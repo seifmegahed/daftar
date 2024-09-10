@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 PROJECT_NAME=$(grep '"name"' package.json | head -n 1 | sed -E 's/.*"name": *"([^"]+)".*/\1/')
-
+PG_VERSION="16"
 # Load environment variables from the .env file
 set -a
 source .env
@@ -15,8 +15,8 @@ DB_NAME=$(echo "$DATABASE_URL" | awk -F'/' '{print $4}')
 
 # Specify the directory for backups (this could be an external hard drive or separate partition)
 DB_BACKUP_DIR="/mnt/backup" # Change this path to your backup location
-PG_CTL_PATH="/usr/lib/postgresql/14/bin/pg_ctl" # Update this to match your PostgreSQL version
-PG_DATA_DIR="/var/lib/postgresql/14/main" # The data directory for PostgreSQL
+PG_CTL_PATH="/usr/lib/postgresql/$PG_VERSION/bin/pg_ctl" # Update this to match your PostgreSQL version
+PG_DATA_DIR="/var/lib/postgresql/$PG_VERSION/main" # The data directory for PostgreSQL
 
 # Check if PostgreSQL is installed
 if ! [ -x "$(command -v psql)" ]; then
