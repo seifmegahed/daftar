@@ -50,3 +50,5 @@ yarn-error.log*
 
 # Local Storage Folder
 .local-storage
+
+.explorations
