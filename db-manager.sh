@@ -6,10 +6,11 @@ PG_VERSION="16"
 set -a
 source .env
 
+DB_HOST="localhost"
+
 # Extract the username, password, and port from DATABASE_URL
 DB_USERNAME=$(echo "$DATABASE_URL" | awk -F'[/:@]' '{print $4}')
 DB_PASSWORD=$(echo "$DATABASE_URL" | awk -F'[/:@]' '{print $5}')
-DB_HOST=$(echo "$DATABASE_URL" | awk -F'[/:@]' '{print $6}')
 DB_PORT=$(echo "$DATABASE_URL" | awk -F'[/:@]' '{print $7}')
 DB_NAME=$(echo "$DATABASE_URL" | awk -F'/' '{print $4}')
 
