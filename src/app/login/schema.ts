@@ -1,7 +1,7 @@
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import { z } from "zod";
 
-export const loginSchema = z
+export const schema = z
   .object({
     username: z.string().min(3).max(256),
     password: z.string().min(3).max(256),
@@ -17,7 +17,7 @@ export const loginSchema = z
     }
   });
 
-export type LoginFormType = z.infer<typeof loginSchema>;
+export type LoginFormType = z.infer<typeof schema>;
 
 export const defaultValues: LoginFormType = {
   username: "",

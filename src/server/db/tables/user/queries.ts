@@ -3,22 +3,32 @@ import { users } from ".";
 import { eq } from "drizzle-orm";
 
 export const getUserByUserName = async (username: string) => {
-  const user = await db
-    .select({
-      id: users.id,
-      username: users.username,
-    })
-    .from(users)
-    .where(eq(users.username, username));
-  if (!user.length) {
-    throw new Error("User not found");
+  try {
+    const [user] = await db
+      .select()
+      .from(users)
+      .where(eq(users.username, username));
+
+    if (!user) throw new Error("User not found");
+    return user;
+  } catch (error) {
+    console.error("Error getting user by username:", error);
+    throw new Error("Could not get user by username");
   }
-  return user[0];
 };
 
 export const updateUserPassword = async (id: number, password: string) => {
-  await db
-    .update(users)
-    .set({ password })
-    .where(eq(users.id, id));
+  try {
+    const [user] = await db
+      .update(users)
+      .set({ password })
+      .where(eq(users.id, id))
+      .returning({ id: users.id });
+
+    if (!user) throw new Error("Error updating user password");
+    return user.id;
+  } catch (error) {
+    console.error("Error updating user password:", error);
+    throw new Error("Could not update user password");
+  }
 };

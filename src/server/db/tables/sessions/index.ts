@@ -1,10 +1,16 @@
 import { sql } from "drizzle-orm";
-import { pgTable, serial, varchar, timestamp } from "drizzle-orm/pg-core";
+import {
+  pgTable,
+  serial,
+  varchar,
+  timestamp,
+  integer,
+} from "drizzle-orm/pg-core";
 import { users } from "../user";
 
 export const sessions = pgTable("session", {
   id: serial("id").primaryKey(),
-  userId: serial("user_id")
+  userId: integer("user_id")
     .unique()
     .notNull()
     .references(() => users.id),

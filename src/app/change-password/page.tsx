@@ -18,8 +18,10 @@ import {
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useRouter } from "next/navigation";
 
-export default function LoginForm() {
+export default function ChangePasswordForm() {
+  const router = useRouter();
   const form = useForm<ChangePasswordFormType>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues,
@@ -27,7 +29,10 @@ export default function LoginForm() {
 
   const onSubmit = (data: ChangePasswordFormType) => {
     changePasswordAction(data)
-      .then(() => console.log("Password changed"))
+      .then((res) => {
+        console.log("Password changed successfully for user:", res);
+        router.replace("/login");
+      })
       .catch((error) => console.error("Error changing password:", error));
   };
 
