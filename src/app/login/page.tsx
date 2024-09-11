@@ -18,6 +18,7 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
+import { loginAction } from "@/server/actions/auth/login";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -26,8 +27,32 @@ export default function LoginForm() {
     defaultValues: defaultValues,
   });
 
-  const onSubmit = (data: LoginFormType) => {
-    console.log("Submitted login form:", data);
+  const onSubmit = async (data: LoginFormType) => {
+    await loginAction(data)
+      .then(() => {
+        router.replace("/");
+      })
+      .catch((error: Error) => {
+        if (error.message === "Incorrect password")
+          form.setError(
+            "password",
+            {
+              type: "manual",
+              message: "Incorrect password",
+            },
+            { shouldFocus: true },
+          );
+        else if (error.message === "User not found")
+          form.setError(
+            "username",
+            {
+              type: "manual",
+              message: "User not found",
+            },
+            { shouldFocus: true },
+          );
+        else console.error("Error logging in:", error);
+      });
   };
 
   return (

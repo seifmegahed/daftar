@@ -8,12 +8,9 @@ export const getUserByUserName = async (username: string) => {
       .select()
       .from(users)
       .where(eq(users.username, username));
-
-    if (!user) throw new Error("User not found");
     return user;
   } catch (error) {
     console.error("Error getting user by username:", error);
-    throw new Error("Could not get user by username");
   }
 };
 
