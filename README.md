@@ -14,9 +14,9 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [x] Implement Auth middleware with JWT
 - [x] Implement Login functionality
 - [x] Implement Change Password functionality
-- [ ] Implement Nodejs SuperAdmin add user functionality
-- [ ] Implement Admin add user functionality
+- [x] Implement Nodejs SuperAdmin add user functionality
 - [ ] Implement Logout functionality
+- [ ] Implement Admin add user functionality
 
   
 ## License

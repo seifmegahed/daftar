@@ -47,5 +47,5 @@ docker run -d \
   -e POSTGRES_PASSWORD="$DB_PASSWORD" \
   -e POSTGRES_DB="$PROJECT_NAME" \
   -p "$DB_PORT":5432 \
-  -v "$DB_VOLUME_NAME:/var/lib/postgresql/data" \
+  -v "$DB_VOLUME_NAME:/var/lib/postgresql/16/data" \
   docker.io/postgres && echo "Database container '$DB_CONTAINER_NAME' was successfully created with persistent storage"

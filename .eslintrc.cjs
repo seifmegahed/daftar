@@ -8,6 +8,14 @@ const config = {
     "@typescript-eslint",
     "drizzle"
   ],
+  "ignorePatterns": [
+    "node_modules",
+    "next-env.d.ts",
+    "next.config.mjs",
+    "postcss.config.cjs",
+    "tailwind.config.cjs",
+    "admin"
+  ],
   "extends": [
     "next/core-web-vitals",
     "plugin:@typescript-eslint/recommended-type-checked",
