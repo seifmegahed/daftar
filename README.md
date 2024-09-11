@@ -18,6 +18,14 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [ ] Implement Logout functionality
 - [ ] Implement Admin add user functionality
 
+
+To stop and remove the database container, run the following commands:
+
+```bash
+sudo docker stop daftar-postgres
+sudo docker container rm daftar-postgres
+sudo docker volume rm daftar-postgres-data
+```
   
 ## License
 

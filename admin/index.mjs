@@ -1,24 +1,54 @@
+/**
+ * This file is used to create an admin user in the database
+ *
+ * The program requires a .env file that contains the following variables:
+ * - DATABASE_URL
+ * - ADMIN_USERNAME
+ * - ADMIN_PASSWORD
+ *
+ * Alternatively, you can pass the username and password as arguments
+ *
+ * You should not run this file from this directory, but from the parent directory (the one containing the .env file)
+ * Use the script in the parent directory to run this file
+ *
+ * @example
+ * pnpm run admin
+ *
+ * @example
+ * pnpm run admin admin@example.com Password123
+ *
+ */
 import bcrypt from "bcrypt";
 import pg from "pg";
 import dotenv from "dotenv";
-import fs from "fs";
 
-const envFilePath = "../.env";
-
-if (!fs.existsSync(envFilePath)) {
-  console.error("Error: env file not found");
-  process.exit(1);
-}
-
-// dotenv.config();
-
-const env = dotenv.parse(fs.readFileSync(envFilePath));
+dotenv.config();
 
 const saltRounds = 10;
 
 const pool = new pg.Pool({
-  connectionString: env.DATABASE_URL,
+  connectionString: process.env.DATABASE_URL,
 });
+
+const containsUppercase = (ch) => /[A-Z]/.test(ch);
+const containsLowercase = (ch) => /[a-z]/.test(ch);
+
+const checkPasswordComplexity = (password) => {
+  let countOfUpperCase = 0,
+    countOfLowerCase = 0,
+    countOfNumbers = 0;
+  if (password.length < 8) return false;
+  for (let i = 0; i < password.length; i++) {
+    const ch = password.charAt(i);
+    if (!isNaN(+ch)) countOfNumbers++;
+    else if (containsUppercase(ch)) countOfUpperCase++;
+    else if (containsLowercase(ch)) countOfLowerCase++;
+  }
+  if (countOfLowerCase > 0 && countOfUpperCase > 0 && countOfNumbers > 0) {
+    return true;
+  }
+  return false;
+};
 
 async function createAdminUser(username, password) {
   if (!username || !password) {
@@ -34,7 +64,7 @@ async function createAdminUser(username, password) {
       VALUES ($1, $2, $3)
       RETURNING id, username;
     `;
-  
+
     const values = [username, hashedPassword, "admin"];
 
     const result = await pool.query(query, values);
@@ -49,7 +79,24 @@ async function createAdminUser(username, password) {
   }
 }
 
-const [username, password] = process.argv.slice(2);
+let [username, password] = process.argv.slice(2);
+
+if (!username || !password) {
+  username = process.env.ADMIN_USERNAME;
+  password = process.env.ADMIN_PASSWORD;
+}
+
+if (!checkPasswordComplexity(password)) {
+  console.error(
+    "\n\
+    Password should be at least 8 characters long\n\
+    and should contain at least \n\
+      one uppercase letter, \n\
+      one lowercase letter, \n\
+      and one number.\n\n",
+  );
+  process.exit(1);
+}
 
 createAdminUser(username, password)
   .then(() => {

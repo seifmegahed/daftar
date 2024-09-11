@@ -10,8 +10,7 @@
   },
   "scripts": {
     "build": "next build",
-    "admin:build": "tsc ./src/super-admin/index.ts --outDir ./super-admin",
-    "admin:run": "node ./super-admin/index.js",
+    "admin": "node ./admin/index.mjs",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
