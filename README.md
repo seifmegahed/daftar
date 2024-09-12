@@ -7,6 +7,22 @@ It uses the server's filesystem to store and retrieve files, and might use web s
 So Vercel, Netlify, or any other hosting provider is not recommended.
 
 
+## Tech Stack
+- Typescript
+- Next.js
+- React
+- Tailwind CSS
+- Drizzle ORM
+- PostgreSQL
+
+## System Architecture
+
+### Data Flow Diagram
+![Data Flow Diagram](/docs/images/system-design-data-validation.png)
+
+### Database Diagram
+![Database Diagram](/docs/images/system-design-database-diagram.svg)
+
 ## TODO
 
 - [x] Add a database
@@ -17,13 +33,30 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [x] Implement Nodejs SuperAdmin add user functionality
 - [x] Implement Logout functionality
 - [x] Role protected Admin page
-- [ ] Implement Admin add user functionality
+- [x] Implement Admin add user functionality
+- [ ] Implement Admin edit user role functionality
+- [ ] Implement Admin reset user password functionality
+- [ ] Implement Admin delete user functionality
+- [ ] Implement Password validation for user to change password
 
 
-To stop and remove the database container, run the following commands:
+## Database Container Commands
+
+To start the database container, make sure you have Docker installed and your environment variables are set up. Then run the following command:
+
+```bash
+sudo ./start-database.sh
+```
+
+To stop the database container, run the following command:
 
 ```bash
 sudo docker stop daftar-postgres
+```
+
+To remove the database container and its volume, run the following command:
+
+```bash
 sudo docker container rm daftar-postgres
 sudo docker volume rm daftar-postgres-data
 ```
