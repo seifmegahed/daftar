@@ -38,5 +38,5 @@
     "**/*.js",
     ".next/types/**/*.ts"
   ],
-  "exclude": ["node_modules", "super-admin"]
+  "exclude": ["node_modules", "admin"]
 }
