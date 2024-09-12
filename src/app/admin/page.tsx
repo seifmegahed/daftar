@@ -1,20 +1,12 @@
-"use client";
 import { Button } from "@/components/ui/button";
-import { logoutAction } from "@/server/actions/auth/logout";
-import { useRouter } from "next/navigation";
+import { getAllUsersAction } from "@/server/actions/users";
+import UsersTable from "./users-table";
 
-function AdminPage() {
-  const router = useRouter();
+async function AdminPage() {
+  const users = await getAllUsersAction();
   return (
-    <div>
-      Admin Page
-      <Button
-        onClick={async () =>
-          await logoutAction().then(() => router.push("/login"))
-        }
-      >
-        Logout
-      </Button>
+    <div className="flex w-full justify-center">
+      <UsersTable users={users} />
     </div>
   );
 }

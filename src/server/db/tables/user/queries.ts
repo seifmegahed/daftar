@@ -3,6 +3,22 @@ import { type UserDataType, users } from "./schema";
 import { eq } from "drizzle-orm";
 import type { AtLeastOne } from "@/utils/type-utils";
 
+export const getAllUsers = async () => {
+  try {
+    const allUsers = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        username: users.username,
+        role: users.role,
+      })
+      .from(users);
+    return allUsers;
+  } catch (error) {
+    console.error("Error getting all users:", error);
+  }
+};
+
 export const getUserByUsername = async (username: string) => {
   try {
     const [user] = await db

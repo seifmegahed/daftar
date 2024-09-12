@@ -21,7 +21,7 @@ async function middleware(request: NextRequest) {
     return NextResponse.next();
 
   const role = decoded.payload.role;
-  console.log(role);
+
   if (role !== "admin")
     return NextResponse.redirect(new URL("/", request.url));
 
@@ -35,6 +35,7 @@ export const config = {
      *    - _next/static (static files)
      *    - _next/image (image optimization files)
      *    - favicon.ico (favicon file)
+     *    - favicon.svg (favicon file)
      */
     "/((?!login|_next/static|_next/image|favicon.ico|favicon.svg).*)",
   ],
