@@ -1,8 +1,9 @@
 import { db } from "../..";
-import { users } from ".";
+import { type UserDataType, users } from ".";
 import { eq } from "drizzle-orm";
+import type { AtLeastOne } from "@/utils/type-utils";
 
-export const getUserByUserName = async (username: string) => {
+export const getUserByUsername = async (username: string) => {
   try {
     const [user] = await db
       .select()
@@ -11,6 +12,25 @@ export const getUserByUserName = async (username: string) => {
     return user;
   } catch (error) {
     console.error("Error getting user by username:", error);
+  }
+};
+
+export const updateUser = async (
+  id: number,
+  userData: AtLeastOne<Pick<UserDataType, "name" | "role">>,
+) => {
+  try {
+    const [user] = await db
+      .update(users)
+      .set(userData)
+      .where(eq(users.id, id))
+      .returning({ id: users.id });
+
+    if (!user) throw new Error("Error updating user name");
+    return user.id;
+  } catch (error) {
+    console.error("Error updating user name:", error);
+    throw new Error("Could not update user name");
   }
 };
 

@@ -1,16 +1,29 @@
 "use server";
+import type { z } from "zod";
 
 import { cookies } from "next/headers";
-
-import type { LoginFormType } from "@/app/login/schema";
-import { getUserByUserName } from "@/server/db/tables/user/queries";
-import { comparePassword } from "@/utils/hashing";
 import { createToken } from "@/lib/jwt";
 
-// const daysToSeconds = (days: number) => days * 24 * 60 * 60;
+import { UserSchema } from "@/server/db/tables/user";
+import { getUserByUsername } from "@/server/db/tables/user/queries";
+import { comparePassword } from "@/utils/hashing";
+import { checkPasswordComplexity } from "@/utils/password-complexity";
+
+const loginSchema = UserSchema.pick({
+  username: true,
+  password: true,
+}).superRefine((data) => checkPasswordComplexity(data.password));
+
+type LoginFormType = z.infer<typeof loginSchema>;
 
 export const loginAction = async (data: LoginFormType) => {
-  const user = await getUserByUserName(data.username);
+  const isValid = loginSchema.safeParse(data);
+
+  if (!isValid.success) {
+    throw new Error("Invalid data");
+  }
+
+  const user = await getUserByUsername(data.username);
 
   if (!user) throw new Error("User not found");
   if (!user.password) throw new Error("User not initialized");
@@ -23,6 +36,5 @@ export const loginAction = async (data: LoginFormType) => {
     httpOnly: true,
     secure: false,
     sameSite: "strict",
-    // maxAge: daysToSeconds(5),
   });
 };
