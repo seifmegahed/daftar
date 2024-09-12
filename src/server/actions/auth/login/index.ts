@@ -30,7 +30,11 @@ export const loginAction = async (data: LoginFormType) => {
   if (!(await comparePassword(data.password, user.password)))
     throw new Error("Incorrect password");
 
-  const token = await createToken(user.username, user.role);
+  const token = await createToken({
+    id: user.id,
+    username: user.username,
+    role: user.role,
+  });
 
   cookies().set("token", token, {
     httpOnly: true,
