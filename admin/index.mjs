@@ -98,6 +98,11 @@ if (!checkPasswordComplexity(password)) {
   process.exit(1);
 }
 
+if (username.length < 5){
+  console.error("\nUsername should be at least 5 characters long\n");
+  process.exit(1);
+}
+
 createAdminUser(username, password)
   .then(() => {
     console.log("Admin user created successfully.");

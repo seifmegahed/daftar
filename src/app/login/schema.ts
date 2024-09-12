@@ -3,8 +3,8 @@ import { z } from "zod";
 
 export const schema = z
   .object({
-    username: z.string().min(3).max(256),
-    password: z.string().min(3).max(256),
+    username: z.string().min(5).max(256),
+    password: z.string().min(8).max(256),
   })
   .superRefine((data, context) => {
     if (!checkPasswordComplexity(data.password)) {
