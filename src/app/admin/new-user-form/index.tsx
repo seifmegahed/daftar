@@ -24,15 +24,37 @@ import {
   SelectItem,
   Select,
 } from "@/components/ui/select";
+import { addUserAction } from "@/server/actions/users";
+import { useRouter } from "next/navigation";
 
 export default function NewUserForm() {
+  const router = useRouter();
   const form = useForm<NewUserFormType>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues,
   });
 
-  const onSubmit = (data: NewUserFormType) => {
-    console.log("New user form submitted:", data);
+  const onSubmit = async (data: NewUserFormType) => {
+    await addUserAction(data)
+      .then((res) => {
+        console.log("User added:", res);
+        form.reset();
+        router.refresh();
+      })
+      .catch((error) => {
+        console.error("Error adding user:", error);
+        if (
+          error instanceof Error &&
+          error.message.includes("Username already exists")
+        ) {
+          form.setError("username", {
+            type: "manual",
+            message: "Username already exists",
+          });
+          return;
+        }
+        alert("Error adding user");
+      });
   };
 
   return (

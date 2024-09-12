@@ -65,3 +65,23 @@ export const updateUserPassword = async (id: number, password: string) => {
     throw new Error("Could not update user password");
   }
 };
+
+export const insertNewUser = async (
+  userData: Omit<UserDataType, "id" | "verifyPassword">,
+) => {
+  try {
+    const [user] = await db
+      .insert(users)
+      .values(userData)
+      .returning({ id: users.id });
+
+    if (!user) throw new Error("Error inserting new user");
+    return user.id;
+  } catch (error) {
+    console.error("Error inserting new user:", error);
+    if (error instanceof Error && error.message.includes("unique")) {
+      throw new Error("Username already exists");
+    }
+    throw error;
+  }
+};
