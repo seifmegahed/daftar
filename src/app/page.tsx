@@ -12,7 +12,7 @@ export default function HomePage() {
         <h1 className="text-3xl font-bold">Daftar</h1>
         <Button
           onClick={async () =>
-            await logoutAction().then(() => router.refresh())
+            await logoutAction().then(() => router.push("/login"))
           }
         >
           Logout
