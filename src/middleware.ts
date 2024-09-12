@@ -17,7 +17,14 @@ async function middleware(request: NextRequest) {
   if (!decoded)
     return NextResponse.redirect(new URL("/login", request.url));
 
-  return NextResponse.next();
+  if (!request.url.includes("/admin"))
+    return NextResponse.next();
+
+  const role = decoded.payload.role;
+  console.log(role);
+  if (role !== "admin")
+    return NextResponse.redirect(new URL("/", request.url));
+
 }
 
 export const config = {
