@@ -16,6 +16,7 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [x] Implement Change Password functionality
 - [x] Implement Nodejs SuperAdmin add user functionality
 - [x] Implement Logout functionality
+- [x] Role protected Admin page
 - [ ] Implement Admin add user functionality
 
 
