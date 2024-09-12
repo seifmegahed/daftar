@@ -4,7 +4,7 @@ import type { z } from "zod";
 import { cookies } from "next/headers";
 import { createToken } from "@/lib/jwt";
 
-import { UserSchema } from "@/server/db/tables/user";
+import { UserSchema } from "@/server/db/tables/user/schema";
 import { getUserByUsername } from "@/server/db/tables/user/queries";
 import { comparePassword } from "@/utils/hashing";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
@@ -30,7 +30,7 @@ export const loginAction = async (data: LoginFormType) => {
   if (!(await comparePassword(data.password, user.password)))
     throw new Error("Incorrect password");
 
-  const token = await createToken(user.username, "user");
+  const token = await createToken(user.username, user.role);
 
   cookies().set("token", token, {
     httpOnly: true,

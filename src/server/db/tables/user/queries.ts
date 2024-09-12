@@ -1,5 +1,5 @@
 import { db } from "../..";
-import { type UserDataType, users } from ".";
+import { type UserDataType, users } from "./schema";
 import { eq } from "drizzle-orm";
 import type { AtLeastOne } from "@/utils/type-utils";
 

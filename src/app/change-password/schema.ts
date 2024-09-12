@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 
-import { UserSchema } from "@/server/db/tables/user";
+import { UserSchema } from "@/server/db/tables/user/schema";
 
 export const schema = UserSchema.pick({
   username: true,

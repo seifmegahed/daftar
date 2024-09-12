@@ -1,1 +1,1 @@
-export {users} from "./tables/user";
+export {users} from "./tables/user/schema";

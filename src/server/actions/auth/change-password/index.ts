@@ -2,7 +2,7 @@
 
 import type { z } from "zod";
 
-import { UserSchema } from "@/server/db/tables/user";
+import { UserSchema } from "@/server/db/tables/user/schema";
 import {
   getUserByUsername,
   updateUserPassword,

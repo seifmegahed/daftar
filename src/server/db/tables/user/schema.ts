@@ -6,7 +6,7 @@ export const users = pgTable("user", {
   name: varchar("name", { length: 64 }),
   username: varchar("username", { length: 64 }).notNull().unique(),
   password: varchar("password", { length: 64 }).notNull(),
-  role: varchar("role", { length: 32 }).default("user"),
+  role: varchar("role", { length: 32 }).default("user").notNull(),
 });
 
 export const UserSchema = z.object({
