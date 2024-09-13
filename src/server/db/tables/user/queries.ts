@@ -85,3 +85,20 @@ export const insertNewUser = async (
     throw error;
   }
 };
+
+export const getUserById = async (id: number) => {
+  try {
+    const [user] = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        username: users.username,
+        role: users.role,
+      })
+      .from(users)
+      .where(eq(users.id, id));
+    return user;
+  } catch (error) {
+    console.error("Error getting user by id:", error);
+  }
+};
