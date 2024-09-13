@@ -4,7 +4,6 @@ services:
       - path: .env
         required: true
     image: postgres
-    restart: always
     environment:
       POSTGRES_USER: ${DATABASE_USER}
       POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
@@ -12,4 +11,4 @@ services:
     ports:
       - "${DATABASE_PORT}:${DATABASE_PORT}"
     volumes:
-      - ./local-storage/pgdata:/var/lib/postgresql/data/pgdata
+      - ./local-storage/pgdata:/home/seifmegahed/postgres/data/pgdata
