@@ -60,6 +60,24 @@ To remove the database container and its volume, run the following command:
 sudo docker container rm daftar-postgres
 sudo docker volume rm daftar-postgres-data
 ```
+
+## Create initial admin user
+
+In order to use the application, you need to create an initial admin user. Since there is no registration process, you will need to create the admin user manually. This admin user can be used to access the admin panel and add other users.
+
+To create the initial admin user, run the following command:
+
+```bash
+pnpm run admin <username> <password>
+```
+
+This will create an admin user with the specified username and password.
+
+Alternatively, you can set the `ADMIN_USERNAME` and `ADMIN_PASSWORD` environment variables in the `.env` file and run the command without specifying the username and password arguments.
+
+```bash
+pnpm run admin
+```
   
 ## License
 
