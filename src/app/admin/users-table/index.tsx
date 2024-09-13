@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 
 import type { UserDataType } from "@/server/db/tables/user/schema";
+import Link from "next/link";
 import type { Overwrite } from "utility-types";
 
 type UsersTableProps = {
@@ -30,7 +31,9 @@ function UsersTable({ users }: UsersTableProps) {
             <td>{user.name ?? "N/A"}</td>
             <td>{user.role.toUpperCase()}</td>
             <td className="flex gap-3 py-2">
-              <Button variant="ghost">Edit</Button>
+              <Link href={`/admin/edit-user/${user.id}`}>
+                <Button variant="ghost">Edit</Button>
+              </Link>
               <Button variant="ghost">Delete</Button>
             </td>
           </tr>

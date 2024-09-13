@@ -1,6 +1,6 @@
 function AdminTopBar() {
   return (
-    <div className="flex w-full justify-between bg-primary p-5 text-primary-foreground">
+    <div className="flex w-full justify-between p-5 bg-muted">
       <h1 className="text-3xl font-bold">Daftar Admin</h1>
     </div>
   );
