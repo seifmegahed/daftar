@@ -1,5 +1,10 @@
 "use server";
-import { getAllUsers, insertNewUser } from "@/server/db/tables/user/queries";
+import { getErrorMessage } from "@/lib/exceptions";
+import {
+  getAllUsers,
+  getUserById,
+  insertNewUser,
+} from "@/server/db/tables/user/queries";
 import { UserSchema } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import type { z } from "zod";
@@ -42,4 +47,14 @@ export const addUserAction = async (data: AddUserFormType) => {
 
   const userId = await insertNewUser(data);
   return userId;
+};
+
+export const getUserByIdAction = async (id: number) => {
+  try {
+    const user = await getUserById(id);
+    if (!user) throw new Error("User not found");
+    return user;
+  } catch (error) {
+    return { error: getErrorMessage(error) };
+  }
 };
