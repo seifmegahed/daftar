@@ -2,14 +2,21 @@
  * This file is used to create an admin user in the database
  *
  * The program requires a .env file that contains the following variables:
- * - DATABASE_URL
+ * - DATABASE_USER
+ * - DATABASE_PASSWORD
+ * - DATABASE_HOST
+ * - DATABASE_PORT
+ * - DATABASE_NAME
+ * 
  * - ADMIN_USERNAME
  * - ADMIN_PASSWORD
  *
+ * You can find an example of the environment variables in the ../.env-e file.
  * Alternatively, you can pass the username and password as arguments
  *
  * You should not run this file from this directory, but from the parent directory (the one containing the .env file)
  * Use the script in the parent directory to run this file
+ * before running this file make sure you run `pnpm install` in this directory
  *
  * @example
  * pnpm run admin
@@ -26,8 +33,10 @@ dotenv.config();
 
 const saltRounds = 10;
 
+const connectionString = `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`;
+
 const pool = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString,
 });
 
 const containsUppercase = (ch) => /[A-Z]/.test(ch);
@@ -98,7 +107,7 @@ if (!checkPasswordComplexity(password)) {
   process.exit(1);
 }
 
-if (username.length < 5){
+if (username.length < 5) {
   console.error("\nUsername should be at least 5 characters long\n");
   process.exit(1);
 }

@@ -39,31 +39,35 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [ ] Implement Admin delete user functionality
 - [ ] Implement Password validation for user to change password
 
+## Environment Variables
+You can find an example of the environment variables in the `.env-e` file.
+Copy the `.env-e` file to `.env` and fill in the values.
 
 ## Database Container Commands
 
 To start the database container, make sure you have Docker installed and your environment variables are set up. Then run the following command:
 
 ```bash
-sudo ./start-database.sh
+sudo Docker compose up -d
 ```
 
 To stop the database container, run the following command:
 
 ```bash
-sudo docker stop daftar-postgres
-```
-
-To remove the database container and its volume, run the following command:
-
-```bash
-sudo docker container rm daftar-postgres
-sudo docker volume rm daftar-postgres-data
+sudo docker compose down
 ```
 
 ## Create initial admin user
 
 In order to use the application, you need to create an initial admin user. Since there is no registration process, you will need to create the admin user manually. This admin user can be used to access the admin panel and add other users.
+
+Before running the command, make sure you run `pnpm install` in the `admin` directory, and that you have created the `.env` file in the root directory, and that the database container is running.
+
+```bash
+cd admin
+pnpm install
+cd ..
+```
 
 To create the initial admin user, run the following command:
 
