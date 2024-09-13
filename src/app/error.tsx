@@ -2,9 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import Link from "next/link";
+import { env } from "@/env";
+
 
 const errorReport = (error: Error) => `
-                  mailto:${process.env.NEXT_PUBLIC_CONTACT_EMAIL}
+                  mailto:${env.NEXT_PUBLIC_CONTACT_EMAIL}
                   ?subject=Error on ${window.location.host + window.location.pathname}
                   &body=${error.stack}
                 `;
