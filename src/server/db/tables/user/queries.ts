@@ -5,7 +5,11 @@ import type { AtLeastOne, ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
 import { userErrors } from "@/server/actions/users/errors";
 
-export const getAllUsers = async () => {
+type PartialUser = Pick<UserDataType, "id" | "username" | "role"> & {
+  name: string | null;
+};
+
+export const getAllUsers = async (): Promise<ReturnTuple<PartialUser[]>> => {
   try {
     const allUsers = await db
       .select({
@@ -15,9 +19,10 @@ export const getAllUsers = async () => {
         role: users.role,
       })
       .from(users);
-    return allUsers;
+
+    return [allUsers, null];
   } catch (error) {
-    console.error("Error getting all users:", error);
+    return [null, getErrorMessage(error)];
   }
 };
 

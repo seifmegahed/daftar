@@ -5,19 +5,35 @@ import {
   getUserById,
   insertNewUser,
 } from "@/server/db/tables/user/queries";
-import { UserSchema } from "@/server/db/tables/user/schema";
+import { type UserDataType, UserSchema } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import type { z } from "zod";
 import { userErrors } from "./errors";
 import type { ReturnTuple } from "@/utils/type-utils";
 
-export const getAllUsersAction = async () => {
+type PartialUser = Pick<UserDataType, "id" | "username" | "role"> & {
+  name: string | null;
+};
+
+export const getAllUsersAction = async (): Promise<
+  ReturnTuple<PartialUser[]>
+> => {
   try {
-    const allUsers = await getAllUsers();
-    return allUsers ?? [];
+    return await getAllUsers();
   } catch (error) {
-    console.error("Error getting all users:", error);
-    return [];
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const getUserByIdAction = async (
+  id: number,
+): Promise<ReturnTuple<PartialUser>> => {
+  try {
+    const user = await getUserById(id);
+    if (!user) return [null, userErrors.userNotFound];
+    return [user, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
   }
 };
 
@@ -42,14 +58,4 @@ export const addUserAction = async (
   if (!isValid.success) return [null, userErrors.invalidData];
 
   return await insertNewUser(data);
-};
-
-export const getUserByIdAction = async (id: number) => {
-  try {
-    const user = await getUserById(id);
-    if (!user) throw new Error("User not found");
-    return user;
-  } catch (error) {
-    return { error: getErrorMessage(error) };
-  }
 };

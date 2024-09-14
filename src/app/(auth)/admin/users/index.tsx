@@ -6,9 +6,17 @@ import NewUserForm from "./new-user-form";
 import UserPage from "./user-page";
 import { Card } from "@/components/ui/card";
 import { AddNewUserTab, UserTab } from "./user-tabs";
+import { toast } from "sonner";
 
 async function Users() {
-  const users = await getAllUsersAction();
+  const [users, error] = await getAllUsersAction();
+
+  if (error !== null) {
+    console.error("Error getting users:", error);
+    toast.error(error);
+    return <div>Error getting users</div>;
+  }
+
   return (
     <Tabs.Root defaultValue="add-user" className="">
       <Card className="h-[75vh] max-w-6xl overflow-hidden">
