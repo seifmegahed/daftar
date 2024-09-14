@@ -13,17 +13,16 @@ const errorReport = (error: Error) => `
 
 function Error({ error, reset }: { error: Error; reset: () => void }) {
   return (
-    <div className="flex h-screen w-screen items-center justify-center bg-secondary">
+    <div className="flex min-h-screen h-full py-10 w-screen items-center justify-center bg-secondary">
       <Card className="h-fit w-full max-w-screen-sm">
         <CardHeader className="">
           <h1 className="text-5xl font-bold text-destructive">Error</h1>
         </CardHeader>
-        <CardContent className="flex flex-col gap-5">
-          <div className="flex w-full justify-between">
-            <h1 className="text-2xl text-destructive">Something went wrong:</h1>
+        <CardContent className="flex flex-col gap-5 h-full">
+            <h1 className="text-2xl text-destructive w-full">Something went wrong:</h1>
             <h1 className="text-2xl text-muted-foreground">{error.message}</h1>
-          </div>
-          <div className="-mx-6 overflow-auto text-ellipsis bg-muted p-6 text-muted-foreground">
+          
+          <div className="-mx-6 overflow-y-scroll text-ellipsis bg-muted p-6 text-muted-foreground max-h-[50vh]">
             {error.stack}
           </div>
           <div className="text-small text-muted-foreground">

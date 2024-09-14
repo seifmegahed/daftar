@@ -9,6 +9,8 @@ const data = [
   { name: "Projects", href: "/projects" },
   { name: "Clients", href: "/clients" },
   { name: "Suppliers", href: "/suppliers" },
+  { name: "Contacts", href: "/contacts" },
+  { name: "Documents", href: "/documents" },
   { name: "Items", href: "/items" },
   { name: "Admin", href: "/admin" },
 ];
