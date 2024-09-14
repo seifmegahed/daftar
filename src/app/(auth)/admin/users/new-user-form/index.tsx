@@ -25,6 +25,7 @@ import {
 } from "@/components/ui/select";
 import { addUserAction } from "@/server/actions/users";
 import { useRouter } from "next/navigation";
+import LoadingOverlay from "@/components/loading-overlay";
 
 export default function NewUserForm() {
   const router = useRouter();
@@ -58,7 +59,11 @@ export default function NewUserForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="relative overflow-hidden"
+      >
+        <LoadingOverlay state={form.formState.isSubmitting} />
         <CardHeader>
           <CardTitle className="text-2xl">Add User</CardTitle>
           <CardDescription>
