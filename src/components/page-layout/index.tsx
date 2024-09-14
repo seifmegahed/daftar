@@ -12,12 +12,12 @@ function PageLayout({
 }) {
   if (!sidenavLinks[0]) return null;
   return (
-    <div className="grid w-full max-w-6xl grid-cols-1 items-start gap-6 md:mx-auto md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-      <div className="px-4 sm:px-0 flex flex-col gap-4">
+    <div className="grid w-full grid-cols-1 items-start gap-6 md:mx-auto md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
+      <div className="flex flex-col gap-4 px-4 sm:px-0">
         <h1 className="text-3xl font-semibold">{title}</h1>
         {sidenavLinks.length && <SideNav links={sidenavLinks} />}
       </div>
-      {children}
+      <div className="flex w-full flex-col items-center">{children}</div>
     </div>
   );
 }

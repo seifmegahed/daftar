@@ -10,8 +10,8 @@ import { Card } from "@/components/ui/card";
 async function Users() {
   const users = await getAllUsersAction();
   return (
-    <Tabs.Root defaultValue="add-user">
-      <Card className="h-[75vh] overflow-hidden">
+    <Tabs.Root defaultValue="add-user" className="">
+      <Card className="h-[75vh] overflow-hidden max-w-6xl">
         <div className="grid h-full grid-cols-6">
           <div className="col-span-2 h-full overflow-y-scroll">
             <SectionTitle title="Users" />
@@ -76,7 +76,7 @@ function UserAvatarContainer({ children }: { children: React.ReactNode }) {
 
 function SectionTitle({ title }: { title: string }) {
   return (
-    <div className="p-3">
+    <div className="p-5">
       <h1 className="text-3xl font-bold">{title}</h1>
     </div>
   );
