@@ -8,6 +8,8 @@ import { UserSchema } from "@/server/db/tables/user/schema";
 import { getUserByUsername } from "@/server/db/tables/user/queries";
 import { comparePassword } from "@/utils/hashing";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
+import { ReturnTuple } from "@/utils/type-utils";
+import { loginErrors } from "./errors";
 
 const loginSchema = UserSchema.pick({
   username: true,
@@ -16,7 +18,9 @@ const loginSchema = UserSchema.pick({
 
 type LoginFormType = z.infer<typeof loginSchema>;
 
-export const loginAction = async (data: LoginFormType) => {
+export const loginAction = async (
+  data: LoginFormType,
+): Promise<ReturnTuple<boolean>> => {
   const isValid = loginSchema.safeParse(data);
 
   if (!isValid.success) {
@@ -25,9 +29,9 @@ export const loginAction = async (data: LoginFormType) => {
 
   const user = await getUserByUsername(data.username);
 
-  if (!user) return { error: "User not found" };
+  if (!user) return [null, loginErrors.userNotFound];
   if (!(await comparePassword(data.password, user.password)))
-    return { error: "Incorrect password" };
+    return [null, loginErrors.incorrectPassword];
 
   const token = await createToken({
     id: user.id,
@@ -40,4 +44,5 @@ export const loginAction = async (data: LoginFormType) => {
     secure: false,
     sameSite: "strict",
   });
+  return [true, null];
 };

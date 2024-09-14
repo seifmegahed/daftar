@@ -20,6 +20,7 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { loginAction } from "@/server/actions/auth/login";
 import LoadingOverlay from "@/components/loading-overlay";
+import { loginErrors } from "@/server/actions/auth/login/errors";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -31,27 +32,14 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormType) => {
     await loginAction(data)
       .then((res) => {
-        if (res?.error)
-          form.setError("password", { type: "manual", message: res.error });
-        if (res?.error === "Incorrect password")
+        const [_, error] = res;
+        if (error) {
           form.setError(
-            "password",
-            {
-              type: "manual",
-              message: "Incorrect password",
-            },
-            { shouldFocus: true },
+            error === loginErrors.userNotFound ? "username" : "password",
+            { type: "manual", message: error },
           );
-        else if (res?.error === "User not found")
-          form.setError(
-            "username",
-            {
-              type: "manual",
-              message: "User not found",
-            },
-            { shouldFocus: true },
-          );
-        else router.replace("/");
+        }
+        router.replace("/");
       })
       .catch((error: Error) => {
         console.error("Error logging in:", error);
@@ -60,7 +48,7 @@ export default function LoginForm() {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <Card className="w-full max-w-md py-8 relative overflow-hidden">
+      <Card className="relative w-full max-w-md overflow-hidden py-8">
         <LoadingOverlay state={form.formState.isSubmitting} />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>

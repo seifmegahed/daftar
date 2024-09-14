@@ -45,7 +45,11 @@ function UserButton() {
         <DropdownMenuItem>
           <div
             onClick={async () => {
-              await logoutAction().then(() => router.push("/login"));
+              await logoutAction().then((res) => {
+                const [_, error] = res;
+                if (error) throw new Error(error);
+                router.push("/login");
+              });
             }}
           >
             Logout
