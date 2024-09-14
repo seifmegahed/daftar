@@ -7,7 +7,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import NavLinks from "../nav-links";
 import { Description, DialogTitle } from "@radix-ui/react-dialog";
 
-function MobileNav() {
+function MobileNav({
+  admin,
+}: {
+  admin: boolean;
+}) {
   return (
     <Sheet>
       <SheetTrigger asChild>
@@ -25,7 +29,7 @@ function MobileNav() {
           >
             <BookmarkIcon />
           </Link>
-          <NavLinks />
+          <NavLinks admin={admin} />
         </nav>
       </SheetContent>
     </Sheet>

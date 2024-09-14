@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-const data = [
+const routes = [
   { name: "Dashboard", href: "/" },
   { name: "Projects", href: "/projects" },
   { name: "Clients", href: "/clients" },
@@ -12,15 +12,20 @@ const data = [
   { name: "Contacts", href: "/contacts" },
   { name: "Documents", href: "/documents" },
   { name: "Items", href: "/items" },
-  { name: "Admin", href: "/admin" },
 ];
 
-function NavLinks() {
+const protectedRoutes = [{ name: "Admin", href: "/admin" }];
+
+function NavLinks({ admin }: { admin: boolean }) {
+  const data = useMemo(
+    () => (admin ? [...routes, ...protectedRoutes] : routes),
+    [admin],
+  );
   const pathname = "/" + usePathname().split("/")[1];
   const [activeLinkIndex, setActiveLinkIndex] = useState(-1);
   useEffect(() => {
     setActiveLinkIndex(() => data.findIndex((link) => link.href === pathname));
-  }, [pathname]);
+  }, [pathname, data]);
   return (
     <>
       {data.map((link, index) => (

@@ -69,12 +69,12 @@ async function createAdminUser(username, password) {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     const query = `
-      INSERT INTO "user" (username, password, role)
-      VALUES ($1, $2, $3)
+      INSERT INTO "user" (username, password, role, name)
+      VALUES ($1, $2, $3, $4)
       RETURNING id, username;
     `;
 
-    const values = [username, hashedPassword, "admin"];
+    const values = [username, hashedPassword, "admin", "Change me"];
 
     const result = await pool.query(query, values);
     const adminUser = result.rows[0];

@@ -1,6 +1,5 @@
 "use client";
 
-import { CircleUser } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 
 import { Button } from "@/components/ui/button";
@@ -15,48 +14,76 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { logoutAction } from "@/server/actions/auth/logout";
 import { useRouter } from "next/navigation";
+import LoadingOverlay from "@/components/loading-overlay";
+import { useState } from "react";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/exceptions";
+import { useTheme } from "next-themes";
+import { getInitials } from "@/utils/user";
+import type { UserDataType } from "@/server/db/tables/user/schema";
 
-function UserButton() {
-  const user = { given_name: "Seif", family_name: "Megahed" };
+function UserButton({
+  user,
+}: {
+  user: Pick<UserDataType, "id" | "username" | "name" | "role">;
+}) {
   const router = useRouter();
-  let initials = null;
+  const [loading, setLoading] = useState(false);
+  const { setTheme } = useTheme();
+
   if (!user) return null;
-  const { given_name, family_name } = user;
-  if (given_name && family_name) initials = given_name[0] + family_name[0]!;
+  const initials = getInitials(user.name);
+
+  const logout = async () => {
+    setLoading(true);
+    await logoutAction()
+      .then((res) => {
+        const [, error] = res;
+        if (error) throw new Error(error);
+        router.push("/login");
+      })
+      .catch((error) => {
+        console.error("Error logging out:", error);
+        toast.error(getErrorMessage(error));
+        setLoading(false);
+      });
+  };
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="secondary" size="icon" className="rounded-full">
-          {initials === null ? (
-            <CircleUser className="h-5 w-5" />
-          ) : (
+    <>
+      <LoadingOverlay state={loading} />
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="secondary" size="icon" className="rounded-full">
             <Avatar>
               <AvatarFallback>{initials}</AvatarFallback>
             </Avatar>
-          )}
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>Settings</DropdownMenuItem>
-        <DropdownMenuItem>Support</DropdownMenuItem>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <div
-            onClick={async () => {
-              await logoutAction().then((res) => {
-                const [, error] = res;
-                if (error) throw new Error(error);
-                router.push("/login");
-              });
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>My Account</DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem
+            className="dark:hidden"
+            onClick={() => {
+              setTheme("dark");
             }}
           >
-            Logout
-          </div>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+            Dark Mode
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            className="hidden dark:block"
+            onClick={() => {
+              setTheme("light");
+            }}
+          >
+            Light Mode
+          </DropdownMenuItem>
+          <DropdownMenuItem>Change Password</DropdownMenuItem>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
   );
 }
 

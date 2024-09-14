@@ -8,23 +8,25 @@ export const schema = UserSchema.pick({
   verifyPassword: true,
   name: true,
   role: true,
-}).superRefine((data, context) => {
-  if (data.password !== data.verifyPassword) {
-    context.addIssue({
-      code: z.ZodIssueCode.custom,
-      message: "Passwords don't match",
-      path: ["verifyPassword"],
-    });
-  }
-  if (!checkPasswordComplexity(data.password)) {
-    context.addIssue({
-      code: z.ZodIssueCode.custom,
-      message:
-        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-      path: ["password"],
-    });
-  }
-});
+})
+  .required()
+  .superRefine((data, context) => {
+    if (data.password !== data.verifyPassword) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Passwords don't match",
+        path: ["verifyPassword"],
+      });
+    }
+    if (!checkPasswordComplexity(data.password)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message:
+          "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+        path: ["password"],
+      });
+    }
+  });
 
 export type NewUserFormType = z.infer<typeof schema>;
 

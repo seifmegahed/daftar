@@ -36,7 +36,7 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [x] Error Boundary Page
 - [x] Setup app layout
 - [x] Implement Admin add user functionality
-- [ ] Implement Go's tuple return concept to properly handle and parse errors
+- [x] Implement Go's tuple return concept to properly handle and parse errors
 - [ ] Implement Admin edit user role functionality
 - [ ] Implement Admin reset user password functionality
 - [ ] Implement Admin delete user functionality

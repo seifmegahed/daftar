@@ -1,3 +1,4 @@
+import { getInitials } from "@/utils/user";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Plus } from "lucide-react";
 
@@ -17,17 +18,17 @@ export function AddNewUserTab() {
   );
 }
 
-export function UserTab({ username }: { username: string }) {
+export function UserTab({ name, value }: { name: string; value: string }) {
   return (
     <Tabs.Trigger
-      value={username}
+      value={value}
       className="group w-full data-[state=active]:bg-muted"
     >
       <UserCardItem>
         <UserAvatarContainer>
-          {username[0]?.toUpperCase() ?? "?"}
+          {getInitials(name)}
         </UserAvatarContainer>
-        <UserCardItemText>{username}</UserCardItemText>
+        <UserCardItemText>{name}</UserCardItemText>
       </UserCardItem>
     </Tabs.Trigger>
   );

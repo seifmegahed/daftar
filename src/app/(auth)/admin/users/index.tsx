@@ -27,7 +27,7 @@ async function Users() {
               <Tabs.List>
                 <AddNewUserTab />
                 {users.map((user) => (
-                  <UserTab key={user.id} username={user.username} />
+                  <UserTab key={user.id} name={user.name} value={user.username} />
                 ))}
               </Tabs.List>
             </div>

@@ -27,9 +27,10 @@ export const loginAction = async (
     throw new Error("Invalid data");
   }
 
-  const user = await getUserByUsername(data.username);
+  const [user, error] = await getUserByUsername(data.username);
 
-  if (!user) return [null, loginErrors.userNotFound];
+  if (error !== null) return [null, loginErrors.userNotFound];
+
   if (!(await comparePassword(data.password, user.password)))
     return [null, loginErrors.incorrectPassword];
 

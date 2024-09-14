@@ -21,6 +21,8 @@ import { useRouter } from "next/navigation";
 import { loginAction } from "@/server/actions/auth/login";
 import LoadingOverlay from "@/components/loading-overlay";
 import { loginErrors } from "@/server/actions/auth/login/errors";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/exceptions";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -41,8 +43,8 @@ export default function LoginForm() {
         }
         router.replace("/");
       })
-      .catch((error: Error) => {
-        console.error("Error logging in:", error);
+      .catch((error) => {
+        toast.error(getErrorMessage(error));
       });
   };
 

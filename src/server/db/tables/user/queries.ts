@@ -1,13 +1,11 @@
 import { db } from "../..";
 import { type UserDataType, users } from "./schema";
 import { eq } from "drizzle-orm";
-import type { AtLeastOne, ReturnTuple } from "@/utils/type-utils";
+import type { ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
 import { userErrors } from "@/server/actions/users/errors";
 
-type PartialUser = Pick<UserDataType, "id" | "username" | "role"> & {
-  name: string | null;
-};
+type PartialUser = Pick<UserDataType, "id" | "username" | "role" | "name">;
 
 export const getAllUsers = async (): Promise<ReturnTuple<PartialUser[]>> => {
   try {
@@ -26,34 +24,56 @@ export const getAllUsers = async (): Promise<ReturnTuple<PartialUser[]>> => {
   }
 };
 
-export const getUserByUsername = async (username: string) => {
+export const getUserByUsername = async (
+  username: string,
+): Promise<ReturnTuple<Omit<UserDataType, "verifyPassword">>> => {
   try {
     const [user] = await db
       .select()
       .from(users)
       .where(eq(users.username, username));
-    return user;
+
+    if (!user) return [null, userErrors.userNotFound];
+
+    return [user, null];
   } catch (error) {
-    console.error("Error getting user by username:", error);
+    return [null, getErrorMessage(error)];
   }
 };
 
-export const updateUser = async (
+export const updateUserName = async (
   id: number,
-  userData: AtLeastOne<Pick<UserDataType, "name" | "role">>,
-) => {
+  name: string,
+): Promise<ReturnTuple<boolean>> => {
   try {
     const [user] = await db
       .update(users)
-      .set(userData)
+      .set({ name })
       .where(eq(users.id, id))
       .returning({ id: users.id });
 
-    if (!user) throw new Error("Error updating user name");
-    return user.id;
+    if (!user) throw new Error("User not found");
+    return [true, null];
   } catch (error) {
-    console.error("Error updating user name:", error);
-    throw new Error("Could not update user name");
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const updateUserRole = async (
+  id: number,
+  role: string,
+): Promise<ReturnTuple<boolean>> => {
+  try {
+    const [user] = await db
+      .update(users)
+      .set({ role })
+      .where(eq(users.id, id))
+      .returning({ id: users.id });
+
+    if (!user) throw new Error("User not found");
+    return [true, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
   }
 };
 
@@ -94,7 +114,9 @@ export const insertNewUser = async (
   }
 };
 
-export const getUserById = async (id: number) => {
+export const getUserById = async (
+  id: number,
+): Promise<ReturnTuple<PartialUser>> => {
   try {
     const [user] = await db
       .select({
@@ -105,8 +127,9 @@ export const getUserById = async (id: number) => {
       })
       .from(users)
       .where(eq(users.id, id));
-    return user;
+    if (!user) return [null, userErrors.userNotFound];
+    return [user, null];
   } catch (error) {
-    console.error("Error getting user by id:", error);
+    return [null, getErrorMessage(error)];
   }
 };

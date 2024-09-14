@@ -34,8 +34,8 @@ export const changePasswordAction = async (
     return [null, changePasswordErrors.invalidData];
   }
 
-  const user = await getUserByUsername(data.username);
-  if (!user) return [null, changePasswordErrors.userNotFound];
+  const [user, error] = await getUserByUsername(data.username);
+  if (error !== null) return [null, changePasswordErrors.userNotFound];
 
   const saltedPassword = await hashPassword(data.password);
   if (!saltedPassword) return [null, changePasswordErrors.errorHashingPassword];
