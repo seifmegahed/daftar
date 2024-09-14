@@ -1,6 +1,6 @@
 "use server";
 import { getErrorMessage } from "@/lib/exceptions";
-import { ReturnTuple } from "@/utils/type-utils";
+import type { ReturnTuple } from "@/utils/type-utils";
 import { cookies } from "next/headers";
 
 export const logoutAction = async (): Promise<ReturnTuple<boolean>> => {

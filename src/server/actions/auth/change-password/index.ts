@@ -9,8 +9,8 @@ import {
 } from "@/server/db/tables/user/queries";
 import { hashPassword } from "@/utils/hashing";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
-import { ReturnTuple } from "@/utils/type-utils";
-import { errors } from "jose";
+import type { ReturnTuple } from "@/utils/type-utils";
+
 import { changePasswordErrors } from "./errors";
 
 const changePasswordSchema = UserSchema.pick({

@@ -46,7 +46,7 @@ function UserButton() {
           <div
             onClick={async () => {
               await logoutAction().then((res) => {
-                const [_, error] = res;
+                const [, error] = res;
                 if (error) throw new Error(error);
                 router.push("/login");
               });

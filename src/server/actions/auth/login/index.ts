@@ -8,7 +8,7 @@ import { UserSchema } from "@/server/db/tables/user/schema";
 import { getUserByUsername } from "@/server/db/tables/user/queries";
 import { comparePassword } from "@/utils/hashing";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
-import { ReturnTuple } from "@/utils/type-utils";
+import type { ReturnTuple } from "@/utils/type-utils";
 import { loginErrors } from "./errors";
 
 const loginSchema = UserSchema.pick({

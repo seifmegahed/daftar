@@ -3,6 +3,7 @@ import { type UserDataType, users } from "./schema";
 import { eq } from "drizzle-orm";
 import type { AtLeastOne, ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
+import { userErrors } from "@/server/actions/users/errors";
 
 export const getAllUsers = async () => {
   try {
@@ -71,7 +72,7 @@ export const updateUserPassword = async (
 
 export const insertNewUser = async (
   userData: Omit<UserDataType, "id" | "verifyPassword">,
-) => {
+): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
       .insert(users)
@@ -79,13 +80,12 @@ export const insertNewUser = async (
       .returning({ id: users.id });
 
     if (!user) throw new Error("Error inserting new user");
-    return user.id;
+    return [user.id, null];
   } catch (error) {
-    console.error("Error inserting new user:", error);
-    if (error instanceof Error && error.message.includes("unique")) {
-      throw new Error("Username already exists");
-    }
-    throw error;
+    const errorMessage = getErrorMessage(error);
+    if (errorMessage.includes("unique"))
+      return [null, userErrors.usernameAlreadyExists];
+    return [null, errorMessage];
   }
 };
 

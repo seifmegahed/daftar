@@ -32,7 +32,7 @@ export default function LoginForm() {
   const onSubmit = async (data: LoginFormType) => {
     await loginAction(data)
       .then((res) => {
-        const [_, error] = res;
+        const [, error] = res;
         if (error) {
           form.setError(
             error === loginErrors.userNotFound ? "username" : "password",

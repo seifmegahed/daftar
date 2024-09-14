@@ -31,7 +31,7 @@ export default function ChangePasswordForm() {
   const onSubmit = (data: ChangePasswordFormType) => {
     changePasswordAction(data)
       .then((res) => {
-        const [_, error] = res;
+        const [, error] = res;
         if (error) {
           form.setError(
             error === changePasswordErrors.userNotFound

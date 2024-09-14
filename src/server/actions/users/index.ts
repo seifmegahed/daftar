@@ -8,6 +8,8 @@ import {
 import { UserSchema } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import type { z } from "zod";
+import { userErrors } from "./errors";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 export const getAllUsersAction = async () => {
   try {
@@ -25,28 +27,21 @@ const addUserSchema = UserSchema.pick({
   password: true,
   verifyPassword: true,
   role: true,
-}).superRefine((data) => {
-  if (!checkPasswordComplexity(data.password)) {
-    throw new Error(
-      "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-    );
-  }
-  if (data.password !== data.verifyPassword) {
-    throw new Error("Passwords don't match");
-  }
-});
+}).superRefine(
+  (data) =>
+    !checkPasswordComplexity(data.password) ||
+    data.password !== data.verifyPassword,
+);
 
 type AddUserFormType = z.infer<typeof addUserSchema>;
 
-export const addUserAction = async (data: AddUserFormType) => {
+export const addUserAction = async (
+  data: AddUserFormType,
+): Promise<ReturnTuple<number>> => {
   const isValid = addUserSchema.safeParse(data);
+  if (!isValid.success) return [null, userErrors.invalidData];
 
-  if (!isValid.success) {
-    throw new Error("Invalid data");
-  }
-
-  const userId = await insertNewUser(data);
-  return userId;
+  return await insertNewUser(data);
 };
 
 export const getUserByIdAction = async (id: number) => {

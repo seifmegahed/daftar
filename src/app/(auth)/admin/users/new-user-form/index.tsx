@@ -27,6 +27,9 @@ import { addUserAction } from "@/server/actions/users";
 import { useRouter } from "next/navigation";
 import LoadingOverlay from "@/components/loading-overlay";
 
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/exceptions";
+
 export default function NewUserForm() {
   const router = useRouter();
   const form = useForm<NewUserFormType>({
@@ -37,23 +40,16 @@ export default function NewUserForm() {
   const onSubmit = async (data: NewUserFormType) => {
     await addUserAction(data)
       .then((res) => {
-        console.log("User added:", res);
+        const [_, error] = res;
+        if (error) {
+          toast.error(error);
+          return;
+        }
         form.reset();
         router.refresh();
       })
       .catch((error) => {
-        console.error("Error adding user:", error);
-        if (
-          error instanceof Error &&
-          error.message.includes("Username already exists")
-        ) {
-          form.setError("username", {
-            type: "manual",
-            message: "Username already exists",
-          });
-          return;
-        }
-        alert("Error adding user");
+        toast.error(getErrorMessage(error));
       });
   };
 
