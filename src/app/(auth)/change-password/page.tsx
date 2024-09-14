@@ -19,6 +19,7 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
+import { changePasswordErrors } from "@/server/actions/auth/change-password/errors";
 
 export default function ChangePasswordForm() {
   const router = useRouter();
@@ -30,7 +31,19 @@ export default function ChangePasswordForm() {
   const onSubmit = (data: ChangePasswordFormType) => {
     changePasswordAction(data)
       .then((res) => {
-        console.log("Password changed successfully for user:", res);
+        const [_, error] = res;
+        if (error) {
+          form.setError(
+            error === changePasswordErrors.userNotFound
+              ? "username"
+              : "verifyPassword",
+            {
+              type: "manual",
+              message: error,
+            },
+            { shouldFocus: true },
+          );
+        }
         router.replace("/login");
       })
       .catch((error) => console.error("Error changing password:", error));

@@ -1,7 +1,8 @@
 import { db } from "../..";
 import { type UserDataType, users } from "./schema";
 import { eq } from "drizzle-orm";
-import type { AtLeastOne } from "@/utils/type-utils";
+import type { AtLeastOne, ReturnTuple } from "@/utils/type-utils";
+import { getErrorMessage } from "@/lib/exceptions";
 
 export const getAllUsers = async () => {
   try {
@@ -50,7 +51,10 @@ export const updateUser = async (
   }
 };
 
-export const updateUserPassword = async (id: number, password: string) => {
+export const updateUserPassword = async (
+  id: number,
+  password: string,
+): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
       .update(users)
@@ -58,11 +62,10 @@ export const updateUserPassword = async (id: number, password: string) => {
       .where(eq(users.id, id))
       .returning({ id: users.id });
 
-    if (!user) throw new Error("Error updating user password");
-    return user.id;
+    if (!user) throw new Error("User not found");
+    return [user.id, null];
   } catch (error) {
-    console.error("Error updating user password:", error);
-    throw new Error("Could not update user password");
+    return [null, getErrorMessage(error)];
   }
 };
 

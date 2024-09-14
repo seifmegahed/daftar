@@ -1,6 +1,6 @@
 "use server";
 
-import type { z } from "zod";
+import { type z } from "zod";
 
 import { UserSchema } from "@/server/db/tables/user/schema";
 import {
@@ -9,36 +9,36 @@ import {
 } from "@/server/db/tables/user/queries";
 import { hashPassword } from "@/utils/hashing";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
+import { ReturnTuple } from "@/utils/type-utils";
+import { errors } from "jose";
+import { changePasswordErrors } from "./errors";
 
 const changePasswordSchema = UserSchema.pick({
   username: true,
   password: true,
   verifyPassword: true,
-}).superRefine((data) => {
-  if (data.password !== data.verifyPassword) {
-    throw new Error("Passwords don't match");
-  }
-  if (!checkPasswordComplexity(data.password)) {
-    throw new Error(
-      "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-    );
-  }
-});
+}).superRefine(
+  (data) =>
+    data.password !== data.verifyPassword ||
+    !checkPasswordComplexity(data.password),
+);
 
 type ChangePasswordFormType = z.infer<typeof changePasswordSchema>;
 
-export const changePasswordAction = async (data: ChangePasswordFormType) => {
+export const changePasswordAction = async (
+  data: ChangePasswordFormType,
+): Promise<ReturnTuple<number>> => {
   const isValid = changePasswordSchema.safeParse(data);
 
   if (!isValid.success) {
-    throw new Error("Invalid data");
+    return [null, changePasswordErrors.invalidData];
   }
 
   const user = await getUserByUsername(data.username);
-  if (!user) throw new Error("User not found");
+  if (!user) return [null, changePasswordErrors.userNotFound];
 
   const saltedPassword = await hashPassword(data.password);
-  if (!saltedPassword) throw new Error("Error hashing password");
+  if (!saltedPassword) return [null, changePasswordErrors.errorHashingPassword];
 
   return await updateUserPassword(user.id, saltedPassword);
 };

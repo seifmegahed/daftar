@@ -36,10 +36,22 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [x] Error Boundary Page
 - [x] Setup app layout
 - [x] Implement Admin add user functionality
+- [ ] Implement Go's tuple return concept to properly handle and parse errors
 - [ ] Implement Admin edit user role functionality
 - [ ] Implement Admin reset user password functionality
 - [ ] Implement Admin delete user functionality
 - [ ] Implement Password validation for user to change password
+
+### Error Handling
+Error handling is implemented using try-catch blocks in the server actions.
+The error is caught and returned as a tuple in the form of `[null, errorMessage]`.
+If there is no error, the tuple is `[returnValue, null]`.
+This makes it easier to handle errors in the frontend.
+
+```typescript
+// Either return a value or an error message, never both and never neither
+type ReturnTuple<T> = readonly [T, null] | readonly [null, string];
+```
 
 ## Environment Variables
 You can find an example of the environment variables in the `.env-e` file.
