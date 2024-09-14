@@ -54,3 +54,5 @@ yarn-error.log*
 .explorations
 
 admin/node_modules
+
+NOTES.md

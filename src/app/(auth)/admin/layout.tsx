@@ -9,7 +9,6 @@ function AdminTopBar() {
 function AdminLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex w-full flex-col justify-center gap-5">
-      <AdminTopBar />
       {children}
     </div>
   );

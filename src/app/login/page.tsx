@@ -57,7 +57,7 @@ export default function LoginForm() {
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <Card className="w-full max-w-sm">
+      <Card className="w-full max-w-md py-8">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardHeader>
@@ -66,12 +66,12 @@ export default function LoginForm() {
                 Enter your username and password below to sign in.
               </CardDescription>
             </CardHeader>
-            <CardContent className="grid gap-4">
+            <CardContent>
               <FormField
                 control={form.control}
                 name="username"
                 render={({ field }) => (
-                  <FormItem className="grid gap-2">
+                  <FormItem>
                     <Label htmlFor="username">User Name</Label>
                     <Input id="username" type="username" {...field} />
                     <FormMessage />
@@ -82,7 +82,7 @@ export default function LoginForm() {
                 control={form.control}
                 name="password"
                 render={({ field }) => (
-                  <FormItem className="grid gap-2">
+                  <FormItem>
                     <Label htmlFor="password">Password</Label>
                     <Input id="password" type="password" {...field} />
                     <FormMessage />
