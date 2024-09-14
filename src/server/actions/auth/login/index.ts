@@ -25,10 +25,9 @@ export const loginAction = async (data: LoginFormType) => {
 
   const user = await getUserByUsername(data.username);
 
-  if (!user) throw new Error("User not found");
-  if (!user.password) throw new Error("User not initialized");
+  if (!user) return { error: "User not found" };
   if (!(await comparePassword(data.password, user.password)))
-    throw new Error("Incorrect password");
+    return { error: "Incorrect password" };
 
   const token = await createToken({
     id: user.id,

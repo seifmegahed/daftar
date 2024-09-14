@@ -19,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { loginAction } from "@/server/actions/auth/login";
+import LoadingOverlay from "@/components/loading-overlay";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -29,11 +30,10 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormType) => {
     await loginAction(data)
-      .then(() => {
-        router.replace("/");
-      })
-      .catch((error: Error) => {
-        if (error.message === "Incorrect password")
+      .then((res) => {
+        if (res?.error)
+          form.setError("password", { type: "manual", message: res.error });
+        if (res?.error === "Incorrect password")
           form.setError(
             "password",
             {
@@ -42,7 +42,7 @@ export default function LoginForm() {
             },
             { shouldFocus: true },
           );
-        else if (error.message === "User not found")
+        else if (res?.error === "User not found")
           form.setError(
             "username",
             {
@@ -51,13 +51,17 @@ export default function LoginForm() {
             },
             { shouldFocus: true },
           );
-        else console.error("Error logging in:", error);
+        else router.replace("/");
+      })
+      .catch((error: Error) => {
+        console.error("Error logging in:", error);
       });
   };
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">
-      <Card className="w-full max-w-md py-8">
+      <Card className="w-full max-w-md py-8 relative overflow-hidden">
+        <LoadingOverlay state={form.formState.isSubmitting} />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardHeader>
