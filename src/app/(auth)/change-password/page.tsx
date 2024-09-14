@@ -2,6 +2,8 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 import { defaultValues, schema, type ChangePasswordFormType } from "./schema";
 import { changePasswordAction } from "@/server/actions/auth/change-password";
@@ -18,8 +20,7 @@ import {
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import { changePasswordErrors } from "@/server/actions/auth/change-password/errors";
+
 
 export default function ChangePasswordForm() {
   const router = useRouter();
@@ -33,16 +34,7 @@ export default function ChangePasswordForm() {
       .then((res) => {
         const [, error] = res;
         if (error) {
-          form.setError(
-            error === changePasswordErrors.userNotFound
-              ? "username"
-              : "verifyPassword",
-            {
-              type: "manual",
-              message: error,
-            },
-            { shouldFocus: true },
-          );
+          toast.error(error);
         }
         router.replace("/login");
       })
