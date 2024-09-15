@@ -1,7 +1,7 @@
 import { type GetPartialUserType } from "@/server/db/tables/user/queries";
-import { getInitials } from "@/utils/user";
 import AdminEditUserForm from "./user-edit-form";
 import { Button } from "@/components/ui/button";
+import PageTitle from "./title";
 
 const parseDate = (date: Date | null) =>
   date === null ? "N/A" : date.toLocaleDateString();
@@ -56,15 +56,6 @@ function ActiveProjectsSection() {
           </div>
         </div>
       ))}
-    </div>
-  );
-}
-
-function PageTitle({ title }: { title: string }) {
-  return (
-    <div className="flex justify-between p-5">
-      <h1 className="text-3xl font-bold">{getInitials(title)}</h1>
-      <h1 className="text-2xl">{title}</h1>
     </div>
   );
 }
