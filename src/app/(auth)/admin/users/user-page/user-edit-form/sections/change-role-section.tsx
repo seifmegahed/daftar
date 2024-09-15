@@ -48,9 +48,9 @@ function ChangeRoleSection({
       id: userId,
       role: role,
     });
+    setLoading(false);
     if (error !== null) return toast.error(error);
     toast.success(`Role updated successful for User ID: ${response}`);
-    setLoading(false);
   };
 
   return (

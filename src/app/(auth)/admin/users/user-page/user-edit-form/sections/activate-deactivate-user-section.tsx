@@ -2,15 +2,35 @@
 
 import { Button } from "@/components/ui/button";
 import LabelWrapper from "../label-wrapper";
+import { updateUserActiveAction } from "@/server/actions/users";
+import { toast } from "sonner";
+import { useState } from "react";
+import SubmitButton from "@/components/buttons/submit-button";
 
 function DeactivateUserSection({ userId }: { userId: number }) {
+  const [loading, setLoading] = useState(false);
+  const onsubmit = async () => {
+    setLoading(true);
+    const [response, error] = await updateUserActiveAction({
+      id: userId,
+      active: false,
+    });
+    setLoading(false);
+    if (error !== null) return toast.error(error);
+    toast.success(`User ID: ${response} deactivated`);
+  };
   return (
     <div className="flex flex-col gap-2 py-4">
       <div className="flex items-center justify-between py-4">
         <LabelWrapper label="Deactivate User" />
-        <Button variant="destructive" className="w-40">
+        <SubmitButton
+          variant="destructive"
+          loading={loading}
+          onClick={onsubmit}
+          disabled={loading}
+        >
           Deactivate
-        </Button>
+        </SubmitButton>
       </div>
       <p className="text-xs text-muted-foreground">
         Deactivate the user, this will prevent the user from logging in and
@@ -26,17 +46,35 @@ function DeactivateUserSection({ userId }: { userId: number }) {
 }
 
 function ActivateUserSection({ userId }: { userId: number }) {
+  const [loading, setLoading] = useState(false);
+  const onsubmit = async () => {
+    setLoading(true);
+    const [response, error] = await updateUserActiveAction({
+      id: userId,
+      active: true,
+    });
+    setLoading(false);
+    if (error !== null) return toast.error(error);
+    toast.success(`User ID: ${response} activated`);
+  };
   return (
     <div className="flex flex-col gap-2 py-4">
       <LabelWrapper label="Activate User" />
       <p className="text-xs text-muted-foreground">
-        Activating the user will allow the user to login and access the
-        Application.
+        This user is currently deactivated, this means that they are unable to
+        access the application using their credentials. Activating the user will
+        re-allow the user to login using their credentials and access the
+        application.
       </p>
       <div className="flex justify-end py-4">
-        <Button variant="outline" className="w-40">
+        <SubmitButton
+          variant="destructive"
+          loading={loading}
+          onClick={onsubmit}
+          disabled={loading}
+        >
           Activate
-        </Button>
+        </SubmitButton>
       </div>
     </div>
   );

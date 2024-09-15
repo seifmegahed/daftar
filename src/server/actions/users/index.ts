@@ -2,6 +2,7 @@
 
 import { getErrorMessage } from "@/lib/exceptions";
 import {
+  changeUserActiveState,
   getAllUsers,
   type GetPartialUserType,
   getUserById,
@@ -18,6 +19,7 @@ import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/jwt";
 import { hashPassword } from "@/utils/hashing";
 import type { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 /**
  * Refine passwords to check if they are complex enough and if they match
@@ -278,5 +280,38 @@ export const updateUserRoleAction = async (
   if (!isValid.success) return [null, userErrors.invalidData];
 
   const result = await updateUserRole(data.id, data.role);
+  return result;
+};
+
+/**
+ * Update User Active State - Admin Only
+ *
+ * Admin Server Action to update a user's active state
+ *
+ * Checks if the requesting user has admin permissions
+ *
+ * @param data - Data to update the user's active state
+ *   - @number  id: ID of the user to update
+ *   - @boolean active: New active state of the user
+ * @returns - Tuple containing the updated user's ID or an error message if there is one
+ */
+const updateUserActiveSchema = UserSchema.pick({
+  id: true,
+  active: true,
+});
+
+type UpdateUserActiveFormType = z.infer<typeof updateUserActiveSchema>;
+
+export const updateUserActiveAction = async (
+  data: UpdateUserActiveFormType,
+): Promise<ReturnTuple<number>> => {
+  const [, isAdminError] = await checkAdminPermissions();
+  if (isAdminError !== null) return [null, isAdminError];
+
+  const isValid = updateUserActiveSchema.safeParse(data);
+  if (!isValid.success) return [null, userErrors.invalidData];
+
+  const result = await changeUserActiveState(data.id, data.active);
+  revalidatePath("/admin")
   return result;
 };
