@@ -4,12 +4,13 @@ type UserPageProps = {
   user: {
     id: number;
     username: string;
-    name: string | null;
+    name: string;
     role: string;
   };
 };
 
 function UserPage({ user }: UserPageProps) {
+  const lastActive = new Date().toLocaleDateString();
   return (
     <div>
       <div className="flex flex-col gap-2 p-5">
@@ -18,7 +19,7 @@ function UserPage({ user }: UserPageProps) {
         <p>Username: {user.username}</p>
         <p>Name: {user.name}</p>
         <p>Role: {user.role}</p>
-        <p>Last Active: {new Date().toLocaleString()}</p>
+        <p>Last Active: {lastActive}</p>
         <div className="flex justify-between">
           <Button variant="outline" className="w-40">
             Deactivate

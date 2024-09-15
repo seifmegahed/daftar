@@ -2,21 +2,21 @@
 import { getErrorMessage } from "@/lib/exceptions";
 import {
   getAllUsers,
+  type GetPartialUserType,
   getUserById,
   insertNewUser,
 } from "@/server/db/tables/user/queries";
-import { type UserDataType, UserSchema } from "@/server/db/tables/user/schema";
+import { UserSchema } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
-import type { z } from "zod";
 import { userErrors } from "./errors";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/jwt";
-
-type PartialUser = Pick<UserDataType, "id" | "username" | "role" | "name">;
+import { hashPassword } from "@/utils/hashing";
+import type { z } from "zod";
 
 export const getCurrentUserAction = async (): Promise<
-  ReturnTuple<PartialUser>
+  ReturnTuple<GetPartialUserType>
 > => {
   const token = cookies().get("token");
   if (!token) return [null, userErrors.userNotFound];
@@ -28,7 +28,7 @@ export const getCurrentUserAction = async (): Promise<
 };
 
 export const getAllUsersAction = async (): Promise<
-  ReturnTuple<PartialUser[]>
+  ReturnTuple<GetPartialUserType[]>
 > => {
   try {
     const [allUsers, error] = await getAllUsers();
@@ -41,7 +41,7 @@ export const getAllUsersAction = async (): Promise<
 
 export const getUserByIdAction = async (
   id: number,
-): Promise<ReturnTuple<PartialUser>> => {
+): Promise<ReturnTuple<GetPartialUserType>> => {
   try {
     return await getUserById(id);
   } catch (error) {
@@ -61,13 +61,22 @@ const addUserSchema = UserSchema.pick({
     data.password !== data.verifyPassword,
 );
 
-type AddUserFormType = z.infer<typeof addUserSchema>;
+type CreateUserFormType = z.infer<typeof addUserSchema>;
 
-export const addUserAction = async (
-  data: AddUserFormType,
+export const createUserAction = async (
+  data: CreateUserFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = addUserSchema.safeParse(data);
   if (!isValid.success) return [null, userErrors.invalidData];
 
-  return await insertNewUser(data);
+  const [saltedPassword, error] = await hashPassword(data.password);
+
+  if (error !== null) return [null, userErrors.hashFailed];
+
+  return await insertNewUser({
+    name: data.name,
+    username: data.username,
+    password: saltedPassword,
+    role: data.role,
+  });
 };

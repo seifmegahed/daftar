@@ -1,5 +1,4 @@
 import * as Tabs from "@radix-ui/react-tabs";
-import { Plus } from "lucide-react";
 
 import { getAllUsersAction } from "@/server/actions/users";
 import NewUserForm from "./new-user-form";

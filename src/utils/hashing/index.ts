@@ -1,11 +1,17 @@
+import { getErrorMessage } from "@/lib/exceptions";
 import * as bcrypt from "bcrypt";
+import type { ReturnTuple } from "../type-utils";
 const saltRounds = 10;
 
-export async function hashPassword(password: string) {
+export async function hashPassword(
+  password: string,
+): Promise<ReturnTuple<string>> {
   try {
-    return await bcrypt.hash(password, saltRounds);
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    if (!hashedPassword) throw new Error("Hashing failed");
+    return [hashedPassword, null];
   } catch (error) {
-    console.error("Error hashing password:", error);
+    return [null, getErrorMessage(error)];
   }
 }
 

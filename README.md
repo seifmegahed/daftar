@@ -37,6 +37,7 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [x] Setup app layout
 - [x] Implement Admin add user functionality
 - [x] Implement Go's tuple return concept to properly handle and parse errors
+- [x] Add Last Active, Created, Updated, and Deactivated columns to the User table
 - [ ] Implement Admin edit user role functionality
 - [ ] Implement Admin reset user password functionality
 - [ ] Implement Admin delete user functionality

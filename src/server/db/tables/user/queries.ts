@@ -5,9 +5,19 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
 import { userErrors } from "@/server/actions/users/errors";
 
-type PartialUser = Pick<UserDataType, "id" | "username" | "role" | "name">;
+export type GetUserType = Omit<UserDataType, "verifyPassword">;
+export type GetPartialUserType = Omit<
+  UserDataType,
+  "verifyPassword" | "password"
+>;
+export type SetPartialUser = Pick<
+  UserDataType,
+  "name" | "username" | "role" | "password"
+>;
 
-export const getAllUsers = async (): Promise<ReturnTuple<PartialUser[]>> => {
+export const getAllUsers = async (): Promise<
+  ReturnTuple<GetPartialUserType[]>
+> => {
   try {
     const allUsers = await db
       .select({
@@ -15,6 +25,10 @@ export const getAllUsers = async (): Promise<ReturnTuple<PartialUser[]>> => {
         name: users.name,
         username: users.username,
         role: users.role,
+        active: users.active,
+        lastActive: users.lastActive,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt,
       })
       .from(users);
 
@@ -26,7 +40,7 @@ export const getAllUsers = async (): Promise<ReturnTuple<PartialUser[]>> => {
 
 export const getUserByUsername = async (
   username: string,
-): Promise<ReturnTuple<Omit<UserDataType, "verifyPassword">>> => {
+): Promise<ReturnTuple<GetUserType>> => {
   try {
     const [user] = await db
       .select()
@@ -96,7 +110,7 @@ export const updateUserPassword = async (
 };
 
 export const insertNewUser = async (
-  userData: Omit<UserDataType, "id" | "verifyPassword">,
+  userData: SetPartialUser,
 ): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
@@ -116,7 +130,7 @@ export const insertNewUser = async (
 
 export const getUserById = async (
   id: number,
-): Promise<ReturnTuple<PartialUser>> => {
+): Promise<ReturnTuple<GetPartialUserType>> => {
   try {
     const [user] = await db
       .select({
@@ -124,11 +138,50 @@ export const getUserById = async (
         name: users.name,
         username: users.username,
         role: users.role,
+        active: users.active,
+        lastActive: users.lastActive,
+        createdAt: users.createdAt,
+        updatedAt: users.updatedAt,
       })
       .from(users)
       .where(eq(users.id, id));
     if (!user) return [null, userErrors.userNotFound];
     return [user, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const changeUserActiveState = async (
+  id: number,
+  active: boolean,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [user] = await db
+      .update(users)
+      .set({ active })
+      .where(eq(users.id, id))
+      .returning({ id: users.id });
+
+    if (!user) throw new Error("User not found");
+    return [user.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const updateUserLastActive = async (
+  id: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [user] = await db
+      .update(users)
+      .set({ lastActive: new Date() })
+      .where(eq(users.id, id))
+      .returning({ id: users.id });
+
+    if (!user) throw new Error("User not found");
+    return [user.id, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }

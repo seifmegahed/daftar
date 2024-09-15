@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 import { createToken } from "@/lib/jwt";
 
 import { UserSchema } from "@/server/db/tables/user/schema";
-import { getUserByUsername } from "@/server/db/tables/user/queries";
+import { getUserByUsername, updateUserLastActive } from "@/server/db/tables/user/queries";
 import { comparePassword } from "@/utils/hashing";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import type { ReturnTuple } from "@/utils/type-utils";
@@ -33,6 +33,10 @@ export const loginAction = async (
 
   if (!(await comparePassword(data.password, user.password)))
     return [null, loginErrors.incorrectPassword];
+
+  if (!user.active) return [null, loginErrors.userNotActive];
+
+  await updateUserLastActive(user.id);
 
   const token = await createToken({
     id: user.id,

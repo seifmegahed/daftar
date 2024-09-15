@@ -1,12 +1,24 @@
-import { pgTable, serial, varchar } from "drizzle-orm/pg-core";
+import {
+  boolean,
+  pgTable,
+  serial,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core";
 import { z } from "zod";
 
 export const users = pgTable("user", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 64 }).notNull(),
   username: varchar("username", { length: 64 }).notNull().unique(),
-  password: varchar("password", { length: 64 }).notNull(),
   role: varchar("role", { length: 32 }).default("user").notNull(),
+  active: boolean("active").notNull().default(true),
+  // Salted password
+  password: varchar("password", { length: 128 }).notNull(),
+  // timestamps
+  createdAt: timestamp("created_at").default(new Date()).notNull(),
+  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+  lastActive: timestamp("last_active"),
 });
 
 export const UserSchemaRaw = {
@@ -28,6 +40,10 @@ export const UserSchemaRaw = {
     .string({ required_error: "Role is required" })
     .max(32)
     .default("user"),
+  active: z.boolean(),
+  createdAt: z.date(),
+  lastActive: z.date().nullable(),
+  updatedAt: z.date().nullable(),
 };
 
 export const UserSchema = z.object(UserSchemaRaw);
