@@ -8,7 +8,7 @@ import { type Metadata } from "next";
 export const metadata: Metadata = {
   title: "Daftar",
   description: "ERP System",
-  // icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/favicon.svg" }],
 };
 
 export default function RootLayout({
