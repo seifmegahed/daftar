@@ -1,11 +1,12 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import LabelWrapper from "../label-wrapper";
-import { updateUserActiveAction } from "@/server/actions/users";
-import { toast } from "sonner";
 import { useState } from "react";
+import { toast } from "sonner";
+
+import { updateUserActiveAction } from "@/server/actions/users";
+
 import SubmitButton from "@/components/buttons/submit-button";
+import LabelWrapper from "../label-wrapper";
 
 function DeactivateUserSection({ userId }: { userId: number }) {
   const [loading, setLoading] = useState(false);

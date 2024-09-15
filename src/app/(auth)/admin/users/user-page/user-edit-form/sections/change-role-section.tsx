@@ -1,6 +1,10 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
+
+import { updateUserRoleAction } from "@/server/actions/users";
+
 import {
   Select,
   SelectContent,
@@ -8,11 +12,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useEffect, useState } from "react";
-import LabelWrapper from "../label-wrapper";
-import { toast } from "sonner";
-import { updateUserRoleAction } from "@/server/actions/users";
 import SubmitButton from "@/components/buttons/submit-button";
+
+import LabelWrapper from "../label-wrapper";
 
 const roleItems = [
   {

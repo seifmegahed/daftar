@@ -176,6 +176,7 @@ export const createUserAction = async (
     password: saltedPassword,
     role: data.role,
   });
+  revalidatePath("/admin");
   return result;
 };
 
@@ -245,9 +246,11 @@ export const updateUserNameAction = async (
   if (isAdminError !== null) return [null, isAdminError];
 
   const isValid = updateUserNameSchema.safeParse(data);
+  console.log(isValid.error?.message);
   if (!isValid.success) return [null, userErrors.invalidData];
 
   const result = await updateUserName(data.id, data.name);
+  revalidatePath("/admin");
   return result;
 };
 
@@ -280,6 +283,7 @@ export const updateUserRoleAction = async (
   if (!isValid.success) return [null, userErrors.invalidData];
 
   const result = await updateUserRole(data.id, data.role);
+  revalidatePath("/admin");
   return result;
 };
 
@@ -312,6 +316,6 @@ export const updateUserActiveAction = async (
   if (!isValid.success) return [null, userErrors.invalidData];
 
   const result = await changeUserActiveState(data.id, data.active);
-  revalidatePath("/admin")
+  revalidatePath("/admin");
   return result;
 };

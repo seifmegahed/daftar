@@ -1,19 +1,21 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import LabelWrapper from "../label-wrapper";
-
-import { UserSchema } from "@/server/db/tables/user/schema";
-import { checkPasswordComplexity } from "@/utils/password-complexity";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Form, FormField, FormMessage } from "@/components/ui/form";
 import { toast } from "sonner";
+
 import { updateUserPasswordAction } from "@/server/actions/users";
-import Loading from "@/components/loading";
+
+import { UserSchema } from "@/server/db/tables/user/schema";
+import { checkPasswordComplexity } from "@/utils/password-complexity";
+
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Form, FormField, FormMessage } from "@/components/ui/form";
+import SubmitButton from "@/components/buttons/submit-button";
+
+import LabelWrapper from "../label-wrapper";
 
 const changePasswordSchema = UserSchema.pick({
   password: true,
@@ -115,17 +117,13 @@ function ChangePasswordSection({ userId }: { userId: number }) {
             application.
           </p>
           <div className="flex justify-end py-4">
-            <Button
-              variant="outline"
-              className="w-40"
+            <SubmitButton
+              type="submit"
+              loading={form.formState.isSubmitting}
               disabled={form.formState.isSubmitting}
             >
-              {form.formState.isSubmitting ? (
-                <Loading className="size-5" />
-              ) : (
-                "Save"
-              )}
-            </Button>
+              Save
+            </SubmitButton>
           </div>
         </div>
       </Form>
