@@ -1,9 +1,18 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import LabelWrapper from "../label-wrapper";
+import { toast } from "sonner";
+import { updateUserRoleAction } from "@/server/actions/users";
+import SubmitButton from "@/components/buttons/submit-button";
 
 const roleItems = [
   {
@@ -16,15 +25,33 @@ const roleItems = [
     value: "user",
     description: "Regular user, can preform all actions except admin panel",
   },
-]
+];
 
-function ChangeRoleSection({ userRole }: { userRole: string }) {
+function ChangeRoleSection({
+  userId,
+  userRole,
+}: {
+  userId: number;
+  userRole: string;
+}) {
   const [role, setRole] = useState(userRole);
   const [change, setChange] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setChange(userRole === role ? false : true);
   }, [userRole, role]);
+
+  const handleSubmit = async () => {
+    setLoading(true);
+    const [response, error] = await updateUserRoleAction({
+      id: userId,
+      role: role,
+    });
+    if (error !== null) return toast.error(error);
+    toast.success(`Role updated successful for User ID: ${response}`);
+    setLoading(false);
+  };
 
   return (
     <div className="flex flex-col gap-2 py-4">
@@ -52,9 +79,15 @@ function ChangeRoleSection({ userRole }: { userRole: string }) {
         changes will take effect once the user logs out.
       </p>
       <div className="flex justify-end py-4">
-        <Button variant="outline" className="w-40" disabled={!change}>
+        <SubmitButton
+          variant="outline"
+          className="w-40"
+          disabled={!change || loading}
+          loading={loading}
+          onClick={handleSubmit}
+        >
           Save
-        </Button>
+        </SubmitButton>
       </div>
     </div>
   );

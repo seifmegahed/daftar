@@ -41,7 +41,7 @@ export const getAllUsers = async (): Promise<
 export const updateUserRole = async (
   id: number,
   role: string,
-): Promise<ReturnTuple<boolean>> => {
+): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
       .update(users)
@@ -50,7 +50,7 @@ export const updateUserRole = async (
       .returning({ id: users.id });
 
     if (!user) throw new Error("User not found");
-    return [true, null];
+    return [user.id, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
@@ -199,7 +199,7 @@ export const sensitiveGetUserByUsername = async (
 export const updateUserName = async (
   id: number,
   name: string,
-): Promise<ReturnTuple<boolean>> => {
+): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
       .update(users)
@@ -208,7 +208,7 @@ export const updateUserName = async (
       .returning({ id: users.id });
 
     if (!user) throw new Error("User not found");
-    return [true, null];
+    return [user.id, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }

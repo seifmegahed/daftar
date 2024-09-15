@@ -12,7 +12,7 @@ function AdminEditUserForm({ user }: { user: GetPartialUserType }) {
       <h1 className="text-2xl font-bold">Edit User</h1>
       <ChangeNameSection name={user.name} />
       <hr></hr>
-      <ChangeRoleSection userRole={user.role} />
+      <ChangeRoleSection userId={user.id} userRole={user.role} />
       <hr></hr>
       <ChangePasswordSection userId={user.id} />
       <hr></hr>

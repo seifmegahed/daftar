@@ -238,7 +238,7 @@ type UpdateUserNameFormType = z.infer<typeof updateUserNameSchema>;
 
 export const updateUserNameAction = async (
   data: UpdateUserNameFormType,
-): Promise<ReturnTuple<boolean>> => {
+): Promise<ReturnTuple<number>> => {
   const [, isAdminError] = await checkAdminPermissions();
   if (isAdminError !== null) return [null, isAdminError];
 
@@ -270,7 +270,7 @@ type UpdateUserRoleFormType = z.infer<typeof updateUserRoleSchema>;
 
 export const updateUserRoleAction = async (
   data: UpdateUserRoleFormType,
-): Promise<ReturnTuple<boolean>> => {
+): Promise<ReturnTuple<number>> => {
   const [, isAdminError] = await checkAdminPermissions();
   if (isAdminError !== null) return [null, isAdminError];
 
