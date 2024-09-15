@@ -5,11 +5,9 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const routes = [
-  { name: "Dashboard", href: "/" },
   { name: "Projects", href: "/projects" },
   { name: "Clients", href: "/clients" },
   { name: "Suppliers", href: "/suppliers" },
-  { name: "Contacts", href: "/contacts" },
   { name: "Documents", href: "/documents" },
   { name: "Items", href: "/items" },
 ];
