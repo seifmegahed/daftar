@@ -56,3 +56,5 @@ yarn-error.log*
 admin/node_modules
 
 NOTES.md
+
+.VSCodeCounter
