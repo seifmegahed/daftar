@@ -5,6 +5,9 @@ import {
   type GetPartialUserType,
   getUserById,
   insertNewUser,
+  updateUserName,
+  updateUserPassword,
+  updateUserRole,
 } from "@/server/db/tables/user/queries";
 import { UserSchema } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
@@ -55,7 +58,7 @@ const addUserSchema = UserSchema.pick({
   password: true,
   verifyPassword: true,
   role: true,
-}).superRefine(
+}).refine(
   (data) =>
     !checkPasswordComplexity(data.password) ||
     data.password !== data.verifyPassword,
@@ -73,10 +76,70 @@ export const createUserAction = async (
 
   if (error !== null) return [null, userErrors.hashFailed];
 
-  return await insertNewUser({
+  const result = await insertNewUser({
     name: data.name,
     username: data.username,
     password: saltedPassword,
     role: data.role,
   });
+  return result;
+};
+
+const updateUserPasswordSchema = UserSchema.pick({
+  id: true,
+  password: true,
+  verifyPassword: true,
+}).refine(
+  (data) =>
+    !checkPasswordComplexity(data.password) ||
+    data.password !== data.verifyPassword,
+);
+
+type UpdateUserPasswordFormType = z.infer<typeof updateUserPasswordSchema>;
+
+export const updateUserPasswordAction = async (
+  data: UpdateUserPasswordFormType,
+): Promise<ReturnTuple<number>> => {
+  const isValid = updateUserPasswordSchema.safeParse(data);
+  if (!isValid.success) return [null, userErrors.invalidData];
+
+  const [saltedPassword, error] = await hashPassword(data.password);
+
+  if (error !== null) return [null, userErrors.hashFailed];
+
+  const result = await updateUserPassword(data.id, saltedPassword);
+
+  return result;
+};
+
+const updateUserNameSchema = UserSchema.pick({
+  id: true,
+  name: true,
+});
+
+type UpdateUserNameFormType = z.infer<typeof updateUserNameSchema>;
+
+export const updateUserNameAction = async (
+  data: UpdateUserNameFormType,
+): Promise<ReturnTuple<boolean>> => {
+  const isValid = updateUserNameSchema.safeParse(data);
+  if (!isValid.success) return [null, userErrors.invalidData];
+  const result = await updateUserName(data.id, data.name);
+  return result;
+};
+
+const updateUserRoleSchema = UserSchema.pick({
+  id: true,
+  role: true,
+});
+
+type UpdateUserRoleFormType = z.infer<typeof updateUserRoleSchema>;
+
+export const updateUserRoleAction = async (
+  data: UpdateUserRoleFormType,
+): Promise<ReturnTuple<boolean>> => {
+  const isValid = updateUserRoleSchema.safeParse(data);
+  if (!isValid.success) return [null, userErrors.invalidData];
+  const result = await updateUserRole(data.id, data.role);
+  return result;
 };

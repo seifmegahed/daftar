@@ -35,7 +35,7 @@ export const UserSchemaRaw = {
     .string({ required_error: "Password is required" })
     .min(8, { message: "Password must be at least 8 characters" })
     .max(64, { message: "Password must be at most 64 characters" }),
-  verifyPassword: z.string().min(8).max(64),
+  verifyPassword: z.string(),
   role: z
     .string({ required_error: "Role is required" })
     .max(32)
