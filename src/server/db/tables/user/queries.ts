@@ -38,68 +38,6 @@ export const getAllUsers = async (): Promise<
   }
 };
 
-/**
- *
- * Get User By Username
- *
- * Get a user by username, and return some columns from the user table.
- *
- * This function is intended to be used on the server side, and is not intended
- * to be used on the client side because it contains sensitive information
- * like passwords.
- *
- * Primary usage of this function is to use the data to login a user.
- *
- * @param username
- * @returns - Tuple containing the user's information or an error message if there is one
- */
-type SensitiveGetUserType = Pick<
-  UserDataType,
-  "id" | "name" | "username" | "role" | "active" | "password"
->;
-
-export const sensitiveGetUserByUsername = async (
-  username: string,
-): Promise<ReturnTuple<SensitiveGetUserType>> => {
-  try {
-    const [user] = await db
-      .select({
-        id: users.id,
-        name: users.name,
-        username: users.username,
-        role: users.role,
-        active: users.active,
-        password: users.password,
-      })
-      .from(users)
-      .where(eq(users.username, username));
-
-    if (!user) return [null, userErrors.userNotFound];
-
-    return [user, null];
-  } catch (error) {
-    return [null, getErrorMessage(error)];
-  }
-};
-
-export const updateUserName = async (
-  id: number,
-  name: string,
-): Promise<ReturnTuple<boolean>> => {
-  try {
-    const [user] = await db
-      .update(users)
-      .set({ name })
-      .where(eq(users.id, id))
-      .returning({ id: users.id });
-
-    if (!user) throw new Error("User not found");
-    return [true, null];
-  } catch (error) {
-    return [null, getErrorMessage(error)];
-  }
-};
-
 export const updateUserRole = async (
   id: number,
   role: string,
@@ -209,6 +147,68 @@ export const updateUserLastActive = async (
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+/**
+ *
+ * Sensitive Get User By Username
+ *
+ * Get a user by username, and return some columns from the user table.
+ *
+ * This function is intended to be used on the server side, and is not intended
+ * to be used on the client side because it contains sensitive information
+ * like passwords.
+ *
+ * Primary usage of this function is to use the data to login a user.
+ *
+ * @param username
+ * @returns - Tuple containing the user's information or an error message if there is one
+ */
+type SensitiveGetUserType = Pick<
+  UserDataType,
+  "id" | "name" | "username" | "role" | "active" | "password"
+>;
+
+export const sensitiveGetUserByUsername = async (
+  username: string,
+): Promise<ReturnTuple<SensitiveGetUserType>> => {
+  try {
+    const [user] = await db
+      .select({
+        id: users.id,
+        name: users.name,
+        username: users.username,
+        role: users.role,
+        active: users.active,
+        password: users.password,
+      })
+      .from(users)
+      .where(eq(users.username, username));
+
+    if (!user) return [null, userErrors.userNotFound];
+
+    return [user, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const updateUserName = async (
+  id: number,
+  name: string,
+): Promise<ReturnTuple<boolean>> => {
+  try {
+    const [user] = await db
+      .update(users)
+      .set({ name })
+      .where(eq(users.id, id))
+      .returning({ id: users.id });
+
+    if (!user) throw new Error("User not found");
+    return [true, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
