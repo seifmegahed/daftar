@@ -43,7 +43,7 @@ function ActiveProjectsSection() {
           client: "Client 2",
         },
       ].map((project) => (
-        <div className="flex flex-col gap-2 py-4">
+        <div className="flex flex-col gap-2 py-4" key={project.id}>
           <div className="flex items-center justify-between">
             <h1 className="text-xl">{project.name}</h1>
             <p className="text-sm text-muted-foreground">{project.client}</p>
@@ -74,7 +74,7 @@ function DataDisplayTable({ data }: { data: { [key: string]: string }[] }) {
     <table>
       <tbody>
         {data.map((row) => (
-          <tr>
+          <tr key={row.key}>
             <td className="w-40 py-1">{row.key}</td>
             <td>{row.value}</td>
           </tr>

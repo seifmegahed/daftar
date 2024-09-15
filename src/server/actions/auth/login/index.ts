@@ -5,7 +5,10 @@ import { cookies } from "next/headers";
 import { createToken } from "@/lib/jwt";
 
 import { UserSchema } from "@/server/db/tables/user/schema";
-import { getUserByUsername, updateUserLastActive } from "@/server/db/tables/user/queries";
+import {
+  sensitiveGetUserByUsername,
+  updateUserLastActive,
+} from "@/server/db/tables/user/queries";
 import { comparePassword } from "@/utils/hashing";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import type { ReturnTuple } from "@/utils/type-utils";
@@ -27,7 +30,7 @@ export const loginAction = async (
     throw new Error("Invalid data");
   }
 
-  const [user, error] = await getUserByUsername(data.username);
+  const [user, error] = await sensitiveGetUserByUsername(data.username);
 
   if (error !== null) return [null, loginErrors.userNotFound];
 

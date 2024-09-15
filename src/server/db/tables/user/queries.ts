@@ -5,7 +5,6 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
 import { userErrors } from "@/server/actions/users/errors";
 
-export type GetUserType = Omit<UserDataType, "verifyPassword">;
 export type GetPartialUserType = Omit<
   UserDataType,
   "verifyPassword" | "password"
@@ -38,12 +37,39 @@ export const getAllUsers = async (): Promise<
   }
 };
 
-export const getUserByUsername = async (
+/**
+ *
+ * Get User By Username
+ *
+ * Get a user by username, and return some columns from the user table.
+ *
+ * This function is intended to be used on the server side, and is not intended
+ * to be used on the client side because it contains sensitive information
+ * like passwords.
+ *
+ * Primary usage of this function is to use the data to login a user.
+ *
+ * @param username
+ * @returns - Tuple containing the user's information or an error message if there is one
+ */
+type SensitiveGetUserType = Pick<
+  UserDataType,
+  "id" | "name" | "username" | "role" | "active" | "password"
+>;
+
+export const sensitiveGetUserByUsername = async (
   username: string,
-): Promise<ReturnTuple<GetUserType>> => {
+): Promise<ReturnTuple<SensitiveGetUserType>> => {
   try {
     const [user] = await db
-      .select()
+      .select({
+        id: users.id,
+        name: users.name,
+        username: users.username,
+        role: users.role,
+        active: users.active,
+        password: users.password,
+      })
       .from(users)
       .where(eq(users.username, username));
 
