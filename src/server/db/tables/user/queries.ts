@@ -1,6 +1,6 @@
 import { db } from "../..";
 import { type UserDataType, users } from "./schema";
-import { asc, eq } from "drizzle-orm";
+import { asc, eq, and } from "drizzle-orm";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
 import { userErrors } from "@/server/actions/users/errors";
@@ -163,6 +163,8 @@ export const updateUserLastActive = async (
  * like passwords.
  *
  * Primary usage of this function is to use the data to login a user.
+ * 
+ * User must be active to be able to login.
  *
  * @param username
  * @returns - Tuple containing the user's information or an error message if there is one
@@ -186,7 +188,7 @@ export const sensitiveGetUserByUsername = async (
         password: users.password,
       })
       .from(users)
-      .where(eq(users.username, username));
+      .where(and(eq(users.username, username), eq(users.active, true)));
 
     if (!user) return [null, userErrors.userNotFound];
 
