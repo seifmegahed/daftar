@@ -12,8 +12,8 @@ function PageTitle({ title }: { title: string }) {
   }, [title]);
   return (
     <div className="flex justify-between p-5" ref={topRef}>
-      <h1 className="text-3xl font-bold">{getInitials(title)}</h1>
       <h1 className="text-2xl">{title}</h1>
+      <h1 className="text-3xl font-bold">{getInitials(title)}</h1>
     </div>
   );
 }

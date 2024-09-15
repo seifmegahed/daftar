@@ -83,6 +83,8 @@ function UserInfo({ user }: { user: GetPartialUserType }) {
           data={[
             { key: "ID:", value: user.id.toString() },
             { key: "username:", value: user.username },
+            { key: "Tole:", value: user.role.toUpperCase() },
+            { key: "State:", value: user.active ? "Active" : "Deactivated" },
           ]}
         />
       </div>

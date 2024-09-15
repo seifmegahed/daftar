@@ -120,7 +120,7 @@ function ChangePasswordSection({ userId }: { userId: number }) {
             <SubmitButton
               type="submit"
               loading={form.formState.isSubmitting}
-              disabled={form.formState.isSubmitting}
+              disabled={form.formState.isSubmitting || !form.formState.isDirty}
             >
               Save
             </SubmitButton>
