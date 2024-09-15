@@ -1,6 +1,6 @@
 import { db } from "../..";
 import { type UserDataType, users } from "./schema";
-import { eq } from "drizzle-orm";
+import { asc, eq } from "drizzle-orm";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
 import { userErrors } from "@/server/actions/users/errors";
@@ -29,7 +29,8 @@ export const getAllUsers = async (): Promise<
         createdAt: users.createdAt,
         updatedAt: users.updatedAt,
       })
-      .from(users);
+      .from(users)
+      .orderBy(asc(users.id));
 
     return [allUsers, null];
   } catch (error) {
