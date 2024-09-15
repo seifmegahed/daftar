@@ -132,7 +132,11 @@ export default function NewUserForm() {
           />
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button className="w-60" type="submit">
+          <Button
+            className="w-60"
+            type="submit"
+            disabled={form.formState.isSubmitting}
+          >
             Add User
           </Button>
         </CardFooter>
