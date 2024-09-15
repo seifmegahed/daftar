@@ -1,42 +1,108 @@
+import { type GetPartialUserType } from "@/server/db/tables/user/queries";
+import { getInitials } from "@/utils/user";
+import AdminEditUserForm from "./user-edit-form";
 import { Button } from "@/components/ui/button";
 
-type UserPageProps = {
-  user: {
-    id: number;
-    username: string;
-    name: string;
-    role: string;
-  };
-};
+const parseDate = (date: Date | null) =>
+  date === null ? "N/A" : date.toLocaleDateString();
 
-function UserPage({ user }: UserPageProps) {
-  const lastActive = new Date().toLocaleDateString();
+function UserPage({ user }: { user: GetPartialUserType }) {
   return (
-    <div>
-      <div className="flex flex-col gap-2 p-5">
-        <h1 className="text-2xl">{user.username}</h1>
-        <p>User ID: {user.id}</p>
-        <p>Username: {user.username}</p>
-        <p>Name: {user.name}</p>
-        <p>Role: {user.role}</p>
-        <p>Last Active: {lastActive}</p>
-        <div className="flex justify-between">
-          <Button variant="outline" className="w-40">
-            Deactivate
-          </Button>
-          <Button variant="outline" className="w-40" disabled>
-            Save
-          </Button>
+    <>
+      <PageTitle title={user.name} />
+      <hr></hr>
+      <UserInfo user={user} />
+      <hr></hr>
+      <AdminEditUserForm user={user} />
+      <hr></hr>
+      <ActiveProjectsSection />
+    </>
+  );
+}
+
+function ActiveProjectsSection() {
+  return (
+    <div className="flex flex-col gap-4 p-5">
+      <h1 className="text-2xl font-bold">Active Projects</h1>
+      <p className="text-xs text-muted-foreground">
+        List of active projects where this user is an owner.
+      </p>
+      {[
+        {
+          id: 1,
+          name: "Project 1",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+          client: "Client 1",
+        },
+        {
+          id: 2,
+          name: "Project 2",
+          description:
+            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+          client: "Client 2",
+        },
+      ].map((project) => (
+        <div className="flex flex-col gap-2 py-4">
+          <div className="flex items-center justify-between">
+            <h1 className="text-xl">{project.name}</h1>
+            <p className="text-sm text-muted-foreground">{project.client}</p>
+          </div>
+          <p className="text-xs text-muted-foreground">{project.description}</p>
+          <div className="flex justify-end">
+            <Button variant="outline" className="w-40">
+              Go to Project
+            </Button>
+          </div>
         </div>
+      ))}
+    </div>
+  );
+}
+
+function PageTitle({ title }: { title: string }) {
+  return (
+    <div className="flex justify-between p-5">
+      <h1 className="text-3xl font-bold">{getInitials(title)}</h1>
+      <h1 className="text-2xl">{title}</h1>
+    </div>
+  );
+}
+
+function DataDisplayTable({ data }: { data: { [key: string]: string }[] }) {
+  return (
+    <table>
+      <tbody>
+        {data.map((row) => (
+          <tr>
+            <td className="w-40 py-1">{row.key}</td>
+            <td>{row.value}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+}
+
+function UserInfo({ user }: { user: GetPartialUserType }) {
+  return (
+    <div className="grid grid-cols-2 gap-2 p-5 text-muted-foreground">
+      <div>
+        <DataDisplayTable
+          data={[
+            { key: "ID:", value: user.id.toString() },
+            { key: "username:", value: user.username },
+          ]}
+        />
       </div>
-      <hr></hr>
-      <div className="flex flex-col gap-2 p-5">
-        <h1 className="text-xl">Projects</h1>
-      </div>
-      <hr></hr>
-      <div className="flex flex-col gap-2 p-5">
-        <h1 className="text-xl">Change Password</h1>
-        {/* <ChangePasswordForm user={user} /> */}
+      <div className="flex justify-end border-l">
+        <DataDisplayTable
+          data={[
+            { key: "Date Created:", value: parseDate(user.createdAt) },
+            { key: "Date Updated:", value: parseDate(user.updatedAt) },
+            { key: "Last Active:", value: parseDate(user.lastActive) },
+          ]}
+        />
       </div>
     </div>
   );

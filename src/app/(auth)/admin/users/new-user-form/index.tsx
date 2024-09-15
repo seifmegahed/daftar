@@ -58,6 +58,7 @@ export default function NewUserForm() {
       <form
         onSubmit={form.handleSubmit(onSubmit)}
         className="relative overflow-hidden"
+        autoComplete="off"
       >
         <LoadingOverlay state={form.formState.isSubmitting} />
         <CardHeader>
@@ -73,7 +74,12 @@ export default function NewUserForm() {
             render={({ field }) => (
               <FormItem>
                 <Label htmlFor="username">User Name</Label>
-                <Input id="username" type="username" {...field} />
+                <Input
+                  id="username"
+                  type="username"
+                  autoComplete="new-username"
+                  {...field}
+                />
                 <FormMessage />
               </FormItem>
             )}
@@ -84,7 +90,12 @@ export default function NewUserForm() {
             render={({ field }) => (
               <FormItem>
                 <Label htmlFor="name">Name</Label>
-                <Input id="name" type="name" {...field} />
+                <Input
+                  id="name"
+                  type="name"
+                  autoComplete="new-name"
+                  {...field}
+                />
                 <FormMessage />
               </FormItem>
             )}
@@ -114,7 +125,12 @@ export default function NewUserForm() {
             render={({ field }) => (
               <FormItem>
                 <Label htmlFor="password">Password</Label>
-                <Input id="password" type="password" {...field} />
+                <Input
+                  id="password"
+                  type="password"
+                  autoComplete="new-password"
+                  {...field}
+                />
                 <FormMessage />
               </FormItem>
             )}
@@ -125,7 +141,12 @@ export default function NewUserForm() {
             render={({ field }) => (
               <FormItem>
                 <Label htmlFor="verify-password">Verify Password</Label>
-                <Input id="verify-password" type="password" {...field} />
+                <Input
+                  id="verify-password"
+                  type="password"
+                  autoComplete="new-password-verify"
+                  {...field}
+                />
                 <FormMessage />
               </FormItem>
             )}

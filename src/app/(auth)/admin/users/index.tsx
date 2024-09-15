@@ -19,7 +19,7 @@ async function Users() {
   return (
     <Tabs.Root defaultValue="add-user" className="">
       <Card className="h-[75vh] max-w-6xl overflow-hidden">
-        <div className="grid h-full grid-cols-6">
+        <div className="grid h-full grid-cols-8">
           <div className="col-span-2 h-full overflow-y-scroll">
             <SectionTitle title="Users" />
             <div className="flex flex-col">
@@ -31,7 +31,7 @@ async function Users() {
               </Tabs.List>
             </div>
           </div>
-          <div className="col-span-4 h-full overflow-y-scroll border-l">
+          <div className="col-span-6 h-full overflow-y-scroll border-l">
             <Tabs.Content value="add-user">
               <NewUserForm />
             </Tabs.Content>
