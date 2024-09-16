@@ -1,7 +1,5 @@
 "use client";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-
 import { Button } from "@/components/ui/button";
 
 import {
@@ -21,6 +19,8 @@ import { getErrorMessage } from "@/lib/exceptions";
 import { useTheme } from "next-themes";
 import { getInitials } from "@/utils/user";
 import type { UserDataType } from "@/server/db/tables/user/schema";
+import Link from "next/link";
+import { AvatarContainer } from "@/components/avatar";
 
 function UserButton({
   user,
@@ -54,9 +54,9 @@ function UserButton({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="secondary" size="icon" className="rounded-full">
-            <Avatar>
-              <AvatarFallback>{initials}</AvatarFallback>
-            </Avatar>
+            <AvatarContainer>
+              {initials}
+            </AvatarContainer>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
@@ -78,7 +78,9 @@ function UserButton({
           >
             Light Mode
           </DropdownMenuItem>
-          <DropdownMenuItem>Change Password</DropdownMenuItem>
+          <Link href="settings">
+            <DropdownMenuItem>Settings</DropdownMenuItem>
+          </Link>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
         </DropdownMenuContent>
