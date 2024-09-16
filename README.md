@@ -42,6 +42,9 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [x] Implement Admin edit user role functionality
 - [x] Implement Admin deactivate user functionality
 - [x] Implement Admin edit user name functionality
+- [ ] Implement User settings page
+- [ ] Implement User change name form
+- [ ] Implement User change password form
 - [ ] Implement Password validation for user to change password
 
 ### Error Handling
