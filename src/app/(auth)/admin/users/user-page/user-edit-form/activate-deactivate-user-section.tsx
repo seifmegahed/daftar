@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { updateUserActiveAction } from "@/server/actions/users";
 
 import SubmitButton from "@/components/buttons/submit-button";
-import LabelWrapper from "../label-wrapper";
+import LabelWrapper from "./label-wrapper";
 
 function DeactivateUserSection({ userId }: { userId: number }) {
   const [loading, setLoading] = useState(false);

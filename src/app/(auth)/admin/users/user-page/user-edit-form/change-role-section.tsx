@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/select";
 import SubmitButton from "@/components/buttons/submit-button";
 
-import LabelWrapper from "../label-wrapper";
+import LabelWrapper from "./label-wrapper";
 
 const roleItems = [
   {

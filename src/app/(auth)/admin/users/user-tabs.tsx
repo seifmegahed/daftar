@@ -1,3 +1,8 @@
+import {
+  AdminUserAvatarContainer,
+  AvatarContainer,
+  DeactivatedUserAvatarContainer,
+} from "@/components/avatar";
 import { getInitials } from "@/utils/user";
 import * as Tabs from "@radix-ui/react-tabs";
 import { Plus } from "lucide-react";
@@ -62,34 +67,6 @@ function UserAvatarContainer({
   if (role === "admin")
     return <AdminUserAvatarContainer>{children}</AdminUserAvatarContainer>;
   return <AvatarContainer>{children}</AvatarContainer>;
-}
-
-function AvatarContainer({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="text-md flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-all duration-1000 ease-in-out group-hover:bg-white group-data-[state=active]:bg-white">
-      <div>{children}</div>
-    </div>
-  );
-}
-
-function AdminUserAvatarContainer({ children }: { children: React.ReactNode }) {
-  return (
-    <div className="text-md flex size-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-muted-foreground">
-      <div>{children}</div>
-    </div>
-  );
-}
-
-function DeactivatedUserAvatarContainer({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return (
-    <div className="text-md flex size-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-muted-foreground">
-      <div>{children}</div>
-    </div>
-  );
 }
 
 function UserCardItem({ children }: { children: React.ReactNode }) {

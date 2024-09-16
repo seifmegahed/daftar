@@ -1,10 +1,8 @@
 import { GetPartialUserType } from "@/server/db/tables/user/queries";
-import {
-  ChangeNameSection,
-  ChangePasswordSection,
-  ChangeRoleSection,
-  ActivateDeactivateUserSection,
-} from "./sections";
+import ChangeNameSection from "./change-name-section";
+import ChangePasswordSection from "./change-password-section";
+import ChangeRoleSection from "./change-role-section";
+import ActivateDeactivateUserSection from "./activate-deactivate-user-section";
 
 function AdminEditUserForm({ user }: { user: GetPartialUserType }) {
   return (

@@ -8,7 +8,7 @@ import { updateUserNameAction } from "@/server/actions/users";
 import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/buttons/submit-button";
 
-import LabelWrapper from "../label-wrapper";
+import LabelWrapper from "./label-wrapper";
 
 const changeNameSchema = UserSchema.pick({
   name: true,

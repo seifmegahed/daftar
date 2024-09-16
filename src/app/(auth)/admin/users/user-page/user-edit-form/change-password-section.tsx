@@ -15,7 +15,7 @@ import { Label } from "@/components/ui/label";
 import { Form, FormField, FormMessage } from "@/components/ui/form";
 import SubmitButton from "@/components/buttons/submit-button";
 
-import LabelWrapper from "../label-wrapper";
+import LabelWrapper from "./label-wrapper";
 
 const changePasswordSchema = UserSchema.pick({
   password: true,

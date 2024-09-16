@@ -2,9 +2,8 @@ import { type GetPartialUserType } from "@/server/db/tables/user/queries";
 import AdminEditUserForm from "./user-edit-form";
 import { Button } from "@/components/ui/button";
 import PageTitle from "./title";
-
-const parseDate = (date: Date | null) =>
-  date === null ? "N/A" : date.toLocaleDateString();
+import { format } from "date-fns";
+import DataDisplayTable from "@/components/data-display-table";
 
 function UserPage({ user }: { user: GetPartialUserType }) {
   return (
@@ -60,40 +59,31 @@ function ActiveProjectsSection() {
   );
 }
 
-function DataDisplayTable({ data }: { data: { [key: string]: string }[] }) {
-  return (
-    <table>
-      <tbody>
-        {data.map((row) => (
-          <tr key={row.key}>
-            <td className="w-40 py-1">{row.key}</td>
-            <td>{row.value}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-}
-
 function UserInfo({ user }: { user: GetPartialUserType }) {
   return (
     <div className="grid grid-cols-2 gap-2 p-5 text-muted-foreground">
       <div>
         <DataDisplayTable
           data={[
-            { key: "ID:", value: user.id.toString() },
-            { key: "username:", value: user.username },
-            { key: "Tole:", value: user.role.toUpperCase() },
-            { key: "State:", value: user.active ? "Active" : "Deactivated" },
+            { name: "ID:", value: user.id.toString() },
+            { name: "username:", value: user.username },
+            { name: "Tole:", value: user.role.toUpperCase() },
+            { name: "State:", value: user.active ? "Active" : "Deactivated" },
           ]}
         />
       </div>
       <div className="flex justify-end border-l">
         <DataDisplayTable
           data={[
-            { key: "Date Created:", value: parseDate(user.createdAt) },
-            { key: "Date Updated:", value: parseDate(user.updatedAt) },
-            { key: "Last Active:", value: parseDate(user.lastActive) },
+            { name: "Date Created:", value: format(user.createdAt, "PP") },
+            {
+              name: "Date Updated:",
+              value: user.updatedAt ? format(user.updatedAt, "PP") : "N/A",
+            },
+            {
+              name: "Last Active:",
+              value: user.lastActive ? format(user.lastActive, "PP") : "N/A",
+            },
           ]}
         />
       </div>
