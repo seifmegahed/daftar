@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { updateUserRoleAction } from "@/server/actions/users";
+import { adminUpdateUserRoleAction } from "@/server/actions/users";
 
 import {
   Select,
@@ -46,7 +46,7 @@ function ChangeRoleSection({
 
   const handleSubmit = async () => {
     setLoading(true);
-    const [response, error] = await updateUserRoleAction({
+    const [response, error] = await adminUpdateUserRoleAction({
       id: userId,
       role: role,
     });

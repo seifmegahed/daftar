@@ -23,7 +23,7 @@ import {
   SelectItem,
   Select,
 } from "@/components/ui/select";
-import { createUserAction } from "@/server/actions/users";
+import { adminCreateUserAction } from "@/server/actions/users";
 import { useRouter } from "next/navigation";
 import LoadingOverlay from "@/components/loading-overlay";
 
@@ -38,7 +38,7 @@ export default function NewUserForm() {
   });
 
   const onSubmit = async (data: NewUserFormType) => {
-    await createUserAction(data)
+    await adminCreateUserAction(data)
       .then((res) => {
         const [_, error] = res;
         if (error) {

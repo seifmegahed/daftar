@@ -5,7 +5,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 
-import { updateUserPasswordAction } from "@/server/actions/users";
+import { adminUpdateUserPasswordAction } from "@/server/actions/users";
 
 import { UserSchema } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
@@ -53,7 +53,7 @@ function ChangePasswordSection({ userId }: { userId: number }) {
   });
 
   const onSubmit = async (data: FormSchemaType) => {
-    const [result, error] = await updateUserPasswordAction({
+    const [result, error] = await adminUpdateUserPasswordAction({
       id: userId,
       password: data.password,
       verifyPassword: data.verifyPassword,

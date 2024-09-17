@@ -159,7 +159,7 @@ const addUserSchema = UserSchema.pick({
 
 type CreateUserFormType = z.infer<typeof addUserSchema>;
 
-export const createUserAction = async (
+export const adminCreateUserAction = async (
   data: CreateUserFormType,
 ): Promise<ReturnTuple<number>> => {
   const [, isAdminError] = await checkAdminPermissions();
@@ -204,7 +204,7 @@ const updateUserPasswordSchema = UserSchema.pick({
 
 type UpdateUserPasswordFormType = z.infer<typeof updateUserPasswordSchema>;
 
-export const updateUserPasswordAction = async (
+export const adminUpdateUserPasswordAction = async (
   data: UpdateUserPasswordFormType,
 ): Promise<ReturnTuple<number>> => {
   const [, isAdminError] = await checkAdminPermissions();
@@ -239,7 +239,7 @@ const updateUserNameSchema = UserSchema.pick({
 
 type UpdateUserNameFormType = z.infer<typeof updateUserNameSchema>;
 
-export const updateUserNameAction = async (
+export const adminUpdateUserDisplayNameAction = async (
   data: UpdateUserNameFormType,
 ): Promise<ReturnTuple<number>> => {
   const [, isAdminError] = await checkAdminPermissions();
@@ -273,7 +273,7 @@ const updateUserRoleSchema = UserSchema.pick({
 
 type UpdateUserRoleFormType = z.infer<typeof updateUserRoleSchema>;
 
-export const updateUserRoleAction = async (
+export const adminUpdateUserRoleAction = async (
   data: UpdateUserRoleFormType,
 ): Promise<ReturnTuple<number>> => {
   const [, isAdminError] = await checkAdminPermissions();
@@ -306,7 +306,7 @@ const updateUserActiveSchema = UserSchema.pick({
 
 type UpdateUserActiveFormType = z.infer<typeof updateUserActiveSchema>;
 
-export const updateUserActiveAction = async (
+export const adminUpdateUserActiveAction = async (
   data: UpdateUserActiveFormType,
 ): Promise<ReturnTuple<number>> => {
   const [, isAdminError] = await checkAdminPermissions();

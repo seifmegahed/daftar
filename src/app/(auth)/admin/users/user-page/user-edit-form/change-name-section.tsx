@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { UserSchema } from "@/server/db/tables/user/schema";
-import { updateUserNameAction } from "@/server/actions/users";
+import { adminUpdateUserDisplayNameAction } from "@/server/actions/users";
 import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/buttons/submit-button";
 
@@ -32,7 +32,7 @@ function ChangeNameSection({ userId, name }: { userId: number; name: string }) {
       setLoading(false);
       return;
     } else setErrorMessage("");
-    const [response, error] = await updateUserNameAction({
+    const [response, error] = await adminUpdateUserDisplayNameAction({
       id: userId,
       name: newName,
     });
