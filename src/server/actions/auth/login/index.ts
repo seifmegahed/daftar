@@ -23,12 +23,11 @@ type LoginFormType = z.infer<typeof loginSchema>;
 
 export const loginAction = async (
   data: LoginFormType,
-): Promise<ReturnTuple<boolean>> => {
+): Promise<ReturnTuple<number>> => {
   const isValid = loginSchema.safeParse(data);
 
-  if (!isValid.success) {
-    throw new Error("Invalid data");
-  }
+  if (!isValid.success)
+    return [null, loginErrors.invalidData];
 
   const [user, error] = await sensitiveGetUserByUsername(data.username);
 
@@ -47,10 +46,13 @@ export const loginAction = async (
     role: user.role,
   });
 
+  if (!token) return [null, loginErrors.tokenGenerationError];
+
   cookies().set("token", token, {
     httpOnly: true,
     secure: false,
     sameSite: "strict",
   });
-  return [true, null];
+
+  return [user.id, null];
 };

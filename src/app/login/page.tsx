@@ -20,7 +20,7 @@ import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { loginAction } from "@/server/actions/auth/login";
 import LoadingOverlay from "@/components/loading-overlay";
-import { loginErrors } from "@/server/actions/auth/login/errors";
+
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/exceptions";
 
@@ -32,20 +32,14 @@ export default function LoginForm() {
   });
 
   const onSubmit = async (data: LoginFormType) => {
-    await loginAction(data)
-      .then((res) => {
-        const [, error] = res;
-        if (error) {
-          form.setError(
-            error === loginErrors.userNotFound ? "username" : "password",
-            { type: "manual", message: error },
-          );
-        }
-        router.replace("/");
-      })
-      .catch((error) => {
-        toast.error(getErrorMessage(error));
-      });
+    try {
+      const [result, error] = await loginAction(data);
+      if (error !== null) return toast.error(error);
+      else if (result) router.push("/");
+    } catch (error) {
+      console.error("Error logging in:", error);
+      toast.error(getErrorMessage(error));
+    }
   };
 
   return (
