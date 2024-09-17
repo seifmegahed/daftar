@@ -15,6 +15,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/buttons/submit-button";
+import { userUpdateUserDisplayNameAction } from "@/server/actions/users";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/exceptions";
 
 const accountFormSchema = z.object({
   name: z
@@ -42,15 +45,27 @@ const defaultValues: Partial<AccountFormValues> = {
   name: "",
 };
 
-export function AccountForm() {
+function ChangeNameForm() {
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
     defaultValues,
   });
 
+  const onSubmit = async (data: AccountFormValues) => {
+    try {
+      const [, error] = await userUpdateUserDisplayNameAction(data);
+      if (error !== null) return toast.error(error);
+      toast.success(`Display name updated`);
+      form.reset();
+    } catch (error) {
+      console.error("Error updating user name:", error);
+      toast.error(getErrorMessage(error));
+    }
+  };
+
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(console.log)} className="space-y-8">
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
           name="name"
@@ -61,8 +76,8 @@ export function AccountForm() {
                 <Input placeholder="Your name" {...field} />
               </FormControl>
               <FormDescription>
-                This is the name that will be displayed on your profile and in
-                emails.
+                This is the name that will be displayed in the application and
+                will be used to generate your avatar.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -81,3 +96,5 @@ export function AccountForm() {
     </Form>
   );
 }
+
+export default ChangeNameForm;

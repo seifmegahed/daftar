@@ -7,18 +7,19 @@ import {
   type GetPartialUserType,
   getUserById,
   insertNewUser,
+  sensitiveGetUserPasswordById,
   updateUserName,
   updateUserPassword,
   updateUserRole,
 } from "@/server/db/tables/user/queries";
-import { UserSchema } from "@/server/db/tables/user/schema";
+import { UserSchema, UserSchemaRaw } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import { userErrors } from "./errors";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { cookies } from "next/headers";
 import { verifyToken } from "@/lib/jwt";
-import { hashPassword } from "@/utils/hashing";
-import type { z } from "zod";
+import { comparePassword, hashPassword } from "@/utils/hashing";
+import { z } from "zod";
 import { revalidatePath } from "next/cache";
 
 /**
@@ -61,6 +62,16 @@ export const getCurrentUserAction = async (): Promise<
   return await getUserByIdAction(id);
 };
 
+const getCurrentUserIdAction = async (): Promise<ReturnTuple<number>> => {
+  const token = cookies().get("token");
+  if (!token) return [null, userErrors.userNotFound];
+  const decoded = await verifyToken(token.value);
+  if (decoded === null) return [null, userErrors.userNotFound];
+  const id = Number(decoded.payload.id);
+  if (isNaN(id)) return [null, userErrors.userNotFound];
+  return [id, null];
+};
+
 /**
  * Get All Users
  *
@@ -99,6 +110,105 @@ export const getUserByIdAction = async (
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
+};
+
+/******************************************************************************/
+/*                                                                            */
+/*                                                                            */
+/*                        User Update Self Actions                            */
+/*                                                                            */
+/*                                                                            */
+/******************************************************************************/
+
+/**
+ * Update User Display Name - Same User Only
+ *
+ * User Server Action to update a user's display name
+ *
+ * @param data - Data to update the user's name
+ *   - name: New name of the user
+ * @returns - Tuple containing the updated user's ID or an error message if there is one
+ */
+const updateUserDisplayNameSchema = UserSchema.pick({
+  name: true,
+});
+
+type UpdateUserDisplayNameFormType = z.infer<
+  typeof updateUserDisplayNameSchema
+>;
+
+export const userUpdateUserDisplayNameAction = async (
+  data: UpdateUserDisplayNameFormType,
+): Promise<ReturnTuple<number>> => {
+  const [userId, error] = await getCurrentUserIdAction();
+  if (error !== null) return [null, error];
+
+  const [, isAdminError] = await checkAdminPermissions();
+  if (isAdminError !== null) return [null, isAdminError];
+
+  const isValid = updateUserDisplayNameSchema.safeParse(data);
+  if (!isValid.success) return [null, userErrors.invalidData];
+
+  const result = await updateUserName(userId, data.name);
+  revalidatePath("/settings/account");
+  return result;
+};
+
+/**
+ * Update User Password - Same User Only
+ *
+ * User Server Action to update a user's password.
+ * Intended to be used if a user forgets their password.
+ *
+ * Checks if users old password is correct before updating to the new password to 
+ * verify the user.
+ *
+ * New Password is hashed before being stored in the database.
+ *
+ * @param data - Data to update the user's password
+ *   - oldPassword: Old password of the user
+ *   - newPassword: New password of the user
+ *   - verifyPassword: password verification of the new password
+ * @returns - Tuple containing the updated user's ID or an error message if there is one
+ */
+const userUpdateUserPasswordSchema = z
+  .object({
+    oldPassword: UserSchemaRaw.password,
+    newPassword: UserSchemaRaw.password,
+    verifyPassword: UserSchemaRaw.verifyPassword,
+  })
+  .refine(
+    (data) =>
+      !checkPasswordComplexity(data.oldPassword) ||
+      data.oldPassword !== data.newPassword ||
+      !checkPasswordComplexity(data.newPassword) ||
+      data.newPassword === data.verifyPassword,
+  );
+
+type UserUpdateUserPasswordFormType = z.infer<
+  typeof userUpdateUserPasswordSchema
+>;
+
+export const userUpdateUserPasswordAction = async (
+  data: UserUpdateUserPasswordFormType,
+): Promise<ReturnTuple<number>> => {
+  const [userId, currentUserError] = await getCurrentUserIdAction();
+  if (currentUserError !== null) return [null, currentUserError];
+
+  const isValid = userUpdateUserPasswordSchema.safeParse(data);
+  if (!isValid.success) return [null, userErrors.invalidData];
+
+  const [password, getUserError] = await sensitiveGetUserPasswordById(userId);
+  if (getUserError !== null) return [null, getUserError];
+
+  const isValidPassword = await comparePassword(data.oldPassword, password);
+  if (!isValidPassword) return [null, userErrors.incorrectPassword];
+
+  const [hashedPassword, error] = await hashPassword(data.newPassword);
+  if (error !== null) return [null, userErrors.hashFailed];
+
+  const result = await updateUserPassword(userId, hashedPassword);
+  return result;
 };
 
 /******************************************************************************/
@@ -167,13 +277,13 @@ export const adminCreateUserAction = async (
   const isValid = addUserSchema.safeParse(data);
   if (!isValid.success) return [null, userErrors.invalidData];
 
-  const [saltedPassword, error] = await hashPassword(data.password);
+  const [hashedPassword, error] = await hashPassword(data.password);
   if (error !== null) return [null, userErrors.hashFailed];
 
   const result = await insertNewUser({
     name: data.name,
     username: data.username,
-    password: saltedPassword,
+    password: hashedPassword,
     role: data.role,
   });
   revalidatePath("/admin");
@@ -213,10 +323,10 @@ export const adminUpdateUserPasswordAction = async (
   const isValid = updateUserPasswordSchema.safeParse(data);
   if (!isValid.success) return [null, userErrors.invalidData];
 
-  const [saltedPassword, error] = await hashPassword(data.password);
+  const [hashedPassword, error] = await hashPassword(data.password);
   if (error !== null) return [null, userErrors.hashFailed];
 
-  const result = await updateUserPassword(data.id, saltedPassword);
+  const result = await updateUserPassword(data.id, hashedPassword);
   return result;
 };
 

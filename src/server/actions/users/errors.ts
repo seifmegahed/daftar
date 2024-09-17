@@ -5,4 +5,5 @@ export const userErrors = {
   invalidPermissions: "Invalid permissions",
   usernameAlreadyExists: "Username already exists",
   hashFailed: "Hashing failed",
+  incorrectPassword: "Incorrect password",
 } as const;

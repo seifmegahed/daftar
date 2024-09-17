@@ -153,6 +153,37 @@ export const updateUserLastActive = async (
 };
 
 /**
+ * Sensitive Get User Password By ID
+ * 
+ * This function is intended to be used on the server side, and is not intended
+ * to be used on the client side because it contains sensitive information
+ * like passwords.
+ * 
+ * Primary usage of this function is to use the data to verify a user's password.
+ * 
+ * @param id - ID of the user to get
+ * @returns - Tuple containing the user's information or an error message if there is one
+ */
+export const sensitiveGetUserPasswordById = async (
+  id: number,
+): Promise<ReturnTuple<string>> => {
+  try {
+    const [user] = await db
+      .select({
+        password: users.password,
+      })
+      .from(users)
+      .where(eq(users.id, id));
+
+    if (!user) return [null, userErrors.userNotFound];
+
+    return [user.password, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+/**
  *
  * Sensitive Get User By Username
  *

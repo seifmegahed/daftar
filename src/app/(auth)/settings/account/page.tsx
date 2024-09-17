@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
-import { AccountForm } from "./account-form";
-import { ChangePasswordForm } from "./change-password-form";
+import ChangeNameForm from "./change-name-form";
+import ChangePasswordForm from "./change-password-form";
 
 async function SettingsAccountPage() {
   return (
@@ -11,7 +11,7 @@ async function SettingsAccountPage() {
       </div>
       <Separator />
       <p className="font-medium text-lg">Update name</p>
-      <AccountForm />
+      <ChangeNameForm />
       <Separator />
       <p className="font-medium text-lg">Update password</p>
       <ChangePasswordForm />

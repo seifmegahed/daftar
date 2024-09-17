@@ -42,10 +42,10 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - [x] Implement Admin edit user role functionality
 - [x] Implement Admin deactivate user functionality
 - [x] Implement Admin edit user name functionality
-- [ ] Implement User settings page
-- [ ] Implement User change name form
-- [ ] Implement User change password form
-- [ ] Implement Password validation for user to change password
+- [x] Implement User settings page
+- [x] Implement User change name form
+- [x] Implement User change password form
+- [x] Implement Password validation for user to change password
 
 ### Error Handling
 Error handling is implemented using try-catch blocks in the server actions.

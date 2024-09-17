@@ -16,6 +16,9 @@ import {
 import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/buttons/submit-button";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
+import { userUpdateUserPasswordAction } from "@/server/actions/users";
+import { toast } from "sonner";
+import { getErrorMessage } from "@/lib/exceptions";
 
 const schema = z
   .object({
@@ -64,16 +67,28 @@ const defaultValues: ChangePasswordFormType = {
   verifyPassword: "",
 };
 
-export function ChangePasswordForm() {
+function ChangePasswordForm() {
   const form = useForm<ChangePasswordFormType>({
     resolver: zodResolver(schema),
     defaultValues,
   });
 
+  const onSubmit = async (data: ChangePasswordFormType) => {
+    try {
+      const [, error] = await userUpdateUserPasswordAction(data);
+      if (error !== null) return toast.error(error);
+      toast.success(`Password updated successfully`);
+      form.reset();
+    } catch (error) {
+      console.error("Error updating user password:", error);
+      toast.error(getErrorMessage(error));
+    }
+  };
+
   return (
     <Form {...form}>
       <form
-        onSubmit={form.handleSubmit(console.log)}
+        onSubmit={form.handleSubmit(onSubmit)}
         className="space-y-8"
         autoComplete="off"
       >
@@ -155,3 +170,5 @@ export function ChangePasswordForm() {
     </Form>
   );
 }
+
+export default ChangePasswordForm;
