@@ -67,7 +67,7 @@ Copy the `.env-e` file to `.env` and fill in the values.
 To start the database container, make sure you have Docker installed and your environment variables are set up. Then run the following command:
 
 ```bash
-sudo Docker compose up -d
+sudo docker compose up -d
 ```
 
 To stop the database container, run the following command:
