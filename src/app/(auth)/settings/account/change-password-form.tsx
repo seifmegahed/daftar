@@ -86,12 +86,12 @@ function ChangePasswordForm() {
   };
 
   return (
-    <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(onSubmit)}
-        className="space-y-8"
-        autoComplete="off"
-      >
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="space-y-8"
+      autoComplete="off"
+    >
+      <Form {...form}>
         <FormField
           control={form.control}
           name="oldPassword"
@@ -101,7 +101,7 @@ function ChangePasswordForm() {
               <FormControl>
                 <Input
                   placeholder="Old Password"
-                  autoComplete="current-password"
+                  autoComplete="old-password"
                   type="password"
                   {...field}
                 />
@@ -166,8 +166,8 @@ function ChangePasswordForm() {
             Update Password
           </SubmitButton>
         </div>
-      </form>
-    </Form>
+      </Form>
+    </form>
   );
 }
 
