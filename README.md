@@ -21,7 +21,7 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 ![Data Flow Diagram](/docs/images/system-design-data-validation.png)
 
 ### Database Diagram
-![Database Diagram](/docs/images/system-design-database-diagram.svg)
+![Database Diagram](/docs/images/system-design-database-diagram-2.svg)
 
 ## TODO
 
