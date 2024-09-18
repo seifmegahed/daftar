@@ -83,7 +83,9 @@ async function handleGetUser(id: number) {
 ```
 
 ### Database Design
-![Database Diagram](/docs/images/system-design-database-diagram-3.svg)
+![Database Diagram](/docs/images/system-design-database-diagram-4.svg)
+
+This is a conceptual diagram of the database design. It is not a complete or accurate representation of the actual database schema. The actual schema has more data fields and constraints. This diagram is meant to provide a high-level overview of the database structure.
 
 #### Limitations
 
