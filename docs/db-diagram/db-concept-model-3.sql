@@ -8,7 +8,7 @@ Table Users {
 Table Contacts {
   id int [pk]
   supplierId int [ref: > Suppliers.id]
-  clientId int [ref: > Clients.id, pk]
+  clientId int [ref: > Clients.id]
   title varchar
   name varchar
   phone varchar
@@ -17,7 +17,7 @@ Table Contacts {
 Table Addresses {
   id int [pk]
   supplierId int [ref: > Suppliers.id]
-  clientId int [ref: > Clients.id, pk]
+  clientId int [ref: > Clients.id]
   addressTitle varchar
   address varchar
   city varchar
@@ -74,7 +74,7 @@ Table Documents {
   id int [pk]
   title varchar
   type varchar
-  path varcahr
+  path varchar
   fileType varchar
 }
 

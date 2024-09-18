@@ -12,22 +12,83 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 - Next.js
 - React
 - Tailwind CSS
+- Shadcn ui
 - Drizzle ORM
 - PostgreSQL
+- Zod
 
 ## System Architecture
 
-### Data Flow Diagram
+### Data Flow Design
 ![Data Flow Diagram](/docs/images/system-design-data-validation.png)
 
-### Database Diagram
+As **Immanuel Kant** famously noted in his 1808 Medium article, *"A Critique of Software Development: Observations on the Metaphysics of a Sublime System Design"*: **"You can't trust data coming from the client."**
+
+In keeping with this timeless philosophy, I've implemented validation using `Zod` both on the client and server sides. This approach ensures that data is thoroughly validated before it reaches the database, enabling better error handling and data consistency across the system. 
+
+By validating on both ends, we can prevent invalid data from slipping through and safeguard the integrity of the system, which simplifies the debugging process and enhances overall reliability.
+
+#### Error Handling
+
+In this project, I've adopted a GO-like error-handling approach. The main goal is to ensure a clear separation of concerns when returning data or errors, making it explicit that any function either returns valid data or an error message, never both. This design promotes safer, more predictable code that’s easy to reason about and maintain.
+
+```ts
+/** 
+ * XOR
+ * 
+ * Either return a value or an error message, never both and never neither 
+ * @return [null, errorMessage] | [returnValue, null]
+ */
+type ReturnTuple<T> = readonly [T, null] | readonly [null, string];
+```
+
+By using TypeScript’s type system, the `ReturnTuple` type ensures that our functions can only return valid data or an error message, but never both. This ensures that handling edge cases and errors is enforced by the compiler, reducing the risk of unhandled exceptions or ambiguous states in the application.
+
+This GO-like approach has several advantages over traditional error-handling methods (such as throwing exceptions):
+
+- **Explicit error handling**: By requiring functions to return a tuple, error handling becomes mandatory at every call site, reducing the chances of uncaught exceptions or silent failures.
+- **Predictable function signatures**: Since every function that may fail returns the same type (`ReturnTuple<T>`), it’s easy to reason about how errors are handled throughout the codebase.
+- **Separation of concerns**: The function’s job is clearly split between returning data or handling an error, preventing confusion and enforcing clean, predictable logic.
+
+Here's an example of a function that retrieves a user by their ID:
+
+```typescript
+// Return either user data or an error message
+async function getUserById(id: number): Promise<ReturnTuple<UserDataType>> {
+  try {
+    const user = await getUserByIdQuery(id);
+    
+    // If no user is found, return an error
+    if (!user) return [null, "User not found"];
+
+    return [user, null]; // Success case
+  } catch (error) {
+    return [null, getErrorMessage(error)]; // Error handling
+  }
+}
+
+// Example usage of the function:
+async function handleGetUser(id: number) {
+  const [user, error] = await getUserById(id);
+
+  if (error) {
+    console.error("Failed to fetch user:", error);
+    // Handle the error, display a message to the user, etc.
+  } else {
+    console.log("User data:", user);
+    // Continue with normal execution
+  }
+}
+```
+
+### Database Design
 ![Database Diagram](/docs/images/system-design-database-diagram-3.svg)
 
-### Limitations
+#### Limitations
 
 This design introduces polymorphic relationships, meaning a table can reference multiple other tables. The `DocumentsRelations` table acts as an intermediate table to store relationships between documents, projects, items, suppliers, and clients.
 
-#### Integrity
+##### Integrity
 
 A major concern with this design is the lack of strict database-level constraints to ensure that each row in the `DocumentsRelations` table references exactly one entity besides the `Documents` table. For example, a row should reference either a project, item, supplier, or client, but not multiple entities simultaneously. 
 
@@ -57,7 +118,7 @@ function createProjectDocumentRelationAction(projectId: number, documentId: numb
 
 By doing this, we can tightly control how relations are inserted and avoid situations where multiple foreign keys are populated at once.
 
-#### Querying
+##### Querying
 
 Another challenge with this design is querying documents when many columns in the `DocumentsRelations` table are `null`. Using `LEFT JOIN` to join related tables (e.g., projects, suppliers, and clients) can result in complex queries, especially when we need to account for which entity a document is related to.
 
@@ -95,7 +156,7 @@ const projectWithDocuments = await db
 
 This query works more efficiently by narrowing the focus to documents related to a specific project.
 
-#### Scaling
+##### Scaling
 
 A significant consideration is the scalability of this design. Adding new types of relationships, such as "users having many documents," requires altering the `DocumentsRelations` table by adding new foreign key columns (e.g., `userId`). Each time a new entity needs to be related to documents, we will need to perform a database migration, which can become time-consuming and difficult to manage as the system evolves.
 
@@ -137,17 +198,6 @@ So I decided to go with the strict referential integrity design.
 - [x] Implement User change name form
 - [x] Implement User change password form
 - [x] Implement Password validation for user to change password
-
-### Error Handling
-Error handling is implemented using try-catch blocks in the server actions.
-The error is caught and returned as a tuple in the form of `[null, errorMessage]`.
-If there is no error, the tuple is `[returnValue, null]`.
-This makes it easier to handle errors in the frontend.
-
-```typescript
-// Either return a value or an error message, never both and never neither
-type ReturnTuple<T> = readonly [T, null] | readonly [null, string];
-```
 
 ## Environment Variables
 You can find an example of the environment variables in the `.env-e` file.
