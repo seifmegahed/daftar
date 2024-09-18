@@ -8,6 +8,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { usersTable } from "../user/schema";
 import { z } from "zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 export const clientsTable = pgTable("client", {
   id: serial("id").primaryKey(),
@@ -58,3 +59,8 @@ export const clientSchemaRaw = {
 export const clientSchema = z.object(clientSchemaRaw);
 
 export type ClientDataType = z.infer<typeof clientSchema>;
+
+export const insertClientSchema = createInsertSchema(clientsTable);
+
+export const selectClientSchema = createSelectSchema(clientsTable);
+

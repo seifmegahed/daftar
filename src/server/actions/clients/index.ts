@@ -2,7 +2,7 @@
 
 import type { z } from "zod";
 import { getCurrentUserIdAction } from "../users";
-import { clientSchema } from "@/server/db/tables/client/schema";
+import { insertClientSchema } from "@/server/db/tables/client/schema";
 import {
   type BriefClientType,
   getAllClientsBrief,
@@ -18,14 +18,14 @@ export const getAllClientsBriefAction = async (): Promise<
   return [clients, null];
 };
 
-const addClientSchema = clientSchema.pick({
+const addClientSchema = insertClientSchema.pick({
   name: true,
   registrationNumber: true,
   website: true,
   notes: true,
 });
 
-type AddClientFormType = z.infer<typeof addClientSchema>;
+export type AddClientFormType = z.infer<typeof addClientSchema>;
 
 export const addClientAction = async (
   clientData: AddClientFormType,
@@ -38,9 +38,9 @@ export const addClientAction = async (
 
   const [clientId, clientInsertError] = await insertNewClient({
     name: clientData.name,
-    registrationNumber: clientData.registrationNumber,
-    website: clientData.website,
-    notes: clientData.notes,
+    registrationNumber: clientData.registrationNumber ?? null,
+    website: clientData.website ?? null,
+    notes: clientData.notes ?? null,
     createdBy: userId,
   });
   if (clientInsertError !== null) return [null, clientInsertError];
