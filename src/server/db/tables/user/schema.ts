@@ -7,7 +7,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { z } from "zod";
 
-export const users = pgTable("user", {
+export const usersTable = pgTable("user", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 64 }).notNull(),
   username: varchar("username", { length: 64 }).notNull().unique(),

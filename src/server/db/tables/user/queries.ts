@@ -1,5 +1,5 @@
 import { db } from "../..";
-import { type UserDataType, users } from "./schema";
+import { type UserDataType, usersTable } from "./schema";
 import { asc, eq, and } from "drizzle-orm";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
@@ -20,17 +20,17 @@ export const getAllUsers = async (): Promise<
   try {
     const allUsers = await db
       .select({
-        id: users.id,
-        name: users.name,
-        username: users.username,
-        role: users.role,
-        active: users.active,
-        lastActive: users.lastActive,
-        createdAt: users.createdAt,
-        updatedAt: users.updatedAt,
+        id: usersTable.id,
+        name: usersTable.name,
+        username: usersTable.username,
+        role: usersTable.role,
+        active: usersTable.active,
+        lastActive: usersTable.lastActive,
+        createdAt: usersTable.createdAt,
+        updatedAt: usersTable.updatedAt,
       })
-      .from(users)
-      .orderBy(asc(users.id));
+      .from(usersTable)
+      .orderBy(asc(usersTable.id));
 
     return [allUsers, null];
   } catch (error) {
@@ -44,10 +44,10 @@ export const updateUserRole = async (
 ): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
-      .update(users)
+      .update(usersTable)
       .set({ role })
-      .where(eq(users.id, id))
-      .returning({ id: users.id });
+      .where(eq(usersTable.id, id))
+      .returning({ id: usersTable.id });
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
@@ -62,10 +62,10 @@ export const updateUserPassword = async (
 ): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
-      .update(users)
+      .update(usersTable)
       .set({ password })
-      .where(eq(users.id, id))
-      .returning({ id: users.id });
+      .where(eq(usersTable.id, id))
+      .returning({ id: usersTable.id });
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
@@ -79,9 +79,9 @@ export const insertNewUser = async (
 ): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
-      .insert(users)
+      .insert(usersTable)
       .values(userData)
-      .returning({ id: users.id });
+      .returning({ id: usersTable.id });
 
     if (!user) throw new Error("Error inserting new user");
     return [user.id, null];
@@ -99,17 +99,17 @@ export const getUserById = async (
   try {
     const [user] = await db
       .select({
-        id: users.id,
-        name: users.name,
-        username: users.username,
-        role: users.role,
-        active: users.active,
-        lastActive: users.lastActive,
-        createdAt: users.createdAt,
-        updatedAt: users.updatedAt,
+        id: usersTable.id,
+        name: usersTable.name,
+        username: usersTable.username,
+        role: usersTable.role,
+        active: usersTable.active,
+        lastActive: usersTable.lastActive,
+        createdAt: usersTable.createdAt,
+        updatedAt: usersTable.updatedAt,
       })
-      .from(users)
-      .where(eq(users.id, id));
+      .from(usersTable)
+      .where(eq(usersTable.id, id));
     if (!user) return [null, userErrors.userNotFound];
     return [user, null];
   } catch (error) {
@@ -123,10 +123,10 @@ export const changeUserActiveState = async (
 ): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
-      .update(users)
+      .update(usersTable)
       .set({ active })
-      .where(eq(users.id, id))
-      .returning({ id: users.id });
+      .where(eq(usersTable.id, id))
+      .returning({ id: usersTable.id });
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
@@ -140,10 +140,10 @@ export const updateUserLastActive = async (
 ): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
-      .update(users)
+      .update(usersTable)
       .set({ lastActive: new Date() })
-      .where(eq(users.id, id))
-      .returning({ id: users.id });
+      .where(eq(usersTable.id, id))
+      .returning({ id: usersTable.id });
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
@@ -170,10 +170,10 @@ export const sensitiveGetUserPasswordById = async (
   try {
     const [user] = await db
       .select({
-        password: users.password,
+        password: usersTable.password,
       })
-      .from(users)
-      .where(eq(users.id, id));
+      .from(usersTable)
+      .where(eq(usersTable.id, id));
 
     if (!user) return [null, userErrors.userNotFound];
 
@@ -211,15 +211,15 @@ export const sensitiveGetUserByUsername = async (
   try {
     const [user] = await db
       .select({
-        id: users.id,
-        name: users.name,
-        username: users.username,
-        role: users.role,
-        active: users.active,
-        password: users.password,
+        id: usersTable.id,
+        name: usersTable.name,
+        username: usersTable.username,
+        role: usersTable.role,
+        active: usersTable.active,
+        password: usersTable.password,
       })
-      .from(users)
-      .where(and(eq(users.username, username), eq(users.active, true)));
+      .from(usersTable)
+      .where(and(eq(usersTable.username, username), eq(usersTable.active, true)));
 
     if (!user) return [null, userErrors.userNotFound];
 
@@ -235,10 +235,10 @@ export const updateUserName = async (
 ): Promise<ReturnTuple<number>> => {
   try {
     const [user] = await db
-      .update(users)
+      .update(usersTable)
       .set({ name })
-      .where(eq(users.id, id))
-      .returning({ id: users.id });
+      .where(eq(usersTable.id, id))
+      .returning({ id: usersTable.id });
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
