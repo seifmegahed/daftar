@@ -62,7 +62,7 @@ export const getCurrentUserAction = async (): Promise<
   return await getUserByIdAction(id);
 };
 
-const getCurrentUserIdAction = async (): Promise<ReturnTuple<number>> => {
+export const getCurrentUserIdAction = async (): Promise<ReturnTuple<number>> => {
   const token = cookies().get("token");
   if (!token) return [null, userErrors.userNotFound];
   const decoded = await verifyToken(token.value);

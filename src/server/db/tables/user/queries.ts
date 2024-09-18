@@ -1,4 +1,4 @@
-import { db } from "../..";
+import { db } from "@/server/db";
 import { type UserDataType, usersTable } from "./schema";
 import { asc, eq, and } from "drizzle-orm";
 import type { ReturnTuple } from "@/utils/type-utils";

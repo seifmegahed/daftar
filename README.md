@@ -29,9 +29,9 @@ In keeping with this timeless philosophy, I've implemented validation using `Zod
 
 By validating on both ends, we can prevent invalid data from slipping through and safeguard the integrity of the system, which simplifies the debugging process and enhances overall reliability.
 
-#### Error Handling
+### Error Handling
 
-In this project, I've adopted a GO-like error-handling approach. The main goal is to ensure a clear separation of concerns when returning data or errors, making it explicit that any function either returns valid data or an error message, never both. This design promotes safer, more predictable code that’s easy to reason about and maintain.
+In this project, I've adopted a GO-like error-handling approach. The main goal is to ensure a clear separation of concerns when returning data or errors, making it explicit that any function either returns valid data or an error message, never both, and graceful server-client error communication. This design promotes safer, more predictable code that’s easy to reason about and maintain.
 
 ```ts
 /** 
@@ -45,31 +45,55 @@ type ReturnTuple<T> = readonly [T, null] | readonly [null, string];
 
 By using TypeScript’s type system, the `ReturnTuple` type ensures that our functions can only return valid data or an error message, but never both. This ensures that handling edge cases and errors is enforced by the compiler, reducing the risk of unhandled exceptions or ambiguous states in the application.
 
-This GO-like approach has several advantages over traditional error-handling methods (such as throwing exceptions):
+When extending this approach to client-server communication, it provides several key benefits:
 
-- **Explicit error handling**: By requiring functions to return a tuple, error handling becomes mandatory at every call site, reducing the chances of uncaught exceptions or silent failures.
-- **Predictable function signatures**: Since every function that may fail returns the same type (`ReturnTuple<T>`), it’s easy to reason about how errors are handled throughout the codebase.
-- **Separation of concerns**: The function’s job is clearly split between returning data or handling an error, preventing confusion and enforcing clean, predictable logic.
+**1. Explicit Error Communication**  
+Passing errors as part of the function’s return type means that both the server and client can explicitly handle success and failure cases. Instead of relying on HTTP status codes alone or throwing exceptions, the server can send a clear, structured response, ensuring that the client always knows what went wrong.
+
+On the client side, this translates into predictable handling of error states. The client receives the response and immediately checks whether it contains valid data or an error message, leading to a smoother user experience and reducing the risk of unhandled or silent failures.
+
+**2. Reduced Reliance on Status Codes**  
+While HTTP status codes are still important for signaling the overall success or failure of a request, relying solely on them for error handling can sometimes lead to confusion or missed cases. For instance, some errors may not correspond cleanly to specific HTTP codes.
+
+With the `ReturnTuple<T>` approach, the response always contains an error message that the client can act upon, even if the status code is ambiguous. This helps prevent issues like unexpected 200 responses with error details hidden in the payload or unclear 500 responses where the client isn't sure what went wrong.
+
+**3. Graceful Client-Side Handling**  
+On the client side, this pattern allows for more graceful error handling. Since the client is guaranteed to receive a structured response, it can gracefully degrade user experience by displaying user-friendly error messages or retrying the failed operation without crashing the app or getting stuck in unexpected states.
+
+For instance:
+
+```typescript
+const [data, error] = await fetchUserData();
+
+if (error) {
+  displayErrorMessage(error); // Show a friendly message to the user
+} else {
+  updateUIWithData(data); // Proceed with normal flow
+}
+```
+
+By passing errors in this manner, the application becomes more resilient and responsive to edge cases and potential failures.
+
+---
+
+By integrating this GO-like error-handling approach into both the client and server, the system gains a more structured and robust way of handling errors. This leads to better-defined data flows, more reliable communication, and a smoother experience for users and developers alike.
 
 Here's an example of a function that retrieves a user by their ID:
 
-```typescript
-// Return either user data or an error message
+```ts
 async function getUserById(id: number): Promise<ReturnTuple<UserDataType>> {
   try {
     const user = await getUserByIdQuery(id);
-    
-    // If no user is found, return an error
     if (!user) return [null, "User not found"];
-
-    return [user, null]; // Success case
+    return [user, null];
   } catch (error) {
-    return [null, getErrorMessage(error)]; // Error handling
+    return [null, getErrorMessage(error)];
   }
 }
 
 // Example usage of the function:
 async function handleGetUser(id: number) {
+  // could be implemented in a try-catch block to catch network errors
   const [user, error] = await getUserById(id);
 
   if (error) {
