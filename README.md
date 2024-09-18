@@ -1,11 +1,10 @@
 # Daftar
 
-An ARP Web App to manage Engineering Business's contracting projects and resources
+An ERP Web App to manage Engineering Business's contracting projects and resources
 
 This web app is not meant to be deployed to a cloud provider.
 It uses the server's filesystem to store and retrieve files, and might use web sockets in the future.
-So Vercel, Netlify, or any other hosting provider is not recommended.
-
+So Vercel, Netlify, or any other VPS hosting provider is not recommended.
 
 ## Tech Stack
 - Typescript
@@ -22,7 +21,9 @@ So Vercel, Netlify, or any other hosting provider is not recommended.
 ### Data Flow Design
 ![Data Flow Diagram](/docs/images/system-design-data-validation.png)
 
-As **Immanuel Kant** famously noted in his 1808 Medium article, *"A Critique of Software Development: Observations on the Metaphysics of a Sublime System Design"*: **"You can't trust data coming from the client."**
+As **Immanuel Kant** famously noted in his 1808 Medium article, *"A Critique of Software Development: Observations on the Metaphysics of a Sublime System Design"*: **"You kant trust data coming from the client."**
+
+![YouKant](/docs/images/you-kant.png)
 
 In keeping with this timeless philosophy, I've implemented validation using `Zod` both on the client and server sides. This approach ensures that data is thoroughly validated before it reaches the database, enabling better error handling and data consistency across the system. 
 
