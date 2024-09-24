@@ -3,8 +3,6 @@ import { type ClientDataType, clientsTable } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { asc, eq } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
-import { contactsTable } from "../contact/schema";
-import { addressesTable } from "../address/schema";
 
 /**
  * Getters
@@ -50,66 +48,62 @@ type AddressDataType = {
   city: string | null;
 };
 
-type ClientFullType = {
-  client: ClientDataType;
+type UserDataType = {
+  id: number;
+  name: string;
+};
+
+interface GetClientType extends ClientDataType {
   contacts: ContactDataType[];
   addresses: AddressDataType[];
-};
+  creator: UserDataType | null;
+  updater: UserDataType | null;
+}
 
 export const getClientFull = async (
   id: number,
-): Promise<ReturnTuple<ClientFullType>> => {
+): Promise<ReturnTuple<GetClientType>> => {
   try {
-    const contactsSubQuery = db
-      .select({
-        id: contactsTable.id,
-        name: contactsTable.name,
-        phoneNumber: contactsTable.phoneNumber,
-        email: contactsTable.email,
-      })
-      .from(contactsTable)
-      .where(eq(contactsTable.clientId, id))
-      .as("contacts");
-
-    const addressesSubQuery = db
-      .select({
-        id: addressesTable.id,
-        name: addressesTable.name,
-        addressLine: addressesTable.addressLine,
-        city: addressesTable.city,
-        country: addressesTable.country,
-      })
-      .from(addressesTable)
-      .where(eq(addressesTable.clientId, id))
-      .as("addresses");
-
-    const client = await db
-      .select()
-      .from(clientsTable)
-      .leftJoin(contactsSubQuery, eq(clientsTable.id, contactsTable.clientId))
-      .leftJoin(addressesSubQuery, eq(clientsTable.id, addressesTable.clientId))
-      .where(eq(clientsTable.id, id));
-
-    if (!client.length) throw new Error("Error getting client");
-
-    const reducedClient = client.reduce((accumulator, current) => {
-      return {
-        client: current.client,
-        contacts: current.contacts
-          ? accumulator.contacts.concat(current.contacts)
-          : accumulator.contacts,
-        addresses: current.addresses
-          ? accumulator.addresses.concat(current.addresses)
-          : accumulator.addresses,
-      };
-    }, {} as ClientFullType);
-
-    return [reducedClient, null];
+    const client = await db.query.clientsTable.findFirst({
+      where: (client, { eq }) => eq(client.id, id),
+      with: {
+        contacts: {
+          columns: {
+            id: true,
+            name: true,
+            phoneNumber: true,
+            email: true,
+          },
+        },
+        addresses: {
+          columns: {
+            id: true,
+            name: true,
+            addressLine: true,
+            country: true,
+            city: true,
+          },
+        },
+        creator: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+        updater: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    if (!client) throw new Error("Error getting client");
+    return [client, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
 };
-
 /**
  * Setters
  */

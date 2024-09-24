@@ -9,6 +9,9 @@ import {
 import { usersTable } from "../user/schema";
 import { z } from "zod";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import { relations } from "drizzle-orm";
+import { contactsTable } from "../contact/schema";
+import { addressesTable } from "../address/schema";
 
 export const clientsTable = pgTable("client", {
   id: serial("id").primaryKey(),
@@ -28,6 +31,13 @@ export const clientsTable = pgTable("client", {
     .notNull(),
   updatedBy: integer("updated_by").references(() => usersTable.id),
 });
+
+export const clientRelations = relations(clientsTable, ({ many, one }) => ({
+  contacts: many(contactsTable),
+  addresses: many(addressesTable),
+  creator: one(usersTable),
+  updater: one(usersTable),
+}));
 
 export const clientSchemaRaw = {
   id: z.number(),
@@ -63,4 +73,3 @@ export type ClientDataType = z.infer<typeof clientSchema>;
 export const insertClientSchema = createInsertSchema(clientsTable);
 
 export const selectClientSchema = createSelectSchema(clientsTable);
-

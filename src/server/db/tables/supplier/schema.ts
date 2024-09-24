@@ -6,6 +6,9 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { usersTable } from "../user/schema";
+import { relations } from "drizzle-orm";
+import { contactsTable } from "../contact/schema";
+import { addressesTable } from "../address/schema";
 
 export const suppliersTable = pgTable("supplier", {
   id: serial("id").primaryKey(),
@@ -24,3 +27,10 @@ export const suppliersTable = pgTable("supplier", {
     .notNull(),
   updatedBy: integer("updated_by").references(() => usersTable.id),
 });
+
+export const supplierRelations = relations(suppliersTable, ({ many, one }) => ({
+  contacts: many(contactsTable),
+  addresses: many(addressesTable),
+  creator: one(usersTable),
+  updater: one(usersTable),
+}));

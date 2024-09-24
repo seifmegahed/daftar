@@ -8,6 +8,7 @@ import {
 import { usersTable } from "../user/schema";
 import { suppliersTable } from "../supplier/schema";
 import { clientsTable } from "../client/schema";
+import { relations } from "drizzle-orm";
 
 export const addressesTable = pgTable("address", {
   id: serial("id").primaryKey(),
@@ -48,3 +49,14 @@ export const addressesTable = pgTable("address", {
     .notNull(),
   updatedBy: integer("updated_by").references(() => usersTable.id),
 });
+
+export const addressRelations = relations(addressesTable, ({ one }) => ({
+  supplier: one(suppliersTable, {
+    fields: [addressesTable.supplierId],
+    references: [suppliersTable.id],
+  }),
+  client: one(clientsTable, {
+    fields: [addressesTable.clientId],
+    references: [clientsTable.id],
+  }),
+}));
