@@ -1,12 +1,16 @@
-import { Separator } from "@/components/ui/separator"
-import { SidebarNav } from "@/components/nav"
+import { Separator } from "@/components/ui/separator";
+import { SidebarNav } from "@/components/nav";
 
-const basePath = (id: string) =>  "/client/" + id
+const basePath = (id: string) => "/client/" + id;
 
 const sidebarNavItemsGenerator = (id: string) => [
   {
     title: "Client",
     href: basePath(id),
+  },
+  {
+    title: "Documents",
+    href: basePath(id) + "/documents",
   },
   {
     title: "New Address",
@@ -15,26 +19,31 @@ const sidebarNavItemsGenerator = (id: string) => [
   {
     title: "New Contact",
     href: basePath(id) + "/new-contact",
-  }
-]
+  },
+  {
+    title: "New Document",
+    href: basePath(id) + "/new-document",
+  },
+];
 
 interface SettingsLayoutProps {
-  children: React.ReactNode
-  params: { id: string }
+  children: React.ReactNode;
+  params: { id: string };
 }
 
-export default function SettingsLayout({ children, params }: SettingsLayoutProps) {
+export default function SettingsLayout({
+  children,
+  params,
+}: SettingsLayoutProps) {
   const sidebarNavItems = sidebarNavItemsGenerator(params.id);
 
   return (
     // this should be in root layout, but we're doing it here for testing purposes
-    <div className="bg-background -m-10 h-full min-h-[calc(100vh_-_theme(spacing.16))]">
+    <div className="-m-10 h-full min-h-[calc(100vh_-_theme(spacing.16))] bg-background">
       <div className="space-y-6 p-10 pb-16">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Client</h2>
-          <p className="text-muted-foreground">
-            Manage your client account.
-          </p>
+          <p className="text-muted-foreground">Manage your client account.</p>
         </div>
         <Separator className="my-6" />
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
@@ -45,5 +54,5 @@ export default function SettingsLayout({ children, params }: SettingsLayoutProps
         </div>
       </div>
     </div>
-  )
+  );
 }

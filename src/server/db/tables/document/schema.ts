@@ -10,8 +10,11 @@ import { projectsTable } from "../project/schema";
 import { itemsTable } from "../item/schema";
 import { suppliersTable } from "../supplier/schema";
 import { clientsTable } from "../client/schema";
+import { relations } from "drizzle-orm";
+import { createInsertSchema } from "drizzle-zod";
+import type { z } from "zod";
 
-export const documentsTable = pgTable("document", { 
+export const documentsTable = pgTable("document", {
   id: serial("id").primaryKey(),
   // Data fields
   name: varchar("name", { length: 64 }).notNull(),
@@ -20,14 +23,24 @@ export const documentsTable = pgTable("document", {
 
   // Interaction fields
   createdAt: timestamp("created_at").defaultNow().notNull(),
-  createdBy: integer("created_by").references(() => usersTable.id).notNull(),
+  createdBy: integer("created_by")
+    .references(() => usersTable.id)
+    .notNull(),
 });
 
+export const documentRelations = relations(documentsTable, ({ one }) => ({
+  creator: one(usersTable, {
+    fields: [documentsTable.createdBy],
+    references: [usersTable.id],
+  }),
+}));
 
+export const documentSchema = createInsertSchema(documentsTable);
+export type DocumentDataType = z.infer<typeof documentSchema>;
 
 /**
  * XOR Safe-guarded type for document relations
- * 
+ *
  * This type is used to define the relations between documents, projects, items, suppliers, and clients.
  * It is used to ensure that the relations are one of the following:
  *  - project
@@ -35,18 +48,96 @@ export const documentsTable = pgTable("document", {
  *  - supplier
  *  - client
  */
-export type DocumentRelationsType = {id: number, documentId: number} & (
-  | { projectId: number }
-  | { itemId: number }
-  | { supplierId: number }
-  | { clientId: number }
-);
+
+type RelationsTypeUnion =
+  | { projectId: number; itemId: null; supplierId: null; clientId: null }
+  | { projectId: null; itemId: number; supplierId: null; clientId: null }
+  | { projectId: null; itemId: null; supplierId: number; clientId: null }
+  | { projectId: null; itemId: null; supplierId: null; clientId: number };
+
+export type DocumentRelationsType = {
+  id?: number;
+  documentId: number;
+} & RelationsTypeUnion;
 
 export const documentRelationsTable = pgTable("document_relations", {
   id: serial("id").primaryKey(),
-  documentId: integer("document_id").references(() => documentsTable.id).notNull(),
+  documentId: integer("document_id")
+    .references(() => documentsTable.id)
+    .notNull(),
   projectId: integer("project_id").references(() => projectsTable.id),
   itemId: integer("item_id").references(() => itemsTable.id),
   supplierId: integer("supplier_id").references(() => suppliersTable.id),
   clientId: integer("client_id").references(() => clientsTable.id),
 });
+
+export const documentRelationsRelations = relations(
+  documentRelationsTable,
+  ({ one }) => ({
+    document: one(documentsTable, {
+      fields: [documentRelationsTable.documentId],
+      references: [documentsTable.id],
+    }),
+    project: one(projectsTable, {
+      fields: [documentRelationsTable.projectId],
+      references: [projectsTable.id],
+    }),
+    item: one(itemsTable, {
+      fields: [documentRelationsTable.itemId],
+      references: [itemsTable.id],
+    }),
+    supplier: one(suppliersTable, {
+      fields: [documentRelationsTable.supplierId],
+      references: [suppliersTable.id],
+    }),
+    client: one(clientsTable, {
+      fields: [documentRelationsTable.clientId],
+      references: [clientsTable.id],
+    }),
+  }),
+);
+
+/**
+ * [1,1,1,1]  x
+ * [1,1,1,0]  x
+ * [1,1,0,1]  x
+ * [1,1,0,0]  x
+ * [1,0,1,1]  x
+ * [1,0,1,0]  x
+ * [1,0,0,1]  x
+ * [1,0,0,0]  o
+ * [0,1,1,1]  x
+ * [0,1,1,0]  x
+ * [0,1,0,1]  x
+ * [0,1,0,0]  o
+ * [0,0,1,1]  x
+ * [0,0,1,0]  o
+ * [0,0,0,1]  o
+ * [0,0,0,0]  x
+ *
+ * Dirty way to do a 4 way XOR but...
+ */
+
+export const documentRelationsSchema = createInsertSchema(
+  documentRelationsTable,
+)
+  .omit({ documentId: true })
+  .refine((data) => {
+    const { projectId, itemId, supplierId, clientId } = data;
+    if (projectId && itemId && supplierId && clientId) return false;
+    if (projectId && itemId && supplierId && !clientId) return false;
+    if (projectId && itemId && !supplierId && clientId) return false;
+    if (projectId && itemId && !supplierId && !clientId) return false;
+    if (projectId && !itemId && supplierId && clientId) return false;
+    if (projectId && !itemId && supplierId && !clientId) return false;
+    if (projectId && !itemId && !supplierId && clientId) return false;
+    if (projectId && !itemId && !supplierId && !clientId) return true;
+    if (!projectId && itemId && supplierId && clientId) return false;
+    if (!projectId && itemId && supplierId && !clientId) return false;
+    if (!projectId && itemId && !supplierId && clientId) return false;
+    if (!projectId && itemId && !supplierId && !clientId) return true;
+    if (!projectId && !itemId && supplierId && clientId) return false;
+    if (!projectId && !itemId && supplierId && !clientId) return true;
+    if (!projectId && !itemId && !supplierId && clientId) return true;
+    if (!projectId && !itemId && !supplierId && !clientId) return false;
+  });

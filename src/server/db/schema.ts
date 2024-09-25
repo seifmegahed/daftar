@@ -6,5 +6,5 @@ export { suppliersTable } from "./tables/supplier/schema";
 export { projectsTable } from "./tables/project/schema";
 export { itemsTable } from "./tables/item/schema";
 export { projectItemsTable } from "./tables/project/schema";
-export { documentsTable } from "./tables/document/schema";
-export { documentRelationsTable } from "./tables/document/schema";
+export { documentsTable, documentRelations } from "./tables/document/schema";
+export { documentRelationsTable, documentRelationsRelations } from "./tables/document/schema";
