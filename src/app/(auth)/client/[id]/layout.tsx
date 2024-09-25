@@ -12,6 +12,10 @@ const sidebarNavItemsGenerator = (id: string) => [
     title: "New Address",
     href: basePath(id) + "/new-address",
   },
+  {
+    title: "New Contact",
+    href: basePath(id) + "/new-contact",
+  }
 ]
 
 interface SettingsLayoutProps {

@@ -1,4 +1,4 @@
-export const emptyToUndefined = (value: string) =>
+export const emptyToUndefined = (value: unknown) =>
   value === "" ? undefined : value;
 
-export const emptyToNull = (value: string) => (value === "" ? null : value);
+export const emptyToNull = (value: unknown) => (value === "" ? null : value);
