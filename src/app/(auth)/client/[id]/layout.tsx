@@ -27,9 +27,9 @@ export default function SettingsLayout({ children, params }: SettingsLayoutProps
     <div className="bg-background -m-10 h-full min-h-[calc(100vh_-_theme(spacing.16))]">
       <div className="space-y-6 p-10 pb-16">
         <div className="space-y-0.5">
-          <h2 className="text-2xl font-bold tracking-tight">Clients</h2>
+          <h2 className="text-2xl font-bold tracking-tight">Client</h2>
           <p className="text-muted-foreground">
-            Manage your client accounts.
+            Manage your client account.
           </p>
         </div>
         <Separator className="my-6" />
