@@ -9,6 +9,8 @@ import { usersTable } from "../user/schema";
 import { suppliersTable } from "../supplier/schema";
 import { clientsTable } from "../client/schema";
 import { relations } from "drizzle-orm";
+import { createInsertSchema } from "drizzle-zod";
+import type { z } from "zod";
 
 export const addressesTable = pgTable("address", {
   id: serial("id").primaryKey(),
@@ -60,3 +62,36 @@ export const addressRelations = relations(addressesTable, ({ one }) => ({
     references: [clientsTable.id],
   }),
 }));
+
+export const insertAddressSchema = createInsertSchema(addressesTable).refine(
+  (data) => {
+    /**
+     * XOR Logic
+     * Either a clientId or a supplierId must be present in the data.
+     * If both are present, it's an error.
+     * If neither are present, it's an error.
+     */
+    if (data.clientId && data.supplierId) return false;
+    if (!data.clientId && !data.supplierId) return false;
+    return true;
+  },
+);
+
+type InsertAddressTypeRaw = z.infer<typeof insertAddressSchema>;
+
+export type InsertClientAddressType = InsertAddressTypeRaw & {
+  clientId: number;
+};
+
+export type InsertSupplierAddressType = InsertAddressTypeRaw & {
+  supplierId: number;
+};
+
+/**
+ * XOR Union type for the two possible insert address types
+ *
+ * Either a clientId or a supplierId must be present in the data.
+ */
+export type InsertAddressType =
+  | InsertClientAddressType
+  | InsertSupplierAddressType;
