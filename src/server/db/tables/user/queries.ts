@@ -154,13 +154,13 @@ export const updateUserLastActive = async (
 
 /**
  * Sensitive Get User Password By ID
- * 
+ *
  * This function is intended to be used on the server side, and is not intended
  * to be used on the client side because it contains sensitive information
  * like passwords.
- * 
+ *
  * Primary usage of this function is to use the data to verify a user's password.
- * 
+ *
  * @param id - ID of the user to get
  * @returns - Tuple containing the user's information or an error message if there is one
  */
@@ -174,7 +174,6 @@ export const sensitiveGetUserPasswordById = async (
       })
       .from(usersTable)
       .where(eq(usersTable.id, id));
-
     if (!user) return [null, userErrors.userNotFound];
 
     return [user.password, null];
@@ -194,7 +193,7 @@ export const sensitiveGetUserPasswordById = async (
  * like passwords.
  *
  * Primary usage of this function is to use the data to login a user.
- * 
+ *
  * User must be active to be able to login.
  *
  * @param username
@@ -219,13 +218,21 @@ export const sensitiveGetUserByUsername = async (
         password: usersTable.password,
       })
       .from(usersTable)
-      .where(and(eq(usersTable.username, username), eq(usersTable.active, true)));
+      .where(
+        and(eq(usersTable.username, username), eq(usersTable.active, true)),
+      );
 
+    console.log(user);
     if (!user) return [null, userErrors.userNotFound];
 
     return [user, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    const errorMessage = getErrorMessage(error);
+    
+    if (errorMessage.includes("CONNECT_TIMEOUT"))
+      return [null, "Error connecting to database"];
+
+    return [null, "Something went wrong"];
   }
 };
 

@@ -31,7 +31,7 @@ export const loginAction = async (
 
   const [user, error] = await sensitiveGetUserByUsername(data.username);
 
-  if (error !== null) return [null, loginErrors.userNotFound];
+  if (error !== null) return [null, error];
 
   if (!(await comparePassword(data.password, user.password)))
     return [null, loginErrors.incorrectPassword];
