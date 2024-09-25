@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { addNewContactAction } from "@/server/actions/contacts";
 import { emptyToUndefined } from "@/utils/common";
 
 import {
@@ -17,7 +18,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import SubmitButton from "@/components/buttons/submit-button";
-
 
 const formSchema = z.object({
   name: z
@@ -32,7 +32,8 @@ const formSchema = z.object({
     z
       .string()
       .email({ message: "Email is not valid" })
-      .max(64, { message: "Email must not be longer than 64 characters" }),
+      .max(64, { message: "Email must not be longer than 64 characters" })
+      .optional(),
   ),
   notes: z
     .string()
@@ -60,19 +61,22 @@ function NewContactForm({
 
   const onSubmit = async (data: FormSchemaType) => {
     const ref = type === "supplier" ? { supplierId: id } : { clientId: id };
-    // const [, addressInsertError] = await addNewAddressAction({
-    //   ...data,
-    //   ...ref,
-    //   createdBy: -1,
-    // });
-    // if (addressInsertError !== null) {
-    //   toast.error("An error occurred while adding the address");
-    // } else {
-    //   toast.success("Address added successfully");
-    //   form.reset();
-    // }
-    console.log(data, ref);
-    toast.success("Contact added successfully");
+    try {
+      const [, contactInsertError] = await addNewContactAction({
+        ...data,
+        ...ref,
+        createdBy: -1,
+      });
+      if (contactInsertError !== null) {
+        toast.error("An error occurred while adding the contact");
+      } else {
+        toast.success("Contact added successfully");
+        form.reset();
+      }
+    } catch (error) {
+      console.error("Error adding contact:", error);
+      toast.error("An error occurred while adding the contact");
+    }
   };
 
   return (

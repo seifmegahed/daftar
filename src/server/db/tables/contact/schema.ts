@@ -9,6 +9,8 @@ import { usersTable } from "../user/schema";
 import { suppliersTable } from "../supplier/schema";
 import { clientsTable } from "../client/schema";
 import { relations } from "drizzle-orm";
+import { createInsertSchema } from "drizzle-zod";
+import type { z } from "zod";
 
 export const contactsTable = pgTable("contact", {
   id: serial("id").primaryKey(),
@@ -59,3 +61,36 @@ export const contactRelations = relations(contactsTable, ({ one }) => ({
     references: [clientsTable.id],
   }),
 }));
+
+export const insertContactSchema = createInsertSchema(contactsTable).refine(
+  (data) => {
+    /**
+     * XOR Logic
+     * Either a clientId or a supplierId must be present in the data.
+     * If both are present, it's an error.
+     * If neither are present, it's an error.
+     */
+    if (data.clientId && data.supplierId) return false;
+    if (!data.clientId && !data.supplierId) return false;
+    return true;
+  },
+);
+
+type InsertContactTypeRaw = z.infer<typeof insertContactSchema>;
+
+export type InsertClientContactType = InsertContactTypeRaw & {
+  clientId: number;
+};
+
+export type InsertSupplierContactType = InsertContactTypeRaw & {
+  supplierId: number;
+};
+
+/**
+ * XOR Union type for the two possible insert contact types
+ *
+ * Either a clientId or a supplierId must be present in the data.
+ */
+export type InsertContactType =
+  | InsertClientContactType
+  | InsertSupplierContactType;
