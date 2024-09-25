@@ -8,6 +8,13 @@
       "when": 1727252789546,
       "tag": "0000_lethal_doctor_octopus",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1727254444119,
+      "tag": "0001_icy_cobalt_man",
+      "breakpoints": true
     }
   ]
 }

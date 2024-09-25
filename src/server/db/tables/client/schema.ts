@@ -35,8 +35,14 @@ export const clientsTable = pgTable("client", {
 export const clientRelations = relations(clientsTable, ({ many, one }) => ({
   contacts: many(contactsTable),
   addresses: many(addressesTable),
-  creator: one(usersTable),
-  updater: one(usersTable),
+  creator: one(usersTable, {
+    fields: [clientsTable.createdBy],
+    references: [usersTable.id],
+  }),
+  updater: one(usersTable, {
+    fields: [clientsTable.updatedBy],
+    references: [usersTable.id],
+  }),
 }));
 
 export const clientSchemaRaw = {

@@ -50,6 +50,12 @@ export const contactsTable = pgTable("contact", {
 });
 
 export const contactRelations = relations(contactsTable, ({ one }) => ({
-  supplier: one(suppliersTable),
-  client: one(clientsTable),
+  supplier: one(suppliersTable, {
+    fields: [contactsTable.supplierId],
+    references: [suppliersTable.id],
+  }),
+  client: one(clientsTable, {
+    fields: [contactsTable.clientId],
+    references: [clientsTable.id],
+  }),
 }));

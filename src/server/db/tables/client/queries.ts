@@ -53,14 +53,14 @@ type UserDataType = {
   name: string;
 };
 
-interface GetClientType extends ClientDataType {
+export interface GetClientType extends ClientDataType {
   contacts: ContactDataType[];
   addresses: AddressDataType[];
   creator: UserDataType | null;
   updater: UserDataType | null;
 }
 
-export const getClientFull = async (
+export const getClientFullById = async (
   id: number,
 ): Promise<ReturnTuple<GetClientType>> => {
   try {
@@ -98,10 +98,14 @@ export const getClientFull = async (
         },
       },
     });
-    if (!client) throw new Error("Error getting client");
+    if (!client) return [null, "Error: Client not found"];
     return [client, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    const errorMessage = getErrorMessage(error);
+    if (errorMessage.includes("CONNECT_TIMEOUT"))
+      return [null, "Error connecting to database"];
+    console.log(error);
+    return [null, errorMessage];
   }
 };
 /**
