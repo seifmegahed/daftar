@@ -1,6 +1,12 @@
 "use client";
 
-import SubmitButton from "@/components/buttons/submit-button";
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+
+import { addNewAddressAction } from "@/server/actions/addresses";
+
 import ComboSelect from "@/components/combo-select";
 import {
   Form,
@@ -12,13 +18,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { countries } from "@/lib/countries";
-import { addNewAddressAction } from "@/server/actions/addresses";
-import { zodResolver } from "@hookform/resolvers/zod";
+import SubmitButton from "@/components/buttons/submit-button";
 
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { countries } from "@/lib/countries";
 
 const formSchema = z.object({
   name: z
@@ -80,6 +82,7 @@ function NewAddressForm({
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
+      <h1 className="text-2xl font-bold">Address Form</h1>
       <Form {...form}>
         <FormField
           name="name"
