@@ -5,7 +5,9 @@ import { getCurrentUserIdAction } from "../users";
 import { insertClientSchema } from "@/server/db/tables/client/schema";
 import {
   type BriefClientType,
+  type GetClientType,
   getAllClientsBrief,
+  getClientFullById,
   insertNewClient,
 } from "@/server/db/tables/client/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
@@ -46,4 +48,12 @@ export const addClientAction = async (
   if (clientInsertError !== null) return [null, clientInsertError];
 
   return [clientId, null];
+};
+
+export const getClientFullByIdAction = async (
+  id: number,
+): Promise<ReturnTuple<GetClientType>> => {
+  const [client, clientError] = await getClientFullById(id);
+  if (clientError !== null) return [null, clientError];
+  return [client, null];
 };
