@@ -11,21 +11,22 @@ import { usersTable } from "../user/schema";
 import { clientsTable } from "../client/schema";
 import { itemsTable } from "../item/schema";
 import { suppliersTable } from "../supplier/schema";
+import { relations } from "drizzle-orm";
 
 export const projectsTable = pgTable("project", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 64 }).notNull(),
   status: integer("status").notNull(),
   description: varchar("description", { length: 256 }),
-  startDate: date("start_date").notNull(),
-  endDate: date("end_date").notNull(),
+  startDate: date("start_date"),
+  endDate: date("end_date"),
   notes: varchar("notes", { length: 256 }),
 
   // Foreign keys
-  client: integer("client")
+  clientId: integer("client_id")
     .references(() => clientsTable.id)
     .notNull(),
-  owner: integer("owner")
+  ownerId: integer("owner_id")
     .references(() => usersTable.id)
     .notNull(),
 
@@ -37,6 +38,25 @@ export const projectsTable = pgTable("project", {
     .notNull(),
   updatedBy: integer("updated_by").references(() => usersTable.id),
 });
+
+export const projectRelations = relations(projectsTable, ({ one }) => ({
+  client: one(clientsTable, {
+    fields: [projectsTable.clientId],
+    references: [clientsTable.id],
+  }),
+  owner: one(usersTable, {
+    fields: [projectsTable.ownerId],
+    references: [usersTable.id],
+  }),
+  creator: one(usersTable, {
+    fields: [projectsTable.createdBy],
+    references: [usersTable.id],
+  }),
+  updater: one(usersTable, {
+    fields: [projectsTable.updatedBy],
+    references: [usersTable.id],
+  }),
+}));
 
 export const projectItemsTable = pgTable("project_items", {
   id: serial("id").primaryKey(),

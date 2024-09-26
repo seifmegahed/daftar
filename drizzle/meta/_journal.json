@@ -36,6 +36,20 @@
       "when": 1727341958519,
       "tag": "0004_loud_sabretooth",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1727373283184,
+      "tag": "0005_safe_turbo",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1727373380636,
+      "tag": "0006_many_jasper_sitwell",
+      "breakpoints": true
     }
   ]
 }
