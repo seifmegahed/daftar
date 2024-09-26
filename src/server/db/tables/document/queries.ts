@@ -7,6 +7,23 @@ import {
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 
+export const insertDocument = async (
+  data: DocumentDataType,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [document] = await db
+      .insert(documentsTable)
+      .values(data)
+      .returning({ id: documentsTable.id });
+
+    if (!document) return [null, "Error inserting new document"];
+    return [document.id, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error inserting new document"];
+  }
+};
+
 export const insertDocumentWithRelation = async (
   document: DocumentDataType,
   relation: Omit<DocumentRelationsType, "documentId">,
@@ -113,5 +130,25 @@ export const getItemDocuments = async (
   } catch (error) {
     console.log(error);
     return [null, "Error getting item documents"];
+  }
+};
+
+// TODO: Implement getProjectDocuments
+
+export const getDocuments = async (): Promise<
+  ReturnTuple<SimpDoc[]>
+> => {
+  try {
+    const documents = await db.select({
+      id: documentsTable.id,
+      name: documentsTable.name,
+      extension: documentsTable.extension,
+    }).from(documentsTable);
+    if (!documents) return [null, "Error getting documents"];
+
+    return [documents, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting documents"];
   }
 };

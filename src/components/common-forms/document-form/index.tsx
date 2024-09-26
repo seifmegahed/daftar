@@ -79,13 +79,13 @@ function DocumentForm({ relationData }: { relationData?: RelationDataType }) {
 
   const onSubmit = async (data: FormSchemaType) => {
     if (relationData) {
-      const relation = generateRelation(relationData);
       const body = new FormData();
       body.append("file", data.file);
       body.append(
         "document",
         JSON.stringify({ name: data.name, notes: data.notes }),
       );
+      const relation = generateRelation(relationData);
       body.append("relation", JSON.stringify(relation));
       const response = await fetch("/api/upload-relational-document", {
         method: "POST",
@@ -96,7 +96,20 @@ function DocumentForm({ relationData }: { relationData?: RelationDataType }) {
         toast.success("Document added successfully");
       }
     } else {
-      // implement document without relation server action
+      const body = new FormData();
+      body.append(
+        "document",
+        JSON.stringify({ name: data.name, notes: data.notes }),
+      );
+      body.append("file", data.file);
+      const response = await fetch("/api/upload-document", {
+        method: "POST",
+        body,
+      });
+      if (!response.ok) toast.error("Error adding document");
+      else {
+        toast.success("Document added successfully");
+      }
     }
   };
 
