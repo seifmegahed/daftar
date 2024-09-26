@@ -145,7 +145,7 @@ function NewItemForm() {
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                Enter the manufacturer's part number of the item.
+                Enter the manufacturer&apos;s part number of the item.
               </FormDescription>
               <FormMessage />
             </FormItem>

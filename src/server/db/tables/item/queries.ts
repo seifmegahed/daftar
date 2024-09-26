@@ -49,3 +49,41 @@ export const getAllItemsBrief = async (): Promise<
     return [null, getErrorMessage(error)];
   }
 };
+
+type BriefUserType = {
+  id: number;
+  name: string;
+};
+
+export type GetItemDetailType = SelectItemType & {
+  creator: BriefUserType;
+  updater: BriefUserType | null;
+};
+
+export const getItemDetail = async (
+  id: number,
+): Promise<ReturnTuple<GetItemDetailType>> => {
+  try {
+    const item = await db.query.itemsTable.findFirst({
+      where: (item, { eq }) => eq(item.id, id),
+      with: {
+        creator: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+        updater: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    if (!item) return [null, "Error getting item"];
+    return [item, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};

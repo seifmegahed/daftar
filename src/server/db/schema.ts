@@ -4,7 +4,7 @@ export { addressesTable, addressRelations } from "./tables/address/schema";
 export { clientsTable, clientRelations } from "./tables/client/schema";
 export { suppliersTable, supplierRelations } from "./tables/supplier/schema";
 export { projectsTable } from "./tables/project/schema";
-export { itemsTable } from "./tables/item/schema";
+export { itemsTable, itemRelations } from "./tables/item/schema";
 export { projectItemsTable } from "./tables/project/schema";
 export { documentsTable, documentRelations } from "./tables/document/schema";
 export { documentRelationsTable, documentRelationsRelations } from "./tables/document/schema";

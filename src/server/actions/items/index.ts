@@ -1,12 +1,14 @@
 "use server";
 
 import { insertItemSchema } from "@/server/db/tables/item/schema";
-import { ReturnTuple } from "@/utils/type-utils";
+import type { ReturnTuple } from "@/utils/type-utils";
 import type { z } from "zod";
 import { getCurrentUserIdAction } from "../users";
 import {
   type GetItemBriefType,
+  type GetItemDetailType,
   getAllItemsBrief,
+  getItemDetail,
   insertItem,
 } from "@/server/db/tables/item/queries";
 
@@ -50,4 +52,12 @@ export const getAllItemsBriefAction = async (): Promise<
   const [items, itemsError] = await getAllItemsBrief();
   if (itemsError !== null) return [null, itemsError];
   return [items, null];
+};
+
+export const getItemDetailAction = async (
+  id: number,
+): Promise<ReturnTuple<GetItemDetailType>> => {
+  const [item, itemError] = await getItemDetail(id);
+  if (itemError !== null) return [null, itemError];
+  return [item, null];
 };

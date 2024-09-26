@@ -56,7 +56,7 @@ type UserDataType = {
 export interface GetClientType extends ClientDataType {
   contacts: ContactDataType[];
   addresses: AddressDataType[];
-  creator: UserDataType | null;
+  creator: UserDataType;
   updater: UserDataType | null;
 }
 
