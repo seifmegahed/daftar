@@ -135,20 +135,52 @@ export const getItemDocuments = async (
 
 // TODO: Implement getProjectDocuments
 
-export const getDocuments = async (): Promise<
-  ReturnTuple<SimpDoc[]>
-> => {
+export const getDocuments = async (): Promise<ReturnTuple<SimpDoc[]>> => {
   try {
-    const documents = await db.select({
-      id: documentsTable.id,
-      name: documentsTable.name,
-      extension: documentsTable.extension,
-    }).from(documentsTable);
+    const documents = await db
+      .select({
+        id: documentsTable.id,
+        name: documentsTable.name,
+        extension: documentsTable.extension,
+      })
+      .from(documentsTable);
     if (!documents) return [null, "Error getting documents"];
 
     return [documents, null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting documents"];
+  }
+};
+
+type UserDataType = {
+  id: number;
+  name: string;
+};
+
+export type DocumentType = DocumentDataType & {
+  creator: UserDataType;
+};
+
+export const getDocumentById = async (
+  id: number,
+): Promise<ReturnTuple<DocumentType>> => {
+  try {
+    const document = await db.query.documentsTable.findFirst({
+      where: (document, { eq }) => eq(document.id, id),
+      with: {
+        creator: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    if (!document) return [null, "Error getting document"];
+    return [document, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting document"];
   }
 };

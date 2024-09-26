@@ -50,7 +50,6 @@ export type DocumentDataType = z.infer<typeof documentSchema>;
  *  - supplier
  *  - client
  */
-
 type RelationsTypeUnion =
   | { projectId: number; itemId: null; supplierId: null; clientId: null }
   | { projectId: null; itemId: number; supplierId: null; clientId: null }

@@ -3,9 +3,11 @@
 import { getErrorMessage } from "@/lib/exceptions";
 import {
   getClientDocuments,
+  getDocumentById,
   getDocuments,
   getItemDocuments,
   getSupplierDocuments,
+  type DocumentType,
   type SimpDoc,
 } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
@@ -73,4 +75,12 @@ export const getDocumentsAction = async (): Promise<ReturnTuple<SimpDoc[]>> => {
   const [documents, documentsError] = await getDocuments();
   if (documentsError !== null) return [null, documentsError];
   return [documents, null];
+};
+
+export const getDocumentByIdAction = async (
+  id: number,
+): Promise<ReturnTuple<DocumentType>> => {
+  const [document, documentError] = await getDocumentById(id);
+  if (documentError !== null) return [null, documentError];
+  return [document, null];
 };
