@@ -89,3 +89,29 @@ export const getSupplierDocuments = async (
     return [null, "Error getting supplier documents"];
   }
 };
+
+export const getItemDocuments = async (
+  itemId: number,
+): Promise<ReturnTuple<SimpDoc[]>> => {
+  try {
+    const documents = await db.query.documentRelationsTable.findMany({
+      where: (documentRelation, { eq }) => eq(documentRelation.itemId, itemId),
+      columns: {},
+      with: {
+        document: {
+          columns: {
+            id: true,
+            name: true,
+            extension: true,
+          },
+        },
+      },
+    });
+    if (!documents) return [null, "Error getting item documents"];
+
+    return [documents.map((x) => x.document), null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting item documents"];
+  }
+};

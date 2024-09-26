@@ -54,7 +54,7 @@ export const getAllItemsBriefAction = async (): Promise<
   return [items, null];
 };
 
-export const getItemDetailAction = async (
+export const getItemDetailsAction = async (
   id: number,
 ): Promise<ReturnTuple<GetItemDetailType>> => {
   const [item, itemError] = await getItemDetail(id);
