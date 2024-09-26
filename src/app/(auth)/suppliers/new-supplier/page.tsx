@@ -92,7 +92,7 @@ function NewSupplierForm() {
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                Enter the supplier's field of business. This will be used to
+                Enter the supplier&apos;s field of business. This will be used to
                 categorize the supplier and make it easier to search for them.
               </FormDescription>
               <FormMessage />

@@ -8,7 +8,7 @@ const sidebarNavItems = [
   },
   {
     title: "New Supplier",
-    href: "/clients/new-supplier",
+    href: "/suppliers/new-supplier",
   },
 ]
 
