@@ -13,6 +13,7 @@ import { clientsTable } from "../client/schema";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import type { z } from "zod";
+import { isExactlyOneDefined } from "@/utils/common";
 
 export const documentsTable = pgTable("document", {
   id: serial("id").primaryKey(),
@@ -98,47 +99,11 @@ export const documentRelationsRelations = relations(
   }),
 );
 
-/**
- * [1,1,1,1]  x
- * [1,1,1,0]  x
- * [1,1,0,1]  x
- * [1,1,0,0]  x
- * [1,0,1,1]  x
- * [1,0,1,0]  x
- * [1,0,0,1]  x
- * [1,0,0,0]  o
- * [0,1,1,1]  x
- * [0,1,1,0]  x
- * [0,1,0,1]  x
- * [0,1,0,0]  o
- * [0,0,1,1]  x
- * [0,0,1,0]  o
- * [0,0,0,1]  o
- * [0,0,0,0]  x
- *
- * Dirty way to do a 4 way XOR but...
- */
-
 export const documentRelationsSchema = createInsertSchema(
   documentRelationsTable,
 )
   .omit({ documentId: true })
   .refine((data) => {
     const { projectId, itemId, supplierId, clientId } = data;
-    if (projectId && itemId && supplierId && clientId) return false;
-    if (projectId && itemId && supplierId && !clientId) return false;
-    if (projectId && itemId && !supplierId && clientId) return false;
-    if (projectId && itemId && !supplierId && !clientId) return false;
-    if (projectId && !itemId && supplierId && clientId) return false;
-    if (projectId && !itemId && supplierId && !clientId) return false;
-    if (projectId && !itemId && !supplierId && clientId) return false;
-    if (projectId && !itemId && !supplierId && !clientId) return true;
-    if (!projectId && itemId && supplierId && clientId) return false;
-    if (!projectId && itemId && supplierId && !clientId) return false;
-    if (!projectId && itemId && !supplierId && clientId) return false;
-    if (!projectId && itemId && !supplierId && !clientId) return true;
-    if (!projectId && !itemId && supplierId && clientId) return false;
-    if (!projectId && !itemId && supplierId && !clientId) return true;
-    if (!projectId && !itemId && !supplierId && clientId) return true;
-    if (!projectId && !itemId && !supplierId && !clientId) return false;
+    return isExactlyOneDefined({ projectId, itemId, supplierId, clientId });
   });
