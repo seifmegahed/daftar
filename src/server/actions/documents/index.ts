@@ -6,6 +6,7 @@ import {
   getDocumentById,
   getDocuments,
   getItemDocuments,
+  getProjectDocuments,
   getSupplierDocuments,
   type DocumentType,
   type SimpDoc,
@@ -69,7 +70,13 @@ export const getItemDocumentsAction = async (
   return [documents, null];
 };
 
-// TODO: Implement getProjectDocumentsAction
+export const getProjectDocumentsAction = async (
+  projectId: number,
+): Promise<ReturnTuple<SimpDoc[]>> => {
+  const [documents, documentsError] = await getProjectDocuments(projectId);
+  if (documentsError !== null) return [null, documentsError];
+  return [documents, null];
+};
 
 export const getDocumentsAction = async (): Promise<ReturnTuple<SimpDoc[]>> => {
   const [documents, documentsError] = await getDocuments();

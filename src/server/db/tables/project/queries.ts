@@ -7,7 +7,10 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 
-export type BriefProjectType = Pick<SelectProjectType, "id" | "name" | "status"> & {
+export type BriefProjectType = Pick<
+  SelectProjectType,
+  "id" | "name" | "status"
+> & {
   client: { id: number; name: string };
   owner: UserBriefType;
 };
@@ -59,5 +62,39 @@ export const insertProject = async (
   } catch (error) {
     console.log(error);
     return [null, "Error inserting new project"];
+  }
+};
+
+export type GetProjectType = SelectProjectType & {
+  client: UserBriefType;
+  owner: UserBriefType;
+};
+
+export const getProjectById = async (
+  id: number,
+): Promise<ReturnTuple<GetProjectType>> => {
+  try {
+    const project = await db.query.projectsTable.findFirst({
+      where: (project, { eq }) => eq(project.id, id),
+      with: {
+        client: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+        owner: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    if (!project) return [null, "Error getting project"];
+    return [project, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting project"];
   }
 };

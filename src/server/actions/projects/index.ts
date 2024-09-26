@@ -1,8 +1,10 @@
 "use server";
 
 import {
+  getProjectById,
   getProjectsBrief,
   insertProject,
+  type GetProjectType,
   type BriefProjectType,
 } from "@/server/db/tables/project/queries";
 import { type InsertProjectType } from "@/server/db/tables/project/schema";
@@ -15,6 +17,14 @@ export const getProjectsBriefAction = async (): Promise<
   const [projects, error] = await getProjectsBrief();
   if (error !== null) return [null, error];
   return [projects, null];
+};
+
+export const getProjectByIdAction = async (
+  id: number,
+): Promise<ReturnTuple<GetProjectType>> => {
+  const [project, error] = await getProjectById(id);
+  if (error !== null) return [null, error];
+  return [project, null];
 };
 
 export const addProjectAction = async (

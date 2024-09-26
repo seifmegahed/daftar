@@ -133,7 +133,31 @@ export const getItemDocuments = async (
   }
 };
 
-// TODO: Implement getProjectDocuments
+export const getProjectDocuments = async (
+  projectId: number,
+): Promise<ReturnTuple<SimpDoc[]>> => {
+  try {
+    const documents = await db.query.documentRelationsTable.findMany({
+      where: (documentRelation, { eq }) =>
+        eq(documentRelation.projectId, projectId),
+      columns: {},
+      with: {
+        document: {
+          columns: {
+            id: true,
+            name: true,
+            extension: true,
+          },
+        },
+      },
+    });
+    if (!documents) return [null, "Error getting project documents"]; 
+    return [documents.map((x) => x.document), null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting project documents"];
+  }
+};
 
 export const getDocuments = async (): Promise<ReturnTuple<SimpDoc[]>> => {
   try {
