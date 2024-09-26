@@ -1,7 +1,9 @@
 import AllClientsPage from "./all-clients";
 
-export default function SettingsPage() {
+function ClientsPage() {
   return (
     <AllClientsPage />
   )
 }
+
+export default ClientsPage;
