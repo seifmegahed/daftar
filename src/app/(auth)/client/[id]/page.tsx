@@ -5,7 +5,7 @@ async function ClientPage({ params }: { params: { id: string } }) {
   if (error !== null) return <p>Error: {error}</p>;
   return (
     <div>
-      <p>Client Page {params.id}</p>
+      <p>Client:</p>
       <pre>{JSON.stringify(client, null, 2)}</pre>
     </div>
   );

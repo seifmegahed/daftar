@@ -1,6 +1,8 @@
 "use server";
 
 import { getErrorMessage } from "@/lib/exceptions";
+import { getClientDocuments } from "@/server/db/tables/document/queries";
+import { type DocumentDataType } from "@/server/db/tables/document/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 import fs from "fs";
@@ -32,4 +34,14 @@ export const saveDocumentFile = async (file: File): Promise<ReturnTuple<string>>
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
+};
+
+type SimpDoc = Pick<DocumentDataType, "id" | "name">;
+
+export const getClientDocumentsAction = async (
+  clientId: number,
+): Promise<ReturnTuple<SimpDoc[]>> => {
+  const [documents, documentsError] = await getClientDocuments(clientId);
+  if (documentsError !== null) return [null, documentsError];
+  return [documents, null];
 };
