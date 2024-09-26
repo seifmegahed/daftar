@@ -1,0 +1,1 @@
+ALTER TABLE "document" ADD COLUMN "extension" varchar(8);

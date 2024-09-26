@@ -74,11 +74,15 @@ export async function POST(request: NextRequest) {
     const [path, saveError] = await saveDocumentFile(validatedFile);
     if (saveError !== null) return new Response(saveError, { status: 500 });
 
+    const extension = validatedFile.name.split(".").pop();
+    if (!extension) return new Response("Invalid file extension", { status: 400 });
+
     const [documentId, documentInsertError] = await insertDocumentWithRelation(
       {
         name: validatedDocument.name,
         notes: validatedDocument.notes,
         path,
+        extension,
         createdBy: userId,
       },
       validatedRelation as Omit<DocumentRelationsType, "documentId">,

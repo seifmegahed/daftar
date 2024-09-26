@@ -20,6 +20,7 @@ export const documentsTable = pgTable("document", {
   name: varchar("name", { length: 64 }).notNull(),
   path: varchar("path", { length: 256 }).notNull(),
   notes: varchar("notes", { length: 256 }),
+  extension: varchar("extension", { length: 8 }).notNull(),
 
   // Interaction fields
   createdAt: timestamp("created_at").defaultNow().notNull(),

@@ -36,7 +36,7 @@ export const insertDocumentWithRelation = async (
 
 export const getClientDocuments = async (
   clientId: number,
-): Promise<ReturnTuple<Pick<DocumentDataType, "id" | "name">[]>> => {
+): Promise<ReturnTuple<Pick<DocumentDataType, "id" | "name" | "extension">[]>> => {
   try {
     const documents = await db.query.documentRelationsTable.findMany({
       where: (documentRelation, { eq }) =>
@@ -47,6 +47,7 @@ export const getClientDocuments = async (
           columns: {
             id: true,
             name: true,
+            extension: true,
           },
         },
       },

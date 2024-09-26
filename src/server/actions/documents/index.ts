@@ -36,7 +36,7 @@ export const saveDocumentFile = async (file: File): Promise<ReturnTuple<string>>
   }
 };
 
-type SimpDoc = Pick<DocumentDataType, "id" | "name">;
+type SimpDoc = Pick<DocumentDataType, "id" | "name" | "extension">;
 
 export const getClientDocumentsAction = async (
   clientId: number,
