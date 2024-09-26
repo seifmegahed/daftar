@@ -6,10 +6,12 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import { usersTable } from "../user/schema";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import type { z } from "zod";
 
 export const itemsTable = pgTable("item", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 64 }).notNull(),
+  name: varchar("name", { length: 64 }).notNull().unique(),
   type: varchar("type", { length: 64 }),
   description: varchar("description", { length: 256 }),
   mpn: varchar("mpn", { length: 64 }),
@@ -24,3 +26,9 @@ export const itemsTable = pgTable("item", {
     .notNull(),
   updatedBy: integer("updated_by").references(() => usersTable.id),
 });
+
+export const insertItemSchema = createInsertSchema(itemsTable);
+export const selectItemSchema = createSelectSchema(itemsTable);
+
+export type AddItemType = z.infer<typeof insertItemSchema>;
+export type SelectItemType = z.infer<typeof selectItemSchema>;
