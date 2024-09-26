@@ -134,3 +134,26 @@ export const insertNewClient = async (
     return [null, getErrorMessage(error)];
   }
 };
+
+export type ClientListType = {
+  id: number;
+  name: string;
+};
+
+export const listAllClients = async (): Promise<ReturnTuple<ClientListType[]>> => {
+  try {
+    const clients = await db
+      .select({
+        id: clientsTable.id,
+        name: clientsTable.name,
+      })
+      .from(clientsTable)
+      .orderBy(asc(clientsTable.id));
+
+    if (!clients) return [null, "Error getting clients"];
+    return [clients, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting clients"];
+  }
+};

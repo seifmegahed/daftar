@@ -12,6 +12,8 @@ import { clientsTable } from "../client/schema";
 import { itemsTable } from "../item/schema";
 import { suppliersTable } from "../supplier/schema";
 import { relations } from "drizzle-orm";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+import type { z } from "zod";
 
 export const projectsTable = pgTable("project", {
   id: serial("id").primaryKey(),
@@ -58,10 +60,20 @@ export const projectRelations = relations(projectsTable, ({ one }) => ({
   }),
 }));
 
+export const insertProjectSchema = createInsertSchema(projectsTable);
+export const selectProjectSchema = createSelectSchema(projectsTable);
+
+export type InsertProjectType = z.infer<typeof insertProjectSchema>;
+export type SelectProjectType = z.infer<typeof selectProjectSchema>;
+
 export const projectItemsTable = pgTable("project_items", {
   id: serial("id").primaryKey(),
-  projectId: integer("project_id").references(() => projectsTable.id).notNull(),
-  itemId: integer("item_id").references(() => itemsTable.id).notNull(),
+  projectId: integer("project_id")
+    .references(() => projectsTable.id)
+    .notNull(),
+  itemId: integer("item_id")
+    .references(() => itemsTable.id)
+    .notNull(),
   supplierId: integer("supplier_id").references(() => suppliersTable.id),
   price: numeric("price").notNull(),
   currency: varchar("currency", { length: 3 }).notNull(),

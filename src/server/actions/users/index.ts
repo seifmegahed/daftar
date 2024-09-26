@@ -4,13 +4,15 @@ import { getErrorMessage } from "@/lib/exceptions";
 import {
   changeUserActiveState,
   getAllUsers,
-  type GetPartialUserType,
   getUserById,
   insertNewUser,
+  listAllUsers,
   sensitiveGetUserPasswordById,
   updateUserName,
   updateUserPassword,
   updateUserRole,
+  type GetPartialUserType,
+  type UserBriefType,
 } from "@/server/db/tables/user/queries";
 import { UserSchema, UserSchemaRaw } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
@@ -34,6 +36,14 @@ import { revalidatePath } from "next/cache";
 const refinePasswords = (data: { password: string; verifyPassword: string }) =>
   !checkPasswordComplexity(data.password) ||
   data.password === data.verifyPassword;
+
+export const listAllUsersAction = async (): Promise<
+  ReturnTuple<UserBriefType[]>
+> => {
+  const [users, error] = await listAllUsers();
+  if (error !== null) return [null, error];
+  return [users, null];
+};
 
 /**
  * Get Current User
@@ -62,7 +72,9 @@ export const getCurrentUserAction = async (): Promise<
   return await getUserByIdAction(id);
 };
 
-export const getCurrentUserIdAction = async (): Promise<ReturnTuple<number>> => {
+export const getCurrentUserIdAction = async (): Promise<
+  ReturnTuple<number>
+> => {
   const token = cookies().get("token");
   if (!token) return [null, userErrors.userNotFound];
   const decoded = await verifyToken(token.value);
@@ -160,7 +172,7 @@ export const userUpdateUserDisplayNameAction = async (
  * User Server Action to update a user's password.
  * Intended to be used if a user forgets their password.
  *
- * Checks if users old password is correct before updating to the new password to 
+ * Checks if users old password is correct before updating to the new password to
  * verify the user.
  *
  * New Password is hashed before being stored in the database.

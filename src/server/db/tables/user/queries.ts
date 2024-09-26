@@ -228,7 +228,7 @@ export const sensitiveGetUserByUsername = async (
     return [user, null];
   } catch (error) {
     const errorMessage = getErrorMessage(error);
-    
+
     if (errorMessage.includes("CONNECT_TIMEOUT"))
       return [null, "Error connecting to database"];
 
@@ -251,5 +251,28 @@ export const updateUserName = async (
     return [user.id, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
+  }
+};
+
+export type UserBriefType = {
+  id: number;
+  name: string;
+};
+
+export const listAllUsers = async (): Promise<ReturnTuple<UserBriefType[]>> => {
+  try {
+    const users = await db
+      .select({
+        id: usersTable.id,
+        name: usersTable.name,
+      })
+      .from(usersTable)
+      .orderBy(asc(usersTable.id));
+
+    if (!users) return [null, "Error getting users"];
+    return [users, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting users"];
   }
 };
