@@ -36,8 +36,14 @@ export const suppliersTable = pgTable("supplier", {
 export const supplierRelations = relations(suppliersTable, ({ many, one }) => ({
   contacts: many(contactsTable),
   addresses: many(addressesTable),
-  creator: one(usersTable),
-  updater: one(usersTable),
+  creator: one(usersTable, {
+    fields: [suppliersTable.createdBy],
+    references: [usersTable.id],
+  }),
+  updater: one(usersTable, {
+    fields: [suppliersTable.updatedBy],
+    references: [usersTable.id],
+  }),
 }));
 
 export const insertSupplierSchema = createInsertSchema(suppliersTable);

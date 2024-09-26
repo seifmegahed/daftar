@@ -34,9 +34,11 @@ export const insertDocumentWithRelation = async (
   }
 };
 
+export type SimpDoc = Pick<DocumentDataType, "id" | "name" | "extension">;
+
 export const getClientDocuments = async (
   clientId: number,
-): Promise<ReturnTuple<Pick<DocumentDataType, "id" | "name" | "extension">[]>> => {
+): Promise<ReturnTuple<SimpDoc[]>> => {
   try {
     const documents = await db.query.documentRelationsTable.findMany({
       where: (documentRelation, { eq }) =>
@@ -58,5 +60,32 @@ export const getClientDocuments = async (
   } catch (error) {
     console.log(error);
     return [null, "Error getting client documents"];
+  }
+};
+
+export const getSupplierDocuments = async (
+  supplierId: number,
+): Promise<ReturnTuple<SimpDoc[]>> => {
+  try {
+    const documents = await db.query.documentRelationsTable.findMany({
+      where: (documentRelation, { eq }) =>
+        eq(documentRelation.supplierId, supplierId),
+      columns: {},
+      with: {
+        document: {
+          columns: {
+            id: true,
+            name: true,
+            extension: true,
+          },
+        },
+      },
+    });
+    if (!documents) return [null, "Error getting supplier documents"];
+
+    return [documents.map((x) => x.document), null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting supplier documents"];
   }
 };

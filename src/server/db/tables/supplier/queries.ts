@@ -21,7 +21,7 @@ export const getAllSuppliersBrief = async (): Promise<
   ReturnTuple<BriefSupplierType[]>
 > => {
   try {
-    const allClients = await db
+    const allSuppliers = await db
       .select({
         id: suppliersTable.id,
         name: suppliersTable.name,
@@ -31,7 +31,7 @@ export const getAllSuppliersBrief = async (): Promise<
       .where(eq(suppliersTable.isActive, true))
       .orderBy(asc(suppliersTable.id));
 
-    return [allClients, null];
+    return [allSuppliers, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
