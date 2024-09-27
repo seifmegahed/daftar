@@ -1,6 +1,9 @@
 import { db } from "@/server/db";
 import {
+  projectItemsTable,
   projectsTable,
+  type SelectProjectItemType,
+  type InsertProjectItemType,
   type InsertProjectType,
   type SelectProjectType,
 } from "./schema";
@@ -96,5 +99,57 @@ export const getProjectById = async (
   } catch (error) {
     console.log(error);
     return [null, "Error getting project"];
+  }
+};
+
+export const insertProjectItem = async (
+  data: InsertProjectItemType,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [project] = await db
+      .insert(projectItemsTable)
+      .values(data)
+      .returning({ id: projectItemsTable.id });
+
+    if (!project) return [null, "Error inserting project item"];
+    return [project.id, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error inserting project item"];
+  }
+};
+
+export type GetProjectItemType = SelectProjectItemType & {
+  item: { id: number; name: string };
+  supplier: { id: number; name: string };
+};
+
+export const getProjectItems = async (
+  projectId: number,
+): Promise<ReturnTuple<GetProjectItemType[]>> => {
+  try {
+    const projectItems = await db.query.projectItemsTable.findMany({
+      where: (projectItem, { eq }) => eq(projectItem.projectId, projectId),
+      with: {
+        item: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+        supplier: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+      },
+    });
+    if (!projectItems) return [null, "Error getting project items"];
+
+    return [projectItems, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting project items"];
   }
 };

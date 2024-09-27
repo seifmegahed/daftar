@@ -74,26 +74,31 @@ export const projectItemsTable = pgTable("project_items", {
   itemId: integer("item_id")
     .references(() => itemsTable.id)
     .notNull(),
-  supplierId: integer("supplier_id").references(() => suppliersTable.id),
+  supplierId: integer("supplier_id")
+    .references(() => suppliersTable.id)
+    .notNull(),
   price: numeric("price", { precision: 10, scale: 2 }).notNull(),
   currency: integer("currency").notNull(),
   quantity: integer("quantity").notNull(),
 });
 
-export const projectItemsRelations = relations(projectItemsTable, ({ one }) => ({
-  project: one(projectsTable, {
-    fields: [projectItemsTable.projectId],
-    references: [projectsTable.id],
+export const projectItemsRelations = relations(
+  projectItemsTable,
+  ({ one }) => ({
+    project: one(projectsTable, {
+      fields: [projectItemsTable.projectId],
+      references: [projectsTable.id],
+    }),
+    item: one(itemsTable, {
+      fields: [projectItemsTable.itemId],
+      references: [itemsTable.id],
+    }),
+    supplier: one(suppliersTable, {
+      fields: [projectItemsTable.supplierId],
+      references: [suppliersTable.id],
+    }),
   }),
-  item: one(itemsTable, {
-    fields: [projectItemsTable.itemId],
-    references: [itemsTable.id],
-  }),
-  supplier: one(suppliersTable, {
-    fields: [projectItemsTable.supplierId],
-    references: [suppliersTable.id],
-  }),
-}));
+);
 
 export const insertProjectItemSchema = createInsertSchema(projectItemsTable);
 export const selectProjectItemSchema = createSelectSchema(projectItemsTable);

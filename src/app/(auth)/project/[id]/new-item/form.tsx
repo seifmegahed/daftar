@@ -24,24 +24,14 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
-
-const currencyOptions = [
-  { value: 0, label: "USD" },
-  { value: 1, label: "EUR" },
-  { value: 2, label: "GBP" },
-  { value: 3, label: "JPY" },
-  { value: 4, label: "INR" },
-  { value: 5, label: "CNY" },
-  { value: 7, label: "AED" },
-  { value: 8, label: "SAR" },
-  { value: 9, label: "EGP" },
-];
+import { currencyOptions } from "@/data/lut";
+import { addProjectItemAction } from "@/server/actions/projects";
 
 const schema = z.object({
-  itemId: z.number({message: "Item is required"}),
-  supplierId: z.number({message: "Supplier is required"}),
+  itemId: z.number({ message: "Item is required" }),
+  supplierId: z.number({ message: "Supplier is required" }),
   price: z.number(),
-  currency: z.number({message: "Currency is required"}),
+  currency: z.number({ message: "Currency is required" }),
   quantity: z.number(),
 });
 
@@ -70,15 +60,21 @@ function NewItemForm({
   });
 
   const onSubmit = async (data: FormSchemaType) => {
-    console.log({
+    const [, error] = await addProjectItemAction({
       projectId,
       itemId: data.itemId,
       supplierId: data.supplierId,
-      price: data.price,
+      price: String(data.price),
       currency: data.currency,
       quantity: data.quantity,
     });
+    if (error !== null) {
+      console.error("Error adding item:", error);
+      toast.error("Error adding item");
+      return;
+    }
     toast.success("Item added successfully");
+    form.reset();
   };
 
   return (
@@ -96,7 +92,7 @@ function NewItemForm({
             <FormItem className="flex flex-col gap-2">
               <FormLabel>Item</FormLabel>
               <ComboSelect
-                value={field.value}
+                value={field.value ?? null}
                 onChange={field.onChange}
                 options={itemsList.map((item) => ({
                   value: item.id,
@@ -121,7 +117,7 @@ function NewItemForm({
             <FormItem className="flex flex-col gap-2">
               <FormLabel>Supplier</FormLabel>
               <ComboSelect
-                value={field.value}
+                value={field.value ?? null}
                 onChange={field.onChange}
                 options={suppliersList.map((supplier) => ({
                   value: supplier.id,
@@ -145,7 +141,6 @@ function NewItemForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Price</FormLabel>
-              <FormDescription>Enter the price of the item.</FormDescription>
               <Input
                 {...field}
                 type="number"
@@ -153,6 +148,7 @@ function NewItemForm({
                 min="0"
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
+              <FormDescription>Enter the price of the item.</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -164,7 +160,7 @@ function NewItemForm({
             <FormItem>
               <FormLabel>Currency</FormLabel>
               <Select
-                defaultValue={String(field.value)}
+                defaultValue={String(field.value) ?? ""}
                 onValueChange={(value) => field.onChange(Number(value))}
               >
                 <FormControl>
@@ -196,7 +192,6 @@ function NewItemForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Quantity</FormLabel>
-              <FormDescription>Enter the quantity of the item.</FormDescription>
               <Input
                 {...field}
                 type="number"
@@ -204,6 +199,7 @@ function NewItemForm({
                 min="0"
                 onChange={(e) => field.onChange(Number(e.target.value))}
               />
+              <FormDescription>Enter the quantity of the item.</FormDescription>
               <FormMessage />
             </FormItem>
           )}

@@ -12,3 +12,15 @@ export const statusCodes = [
   { value: 10, label: "Pending Delivery" },
   { value: 11, label: "Issue" },
 ];
+
+export const currencyOptions = [
+  { value: 0, label: "USD" },
+  { value: 1, label: "EUR" },
+  { value: 2, label: "GBP" },
+  { value: 3, label: "JPY" },
+  { value: 4, label: "INR" },
+  { value: 5, label: "CNY" },
+  { value: 7, label: "AED" },
+  { value: 8, label: "SAR" },
+  { value: 9, label: "EGP" },
+];
