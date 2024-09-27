@@ -6,9 +6,11 @@ import { insertSupplierSchema } from "@/server/db/tables/supplier/schema";
 import {
   type BriefSupplierType,
   type GetSupplierType,
+  type SupplierListType,
   getAllSuppliersBrief,
   getSupplierFullById,
   insertNewSupplier,
+  listAllSuppliers,
 } from "@/server/db/tables/supplier/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 
@@ -58,4 +60,12 @@ export const getSupplierFullByIdAction = async (
   const [supplier, supplierError] = await getSupplierFullById(id);
   if (supplierError !== null) return [null, supplierError];
   return [supplier, null];
+};
+
+export const listAllSuppliersAction = async (): Promise<
+  ReturnTuple<SupplierListType[]>
+> => {
+  const [suppliers, suppliersError] = await listAllSuppliers();
+  if (suppliersError !== null) return [null, suppliersError];
+  return [suppliers, null];
 };

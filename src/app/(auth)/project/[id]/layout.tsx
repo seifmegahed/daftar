@@ -9,8 +9,16 @@ const sidebarNavItemsGenerator = (id: string) => [
     href: basePath(id),
   },
   {
+    title: "Items",
+    href: basePath(id) + "/items",
+  },
+  {
     title: "Documents",
     href: basePath(id) + "/documents",
+  },
+  {
+    title: "New Item",
+    href: basePath(id) + "/new-item",
   },
   {
     title: "New Document",

@@ -7,9 +7,11 @@ import { getCurrentUserIdAction } from "../users";
 import {
   type GetItemBriefType,
   type GetItemDetailType,
+  type ItemListType,
   getAllItemsBrief,
   getItemDetail,
   insertItem,
+  listAllItems,
 } from "@/server/db/tables/item/queries";
 
 const addItemSchema = insertItemSchema.pick({
@@ -60,4 +62,12 @@ export const getItemDetailsAction = async (
   const [item, itemError] = await getItemDetail(id);
   if (itemError !== null) return [null, itemError];
   return [item, null];
+};
+
+export const listAllItemsAction = async (): Promise<
+  ReturnTuple<ItemListType[]>
+> => {
+  const [items, itemsError] = await listAllItems();
+  if (itemsError !== null) return [null, itemsError];
+  return [items, null];
 };

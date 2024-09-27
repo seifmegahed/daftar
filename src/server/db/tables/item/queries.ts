@@ -2,7 +2,7 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { itemsTable, type AddItemType, type SelectItemType } from "./schema";
 import { db } from "@/server/db";
 import { getErrorMessage } from "@/lib/exceptions";
-import { desc } from "drizzle-orm";
+import { asc, desc } from "drizzle-orm";
 
 export const insertItem = async (
   data: AddItemType,
@@ -85,5 +85,29 @@ export const getItemDetail = async (
     return [item, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
+  }
+};
+
+export type ItemListType = {
+  id: number;
+  name: string;
+};
+
+export const listAllItems = async (): Promise<ReturnTuple<ItemListType[]>> => {
+  try {
+    const items = await db
+      .select({
+        id: itemsTable.id,
+        name: itemsTable.name,
+      })
+      .from(itemsTable)
+      .orderBy(asc(itemsTable.name));
+
+    if (!items) return [null, "Error getting items"];
+
+    return [items, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting items"];
   }
 };

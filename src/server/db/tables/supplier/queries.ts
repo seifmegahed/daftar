@@ -131,3 +131,26 @@ export const insertNewSupplier = async (
     return [null, getErrorMessage(error)];
   }
 };
+
+export type SupplierListType = {
+  id: number;
+  name: string;
+};
+
+export const listAllSuppliers = async (): Promise<ReturnTuple<SupplierListType[]>> => {
+  try {
+    const suppliers = await db
+      .select({
+        id: suppliersTable.id,
+        name: suppliersTable.name,
+      })
+      .from(suppliersTable)
+      .orderBy(asc(suppliersTable.name));
+
+    if (!suppliers) return [null, "Error getting suppliers"];
+    return [suppliers, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting suppliers"];
+  }
+};
