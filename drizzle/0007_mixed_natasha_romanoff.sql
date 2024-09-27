@@ -1,0 +1,2 @@
+ALTER TABLE "project_items" ALTER COLUMN "price" SET DATA TYPE numeric(10, 2);--> statement-breakpoint
+ALTER TABLE "project_items" ALTER COLUMN "currency" TYPE integer USING ("currency"::integer);--> statement-breakpoint
