@@ -12,6 +12,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import { relations } from "drizzle-orm";
 import { contactsTable } from "../contact/schema";
 import { addressesTable } from "../address/schema";
+import { documentRelationsTable } from "../document/schema";
 
 export const clientsTable = pgTable("client", {
   id: serial("id").primaryKey(),
@@ -35,6 +36,7 @@ export const clientsTable = pgTable("client", {
 export const clientRelations = relations(clientsTable, ({ many, one }) => ({
   contacts: many(contactsTable),
   addresses: many(addressesTable),
+  documents: many(documentRelationsTable),
   creator: one(usersTable, {
     fields: [clientsTable.createdBy],
     references: [usersTable.id],

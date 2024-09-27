@@ -9,6 +9,7 @@ import { usersTable } from "../user/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { relations } from "drizzle-orm";
+import { documentRelationsTable } from "../document/schema";
 
 export const itemsTable = pgTable("item", {
   id: serial("id").primaryKey(),
@@ -28,7 +29,8 @@ export const itemsTable = pgTable("item", {
   updatedBy: integer("updated_by").references(() => usersTable.id),
 });
 
-export const itemRelations = relations(itemsTable, ({ one }) => ({
+export const itemRelations = relations(itemsTable, ({ one, many }) => ({
+  documents: many(documentRelationsTable),
   creator: one(usersTable, {
     fields: [itemsTable.createdBy],
     references: [usersTable.id],

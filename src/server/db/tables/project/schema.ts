@@ -14,6 +14,7 @@ import { suppliersTable } from "../supplier/schema";
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
+import { documentRelationsTable } from "../document/schema";
 
 export const projectsTable = pgTable("project", {
   id: serial("id").primaryKey(),
@@ -41,7 +42,7 @@ export const projectsTable = pgTable("project", {
   updatedBy: integer("updated_by").references(() => usersTable.id),
 });
 
-export const projectRelations = relations(projectsTable, ({ one }) => ({
+export const projectRelations = relations(projectsTable, ({ one, many }) => ({
   client: one(clientsTable, {
     fields: [projectsTable.clientId],
     references: [clientsTable.id],
@@ -58,6 +59,8 @@ export const projectRelations = relations(projectsTable, ({ one }) => ({
     fields: [projectsTable.updatedBy],
     references: [usersTable.id],
   }),
+  documents: many(documentRelationsTable),
+  items: many(projectItemsTable),
 }));
 
 export const insertProjectSchema = createInsertSchema(projectsTable);

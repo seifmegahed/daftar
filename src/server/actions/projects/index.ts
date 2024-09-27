@@ -6,9 +6,11 @@ import {
   insertProject,
   insertProjectItem,
   getProjectItems,
+  getProjectLinkedDocuments,
   type GetProjectType,
   type BriefProjectType,
   type GetProjectItemType,
+  type GetProjectLinkedDocumentsType,
 } from "@/server/db/tables/project/queries";
 import {
   insertProjectItemSchema,
@@ -67,4 +69,12 @@ export const getProjectItemsAction = async (
   const [projectItems, projectItemsError] = await getProjectItems(projectId);
   if (projectItemsError !== null) return [null, projectItemsError];
   return [projectItems, null];
+};
+
+export const getProjectLinkedDocumentsAction = async (
+  projectId: number,
+): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
+  const [project, projectError] = await getProjectLinkedDocuments(projectId);
+  if (projectError !== null) return [null, projectError];
+  return [project, null];
 };

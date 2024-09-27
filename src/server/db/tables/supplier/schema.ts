@@ -12,6 +12,7 @@ import { contactsTable } from "../contact/schema";
 import { addressesTable } from "../address/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
+import { documentRelationsTable } from "../document/schema";
 
 export const suppliersTable = pgTable("supplier", {
   id: serial("id").primaryKey(),
@@ -36,6 +37,7 @@ export const suppliersTable = pgTable("supplier", {
 export const supplierRelations = relations(suppliersTable, ({ many, one }) => ({
   contacts: many(contactsTable),
   addresses: many(addressesTable),
+  documents: many(documentRelationsTable),
   creator: one(usersTable, {
     fields: [suppliersTable.createdBy],
     references: [usersTable.id],

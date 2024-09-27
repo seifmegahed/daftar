@@ -2,6 +2,8 @@ import { listAllItemsAction } from "@/server/actions/items";
 import { listAllSuppliersAction } from "@/server/actions/suppliers";
 import NewItemForm from "./form";
 
+export const dynamic = "force-dynamic";
+
 async function NewItemPage({ params }: { params: { id: string } }) {
   const [itemsList, itemsError] = await listAllItemsAction();
   if (itemsError !== null) return <div>Error getting items</div>;

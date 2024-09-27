@@ -9,6 +9,7 @@ import {
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
+import type { SimpDoc } from "../document/queries";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -120,7 +121,10 @@ export const insertProjectItem = async (
 };
 
 export type GetProjectItemType = SelectProjectItemType & {
-  item: { id: number; name: string };
+  item: {
+    id: number;
+    name: string;
+  };
   supplier: { id: number; name: string };
 };
 
@@ -151,5 +155,112 @@ export const getProjectItems = async (
   } catch (error) {
     console.log(error);
     return [null, "Error getting project items"];
+  }
+};
+
+export type GetProjectLinkedDocumentsType = {
+  projectDocuments: SimpDoc[];
+  clientDocuments: SimpDoc[];
+  itemsDocuments: SimpDoc[];
+  suppliersDocuments: SimpDoc[];
+};
+
+export const getProjectLinkedDocuments = async (
+  projectId: number,
+): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
+  try {
+    const project = await db.query.projectsTable.findFirst({
+      where: (project, { eq }) => eq(project.id, projectId),
+      columns: {},
+      with: {
+        client: {
+          columns: {},
+          with: {
+            documents: {
+              columns: {},
+              with: {
+                document: {
+                  columns: {
+                    id: true,
+                    name: true,
+                    extension: true,
+                  },
+                },
+              },
+            },
+          },
+        },
+        items: {
+          columns: {},
+          with: {
+            supplier: {
+              columns: {},
+              with: {
+                documents: {
+                  columns: {},
+                  with: {
+                    document: {
+                      columns: {
+                        id: true,
+                        name: true,
+                        extension: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+            item: {
+              columns: {},
+              with: {
+                documents: {
+                  columns: {},
+                  with: {
+                    document: {
+                      columns: {
+                        id: true,
+                        name: true,
+                        extension: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+        documents: {
+          columns: {},
+          with: {
+            document: {
+              columns: {
+                id: true,
+                name: true,
+                extension: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
+    if (!project) return [null, "Error getting project"];
+
+    return [
+      {
+        projectDocuments: project.documents.map((x) => x.document),
+        clientDocuments: project.client.documents.map((x) => x.document),
+        itemsDocuments: project.items.flatMap((x) =>
+          x.item.documents.map((y) => y.document),
+        ),
+        suppliersDocuments: project.items.flatMap((x) =>
+          x.supplier.documents.map((y) => y.document),
+        ),
+      },
+      null,
+    ];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting project"];
   }
 };

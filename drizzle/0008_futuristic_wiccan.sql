@@ -1,0 +1,1 @@
+ALTER TABLE "project_items" ALTER COLUMN "supplier_id" SET NOT NULL;

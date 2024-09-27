@@ -1,4 +1,4 @@
-export { usersTable, userRelations } from "./tables/user/schema";
+export { usersTable } from "./tables/user/schema";
 export { contactsTable, contactRelations } from "./tables/contact/schema";
 export { addressesTable, addressRelations } from "./tables/address/schema";
 export { clientsTable, clientRelations } from "./tables/client/schema";

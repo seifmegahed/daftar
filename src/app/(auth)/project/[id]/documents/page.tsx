@@ -1,7 +1,7 @@
-import { getProjectDocumentsAction } from "@/server/actions/documents";
+import { getProjectLinkedDocumentsAction } from "@/server/actions/projects";
 
 async function ProjectDocumentsPage({ params }: { params: { id: string } }) {
-  const [documents, error] = await getProjectDocumentsAction(Number(params.id));
+  const [documents, error] = await getProjectLinkedDocumentsAction(Number(params.id));
   if (error !== null) return <p>Error: {error}</p>;
   return (
     <div>
