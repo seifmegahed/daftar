@@ -20,7 +20,7 @@ export const clientsTable = pgTable("client", {
   // Data fields
   name: varchar("name", { length: 64 }).notNull().unique(),
   registrationNumber: varchar("registration_number", { length: 64 }),
-  website: varchar("website", { length: 64 }),
+  website: varchar("website", { length: 256 }),
   notes: varchar("notes", { length: notesMaxLength }),
 
   isActive: boolean("is_active").notNull().default(true),

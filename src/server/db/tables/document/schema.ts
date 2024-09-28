@@ -19,7 +19,7 @@ import { notesMaxLength } from "@/data/config";
 export const documentsTable = pgTable("document", {
   id: serial("id").primaryKey(),
   // Data fields
-  name: varchar("name", { length: 64 }).notNull(),
+  name: varchar("name", { length: 64 }).notNull().unique(),
   path: varchar("path", { length: 256 }).notNull(),
   notes: varchar("notes", { length: notesMaxLength }),
   extension: varchar("extension", { length: 8 }).notNull(),

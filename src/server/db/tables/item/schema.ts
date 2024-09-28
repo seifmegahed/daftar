@@ -17,7 +17,7 @@ export const itemsTable = pgTable("item", {
   name: varchar("name", { length: 64 }).notNull().unique(),
   type: varchar("type", { length: 64 }),
   description: varchar("description", { length: notesMaxLength }),
-  mpn: varchar("mpn", { length: 64 }),
+  mpn: varchar("mpn", { length: 128 }),
   make: varchar("make", { length: 64 }),
   notes: varchar("notes", { length: notesMaxLength }),
 

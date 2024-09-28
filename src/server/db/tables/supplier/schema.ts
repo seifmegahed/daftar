@@ -18,7 +18,7 @@ import { notesMaxLength } from "@/data/config";
 export const suppliersTable = pgTable("supplier", {
   id: serial("id").primaryKey(),
   // Data fields
-  name: varchar("name", { length: 64 }).notNull(),
+  name: varchar("name", { length: 64 }).notNull().unique(),
   field: varchar("field", { length: 64 }).notNull(),
   registrationNumber: varchar("registration_number", { length: 64 }),
   website: varchar("website", { length: 256 }),

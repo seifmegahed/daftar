@@ -19,7 +19,7 @@ import { notesMaxLength } from "@/data/config";
 
 export const projectsTable = pgTable("project", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 64 }).notNull(),
+  name: varchar("name", { length: 64 }).notNull().unique(),
   status: integer("status").notNull(),
   description: varchar("description", { length: notesMaxLength }),
   startDate: date("start_date"),
