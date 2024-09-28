@@ -62,19 +62,18 @@ export const contactRelations = relations(contactsTable, ({ one }) => ({
   }),
 }));
 
-export const insertContactSchema = createInsertSchema(contactsTable).refine(
-  (data) => {
-    /**
-     * XOR Logic
-     * Either a clientId or a supplierId must be present in the data.
-     * If both are present, it's an error.
-     * If neither are present, it's an error.
-     */
-    if (data.clientId && data.supplierId) return false;
-    if (!data.clientId && !data.supplierId) return false;
-    return true;
-  },
-);
+export const insertContactSchemaRaw = createInsertSchema(contactsTable);
+export const insertContactSchema = insertContactSchemaRaw.refine((data) => {
+  /**
+   * XOR Logic
+   * Either a clientId or a supplierId must be present in the data.
+   * If both are present, it's an error.
+   * If neither are present, it's an error.
+   */
+  if (data.clientId && data.supplierId) return false;
+  if (!data.clientId && !data.supplierId) return false;
+  return true;
+});
 
 type InsertContactTypeRaw = z.infer<typeof insertContactSchema>;
 

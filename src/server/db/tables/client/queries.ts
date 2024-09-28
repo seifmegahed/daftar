@@ -3,6 +3,11 @@ import { type ClientDataType, clientsTable } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { asc, eq } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
+import {
+  addressesTable,
+  type InsertClientAddressType,
+} from "../address/schema";
+import { contactsTable, type InsertClientContactType } from "../contact/schema";
 
 /**
  * Getters
@@ -117,20 +122,61 @@ type SetPartialClient = Pick<
 >;
 
 export const insertNewClient = async (
-  data: SetPartialClient,
+  clientData: SetPartialClient,
+  addressData: Omit<InsertClientAddressType, "clientId">,
+  contactData: Omit<InsertClientContactType, "clientId">,
 ): Promise<ReturnTuple<number>> => {
   try {
-    const [client] = await db
-      .insert(clientsTable)
-      .values(data)
-      .returning({ id: clientsTable.id });
+    const client = await db.transaction(async (tx) => {
+      const [client] = await tx
+        .insert(clientsTable)
+        .values({
+          ...clientData,
+        })
+        .returning({ id: clientsTable.id });
+
+      if (!client) {
+        tx.rollback();
+        return;
+      }
+      const [address] = await tx
+        .insert(addressesTable)
+        .values({ ...addressData, clientId: client.id })
+        .returning({ id: addressesTable.id });
+
+      if (!address) {
+        tx.rollback();
+        return;
+      }
+
+      const [contact] = await tx
+        .insert(contactsTable)
+        .values({ ...contactData, clientId: client.id })
+        .returning({ id: contactsTable.id });
+
+      if (!contact) {
+        tx.rollback();
+        return;
+      }
+
+      const [updatedClient] = await tx
+        .update(clientsTable)
+        .set({
+          primaryAddressId: address.id,
+          primaryContactId: contact.id,
+        })
+        .where(eq(clientsTable.id, client.id))
+        .returning({ id: clientsTable.id });
+
+      return updatedClient;
+    });
 
     if (!client) throw new Error("Error inserting new client");
     return [client.id, null];
   } catch (error) {
     const errorMessage = getErrorMessage(error);
     if (errorMessage.includes("unique"))
-      return [null, `Client with name ${data.name} already exists`];
+      return [null, `Client with name ${clientData.name} already exists`];
     return [null, getErrorMessage(error)];
   }
 };
@@ -140,7 +186,9 @@ export type ClientListType = {
   name: string;
 };
 
-export const listAllClients = async (): Promise<ReturnTuple<ClientListType[]>> => {
+export const listAllClients = async (): Promise<
+  ReturnTuple<ClientListType[]>
+> => {
   try {
     const clients = await db
       .select({

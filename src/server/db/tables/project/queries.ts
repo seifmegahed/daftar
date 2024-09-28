@@ -10,9 +10,7 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
-import { asc } from "drizzle-orm";
-import { addressesTable } from "../address/schema";
-import { contactsTable } from "../contact/schema";
+import { clientsTable } from "../client/schema";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -120,8 +118,8 @@ export const getProjectById = async (
           },
           with: {
             addresses: {
-              orderBy: [asc(addressesTable.id)],
-              limit: 1,
+              where: (address, { eq }) =>
+                eq(address.id, clientsTable.primaryAddressId),
               columns: {
                 id: true,
                 addressLine: true,
@@ -130,8 +128,8 @@ export const getProjectById = async (
               },
             },
             contacts: {
-              orderBy: [asc(contactsTable.id)],
-              limit: 1,
+              where: (contact, { eq }) =>
+                eq(contact.id, clientsTable.primaryContactId),
               columns: {
                 id: true,
                 name: true,

@@ -1,6 +1,8 @@
 import { getAllClientsBriefAction } from "@/server/actions/clients";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 async function AllClientsPage() {
   const [clients, error] = await getAllClientsBriefAction();
   if (error !== null) return <div>Error getting clients</div>;

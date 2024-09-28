@@ -63,7 +63,8 @@ export const addressRelations = relations(addressesTable, ({ one }) => ({
   }),
 }));
 
-export const insertAddressSchema = createInsertSchema(addressesTable).refine(
+export const insertAddressSchemaRaw = createInsertSchema(addressesTable)
+export const insertAddressSchema = insertAddressSchemaRaw.refine(
   (data) => {
     /**
      * XOR Logic

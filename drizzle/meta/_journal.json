@@ -64,6 +64,13 @@
       "when": 1727434935776,
       "tag": "0008_futuristic_wiccan",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1727543633356,
+      "tag": "0009_slippery_rattler",
+      "breakpoints": true
     }
   ]
 }
