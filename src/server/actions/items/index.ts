@@ -14,13 +14,8 @@ import {
   listAllItems,
 } from "@/server/db/tables/item/queries";
 
-const addItemSchema = insertItemSchema.pick({
-  name: true,
-  type: true,
-  description: true,
-  mpn: true,
-  make: true,
-  notes: true,
+const addItemSchema = insertItemSchema.omit({
+  createdBy: true,
 });
 
 type AddItemFormType = z.infer<typeof addItemSchema>;

@@ -14,11 +14,12 @@ import {
 } from "@/server/db/tables/project/queries";
 import {
   insertProjectItemSchema,
+  insertProjectSchema,
   type InsertProjectItemType,
-  type InsertProjectType,
 } from "@/server/db/tables/project/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "../users";
+import type { z } from "zod";
 
 export const getProjectsBriefAction = async (): Promise<
   ReturnTuple<BriefProjectType[]>
@@ -36,14 +37,28 @@ export const getProjectByIdAction = async (
   return [project, null];
 };
 
+const addProjectSchema = insertProjectSchema.omit({
+  createdBy: true,
+});
+
+type AddProjectFormType = z.infer<typeof addProjectSchema>;
+
 export const addProjectAction = async (
-  data: Omit<InsertProjectType, "createdBy" | "updatedBy">,
+  data: AddProjectFormType,
 ): Promise<ReturnTuple<number>> => {
+  const isValid = addProjectSchema.safeParse(data);
+  if (!isValid.success) return [null, "Invalid data"];
+
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];
 
   const [projectId, projectInsertError] = await insertProject({
-    ...data,
+    name: isValid.data.name,
+    status: isValid.data.status,
+    description: isValid.data.description,
+    notes: isValid.data.notes,
+    clientId: isValid.data.clientId,
+    ownerId: isValid.data.ownerId,
     createdBy: userId,
   });
   if (projectInsertError !== null) return [null, projectInsertError];
