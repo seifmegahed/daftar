@@ -64,36 +64,26 @@ export const addressRelations = relations(addressesTable, ({ one }) => ({
   }),
 }));
 
-export const insertAddressSchemaRaw = createInsertSchema(addressesTable)
+export const insertAddressSchemaRaw = createInsertSchema(addressesTable);
+
+type InsertAddressTypeRaw = z.infer<typeof insertAddressSchemaRaw>;
+
+export const insertAddressSchemaRefineCallback = (
+  data: Partial<InsertAddressTypeRaw>,
+) => {
+  /**
+   * XOR Logic
+   * Either a clientId or a supplierId must be present in the data.
+   * If both are present, it's an error.
+   * If neither are present, it's an error.
+   */
+  if (data.clientId && data.supplierId) return false;
+  if (!data.clientId && !data.supplierId) return false;
+  return true;
+};
+
 export const insertAddressSchema = insertAddressSchemaRaw.refine(
-  (data) => {
-    /**
-     * XOR Logic
-     * Either a clientId or a supplierId must be present in the data.
-     * If both are present, it's an error.
-     * If neither are present, it's an error.
-     */
-    if (data.clientId && data.supplierId) return false;
-    if (!data.clientId && !data.supplierId) return false;
-    return true;
-  },
+  insertAddressSchemaRefineCallback,
 );
 
-type InsertAddressTypeRaw = z.infer<typeof insertAddressSchema>;
-
-export type InsertClientAddressType = InsertAddressTypeRaw & {
-  clientId: number;
-};
-
-export type InsertSupplierAddressType = InsertAddressTypeRaw & {
-  supplierId: number;
-};
-
-/**
- * XOR Union type for the two possible insert address types
- *
- * Either a clientId or a supplierId must be present in the data.
- */
-export type InsertAddressType =
-  | InsertClientAddressType
-  | InsertSupplierAddressType;
+export type InsertAddressType = z.infer<typeof insertAddressSchema>;
