@@ -10,6 +10,9 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
+import { asc } from "drizzle-orm";
+import { addressesTable } from "../address/schema";
+import { contactsTable } from "../contact/schema";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -70,8 +73,35 @@ export const insertProject = async (
 };
 
 export type GetProjectType = SelectProjectType & {
-  client: UserBriefType;
+  client: {
+    id: number;
+    name: string;
+    registrationNumber: string | null;
+    website: string | null;
+    address: {
+      id: number;
+      addressLine: string;
+      city: string | null;
+      country: string;
+    } | null;
+    contact: {
+      id: number;
+      name: string;
+      email: string | null;
+      phoneNumber: string | null;
+    } | null;
+  };
+  items: {
+    id: number;
+    quantity: number;
+    price: string;
+    currency: number;
+    item: { id: number; name: string, make: string | null, mpn: string | null };
+    supplier: UserBriefType;
+  }[];
   owner: UserBriefType;
+  creator: UserBriefType;
+  updater: UserBriefType | null;
 };
 
 export const getProjectById = async (
@@ -85,6 +115,30 @@ export const getProjectById = async (
           columns: {
             id: true,
             name: true,
+            registrationNumber: true,
+            website: true,
+          },
+          with: {
+            addresses: {
+              orderBy: [asc(addressesTable.id)],
+              limit: 1,
+              columns: {
+                id: true,
+                addressLine: true,
+                city: true,
+                country: true,
+              },
+            },
+            contacts: {
+              orderBy: [asc(contactsTable.id)],
+              limit: 1,
+              columns: {
+                id: true,
+                name: true,
+                email: true,
+                phoneNumber: true,
+              },
+            },
           },
         },
         owner: {
@@ -93,10 +147,59 @@ export const getProjectById = async (
             name: true,
           },
         },
+        creator: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+        updater: {
+          columns: {
+            id: true,
+            name: true,
+          },
+        },
+        items: {
+          columns: {
+            id: true,
+            quantity: true,
+            price: true,
+            currency: true,
+          },
+          with: {
+            supplier: {
+              columns: {
+                id: true,
+                name: true,
+              },
+            },
+            item: {
+              columns: {
+                id: true,
+                name: true,
+                make: true,
+                mpn: true,
+              },
+            },
+          },
+        },
       },
     });
     if (!project) return [null, "Error getting project"];
-    return [project, null];
+    return [
+      {
+        ...project,
+        client: {
+          id: project.client.id,
+          name: project.client.name,
+          registrationNumber: project.client.registrationNumber,
+          website: project.client.website,
+          address: project.client.addresses[0] ?? null,
+          contact: project.client.contacts[0] ?? null,
+        },
+      },
+      null,
+    ];
   } catch (error) {
     console.log(error);
     return [null, "Error getting project"];

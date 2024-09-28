@@ -13,6 +13,9 @@ export const statusCodes = [
   { value: 11, label: "Issue" },
 ];
 
+export const getStatusLabel = (status: number) =>
+  statusCodes.find((x) => x.value === status)?.label ?? "Unknown";
+
 export const currencyOptions = [
   { value: 0, label: "USD" },
   { value: 1, label: "EUR" },
@@ -24,3 +27,6 @@ export const currencyOptions = [
   { value: 8, label: "SAR" },
   { value: 9, label: "EGP" },
 ];
+
+export const getCurrencyLabel = (currency: number) =>
+  currencyOptions.find((x) => x.value === currency)?.label ?? "Unknown";
