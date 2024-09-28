@@ -71,6 +71,13 @@
       "when": 1727543633356,
       "tag": "0009_slippery_rattler",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1727547120440,
+      "tag": "0010_fat_prowler",
+      "breakpoints": true
     }
   ]
 }

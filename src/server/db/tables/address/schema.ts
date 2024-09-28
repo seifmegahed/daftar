@@ -11,6 +11,7 @@ import { clientsTable } from "../client/schema";
 import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import type { z } from "zod";
+import { notesMaxLength } from "@/data/config";
 
 export const addressesTable = pgTable("address", {
   id: serial("id").primaryKey(),
@@ -19,7 +20,7 @@ export const addressesTable = pgTable("address", {
   addressLine: varchar("address_line", { length: 256 }).notNull(),
   country: varchar("country", { length: 64 }).notNull(),
   city: varchar("city", { length: 64 }),
-  notes: varchar("notes", { length: 256 }),
+  notes: varchar("notes", { length: notesMaxLength }),
 
   /**
    * Foreign keys

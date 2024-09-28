@@ -15,15 +15,16 @@ import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { documentRelationsTable } from "../document/schema";
+import { notesMaxLength } from "@/data/config";
 
 export const projectsTable = pgTable("project", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 64 }).notNull(),
   status: integer("status").notNull(),
-  description: varchar("description", { length: 256 }),
+  description: varchar("description", { length: notesMaxLength }),
   startDate: date("start_date"),
   endDate: date("end_date"),
-  notes: varchar("notes", { length: 256 }),
+  notes: varchar("notes", { length: notesMaxLength }),
 
   // Foreign keys
   clientId: integer("client_id")

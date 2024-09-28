@@ -31,14 +31,22 @@ import type { UserBriefType } from "@/server/db/tables/user/queries";
 import ComboSelect from "@/components/combo-select-obj";
 import { addProjectAction } from "@/server/actions/projects";
 import { statusCodes } from "@/data/lut";
+import { notesMaxLength } from "@/data/config";
 
 const schema = z.object({
-  name: z.string({ required_error: "Name is required" }).min(4).max(64),
-  status: z.number(),
-  description: z.string().max(256),
-  notes: z.string().max(256),
-  clientId: z.number(),
-  ownerId: z.number(),
+  name: z
+    .string({ required_error: "Name is required" })
+    .min(4, { message: "Name must be at least 4 characters" })
+    .max(64, { message: "Name must not be longer than 64 characters" }),
+  status: z.number({ required_error: "Status is required" }),
+  description: z.string().max(notesMaxLength, {
+    message: `Description must not be longer than ${notesMaxLength} characters`,
+  }),
+  notes: z.string().max(notesMaxLength, {
+    message: `Notes must not be longer than ${notesMaxLength} characters`,
+  }),
+  clientId: z.number({ required_error: "Client is required" }),
+  ownerId: z.number({ required_error: "Owner is required" }),
 });
 
 type ProjectFormSchemaType = z.infer<typeof schema>;
@@ -141,7 +149,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
                   value={field.value as number}
                   onChange={(value) => field.onChange(value)}
                   options={clientList.map((client) => ({
-                    value: client.id, 
+                    value: client.id,
                     label: client.name,
                   }))}
                   selectMessage="Select client"
@@ -166,7 +174,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
                   value={field.value as number}
                   onChange={(value) => field.onChange(value)}
                   options={userList.map((user) => ({
-                    value: user.id, 
+                    value: user.id,
                     label: user.name,
                   }))}
                   selectMessage="Select user"

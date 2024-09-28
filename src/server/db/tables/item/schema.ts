@@ -10,15 +10,16 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { relations } from "drizzle-orm";
 import { documentRelationsTable } from "../document/schema";
+import { notesMaxLength } from "@/data/config";
 
 export const itemsTable = pgTable("item", {
   id: serial("id").primaryKey(),
   name: varchar("name", { length: 64 }).notNull().unique(),
   type: varchar("type", { length: 64 }),
-  description: varchar("description", { length: 256 }),
+  description: varchar("description", { length: notesMaxLength }),
   mpn: varchar("mpn", { length: 64 }),
   make: varchar("make", { length: 64 }),
-  notes: varchar("notes", { length: 256 }),
+  notes: varchar("notes", { length: notesMaxLength }),
 
   // Interaction fields
   createdAt: timestamp("created_at").defaultNow().notNull(),

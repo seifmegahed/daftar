@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { notesMaxLength } from "@/data/config";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 
@@ -60,8 +61,15 @@ function generateRelation(relation: RelationDataType) {
 }
 
 const documentSchema = z.object({
-  name: z.string().min(4).max(64),
-  notes: z.string().max(256),
+  name: z
+    .string({
+      required_error: "Name is required",
+    })
+    .min(4, { message: "Name must be at least 4 characters" })
+    .max(64, { message: "Name must not be longer than 64 characters" }),
+  notes: z.string().max(notesMaxLength, {
+    message: `Notes must not be longer than ${notesMaxLength} characters`,
+  }),
   file: z.instanceof(File),
 });
 

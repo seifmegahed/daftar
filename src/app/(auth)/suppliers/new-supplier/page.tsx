@@ -20,13 +20,26 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { addSupplierAction } from "@/server/actions/suppliers";
 import { getErrorMessage } from "@/lib/exceptions";
+import { notesMaxLength } from "@/data/config";
 
 const schema = z.object({
-  name: z.string({ required_error: "Name is required" }).min(4).max(64),
-  field: z.string({ required_error: "Field is required" }).min(4).max(64),
-  registrationNumber: z.string().max(64),
-  website: z.string().max(256),
-  notes: z.string().max(256),
+  name: z
+    .string({ required_error: "Name is required" })
+    .min(4, { message: "Name must be at least 4 characters" })
+    .max(64, { message: "Name must not be longer than 64 characters" }),
+  field: z
+    .string({ required_error: "Field is required" })
+    .min(4, { message: "Field must be at least 4 characters" })
+    .max(64, { message: "Field must not be longer than 64 characters" }),
+  registrationNumber: z.string().max(64, {
+    message: "Registration number must not be longer than 64 characters",
+  }),
+  website: z
+    .string()
+    .max(256, { message: "Website must not be longer than 256 characters" }),
+  notes: z.string().max(notesMaxLength, {
+    message: `Notes must not be longer than ${notesMaxLength} characters`,
+  }),
 });
 
 type SupplierFormSchemaType = z.infer<typeof schema>;
@@ -74,9 +87,9 @@ function NewSupplierForm() {
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                Enter the name of the supplier. This is the name you will be using
-                to search and refer to the supplier. It will appear in your
-                projects.
+                Enter the name of the supplier. This is the name you will be
+                using to search and refer to the supplier. It will appear in
+                your projects.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -92,8 +105,9 @@ function NewSupplierForm() {
                 <Input {...field} />
               </FormControl>
               <FormDescription>
-                Enter the supplier&apos;s field of business. This will be used to
-                categorize the supplier and make it easier to search for them.
+                Enter the supplier&apos;s field of business. This will be used
+                to categorize the supplier and make it easier to search for
+                them.
               </FormDescription>
               <FormMessage />
             </FormItem>

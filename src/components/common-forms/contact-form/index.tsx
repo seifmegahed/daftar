@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import SubmitButton from "@/components/buttons/submit-button";
+import { notesMaxLength } from "@/data/config";
 
 const formSchema = z.object({
   name: z
@@ -37,7 +38,7 @@ const formSchema = z.object({
   ),
   notes: z
     .string()
-    .max(256, { message: "Notes must not be longer than 256 characters" }),
+    .max(notesMaxLength, { message: `Notes must not be longer than ${notesMaxLength} characters` }),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;

@@ -24,8 +24,7 @@ import { countries } from "@/lib/countries";
 import { Separator } from "@/components/ui/separator";
 import ComboSelect from "@/components/combo-select";
 import { emptyToUndefined } from "@/utils/common";
-
-const notesMaxLength = 256;
+import { notesMaxLength } from "@/data/config";
 
 const schema = z.object({
   // Client Details

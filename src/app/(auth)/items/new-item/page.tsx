@@ -21,14 +21,32 @@ import SubmitButton from "@/components/buttons/submit-button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { getErrorMessage } from "@/lib/exceptions";
+import { notesMaxLength } from "@/data/config";
 
 const schema = z.object({
-  name: z.string({ required_error: "Name is required" }).min(4).max(64),
-  type: z.string().max(64),
-  description: z.string().max(256),
-  mpn: z.string().max(64),
-  make: z.string().max(64),
-  notes: z.string().max(256),
+  name: z
+    .string({ required_error: "Name is required" })
+    .min(4, { message: "Name must be at least 4 characters" })
+    .max(64, { message: "Name must not be longer than 64 characters" }),
+  type: z
+    .string()
+    .max(64, { message: "Type must not be longer than 64 characters" }),
+  description: z
+    .string()
+    .max(notesMaxLength, {
+      message: `Description must not be longer than ${notesMaxLength} characters`,
+    }),
+  mpn: z
+    .string()
+    .max(64, { message: "MPN must not be longer than 64 characters" }),
+  make: z
+    .string()
+    .max(64, { message: "Make must not be longer than 64 characters" }),
+  notes: z
+    .string()
+    .max(notesMaxLength, {
+      message: `Notes must not be longer than ${notesMaxLength} characters`,
+    }),
 });
 
 type ItemFormSchemaType = z.infer<typeof schema>;

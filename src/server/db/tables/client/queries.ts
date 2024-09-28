@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { type ClientDataType, clientsTable } from "./schema";
+import { type InsertClientDataType, clientsTable } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { asc, eq } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
@@ -14,7 +14,7 @@ import { contactsTable, type InsertClientContactType } from "../contact/schema";
  */
 
 export type BriefClientType = Pick<
-  ClientDataType,
+  InsertClientDataType,
   "id" | "name" | "registrationNumber"
 >;
 
@@ -58,7 +58,7 @@ type UserDataType = {
   name: string;
 };
 
-export interface GetClientType extends ClientDataType {
+export interface GetClientType extends InsertClientDataType {
   contacts: ContactDataType[];
   addresses: AddressDataType[];
   creator: UserDataType;
@@ -117,7 +117,7 @@ export const getClientFullById = async (
  * Setters
  */
 type SetPartialClient = Pick<
-  ClientDataType,
+  InsertClientDataType,
   "name" | "registrationNumber" | "website" | "notes" | "createdBy"
 >;
 

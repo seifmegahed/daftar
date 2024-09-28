@@ -13,6 +13,7 @@ import { addressesTable } from "../address/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { documentRelationsTable } from "../document/schema";
+import { notesMaxLength } from "@/data/config";
 
 export const suppliersTable = pgTable("supplier", {
   id: serial("id").primaryKey(),
@@ -21,7 +22,7 @@ export const suppliersTable = pgTable("supplier", {
   field: varchar("field", { length: 64 }).notNull(),
   registrationNumber: varchar("registration_number", { length: 64 }),
   website: varchar("website", { length: 256 }),
-  notes: varchar("notes", { length: 256 }),
+  notes: varchar("notes", { length: notesMaxLength }),
 
   isActive: boolean("is_active").notNull().default(true),
 

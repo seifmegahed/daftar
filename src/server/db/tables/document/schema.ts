@@ -14,13 +14,14 @@ import { relations } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { isExactlyOneDefined } from "@/utils/common";
+import { notesMaxLength } from "@/data/config";
 
 export const documentsTable = pgTable("document", {
   id: serial("id").primaryKey(),
   // Data fields
   name: varchar("name", { length: 64 }).notNull(),
   path: varchar("path", { length: 256 }).notNull(),
-  notes: varchar("notes", { length: 256 }),
+  notes: varchar("notes", { length: notesMaxLength }),
   extension: varchar("extension", { length: 8 }).notNull(),
 
   // Interaction fields
