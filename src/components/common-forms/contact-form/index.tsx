@@ -38,7 +38,9 @@ const formSchema = z.object({
   ),
   notes: z
     .string()
-    .max(notesMaxLength, { message: `Notes must not be longer than ${notesMaxLength} characters` }),
+    .max(notesMaxLength, {
+      message: `Notes must not be longer than ${notesMaxLength} characters`,
+    }),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -66,7 +68,6 @@ function NewContactForm({
       const [, contactInsertError] = await addNewContactAction({
         ...data,
         ...ref,
-        createdBy: -1,
       });
       if (contactInsertError !== null) {
         toast.error("An error occurred while adding the contact");

@@ -7,7 +7,7 @@ import {
   addressesTable,
   type InsertAddressType,
 } from "../address/schema";
-import { contactsTable, type InsertClientContactType } from "../contact/schema";
+import { contactsTable, type InsertContactType } from "../contact/schema";
 
 /**
  * Getters
@@ -123,8 +123,8 @@ type SetPartialClient = Pick<
 
 export const insertNewClient = async (
   clientData: SetPartialClient,
-  addressData: Omit<InsertAddressType, "clientId">,
-  contactData: Omit<InsertClientContactType, "clientId">,
+  addressData: InsertAddressType,
+  contactData: InsertContactType,
 ): Promise<ReturnTuple<number>> => {
   try {
     const client = await db.transaction(async (tx) => {
