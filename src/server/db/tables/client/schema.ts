@@ -59,37 +59,6 @@ export const clientRelations = relations(clientsTable, ({ many, one }) => ({
   }),
 }));
 
-// export const clientSchemaRaw = {
-//   id: z.number(),
-//   name: z
-//     .string({ required_error: "Name is required" })
-//     .min(4, { message: "Name must be at least 4 characters" })
-//     .max(64, { message: "Name must not be longer than 64 characters" }),
-//   registrationNumber: z
-//     .string()
-//     .max(64, {
-//       message: "Registration number must not be longer than 64 characters",
-//     })
-//     .nullable(),
-//   website: z
-//     .string()
-//     .max(64, { message: "Website must not be longer than 64 characters" })
-//     .nullable(),
-//   notes: z
-//     .string()
-//     .max(notesMaxLength, { message: "Notes must not be longer than 256 characters" })
-//     .nullable(),
-
-//   createdAt: z.date(),
-//   updatedAt: z.date().nullable(),
-//   createdBy: z.number(),
-//   updatedBy: z.number().nullable(),
-// };
-
-// export const clientSchema = z.object(clientSchemaRaw);
-
-// export type ClientDataType = z.infer<typeof clientSchema>;
-
 export const insertClientSchema = createInsertSchema(clientsTable);
 
 export type InsertClientDataType = z.infer<typeof insertClientSchema>;

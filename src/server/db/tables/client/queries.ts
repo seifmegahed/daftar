@@ -5,7 +5,7 @@ import { asc, eq } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
 import {
   addressesTable,
-  type InsertClientAddressType,
+  type InsertAddressType,
 } from "../address/schema";
 import { contactsTable, type InsertClientContactType } from "../contact/schema";
 
@@ -123,7 +123,7 @@ type SetPartialClient = Pick<
 
 export const insertNewClient = async (
   clientData: SetPartialClient,
-  addressData: Omit<InsertClientAddressType, "clientId">,
+  addressData: Omit<InsertAddressType, "clientId">,
   contactData: Omit<InsertClientContactType, "clientId">,
 ): Promise<ReturnTuple<number>> => {
   try {
