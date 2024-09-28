@@ -38,11 +38,9 @@ const formSchema = z.object({
   city: z
     .string()
     .max(64, { message: "City must not be longer than 64 characters" }),
-  notes: z
-    .string()
-    .max(notesMaxLength, {
-      message: `Notes must not be longer than ${notesMaxLength} characters`,
-    }),
+  notes: z.string().max(notesMaxLength, {
+    message: `Notes must not be longer than ${notesMaxLength} characters`,
+  }),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -70,7 +68,6 @@ function NewAddressForm({
     const [, addressInsertError] = await addNewAddressAction({
       ...data,
       ...ref,
-      createdBy: -1,
     });
     if (addressInsertError !== null) {
       toast.error("An error occurred while adding the address");
