@@ -10,6 +10,8 @@ import { format } from "date-fns";
 import { MoreHorizontal, FileIcon } from "lucide-react";
 import Link from "next/link";
 
+export const dynamic = "force-dynamic";
+
 async function ProjectPage({ params }: { params: { id: string } }) {
   const [project, projectErrors] = await getProjectByIdAction(
     Number(params.id),
@@ -98,19 +100,19 @@ const ProjectDocuments = ({
     <div className="flex flex-col gap-y-2 text-muted-foreground">
       <DocumentsDisplay
         documents={documents.projectDocuments}
-        title="Project Documents"
+        title="Project's Documents"
       />
       <DocumentsDisplay
         documents={documents.clientDocuments}
-        title="Client Documents"
+        title="Client's Documents"
       />
       <DocumentsDisplay
         documents={documents.itemsDocuments}
-        title="Item Documents"
+        title="Items' Documents"
       />
       <DocumentsDisplay
         documents={documents.suppliersDocuments}
-        title="Supplier Documents"
+        title="Suppliers' Documents"
       />
     </div>
   );
@@ -137,13 +139,13 @@ const DocumentCard = ({ document }: { document: SimpDoc }) => {
   return (
     <div className="flex justify-between pl-5">
       <div className="flex items-center gap-x-2">
-        <div className="relative">
+        <div className="relative cursor-pointer">
           <FileIcon className="h-8 w-8" />
-          <p className="absolute top-3 left-2 text-center w-4 font-medium" style={{ fontSize: 10 }}>
+          <p className="absolute top-3 left-2 text-center w-4 font-medium text-[6pt] select-none">
             {document.extension}
           </p>
         </div>
-        <p>{document.name}</p>
+        <p className="underline cursor-pointer">{document.name}</p>
       </div>
       <div className="flex rounded-full p-2 hover:bg-muted">
         <MoreHorizontal className="h-4 w-4" />
