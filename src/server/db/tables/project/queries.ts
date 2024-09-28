@@ -96,7 +96,7 @@ export type GetProjectType = SelectProjectType & {
     quantity: number;
     price: string;
     currency: number;
-    item: { id: number; name: string, make: string | null, mpn: string | null };
+    item: { id: number; name: string; make: string | null; mpn: string | null };
     supplier: UserBriefType;
   }[];
   owner: UserBriefType;
@@ -297,7 +297,7 @@ export const getProjectLinkedDocuments = async (
           columns: {},
           with: {
             supplier: {
-              columns: {},
+              columns: { id: true },
               with: {
                 documents: {
                   columns: {},
@@ -314,7 +314,7 @@ export const getProjectLinkedDocuments = async (
               },
             },
             item: {
-              columns: {},
+              columns: { id: true },
               with: {
                 documents: {
                   columns: {},
@@ -349,16 +349,31 @@ export const getProjectLinkedDocuments = async (
 
     if (!project) return [null, "Error getting project"];
 
+    const uniqueSuppliers = new Map<number, (typeof project.items)[0]>();
+    const uniqueItems = new Map<number, (typeof project.items)[0]>();
+
+    project.items.forEach((item) => {
+      if (!uniqueSuppliers.has(item.supplier.id)) {
+        uniqueSuppliers.set(item.supplier.id, item);
+      }
+      if (!uniqueItems.has(item.item.id)) {
+        uniqueItems.set(item.item.id, item);
+      }
+    });
+
+    const suppliersDocuments = Array.from(uniqueSuppliers.values()).flatMap(
+      (item) => item.supplier.documents.map((doc) => doc.document),
+    );
+    const itemsDocuments = Array.from(uniqueItems.values()).flatMap((item) =>
+      item.item.documents.map((doc) => doc.document),
+    );
+
     return [
       {
         projectDocuments: project.documents.map((x) => x.document),
         clientDocuments: project.client.documents.map((x) => x.document),
-        itemsDocuments: project.items.flatMap((x) =>
-          x.item.documents.map((y) => y.document),
-        ),
-        suppliersDocuments: project.items.flatMap((x) =>
-          x.supplier.documents.map((y) => y.document),
-        ),
+        itemsDocuments,
+        suppliersDocuments,
       },
       null,
     ];
