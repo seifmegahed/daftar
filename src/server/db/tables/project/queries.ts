@@ -10,7 +10,6 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
-import { clientsTable } from "../client/schema";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -70,33 +69,37 @@ export const insertProject = async (
   }
 };
 
-export type GetProjectType = SelectProjectType & {
-  client: {
+export type ProjectClientType = {
+  id: number;
+  name: string;
+  registrationNumber: string | null;
+  website: string | null;
+  primaryAddress: {
+    id: number;
+    addressLine: string;
+    city: string | null;
+    country: string;
+  } | null;
+  primaryContact: {
     id: number;
     name: string;
-    registrationNumber: string | null;
-    website: string | null;
-    address: {
-      id: number;
-      addressLine: string;
-      city: string | null;
-      country: string;
-    } | null;
-    contact: {
-      id: number;
-      name: string;
-      email: string | null;
-      phoneNumber: string | null;
-    } | null;
-  };
-  items: {
-    id: number;
-    quantity: number;
-    price: string;
-    currency: number;
-    item: { id: number; name: string; make: string | null; mpn: string | null };
-    supplier: UserBriefType;
-  }[];
+    email: string | null;
+    phoneNumber: string | null;
+  } | null;
+};
+
+type ProjectItemType = {
+  id: number;
+  quantity: number;
+  price: string;
+  currency: number;
+  item: { id: number; name: string; make: string | null; mpn: string | null };
+  supplier: { id: number; name: string };
+};
+
+export type GetProjectType = SelectProjectType & {
+  client: ProjectClientType;
+  items: ProjectItemType[];
   owner: UserBriefType;
   creator: UserBriefType;
   updater: UserBriefType | null;
@@ -117,9 +120,7 @@ export const getProjectById = async (
             website: true,
           },
           with: {
-            addresses: {
-              where: (address, { eq }) =>
-                eq(address.id, clientsTable.primaryAddressId),
+            primaryAddress: {
               columns: {
                 id: true,
                 addressLine: true,
@@ -127,9 +128,7 @@ export const getProjectById = async (
                 country: true,
               },
             },
-            contacts: {
-              where: (contact, { eq }) =>
-                eq(contact.id, clientsTable.primaryContactId),
+            primaryContact: {
               columns: {
                 id: true,
                 name: true,
@@ -184,20 +183,7 @@ export const getProjectById = async (
       },
     });
     if (!project) return [null, "Error getting project"];
-    return [
-      {
-        ...project,
-        client: {
-          id: project.client.id,
-          name: project.client.name,
-          registrationNumber: project.client.registrationNumber,
-          website: project.client.website,
-          address: project.client.addresses[0] ?? null,
-          contact: project.client.contacts[0] ?? null,
-        },
-      },
-      null,
-    ];
+    return [project, null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting project"];

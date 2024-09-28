@@ -48,6 +48,14 @@ export const clientRelations = relations(clientsTable, ({ many, one }) => ({
     fields: [clientsTable.updatedBy],
     references: [usersTable.id],
   }),
+  primaryAddress: one(addressesTable, {
+    fields: [clientsTable.primaryAddressId],
+    references: [addressesTable.id],
+  }),
+  primaryContact: one(contactsTable, {
+    fields: [clientsTable.primaryContactId],
+    references: [contactsTable.id],
+  }),
 }));
 
 export const clientSchemaRaw = {

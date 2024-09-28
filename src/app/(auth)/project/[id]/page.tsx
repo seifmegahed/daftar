@@ -5,6 +5,7 @@ import {
   getProjectLinkedDocumentsAction,
 } from "@/server/actions/projects";
 import { type SimpDoc } from "@/server/db/tables/document/queries";
+import { type ProjectClientType } from "@/server/db/tables/project/queries";
 import { numberWithCommas } from "@/utils/common";
 import { format } from "date-fns";
 import { MoreHorizontal, FileIcon } from "lucide-react";
@@ -141,11 +142,11 @@ const DocumentCard = ({ document }: { document: SimpDoc }) => {
       <div className="flex items-center gap-x-2">
         <div className="relative cursor-pointer">
           <FileIcon className="h-8 w-8" />
-          <p className="absolute top-3 left-2 text-center w-4 font-medium text-[6pt] select-none">
+          <p className="absolute left-2 top-3 w-4 select-none text-center text-[6pt] font-medium">
             {document.extension}
           </p>
         </div>
-        <p className="underline cursor-pointer">{document.name}</p>
+        <p className="cursor-pointer underline">{document.name}</p>
       </div>
       <div className="flex rounded-full p-2 hover:bg-muted">
         <MoreHorizontal className="h-4 w-4" />
@@ -214,29 +215,9 @@ const ProjectItems = ({
   );
 };
 
-const ClientSection = ({
-  client,
-}: {
-  client: {
-    id: number;
-    name: string;
-    registrationNumber: string | null;
-    website: string | null;
-    address: {
-      id: number;
-      addressLine: string;
-      city: string | null;
-      country: string;
-    } | null;
-    contact: {
-      id: number;
-      name: string;
-      email: string | null;
-      phoneNumber: string | null;
-    } | null;
-  };
-}) => {
-  const { name, registrationNumber, website, address, contact } = client;
+const ClientSection = ({ client }: { client: ProjectClientType }) => {
+  const { name, registrationNumber, website, primaryAddress, primaryContact } =
+    client;
   return (
     <>
       <div className="flex justify-between">
@@ -267,32 +248,34 @@ const ClientSection = ({
           </Link>
         </div>
       ) : null}
-      {address ? (
+      {primaryAddress ? (
         <div className="flex justify-between text-right">
           <p>Address</p>
           <div>
-            <p>{address.addressLine}</p>
+            <p>{primaryAddress.addressLine}</p>
             <p>
-              {address.city ? address.city + ", " : ""}
-              {address.country}
+              {primaryAddress.city ? primaryAddress.city + ", " : ""}
+              {primaryAddress.country}
             </p>
           </div>
         </div>
       ) : null}
-      {contact ? (
+      {primaryContact ? (
         <div className="flex justify-between text-right">
           <p>Contact</p>
           <div>
-            <p>{contact.name}</p>
-            {contact.email ? (
+            <p>{primaryContact.name}</p>
+            {primaryContact.email ? (
               <Link
                 className="text-blue-400 hover:underline"
-                href={"mailto:" + contact.email}
+                href={"mailto:" + primaryContact.email}
               >
-                {contact.email}
+                {primaryContact.email}
               </Link>
             ) : null}
-            {contact.phoneNumber ? <p>{contact.phoneNumber}</p> : null}
+            {primaryContact.phoneNumber ? (
+              <p>{primaryContact.phoneNumber}</p>
+            ) : null}
           </div>
         </div>
       ) : null}
