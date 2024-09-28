@@ -22,31 +22,27 @@ export const getAllSuppliersBriefAction = async (): Promise<
   return [suppliers, null];
 };
 
-const addSupplierSchema = insertSupplierSchema.pick({
-  name: true,
-  field: true,
-  registrationNumber: true,
-  website: true,
-  notes: true,
+const addSupplierSchema = insertSupplierSchema.omit({
+  createdBy: true,
 });
 
 export type AddSupplierFormType = z.infer<typeof addSupplierSchema>;
 
 export const addSupplierAction = async (
-  supplierData: AddSupplierFormType,
+  data: AddSupplierFormType,
 ): Promise<ReturnTuple<number>> => {
-  const isValid = addSupplierSchema.safeParse(supplierData);
+  const isValid = addSupplierSchema.safeParse(data);
   if (!isValid.success) return [null, "Invalid data"];
 
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];
 
   const [supplierId, supplierInsertError] = await insertNewSupplier({
-    name: supplierData.name,
-    field: supplierData.field,
-    registrationNumber: supplierData.registrationNumber ?? null,
-    website: supplierData.website ?? null,
-    notes: supplierData.notes ?? null,
+    name: isValid.data.name,
+    field: isValid.data.field,
+    registrationNumber: isValid.data.registrationNumber,
+    website: isValid.data.website,
+    notes: isValid.data.notes,
     createdBy: userId,
   });
   if (supplierInsertError !== null) return [null, supplierInsertError];
