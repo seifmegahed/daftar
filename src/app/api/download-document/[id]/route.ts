@@ -8,17 +8,12 @@ export async function GET(
 ) {
   try {
     const { id } = params;
-
-    console.log(id);
-
     const documentId = Number(id);
-
-    if (typeof documentId !== "number") {
+    if (isNaN(documentId)) {
       return new Response("Invalid ID", { status: 400 });
     }
 
     const [document, documentError] = await getDocumentPath(documentId);
-
     if (documentError !== null) {
       return new Response("Error getting document path", {
         status: 500,
@@ -26,7 +21,6 @@ export async function GET(
     }
 
     const file = fs.readFileSync(document.path);
-
     return new NextResponse(file, {
       status: 200,
       headers: {

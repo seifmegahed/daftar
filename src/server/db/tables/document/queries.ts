@@ -52,7 +52,7 @@ export const insertDocumentWithRelation = async (
   }
 };
 
-export type SimpDoc = Pick<DocumentDataType, "id" | "name" | "extension">;
+export type SimpDoc = {id: number, name: string, extension: string, path?: string};
 
 export const getClientDocuments = async (
   clientId: number,
