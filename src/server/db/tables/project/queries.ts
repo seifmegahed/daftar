@@ -10,6 +10,7 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
+import { count } from "drizzle-orm";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -19,11 +20,29 @@ export type BriefProjectType = Pick<
   owner: UserBriefType;
 };
 
-export const getProjectsBrief = async (): Promise<
+export const getProjectsCount = async (): Promise<ReturnTuple<number>> => {
+  try {
+    const [projectCount] = await db
+      .select({
+        count: count(),
+      })
+      .from(projectsTable)
+      .limit(1);
+    if (!projectCount) return [null, "Error getting project count"];
+    return [projectCount.count, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting project count"];
+  }
+};
+
+export const getProjectsBrief = async (page: number): Promise<
   ReturnTuple<BriefProjectType[]>
 > => {
   try {
     const projects = await db.query.projectsTable.findMany({
+      limit: 10,
+      offset: (page - 1) * 10,
       columns: {
         id: true,
         name: true,

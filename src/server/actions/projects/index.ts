@@ -11,6 +11,7 @@ import {
   type BriefProjectType,
   type GetProjectItemType,
   type GetProjectLinkedDocumentsType,
+  getProjectsCount,
 } from "@/server/db/tables/project/queries";
 import {
   insertProjectItemSchema,
@@ -21,10 +22,18 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "../users";
 import type { z } from "zod";
 
-export const getProjectsBriefAction = async (): Promise<
+export const getProjectsCountAction = async (): Promise<
+  ReturnTuple<number>
+> => {
+  const [projectCount, error] = await getProjectsCount();
+  if (error !== null) return [null, error];
+  return [projectCount, null];
+};
+
+export const getProjectsBriefAction = async (page: number): Promise<
   ReturnTuple<BriefProjectType[]>
 > => {
-  const [projects, error] = await getProjectsBrief();
+  const [projects, error] = await getProjectsBrief(page);
   if (error !== null) return [null, error];
   return [projects, null];
 };

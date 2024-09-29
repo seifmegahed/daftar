@@ -7,9 +7,9 @@ export const statusCodes = [
   { value: 5, label: "Cancelled" },
   { value: 6, label: "Completed" },
   { value: 7, label: "On Hold" },
-  { value: 8, label: "Pending Approval" },
-  { value: 9, label: "Pending Payment" },
-  { value: 10, label: "Pending Delivery" },
+  { value: 8, label: "Pending" },
+  { value: 9, label: "Pending" },
+  { value: 10, label: "Pending" },
   { value: 11, label: "Issue" },
 ];
 
