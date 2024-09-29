@@ -8,8 +8,8 @@ import { type SimpDoc } from "@/server/db/tables/document/queries";
 import { type ProjectClientType } from "@/server/db/tables/project/queries";
 import { numberWithCommas } from "@/utils/common";
 import { format } from "date-fns";
-import { MoreHorizontal, FileIcon } from "lucide-react";
 import Link from "next/link";
+import DocumentCard from "./document-card";
 
 export const dynamic = "force-dynamic";
 
@@ -136,25 +136,6 @@ const DocumentsDisplay = ({
   );
 };
 
-const DocumentCard = ({ document }: { document: SimpDoc }) => {
-  return (
-    <div className="flex justify-between pl-5">
-      <div className="flex items-center gap-x-2">
-        <div className="relative cursor-pointer">
-          <FileIcon className="h-8 w-8" />
-          <p className="absolute left-2 top-3 w-4 select-none text-center text-[6pt] font-medium">
-            {document.extension}
-          </p>
-        </div>
-        <p className="cursor-pointer underline">{document.name}</p>
-      </div>
-      <div className="flex rounded-full p-2 hover:bg-muted">
-        <MoreHorizontal className="h-4 w-4" />
-      </div>
-    </div>
-  );
-};
-
 const ProjectItems = ({
   items,
 }: {
@@ -168,7 +149,7 @@ const ProjectItems = ({
   }[];
 }) => {
   return (
-    <table className="w-full text-left text-sm text-muted-foreground">
+    <table className="w-full text-left text-xs text-muted-foreground">
       <thead>
         <tr className="h-12 text-left">
           <th className="pl-4">Item</th>
@@ -176,7 +157,7 @@ const ProjectItems = ({
           <th className="text-right">Quantity</th>
           <th className="text-right">Price</th>
           <th className="text-right">Total</th>
-          <th className="pr-4 text-right">Currency</th>
+          <th className="pr-4 text-right">Cur</th>
         </tr>
       </thead>
       <tbody>

@@ -11,4 +11,4 @@ export const isExactlyOneDefined = <T extends object>(obj: T): boolean => {
 };
 
 export const numberWithCommas = (n: number) =>
-  n.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  n.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");

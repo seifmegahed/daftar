@@ -6,6 +6,7 @@ import {
   type DocumentRelationsType,
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { eq } from "drizzle-orm";
 
 export const insertDocument = async (
   data: DocumentDataType,
@@ -151,7 +152,7 @@ export const getProjectDocuments = async (
         },
       },
     });
-    if (!documents) return [null, "Error getting project documents"]; 
+    if (!documents) return [null, "Error getting project documents"];
     return [documents.map((x) => x.document), null];
   } catch (error) {
     console.log(error);
@@ -206,5 +207,27 @@ export const getDocumentById = async (
   } catch (error) {
     console.log(error);
     return [null, "Error getting document"];
+  }
+};
+
+export const getDocumentPath = async (
+  id: number,
+): Promise<ReturnTuple<{ name: string; path: string, extension: string }>> => {
+  try {
+    const [path] = await db
+      .select({
+        name: documentsTable.name,
+        path: documentsTable.path,
+        extension: documentsTable.extension,
+      })
+      .from(documentsTable)
+      .where(eq(documentsTable.id, id))
+      .limit(1);
+
+    if (!path) return [null, "Error getting document path"];
+    return [path, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting document path"];
   }
 };
