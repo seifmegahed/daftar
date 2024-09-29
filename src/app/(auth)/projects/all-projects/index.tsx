@@ -5,6 +5,9 @@ import {
 } from "@/server/actions/projects";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import { format } from "date-fns";
+
+export const dynamic = "force-dynamic";
 
 async function AllProjectsPage({ page = 1 }: { page?: number }) {
   const [projects, error] = await getProjectsBriefAction(page);
@@ -21,28 +24,52 @@ async function AllProjectsPage({ page = 1 }: { page?: number }) {
       <p className="text-sm text-muted-foreground">List of all projects.</p>
       <div className="flex flex-col gap-4">
         {projects.map((project) => (
-          <Link key={project.id} href={`/project/${project.id}`}>
-            <div className="flex cursor-pointer items-center justify-between rounded-md border p-3 text-xs hover:bg-muted">
-              <div className="line-clamp-1 w-36 text-sm text-muted-foreground">
-                {project.name}
-              </div>
-              <div className="line-clamp-1 w-1/3 text-sm text-muted-foreground">
-                {project.client.name}
-              </div>
-              <div className="line-clamp-1 w-36 text-left text-sm text-muted-foreground">
-                {project.owner.name}
-              </div>
-              <div className="line-clamp-1 w-20 text-right text-sm text-muted-foreground">
-                {statusCodes.find((x) => x.value === project.status)?.label}
-              </div>
-            </div>
-          </Link>
+          <ProjectCard key={project.id} project={project} />
         ))}
       </div>
-        <Pagination page={page} totalPages={totalPages} />
+      <Pagination page={page} totalPages={totalPages} />
     </div>
   );
 }
+
+const ProjectCard = ({
+  project,
+}: {
+  project: {
+    id: number;
+    name: string;
+    client: { id: number; name: string };
+    owner: { id: number; name: string };
+    status: number;
+    createdAt: Date;
+  };
+}) => {
+  return (
+    <Link href={`/project/${project.id}`}>
+      <div className="flex cursor-pointer items-center gap-5 rounded-md border p-4 hover:bg-muted">
+        <p className="w-8 text-right text-2xl font-bold text-foreground">
+          {project.id}
+        </p>
+        <div className="flex w-full items-center justify-between">
+          <div>
+            <p className="text-foreground">{project.name}</p>
+            <p className="text-xs text-muted-foreground">
+              {project.client.name}
+            </p>
+          </div>
+          <div className="w-36 text-right">
+            <p className="text-foreground">
+              {statusCodes.find((x) => x.value === project.status)?.label}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {format(project.createdAt, "PP")}
+            </p>
+          </div>
+        </div>
+      </div>
+    </Link>
+  );
+};
 
 const Pagination = ({
   page,

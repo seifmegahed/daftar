@@ -10,11 +10,11 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
-import { count } from "drizzle-orm";
+import { count, desc } from "drizzle-orm";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
-  "id" | "name" | "status"
+  "id" | "name" | "status" | "createdAt"
 > & {
   client: { id: number; name: string };
   owner: UserBriefType;
@@ -43,10 +43,12 @@ export const getProjectsBrief = async (page: number): Promise<
     const projects = await db.query.projectsTable.findMany({
       limit: 10,
       offset: (page - 1) * 10,
+      orderBy: desc(projectsTable.id),
       columns: {
         id: true,
         name: true,
         status: true,
+        createdAt: true,
       },
       with: {
         client: {
