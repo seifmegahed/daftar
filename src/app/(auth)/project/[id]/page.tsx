@@ -10,6 +10,7 @@ import { numberWithCommas } from "@/utils/common";
 import { format } from "date-fns";
 import Link from "next/link";
 import DocumentCard from "./document-card";
+import { DownloadIcon } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -80,7 +81,7 @@ async function ProjectPage({ params }: { params: { id: string } }) {
         {documents === null ? (
           <p>Error getting project documents.</p>
         ) : (
-          <ProjectDocuments documents={documents} />
+          <ProjectDocuments id={project.id} documents={documents} />
         )}
       </Section>
     </div>
@@ -88,8 +89,10 @@ async function ProjectPage({ params }: { params: { id: string } }) {
 }
 
 const ProjectDocuments = ({
+  id,
   documents,
 }: {
+  id: number;
   documents: {
     projectDocuments: SimpDoc[];
     clientDocuments: SimpDoc[];
@@ -99,6 +102,16 @@ const ProjectDocuments = ({
 }) => {
   return (
     <div className="flex flex-col gap-y-2 text-muted-foreground">
+      {documents.projectDocuments.length === 0 &&
+      documents.clientDocuments.length === 0 &&
+      documents.itemsDocuments.length === 0 &&
+      documents.suppliersDocuments.length === 0 ? null : (
+        <DocumentsDisplay
+          documents={documents.projectDocuments}
+          title="Project's Documents"
+        />
+      )}
+      <DownloadAllDocumentsButton id={id} />
       <DocumentsDisplay
         documents={documents.projectDocuments}
         title="Project's Documents"
@@ -119,6 +132,20 @@ const ProjectDocuments = ({
   );
 };
 
+const DownloadAllDocumentsButton = ({ id }: { id: number }) => {
+  return (
+    <div className="flex justify-end">
+      <Link
+        href={`/api/project/download/${id}`}
+        className="flex cursor-pointer items-center gap-x-2 hover:underline"
+      >
+        <p className="ml-2 text-sm text-muted-foreground">Download all</p>
+        <DownloadIcon className="h-4 w-4" />
+      </Link>
+    </div>
+  );
+};
+
 const DocumentsDisplay = ({
   documents,
   title,
@@ -126,6 +153,7 @@ const DocumentsDisplay = ({
   documents: SimpDoc[];
   title: string;
 }) => {
+  if (documents.length === 0) return null;
   return (
     <div className="flex flex-col gap-y-2 text-muted-foreground">
       <h3 className="font-bold">{title}</h3>
