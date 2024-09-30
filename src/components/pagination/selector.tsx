@@ -8,13 +8,14 @@ import {
 const Selector = ({
   currentPage,
   totalPages,
+  numberOfElements,
   handleClick,
 }: {
   currentPage: number;
   totalPages: number;
+  numberOfElements: number;
   handleClick: (page: number) => void;
 }) => {
-  const numberOfElements = 3;
   const ceiledPage = Math.ceil(numberOfElements / 2);
   const flooredPage = Math.floor(numberOfElements / 2);
 

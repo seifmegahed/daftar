@@ -4,7 +4,13 @@ import { usePathname, useSearchParams, useRouter } from "next/navigation";
 import PaginationWrapper from "./wrapper";
 import Selector from "./selector";
 
-function Pagination({ totalPages }: { totalPages: number }) {
+function Pagination({
+  totalPages,
+  numberOfElements = 3,
+}: {
+  totalPages: number;
+  numberOfElements?: number;
+}) {
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const currentPage = Number(searchParams.get("page")) || 1;
@@ -25,6 +31,7 @@ function Pagination({ totalPages }: { totalPages: number }) {
       <Selector
         currentPage={currentPage}
         totalPages={totalPages}
+        numberOfElements={numberOfElements}
         handleClick={(page) => router.replace(createPageUrl(page))}
       />
     </PaginationWrapper>
