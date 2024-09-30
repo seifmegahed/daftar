@@ -13,6 +13,7 @@ function SearchBar() {
 
   const handleSearch = useDebouncedCallback((searchText: string) => {
     const params = new URLSearchParams(searchParams);
+    params.set("page", "1");
     if (searchText) {
       params.set("query", searchText);
     } else {
@@ -29,7 +30,7 @@ function SearchBar() {
           placeholder="Search projects"
           className="pl-8 sm:w-[300px] md:w-[200px] lg:w-[300px]"
           onChange={(e) => handleSearch(e.target.value)}
-          defaultValue={searchParams.get("search")?.toString()}
+          defaultValue={searchParams.get("query")?.toString()}
         />
       </div>
       <Button

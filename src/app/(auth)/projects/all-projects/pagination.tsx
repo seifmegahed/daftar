@@ -1,31 +1,40 @@
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+"use client";
 
-const Pagination = ({
-  page,
-  totalPages,
-}: {
-  page: number;
-  totalPages: number;
-}) => {
+import { Button } from "@/components/ui/button";
+import { usePathname, useSearchParams } from "next/navigation";
+
+const Pagination = ({ totalPages }: { totalPages: number }) => {
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const currentPage = Number(searchParams.get("page")) || 1;
+
+  const createPageUrl = (page: number | string) => {
+    const params = new URLSearchParams(searchParams);
+    params.set("page", page.toString());
+    return `${pathname}?${params.toString()}`;
+  };
+
   return (
     <div className="flex justify-between">
-      <Link
-        href={`/projects?page=${page === 1 ? page : page - 1}`}
-        className={`${page === 1 ? "cursor-default" : "cursor-pointer"}`}
+      <Button
+        className="w-32"
+        disabled={currentPage === 1}
+        onClick={() => createPageUrl(currentPage - 1)}
       >
-        <Button className="w-32" disabled={page === 1}>
-          Previous
-        </Button>
-      </Link>
-      <Link
-        href={`/projects?page=${page === totalPages ? page : page + 1}`}
-        className={`${page === totalPages ? "cursor-default" : "cursor-pointer"}`}
+        Previous
+      </Button>
+      <div className="flex w-full items-center justify-center">
+        <p className="text-center text-sm text-muted-foreground">
+          Page {currentPage} of {totalPages}
+        </p>
+      </div>
+      <Button
+        className="w-32"
+        disabled={currentPage === totalPages}
+        onClick={() => createPageUrl(currentPage + 1)}
       >
-        <Button className="w-32" disabled={page === totalPages}>
-          Next
-        </Button>
-      </Link>
+        Next
+      </Button>
     </div>
   );
 };

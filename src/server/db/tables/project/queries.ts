@@ -24,14 +24,24 @@ export type BriefProjectType = Pick<
   totalCount: number;
 };
 
-export const getProjectsCount = async (): Promise<ReturnTuple<number>> => {
+export const getProjectsCount = async (
+  searchText?: string,
+): Promise<ReturnTuple<number>> => {
   try {
     const [projectCount] = await db
       .select({
         count: count(),
       })
       .from(projectsTable)
-      .limit(1);
+      .limit(1)
+      .where(
+        searchText
+          ? sql`(
+          setweight(to_tsvector('english', coalesce(${projectsTable.name}, '')), 'A') ||
+          setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B')
+        ) @@ plainto_tsquery('english', ${searchText});`
+          : sql`true`,
+      );
     if (!projectCount) return [null, "Error getting project count"];
     return [projectCount.count, null];
   } catch (error) {
