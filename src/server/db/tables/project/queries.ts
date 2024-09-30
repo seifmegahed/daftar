@@ -37,9 +37,9 @@ export const getProjectsCount = async (
       .where(
         searchText
           ? sql`(
-          setweight(to_tsvector('english', coalesce(${projectsTable.name}, '')), 'A') ||
-          setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B')
-        ) @@ plainto_tsquery('english', ${searchText});`
+            setweight(to_tsvector('english', COALESCE(${projectsTable.name}, '')), 'A') ||
+            setweight(to_tsvector('english', COALESCE(${projectsTable.description}, '')), 'B')
+          ) @@ plainto_tsquery('english', ${searchText})`
           : sql`true`,
       );
     if (!projectCount) return [null, "Error getting project count"];

@@ -26,7 +26,7 @@ async function AllProjects({
       <Suspense key={page + (query ?? "")} fallback={<SkeletonList />}>
         <ProjectsList page={page} query={query === "" ? undefined : query} />
       </Suspense>
-      <Pagination totalPages={totalPages} />
+      <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
     </div>
   );
 }
