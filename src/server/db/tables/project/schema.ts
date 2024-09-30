@@ -8,6 +8,7 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
+
 import { usersTable } from "../user/schema";
 import { clientsTable } from "../client/schema";
 import { itemsTable } from "../item/schema";

@@ -1,0 +1,1 @@
+CREATE INDEX IF NOT EXISTS "clients_search_index" ON "client" USING gin (to_tsvector('english', "name"));

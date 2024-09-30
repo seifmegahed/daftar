@@ -54,8 +54,6 @@ const briefProjectSchema = z.object({
 
   ownerId: z.number(),
   ownerName: z.string(),
-
-  // total_count: z.string(),
 });
 
 const prepareSearchText = (searchText: string) => {
@@ -73,9 +71,12 @@ const prepareSearchText = (searchText: string) => {
 
 const projectSearchQuery = (searchText: string) =>
   sql`
-  setweight(to_tsvector('english', coalesce(${projectsTable.name}, '')), 'A') ||
-  setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B'),
-  to_tsquery(${prepareSearchText(searchText)})
+    (
+      setweight(to_tsvector('english', ${projectsTable.name}), 'A') ||
+      setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B') 
+    ) || (
+      to_tsvector('english', ${clientsTable.name}) 
+    ), to_tsquery(${prepareSearchText(searchText)})
   `;
 
 export const getProjectsBrief = async (

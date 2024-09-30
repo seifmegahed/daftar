@@ -7,6 +7,8 @@ import { getProjectsCountAction } from "@/server/actions/projects";
 
 const pageLimit = 10;
 
+export const dynamic = "force-dynamic";
+
 async function AllProjects({
   searchParams,
 }: {
