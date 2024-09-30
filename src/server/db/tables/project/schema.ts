@@ -1,5 +1,6 @@
 import {
   date,
+  index,
   integer,
   numeric,
   pgTable,
@@ -11,37 +12,49 @@ import { usersTable } from "../user/schema";
 import { clientsTable } from "../client/schema";
 import { itemsTable } from "../item/schema";
 import { suppliersTable } from "../supplier/schema";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { documentRelationsTable } from "../document/schema";
 import { notesMaxLength } from "@/data/config";
 
-export const projectsTable = pgTable("project", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 64 }).notNull().unique(),
-  status: integer("status").notNull(),
-  description: varchar("description", { length: notesMaxLength }),
-  startDate: date("start_date"),
-  endDate: date("end_date"),
-  notes: varchar("notes", { length: notesMaxLength }),
+export const projectsTable = pgTable(
+  "project",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 64 }).notNull().unique(),
+    status: integer("status").notNull(),
+    description: varchar("description", { length: notesMaxLength }),
+    startDate: date("start_date"),
+    endDate: date("end_date"),
+    notes: varchar("notes", { length: notesMaxLength }),
 
-  // Foreign keys
-  clientId: integer("client_id")
-    .references(() => clientsTable.id)
-    .notNull(),
-  ownerId: integer("owner_id")
-    .references(() => usersTable.id)
-    .notNull(),
+    // Foreign keys
+    clientId: integer("client_id")
+      .references(() => clientsTable.id)
+      .notNull(),
+    ownerId: integer("owner_id")
+      .references(() => usersTable.id)
+      .notNull(),
 
-  // Interaction fields
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
-  createdBy: integer("created_by")
-    .references(() => usersTable.id)
-    .notNull(),
-  updatedBy: integer("updated_by").references(() => usersTable.id),
-});
+    // Interaction fields
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+    createdBy: integer("created_by")
+      .references(() => usersTable.id)
+      .notNull(),
+    updatedBy: integer("updated_by").references(() => usersTable.id),
+  },
+  (table) => ({
+    searchIndex: index("search_index").using(
+      "gin",
+      sql`(
+        setweight(to_tsvector('english', coalesce(${table.name}, '')), 'A') ||
+        setweight(to_tsvector('english', coalesce(${table.description}, '')), 'B')
+      )`,
+    ),
+  }),
+);
 
 export const projectRelations = relations(projectsTable, ({ one, many }) => ({
   client: one(clientsTable, {
