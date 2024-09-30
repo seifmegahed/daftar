@@ -10,14 +10,18 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
-import { count, desc, sql } from "drizzle-orm";
+import { count, sql } from "drizzle-orm";
+import { z } from "zod";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
   "id" | "name" | "status" | "createdAt"
 > & {
-  client: { id: number; name: string };
-  owner: UserBriefType;
+  clientId: number;
+  clientName: string;
+  ownerId: number;
+  ownerName: string;
+  totalCount: number;
 };
 
 export const getProjectsCount = async (): Promise<ReturnTuple<number>> => {
@@ -36,53 +40,125 @@ export const getProjectsCount = async (): Promise<ReturnTuple<number>> => {
   }
 };
 
+const briefProjectSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string(),
+  status: z.number(),
+
+  created_at: z.string(),
+
+  client_id: z.number(),
+  client_name: z.string(),
+
+  owner_id: z.number(),
+  owner_name: z.string(),
+
+  total_count: z.string(),
+});
+
 export const getProjectsBrief = async (
   page: number,
   searchText?: string,
+  limit = 10,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {
   try {
-    const projects = await db.query.projectsTable.findMany({
-      limit: 10,
-      offset: (page - 1) * 10,
-      columns: {
-        id: true,
-        name: true,
-        status: true,
-        createdAt: true,
-      },
-      with: {
-        client: {
-          columns: {
-            id: true,
-            name: true,
-          },
-        },
-        owner: {
-          columns: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-      where: searchText
-        ? undefined
-        : sql`(
-        setweight(to_tsvector('english', coalesce(${projectsTable.name}, '')), 'A') ||
-        setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B')
-        @@@ plainto_tsquery('english', ${searchText})
-      )`,
-      orderBy: searchText
-        ? desc(projectsTable.id)
-        : sql`
+    const query = searchText
+      ? sql`
+      WITH ranked_projects AS (
+        SELECT
+          projects.id AS id,
+          projects.name AS name,
+          projects.description AS description,
+          projects.status AS status,
+          projects.created_at AS created_at,
+
+          clients.id AS client_id,
+          clients.name AS client_name,
+
+          "user".id AS owner_id,
+          "user".name AS owner_name,
+          
           ts_rank(
-            setweight(to_tsvector('english', coalesce(${projectsTable.name}, '')), 'A') ||
-            setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B'),
+            setweight(to_tsvector('english', COALESCE(projects.name, '')), 'A') ||
+            setweight(to_tsvector('english', COALESCE(projects.description, '')), 'B'),
             plainto_tsquery('english', ${searchText})
-          ) DESC
-        `,
-    });
-    if (!projects) return [null, "Error getting projects"];
-    return [projects, null];
+            ) AS rank,
+          COUNT(*) OVER() AS total_count
+        FROM
+          project projects
+        JOIN
+          client clients ON projects.client_id = clients.id
+        JOIN
+          "user" ON projects.owner_id = "user".id
+        WHERE
+          (
+            setweight(to_tsvector('english', COALESCE(projects.name, '')), 'A') ||
+            setweight(to_tsvector('english', COALESCE(projects.description, '')), 'B')
+          ) @@ plainto_tsquery('english', ${searchText})
+      )
+      SELECT
+        id,
+        name,
+        description,
+        status,
+        created_at,
+        client_id,
+        client_name,
+        owner_id,
+        owner_name,
+        total_count
+      FROM
+        ranked_projects
+      ORDER BY
+        rank DESC
+      LIMIT ${limit}
+      OFFSET ${(page - 1) * 10};
+    `
+      : sql`
+      SELECT
+        projects.id AS id,
+        projects.name AS name,
+        projects.description AS description,
+        projects.status AS status,
+        projects.created_at AS created_at,
+        clients.id AS client_id,
+        clients.name AS client_name,
+        "user".id AS owner_id,
+        "user".name AS owner_name,
+        COUNT(*) OVER() AS total_count
+      FROM
+        project projects
+      JOIN
+        client clients ON projects.client_id = clients.id
+      JOIN
+        "user" ON projects.owner_id = "user".id
+      ORDER BY
+        id DESC
+      LIMIT ${limit}
+      OFFSET ${(page - 1) * 10};
+      `;
+    const projectsResult = await db.execute(query);
+
+    const projects = z.array(briefProjectSchema).safeParse(projectsResult);
+
+    if (!projects.success) return [null, "Error getting projects"];
+
+    return [
+      projects.data.map((x) => ({
+        id: x.id,
+        name: x.name,
+        description: x.description,
+        status: x.status,
+        totalCount: parseInt(x.total_count),
+        clientId: x.client_id,
+        clientName: x.client_name,
+        ownerId: x.owner_id,
+        ownerName: x.owner_name,
+        createdAt: new Date(x.created_at),
+      })),
+      null,
+    ];
   } catch (error) {
     console.log(error);
     return [null, "Error getting projects"];
