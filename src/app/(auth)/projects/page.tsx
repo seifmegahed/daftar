@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import Pagination from "./all-projects/pagination";
+import Pagination from "@/components/pagination";
 import ProjectsList from "./all-projects/projects-list";
 import SearchBar from "./all-projects/search-bar";
 import SkeletonList from "./all-projects/project-list-skeleton";
