@@ -17,7 +17,7 @@ async function AllProjects({
 
   const [totalCount] = await getProjectsCountAction(query);
 
-  const totalPages = Math.ceil(totalCount ?? 1 / pageLimit);
+  const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
 
   return (
     <div className="space-y-6">
