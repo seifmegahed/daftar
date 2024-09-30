@@ -10,8 +10,10 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
-import { count, sql } from "drizzle-orm";
+import { count, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
+import { clientsTable } from "../client/schema";
+import { usersTable } from "../user/schema";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -21,27 +23,16 @@ export type BriefProjectType = Pick<
   clientName: string;
   ownerId: number;
   ownerName: string;
-  totalCount: number;
 };
 
-export const getProjectsCount = async (
-  searchText?: string,
-): Promise<ReturnTuple<number>> => {
+export const getProjectsCount = async (): Promise<ReturnTuple<number>> => {
   try {
     const [projectCount] = await db
       .select({
         count: count(),
       })
       .from(projectsTable)
-      .limit(1)
-      .where(
-        searchText
-          ? sql`(
-            setweight(to_tsvector('english', COALESCE(${projectsTable.name}, '')), 'A') ||
-            setweight(to_tsvector('english', COALESCE(${projectsTable.description}, '')), 'B')
-          ) @@ plainto_tsquery('english', ${searchText})`
-          : sql`true`,
-      );
+      .limit(1);
     if (!projectCount) return [null, "Error getting project count"];
     return [projectCount.count, null];
   } catch (error) {
@@ -56,16 +47,23 @@ const briefProjectSchema = z.object({
   description: z.string(),
   status: z.number(),
 
-  created_at: z.string(),
+  createdAt: z.date(),
 
-  client_id: z.number(),
-  client_name: z.string(),
+  clientId: z.number(),
+  clientName: z.string(),
 
-  owner_id: z.number(),
-  owner_name: z.string(),
+  ownerId: z.number(),
+  ownerName: z.string(),
 
-  total_count: z.string(),
+  // total_count: z.string(),
 });
+
+const projectSearchQuery = (searchText: string) =>
+  sql`
+  setweight(to_tsvector('english', coalesce(${projectsTable.name}, '')), 'A') ||
+  setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B'),
+  plainto_tsquery('english', ${searchText})
+  `;
 
 export const getProjectsBrief = async (
   page: number,
@@ -73,102 +71,35 @@ export const getProjectsBrief = async (
   limit = 10,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {
   try {
-    const query = searchText
-      ? sql`
-      WITH ranked_projects AS (
-        SELECT
-          projects.id AS id,
-          projects.name AS name,
-          projects.description AS description,
-          projects.status AS status,
-          projects.created_at AS created_at,
-
-          clients.id AS client_id,
-          clients.name AS client_name,
-
-          "user".id AS owner_id,
-          "user".name AS owner_name,
-          
-          ts_rank(
-            setweight(to_tsvector('english', COALESCE(projects.name, '')), 'A') ||
-            setweight(to_tsvector('english', COALESCE(projects.description, '')), 'B'),
-            plainto_tsquery('english', ${searchText})
-            ) AS rank,
-          COUNT(*) OVER() AS total_count
-        FROM
-          project projects
-        JOIN
-          client clients ON projects.client_id = clients.id
-        JOIN
-          "user" ON projects.owner_id = "user".id
-        WHERE
-          (
-            setweight(to_tsvector('english', COALESCE(projects.name, '')), 'A') ||
-            setweight(to_tsvector('english', COALESCE(projects.description, '')), 'B')
-          ) @@ plainto_tsquery('english', ${searchText})
-      )
-      SELECT
-        id,
-        name,
-        description,
-        status,
-        created_at,
-        client_id,
-        client_name,
-        owner_id,
-        owner_name,
-        total_count
-      FROM
-        ranked_projects
-      ORDER BY
-        rank DESC
-      LIMIT ${limit}
-      OFFSET ${(page - 1) * 10};
-    `
-      : sql`
-      SELECT
-        projects.id AS id,
-        projects.name AS name,
-        projects.description AS description,
-        projects.status AS status,
-        projects.created_at AS created_at,
-        clients.id AS client_id,
-        clients.name AS client_name,
-        "user".id AS owner_id,
-        "user".name AS owner_name,
-        COUNT(*) OVER() AS total_count
-      FROM
-        project projects
-      JOIN
-        client clients ON projects.client_id = clients.id
-      JOIN
-        "user" ON projects.owner_id = "user".id
-      ORDER BY
-        id DESC
-      LIMIT ${limit}
-      OFFSET ${(page - 1) * 10};
-      `;
-    const projectsResult = await db.execute(query);
+    const projectsResult = await db
+      .select({
+        id: projectsTable.id,
+        name: projectsTable.name,
+        description: projectsTable.description,
+        status: projectsTable.status,
+        createdAt: projectsTable.createdAt,
+        clientId: projectsTable.clientId,
+        clientName: clientsTable.name,
+        ownerId: projectsTable.ownerId,
+        ownerName: usersTable.name,
+        rank: searchText
+          ? sql`ts_rank(${projectSearchQuery(searchText ?? "")})`
+          : sql`1`,
+      })
+      .from(projectsTable)
+      .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
+      .leftJoin(usersTable, eq(projectsTable.ownerId, usersTable.id))
+      .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
+      .limit(limit)
+      .offset((page - 1) * limit);
 
     const projects = z.array(briefProjectSchema).safeParse(projectsResult);
 
+    console.log(projects.error?.errors[0]);
+
     if (!projects.success) return [null, "Error getting projects"];
 
-    return [
-      projects.data.map((x) => ({
-        id: x.id,
-        name: x.name,
-        description: x.description,
-        status: x.status,
-        totalCount: parseInt(x.total_count),
-        clientId: x.client_id,
-        clientName: x.client_name,
-        ownerId: x.owner_id,
-        ownerName: x.owner_name,
-        createdAt: new Date(x.created_at),
-      })),
-      null,
-    ];
+    return [projects.data, null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting projects"];

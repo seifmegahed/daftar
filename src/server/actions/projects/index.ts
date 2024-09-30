@@ -22,10 +22,10 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "../users";
 import type { z } from "zod";
 
-export const getProjectsCountAction = async (
-  searchText?: string,
-): Promise<ReturnTuple<number>> => {
-  const [projectCount, error] = await getProjectsCount(searchText);
+export const getProjectsCountAction = async (): Promise<
+  ReturnTuple<number>
+> => {
+  const [projectCount, error] = await getProjectsCount();
   if (error !== null) return [null, error];
   return [projectCount, null];
 };

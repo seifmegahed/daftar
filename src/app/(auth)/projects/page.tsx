@@ -13,9 +13,9 @@ async function AllProjects({
   searchParams: { page?: string; query?: string };
 }) {
   const page = Number(searchParams.page) || 1;
-  const query = searchParams.query;
+  const query = searchParams.query ?? "";
 
-  const [totalCount] = await getProjectsCountAction(query);
+  const [totalCount] = await getProjectsCountAction();
 
   const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
 
@@ -23,7 +23,7 @@ async function AllProjects({
     <div className="space-y-6">
       <h3 className="text-lg font-medium">All Projects Page</h3>
       <SearchBar />
-      <Suspense key={page + (query ?? "")} fallback={<SkeletonList />}>
+      <Suspense key={page + query} fallback={<SkeletonList />}>
         <ProjectsList page={page} query={query === "" ? undefined : query} />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
