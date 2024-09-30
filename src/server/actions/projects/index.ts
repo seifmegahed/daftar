@@ -30,10 +30,11 @@ export const getProjectsCountAction = async (): Promise<
   return [projectCount, null];
 };
 
-export const getProjectsBriefAction = async (page: number): Promise<
-  ReturnTuple<BriefProjectType[]>
-> => {
-  const [projects, error] = await getProjectsBrief(page);
+export const getProjectsBriefAction = async (
+  page: number,
+  search?: string,
+): Promise<ReturnTuple<BriefProjectType[]>> => {
+  const [projects, error] = await getProjectsBrief(page, search);
   if (error !== null) return [null, error];
   return [projects, null];
 };

@@ -10,7 +10,7 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
-import { count, desc } from "drizzle-orm";
+import { count, desc, sql } from "drizzle-orm";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -36,14 +36,14 @@ export const getProjectsCount = async (): Promise<ReturnTuple<number>> => {
   }
 };
 
-export const getProjectsBrief = async (page: number): Promise<
-  ReturnTuple<BriefProjectType[]>
-> => {
+export const getProjectsBrief = async (
+  page: number,
+  searchText?: string,
+): Promise<ReturnTuple<BriefProjectType[]>> => {
   try {
     const projects = await db.query.projectsTable.findMany({
       limit: 10,
       offset: (page - 1) * 10,
-      orderBy: desc(projectsTable.id),
       columns: {
         id: true,
         name: true,
@@ -64,6 +64,22 @@ export const getProjectsBrief = async (page: number): Promise<
           },
         },
       },
+      where: searchText
+        ? undefined
+        : sql`(
+        setweight(to_tsvector('english', coalesce(${projectsTable.name}, '')), 'A') ||
+        setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B')
+        @@@ plainto_tsquery('english', ${searchText})
+      )`,
+      orderBy: searchText
+        ? desc(projectsTable.id)
+        : sql`
+          ts_rank(
+            setweight(to_tsvector('english', coalesce(${projectsTable.name}, '')), 'A') ||
+            setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B'),
+            plainto_tsquery('english', ${searchText})
+          ) DESC
+        `,
     });
     if (!projects) return [null, "Error getting projects"];
     return [projects, null];
