@@ -58,11 +58,24 @@ const briefProjectSchema = z.object({
   // total_count: z.string(),
 });
 
+const prepareSearchText = (searchText: string) => {
+  searchText = searchText.toLowerCase();
+
+  if (searchText.includes(" ")) {
+    if (searchText.endsWith(" ")) searchText = searchText.slice(0, -1);
+    const searchTextArray = searchText.split(" ");
+    if (searchTextArray.length === 1) return searchText + ":*";
+    searchTextArray[searchTextArray.length - 1] += ":*";
+    return searchTextArray.join(" | ");
+  }
+  return searchText + ":*";
+};
+
 const projectSearchQuery = (searchText: string) =>
   sql`
   setweight(to_tsvector('english', coalesce(${projectsTable.name}, '')), 'A') ||
   setweight(to_tsvector('english', coalesce(${projectsTable.description}, '')), 'B'),
-  plainto_tsquery('english', ${searchText})
+  to_tsquery(${prepareSearchText(searchText)})
   `;
 
 export const getProjectsBrief = async (
@@ -94,8 +107,6 @@ export const getProjectsBrief = async (
       .offset((page - 1) * limit);
 
     const projects = z.array(briefProjectSchema).safeParse(projectsResult);
-
-    console.log(projects.error?.errors[0]);
 
     if (!projects.success) return [null, "Error getting projects"];
 
