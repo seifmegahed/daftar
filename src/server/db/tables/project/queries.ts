@@ -57,16 +57,11 @@ const briefProjectSchema = z.object({
 });
 
 const prepareSearchText = (searchText: string) => {
-  searchText = searchText.toLowerCase();
-
-  if (searchText.includes(" ")) {
-    if (searchText.endsWith(" ")) searchText = searchText.slice(0, -1);
-    const searchTextArray = searchText.split(" ");
-    if (searchTextArray.length === 1) return searchText + ":*";
-    searchTextArray[searchTextArray.length - 1] += ":*";
-    return searchTextArray.join(" | ");
-  }
-  return searchText + ":*";
+  searchText = searchText.trim().replace(/\s+/g, ' ').toLowerCase();
+  if (!searchText) return '';
+  const searchTextArray = searchText.split(" ");
+  searchTextArray[searchTextArray.length - 1] += ":*";
+  return searchTextArray.join(" | ");
 };
 
 const projectSearchQuery = (searchText: string) =>
