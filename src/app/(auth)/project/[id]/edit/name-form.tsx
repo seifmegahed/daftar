@@ -14,6 +14,8 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { emptyToUndefined } from "@/utils/common";
+import { toast } from "sonner";
+import { updateProjectNameAction } from "@/server/actions/projects";
 
 const schema = z.object({
   name: z.preprocess(
@@ -27,16 +29,39 @@ const schema = z.object({
 
 type FormDataType = z.infer<typeof schema>;
 
-function NameForm({ name, access }: { name: string, access: boolean }) {
+function NameForm({
+  name,
+  access,
+  ownerId,
+  projectId,
+}: {
+  name: string;
+  access: boolean;
+  ownerId: number;
+  projectId: number;
+}) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { name },
   });
 
   const onSubmit = async (data: FormDataType) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    form.reset(data);
+    try {
+      const [, error] = await updateProjectNameAction(projectId, {
+        name: data.name,
+        ownerId,
+      });
+      if (error !== null) {
+        console.log(error);
+        toast.error("Error updating project name");
+      } else {
+        toast.success("Project name updated successfully");
+        form.reset(data);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error updating project name");
+    }
   };
 
   return (
@@ -63,16 +88,22 @@ function NameForm({ name, access }: { name: string, access: boolean }) {
                   Update project name, this will change the name of the project
                   across all references. After typing the updated name press the
                   update button to persist the change. Project name is one of
-                  the fields used to search project. Project name must be unique.
+                  the fields used to search project. Project name must be
+                  unique.
                   <br />
-                  <strong>Note:</strong> Only the owner or an admin can change the project name.
+                  <strong>Note:</strong> Only the owner or an admin can change
+                  the project name.
                 </FormDescription>
               </FormItem>
             )}
           />
           <div className="flex justify-end">
             <SubmitButton
-              disabled={form.formState.isSubmitting || !form.formState.isDirty || !access}
+              disabled={
+                form.formState.isSubmitting ||
+                !form.formState.isDirty ||
+                !access
+              }
               loading={form.formState.isSubmitting}
             >
               Update

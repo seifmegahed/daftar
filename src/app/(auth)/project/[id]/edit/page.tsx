@@ -35,7 +35,7 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
         <strong>register you as the last updater.</strong>
       </p>
       <StatusForm projectId={project.id} status={project.status} />
-      <NameForm name={project.name} access={hasFullAccess} />
+      <NameForm projectId={project.id} name={project.name} access={hasFullAccess} ownerId={project.ownerId} />
       <DescriptionForm description={project.description ?? ""} />
       {usersError === null && currentUserError === null && (
         <OwnerForm
