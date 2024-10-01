@@ -15,15 +15,16 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { notesMaxLength } from "@/data/config";
 import { emptyToUndefined } from "@/utils/common";
+import { toast } from "sonner";
+import { updateProjectNotesAction } from "@/server/actions/projects";
 
 const schema = z.object({
   notes: z.preprocess(
     emptyToUndefined,
     z
-      .string({ message: "Description is required" })
-      .min(4, { message: "Description must be at least 4 characters long" })
+      .string()
       .max(notesMaxLength, {
-        message: `Description must not exceed ${notesMaxLength} characters`,
+        message: `Notes must not exceed ${notesMaxLength} characters`,
       })
       .optional(),
   ),
@@ -31,16 +32,28 @@ const schema = z.object({
 
 type FormDataType = z.infer<typeof schema>;
 
-function NotesForm({ notes }: { notes: string }) {
+function NotesForm({ projectId, notes }: { projectId: number, notes: string }) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { notes },
   });
 
   const onSubmit = async (data: FormDataType) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    form.reset(data);
+    try {
+      const [, error] = await updateProjectNotesAction(projectId, {
+        notes: data.notes,
+      });
+      if (error !== null) {
+        console.log(error);
+        toast.error("Error updating project notes");
+      } else {
+        toast.success("Project notes updated successfully");
+        form.reset(data);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error updating project notes");
+    }
   };
 
   return (
@@ -59,6 +72,8 @@ function NotesForm({ notes }: { notes: string }) {
               <FormItem>
                 <Textarea
                   {...field}
+                  value={field.value ?? ""}
+                  placeholder="Notes"
                   className={`resize-none ${form.formState.isDirty ? "" : "!text-muted-foreground"}`}
                   rows={4}
                 />

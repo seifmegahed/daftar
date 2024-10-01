@@ -50,7 +50,7 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
         startDate={project.startDate ? new Date(project.startDate) : undefined}
         endDate={project.endDate ? new Date(project.endDate) : undefined}
       />
-      <NotesForm notes={project.notes ?? ""} />
+      <NotesForm projectId={project.id} notes={project.notes ?? ""} />
       <DeleteProjectForm name={project.name} access={hasFullAccess} />
     </div>
   );

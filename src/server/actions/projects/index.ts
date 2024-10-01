@@ -215,7 +215,7 @@ export const updateProjectNotesAction = async (
 
   const [projectId, error] = await updateProject(id, {
     updatedBy: currentUserId,
-    notes: isValid.data.notes,
+    notes: isValid.data.notes ?? null,
   });
   if (error !== null) return [null, error];
 
