@@ -291,6 +291,8 @@ export type GetProjectItemType = SelectProjectItemType & {
   item: {
     id: number;
     name: string;
+    make: string | null;
+    mpn: string | null;
   };
   supplier: { id: number; name: string };
 };
@@ -306,6 +308,8 @@ export const getProjectItems = async (
           columns: {
             id: true,
             name: true,
+            make: true,
+            mpn: true,
           },
         },
         supplier: {
