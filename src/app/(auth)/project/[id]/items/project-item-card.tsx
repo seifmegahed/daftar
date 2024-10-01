@@ -17,39 +17,42 @@ function ProjectItemCard({
           {index + 1}
         </p>
       </div>
-      <div className="flex w-full items-center justify-between">
-        <div>
-          <Link href={`/item/${projectItem.item.id}`}>
-            <p className="cursor-pointer text-foreground hover:underline">
-              {projectItem.item.name}
+      <div className="flex justify-between items-center w-full">
+        <div className="flex w-full items-center justify-between flex-shrink">
+          <div>
+            <Link href={`/item/${projectItem.item.id}`}>
+              <p className="cursor-pointer text-foreground hover:underline line-clamp-1">
+                {projectItem.item.name}
+              </p>
+            </Link>
+            <Link href={`/item/${projectItem.item.id}`}>
+              <p className="cursor-pointer text-xs text-muted-foreground hover:underline">
+                {projectItem.item.make}
+              </p>
+            </Link>
+          </div>
+        </div>
+        <div className="w-full text-right flex-grow">
+          <Link href={`/suppliers/${projectItem.supplier.id}`}>
+            <p className="line-clamp-1 cursor-pointer hover:underline">
+              {projectItem.supplier.name}
             </p>
-          </Link>
-          <Link href={`/item/${projectItem.item.id}`}>
-            <p className="cursor-pointer text-xs text-muted-foreground hover:underline">
-              {projectItem.item.make}
-            </p>
+            <div className="flex justify-end gap-3">
+              <p className="cursor-pointer text-xs text-muted-foreground">
+                {"PPU: (" +
+                  getCurrencyLabel(projectItem.currency) +
+                  ") " +
+                  projectItem.price}
+              </p>
+              <p className="cursor-pointer text-xs text-muted-foreground">
+                Quantity: {projectItem.quantity}
+              </p>
+            </div>
           </Link>
         </div>
       </div>
-      <div className="w-full text-right">
-        <Link href={`/suppliers/${projectItem.supplier.id}`}>
-          <p className="cursor-pointer hover:underline">
-            {projectItem.supplier.name}
-          </p>
-          <div className="flex justify-end gap-3">
-            <p className="cursor-pointer text-xs text-muted-foreground">
-              {"PPU: (" +
-                getCurrencyLabel(projectItem.currency) +
-                ") " +
-                projectItem.price}
-            </p>
-            <p className="cursor-pointer text-xs text-muted-foreground">
-              Quantity: {projectItem.quantity}
-            </p>
-          </div>
-        </Link>
-      </div>
       <ProjectItemCardContextMenu
+        projectItemId={projectItem.id}
         itemId={projectItem.item.id}
         supplierId={projectItem.supplier.id}
       />

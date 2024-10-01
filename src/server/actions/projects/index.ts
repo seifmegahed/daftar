@@ -15,6 +15,7 @@ import {
   getProjectBriefById,
   updateProject,
   deleteProject,
+  deleteProjectItem,
 } from "@/server/db/tables/project/queries";
 import {
   insertProjectItemSchema,
@@ -299,6 +300,14 @@ export const deleteProjectAction = async (
 
   const [, error] = await deleteProject(id);
   if (error !== null) return [null, error];
-  
+
   redirect("/projects");
+};
+
+export const deleteProjectItemAction = async (
+  projectItemId: number,
+): Promise<ReturnTuple<number>> => {
+  const [returnValue, error] = await deleteProjectItem(projectItemId);
+  if (error !== null) return [null, error];
+  return [returnValue, null];
 };

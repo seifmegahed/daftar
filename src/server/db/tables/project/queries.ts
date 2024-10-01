@@ -10,7 +10,7 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
-import { count, desc, eq, sql } from "drizzle-orm";
+import { and, count, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { clientsTable } from "../client/schema";
 import { usersTable } from "../user/schema";
@@ -503,5 +503,22 @@ export const deleteProject = async (
   } catch (error) {
     console.log(error);
     return [null, "Error deleting project"];
+  }
+};
+
+export const deleteProjectItem = async (
+  projectItemId: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [projectItem] = await db
+      .delete(projectItemsTable)
+      .where(eq(projectItemsTable.id, projectItemId))
+      .returning({ id: projectItemsTable.id });
+
+    if (!projectItem) return [null, "Error deleting project item"];
+    return [projectItem.id, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error deleting project item"];
   }
 };
