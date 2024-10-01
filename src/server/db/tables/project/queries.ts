@@ -450,3 +450,39 @@ export const getProjectLinkedDocuments = async (
     return [null, "Error getting project"];
   }
 };
+
+export const updateProject = async (
+  id: number,
+  data: Partial<SelectProjectType>,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [project] = await db
+      .update(projectsTable)
+      .set(data)
+      .where(eq(projectsTable.id, id))
+      .returning({ id: projectsTable.id });
+
+    if (!project) return [null, "Error updating project"];
+    return [project.id, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error updating project"];
+  }
+};
+
+export const deleteProject = async (
+  id: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [project] = await db
+      .delete(projectsTable)
+      .where(eq(projectsTable.id, id))
+      .returning({ id: projectsTable.id });
+
+    if (!project) return [null, "Error deleting project"];
+    return [project.id, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error deleting project"];
+  }
+};
