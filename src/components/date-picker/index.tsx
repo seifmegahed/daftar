@@ -7,10 +7,12 @@ import TriggerButton from "./trigger-button";
 
 function DatePicker({
   date,
+  className,
   allowFuture,
   onChange,
 }: {
   date?: Date;
+  className?: string;
   allowFuture?: boolean;
   onChange: (date?: Date) => void;
 }) {
@@ -21,7 +23,7 @@ function DatePicker({
 
   return (
     <Popover>
-      <TriggerButton date={date} />
+      <TriggerButton date={date} className={className} />
       <PopoverContent className="w-auto p-0">
         <YearSelect date={date} onChange={onChange} />
         <Calendar

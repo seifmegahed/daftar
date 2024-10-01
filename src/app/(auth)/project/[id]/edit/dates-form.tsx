@@ -5,7 +5,6 @@ import SubmitButton from "@/components/buttons/submit-button";
 import { useForm } from "react-hook-form";
 import {
   Form,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,10 +13,14 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DatePicker from "@/components/date-picker";
+import { updateProjectDatesAction } from "@/server/actions/projects";
+import { toast } from "sonner";
+import { useState } from "react";
+import { toDBDate } from "@/utils/common";
 
 const schema = z.object({
-  startDate: z.date(),
-  endDate: z.date(),
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
 });
 
 type FormDataType = z.infer<typeof schema>;
@@ -25,19 +28,34 @@ type FormDataType = z.infer<typeof schema>;
 function DatesForm({
   startDate,
   endDate,
+  projectId,
 }: {
   startDate?: Date;
   endDate?: Date;
+  projectId: number;
 }) {
+  const [defaultValues, setDefaultValues] = useState<{
+    startDate?: Date;
+    endDate?: Date;
+  }>({ startDate, endDate });
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
-    defaultValues: { startDate, endDate },
+    defaultValues,
   });
 
   const onSubmit = async (data: FormDataType) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    form.reset(data);
+    const [, error] = await updateProjectDatesAction(projectId, {
+      startDate: toDBDate(data.startDate),
+      endDate: toDBDate(data.endDate),
+    });
+    if (error !== null) {
+      console.log(error);
+      toast.error("Error updating project dates");
+    } else {
+      toast.success("Project dates updated successfully");
+      setDefaultValues(data);
+      form.reset(data);
+    }
   };
 
   return (
@@ -56,8 +74,12 @@ function DatesForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
                   <FormLabel>Start Date</FormLabel>
-                  <div className="flex gap-2">
-                    <DatePicker onChange={field.onChange} date={field.value} />
+                  <div className="flex flex-col gap-2">
+                    <DatePicker
+                      onChange={(value) => field.onChange(value ?? undefined)}
+                      date={field.value}
+                      className={`${field.value?.toString() !== defaultValues.startDate?.toString() ? "" : "!text-muted-foreground"}`}
+                    />
                     <FormMessage />
                   </div>
                 </FormItem>
@@ -69,8 +91,13 @@ function DatesForm({
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
                   <FormLabel>End Date</FormLabel>
-                  <div className="flex gap-2">
-                    <DatePicker onChange={field.onChange} date={field.value} />
+                  <div className="flex flex-col gap-2">
+                    <DatePicker
+                      onChange={(value) => field.onChange(value ?? undefined)}
+                      date={field.value}
+                      className={`${field.value?.toString() !== defaultValues.endDate?.toString() ? "" : "!text-muted-foreground"}`}
+                      allowFuture
+                    />
                     <FormMessage />
                   </div>
                 </FormItem>

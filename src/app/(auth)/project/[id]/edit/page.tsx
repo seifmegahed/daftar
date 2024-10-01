@@ -11,6 +11,8 @@ import DatesForm from "./dates-form";
 import NotesForm from "./notes-form";
 import DeleteProjectForm from "./delete-project";
 
+export const dynamic = "force-dynamic";
+
 async function EditProjectPage({ params }: { params: { id: number } }) {
   const [project, error] = await getProjectBriefByIdAction(params.id);
   if (error !== null) return <div>Error getting project</div>;
@@ -43,6 +45,7 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
         />
       )}
       <DatesForm
+        projectId={project.id}
         startDate={project.startDate ? new Date(project.startDate) : undefined}
         endDate={project.endDate ? new Date(project.endDate) : undefined}
       />
