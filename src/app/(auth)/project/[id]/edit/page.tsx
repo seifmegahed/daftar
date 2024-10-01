@@ -31,12 +31,20 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
       <p className="text-muted-foreground">
         In this page you can edit the project {project.name}. Here you can
         change the name, description, status, and more. Updating any field will
-        update the project in all references. and will {" "}
+        update the project in all references. and will{" "}
         <strong>register you as the last updater.</strong>
       </p>
       <StatusForm projectId={project.id} status={project.status} />
-      <NameForm projectId={project.id} name={project.name} access={hasFullAccess} ownerId={project.ownerId} />
-      <DescriptionForm projectId={project.id} description={project.description ?? ""} />
+      <NameForm
+        projectId={project.id}
+        name={project.name}
+        access={hasFullAccess}
+        ownerId={project.ownerId}
+      />
+      <DescriptionForm
+        projectId={project.id}
+        description={project.description ?? ""}
+      />
       {usersError === null && currentUserError === null && (
         <OwnerForm
           projectId={project.id}
@@ -51,7 +59,12 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
         endDate={project.endDate ? new Date(project.endDate) : undefined}
       />
       <NotesForm projectId={project.id} notes={project.notes ?? ""} />
-      <DeleteProjectForm name={project.name} access={hasFullAccess} />
+      <DeleteProjectForm
+        projectId={project.id}
+        name={project.name}
+        access={hasFullAccess}
+        ownerId={project.ownerId}
+      />
     </div>
   );
 }

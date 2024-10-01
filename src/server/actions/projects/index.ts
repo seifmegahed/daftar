@@ -25,6 +25,7 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserAction, getCurrentUserIdAction } from "../users";
 import type { z } from "zod";
+import { redirect } from "next/navigation";
 
 export const getProjectsCountAction = async (): Promise<
   ReturnTuple<number>
@@ -296,8 +297,8 @@ export const deleteProjectAction = async (
   if (isValid.data.ownerId !== currentUser.id && currentUser.role !== "admin")
     return [null, "Unauthorized"];
 
-  const [projectId, error] = await deleteProject(id);
+  const [, error] = await deleteProject(id);
   if (error !== null) return [null, error];
-
-  return [projectId, null];
+  
+  redirect("/projects");
 };

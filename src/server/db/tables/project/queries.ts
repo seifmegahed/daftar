@@ -14,6 +14,7 @@ import { count, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { clientsTable } from "../client/schema";
 import { usersTable } from "../user/schema";
+import { documentRelationsTable } from "../document/schema";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -474,10 +475,24 @@ export const deleteProject = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
   try {
-    const [project] = await db
-      .delete(projectsTable)
-      .where(eq(projectsTable.id, id))
-      .returning({ id: projectsTable.id });
+    const project = await db.transaction(async (tx) => {
+      await tx
+        .delete(projectItemsTable)
+        .where(eq(projectItemsTable.projectId, id))
+        .returning({ id: projectItemsTable.id });
+
+      await tx
+        .delete(documentRelationsTable)
+        .where(eq(documentRelationsTable.projectId, id))
+        .returning({ id: documentRelationsTable.id });
+
+      const [project] = await tx
+        .delete(projectsTable)
+        .where(eq(projectsTable.id, id))
+        .returning({ id: projectsTable.id });
+
+      return project;
+    });
 
     if (!project) return [null, "Error deleting project"];
     return [project.id, null];

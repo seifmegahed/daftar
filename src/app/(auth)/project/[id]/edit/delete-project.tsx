@@ -14,20 +14,25 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { emptyToUndefined } from "@/utils/common";
+import { toast } from "sonner";
+import { deleteProjectAction } from "@/server/actions/projects";
 
 function DeleteProjectForm({
+  projectId,
   name,
   access,
+  ownerId,
 }: {
+  projectId: number;
   name: string;
   access: boolean;
+  ownerId: number;
 }) {
   const schema = z
     .object({
       name: z.preprocess(
         emptyToUndefined,
-        z
-          .string({ message: "Project name is required to delete the project" })
+        z.string({ message: "Project name is required to delete the project" }),
       ),
     })
     .superRefine((data, ctx) => {
@@ -49,9 +54,15 @@ function DeleteProjectForm({
   });
 
   const onSubmit = async (data: FormDataType) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    form.reset(data);
+    try {
+      const [, error] = await deleteProjectAction(projectId, { ownerId });
+      if (error !== null) {
+        console.log(error);
+        toast.error("Error deleting project");
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
@@ -79,11 +90,11 @@ function DeleteProjectForm({
                   <strong>
                     Deleting a project is permanent, you will not be able to
                     undo this action.
-                  </strong>
-                  {" "}
+                  </strong>{" "}
                   Please type the name of the project to confirm. After typing
                   the name press the delete button to delete the project. <br />
-                  <strong>Note:</strong> Only the owner or an admin can delete a project.
+                  <strong>Note:</strong> Only the owner or an admin can delete a
+                  project.
                 </FormDescription>
               </FormItem>
             )}
