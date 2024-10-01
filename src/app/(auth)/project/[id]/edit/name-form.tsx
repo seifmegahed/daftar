@@ -46,6 +46,11 @@ function NameForm({
   });
 
   const onSubmit = async (data: FormDataType) => {
+    if(!access) {
+      toast.error("You do not have permission to change the project name");
+      form.reset({ name });
+      return;
+    }
     try {
       const [, error] = await updateProjectNameAction(projectId, {
         name: data.name,

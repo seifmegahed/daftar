@@ -48,6 +48,7 @@ function OwnerForm({
   const onSubmit = async (data: FormDataType) => {
     if (!access) {
       toast.error("You do not have permission to change the project owner");
+      form.reset({ ownerId });
       return;
     }
     try {
