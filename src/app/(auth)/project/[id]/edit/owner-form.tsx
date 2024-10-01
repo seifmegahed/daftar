@@ -20,6 +20,8 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { UserBriefType } from "@/server/db/tables/user/queries";
+import { toast } from "sonner";
+import { updateProjectOwnerAction } from "@/server/actions/projects";
 
 const schema = z.object({
   ownerId: z.preprocess((value: unknown) => Number(value), z.number()),
@@ -28,10 +30,12 @@ const schema = z.object({
 type FormDataType = z.infer<typeof schema>;
 
 function OwnerForm({
+  projectId,
   ownerId,
   users,
   access,
 }: {
+  projectId: number;
   ownerId: number;
   users: UserBriefType[];
   access: boolean;
@@ -42,9 +46,25 @@ function OwnerForm({
   });
 
   const onSubmit = async (data: FormDataType) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    form.reset(data);
+    if (!access) {
+      toast.error("You do not have permission to change the project owner");
+      return;
+    }
+    try {
+      const [, error] = await updateProjectOwnerAction(projectId, {
+        ownerId: data.ownerId,
+      });
+      if (error !== null) {
+        console.log(error);
+        toast.error("Error updating project owner");
+      } else {
+        toast.success("Project owner updated successfully");
+        form.reset(data);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error updating project owner");
+    }
   };
 
   return (
@@ -86,7 +106,8 @@ function OwnerForm({
                 <FormDescription>
                   Update project owner. After selecting the desired owner press
                   the update button to persist the change. <br />
-                  <strong>Note:</strong> Only the owner or an admin can change the project owner.
+                  <strong>Note:</strong> Only the owner or an admin can change
+                  the project owner.
                 </FormDescription>
               </FormItem>
             )}
