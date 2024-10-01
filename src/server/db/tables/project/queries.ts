@@ -10,7 +10,7 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
 import type { SimpDoc } from "../document/queries";
-import { and, count, desc, eq, sql } from "drizzle-orm";
+import { count, desc, eq, sql } from "drizzle-orm";
 import { z } from "zod";
 import { clientsTable } from "../client/schema";
 import { usersTable } from "../user/schema";

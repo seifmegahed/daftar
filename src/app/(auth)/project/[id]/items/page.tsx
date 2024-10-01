@@ -1,7 +1,7 @@
 import { getProjectItemsAction } from "@/server/actions/projects";
 import ProjectItemCard from "./project-item-card";
 
-const dynamic = "force-dynamic";
+export const dynamic = "force-dynamic";
 
 async function ProjectItemsPage({ params }: { params: { id: string } }) {
   const [projectItems, error] = await getProjectItemsAction(Number(params.id));

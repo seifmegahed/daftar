@@ -1,5 +1,5 @@
 import { getCurrencyLabel } from "@/data/lut";
-import { GetProjectItemType } from "@/server/db/tables/project/queries";
+import { type GetProjectItemType } from "@/server/db/tables/project/queries";
 import Link from "next/link";
 import ProjectItemCardContextMenu from "./project-item-card-menu";
 

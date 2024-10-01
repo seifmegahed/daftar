@@ -53,7 +53,7 @@ function DeleteProjectForm({
     defaultValues: { name: "" },
   });
 
-  const onSubmit = async (data: FormDataType) => {
+  const onSubmit = async (_data: FormDataType) => {
     try {
       const [, error] = await deleteProjectAction(projectId, { ownerId });
       if (error !== null) {
