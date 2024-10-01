@@ -15,11 +15,12 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { notesMaxLength } from "@/data/config";
 import { emptyToUndefined } from "@/utils/common";
+import { toast } from "sonner";
+import { updateProjectDescriptionAction } from "@/server/actions/projects";
 
 const schema = z.object({
   description: z.preprocess(
     emptyToUndefined,
-
     z
       .string({ message: "Description is required" })
       .min(4, { message: "Description must be at least 4 characters long" })
@@ -31,16 +32,34 @@ const schema = z.object({
 
 type FormDataType = z.infer<typeof schema>;
 
-function DescriptionForm({ description }: { description: string }) {
+function DescriptionForm({
+  projectId,
+  description,
+}: {
+  projectId: number;
+  description: string;
+}) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { description },
   });
 
   const onSubmit = async (data: FormDataType) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    form.reset(data);
+    try {
+      const [, error] = await updateProjectDescriptionAction(projectId, {
+        description: data.description,
+      });
+      if (error !== null) {
+        console.log(error);
+        toast.error("Error updating project description");
+      } else {
+        toast.success("Project description updated successfully");
+        form.reset(data);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error updating project description");
+    }
   };
 
   return (
