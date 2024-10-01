@@ -70,9 +70,11 @@ const ProjectCardContextMenu = ({ projectId }: { projectId: number }) => {
         <Link href={`/project/${projectId}/edit`}>
           <DropdownMenuItem>Edit Project</DropdownMenuItem>
         </Link>
-        <DropdownMenuItem>
-          <p className="text-red-500">Delete Project</p>
-        </DropdownMenuItem>
+        <Link href={`/project/${projectId}/edit#delete`} scroll>
+          <DropdownMenuItem>
+            <p className="text-red-500">Delete Project</p>
+          </DropdownMenuItem>
+        </Link>
       </DropdownMenuContent>
     </DropdownMenu>
   );

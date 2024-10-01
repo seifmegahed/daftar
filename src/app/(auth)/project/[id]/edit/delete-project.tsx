@@ -66,7 +66,7 @@ function DeleteProjectForm({
   };
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 scroll-smooth" id="delete">
       <h2 className="text-xl font-bold">Delete Project</h2>
       <Separator />
       <form
