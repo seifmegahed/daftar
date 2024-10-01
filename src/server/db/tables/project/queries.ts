@@ -57,8 +57,8 @@ const briefProjectSchema = z.object({
 });
 
 const prepareSearchText = (searchText: string) => {
-  searchText = searchText.trim().replace(/\s+/g, ' ').toLowerCase();
-  if (!searchText) return '';
+  searchText = searchText.trim().replace(/\s+/g, " ").toLowerCase();
+  if (!searchText) return "";
   const searchTextArray = searchText.split(" ");
   searchTextArray[searchTextArray.length - 1] += ":*";
   return searchTextArray.join(" | ");
@@ -127,6 +127,24 @@ export const insertProject = async (
   } catch (error) {
     console.log(error);
     return [null, "Error inserting new project"];
+  }
+};
+
+export const getProjectBriefById = async (
+  id: number,
+): Promise<ReturnTuple<SelectProjectType>> => {
+  try {
+    const [project] = await db
+      .select()
+      .from(projectsTable)
+      .where(eq(projectsTable.id, id));
+
+    if (!project) return [null, "Error getting project"];
+
+    return [project, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting project"];
   }
 };
 

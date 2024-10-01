@@ -1,5 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
+import { title } from "process";
 
 const basePath = (id: string) => "/project/" + id;
 
@@ -7,6 +8,10 @@ const sidebarNavItemsGenerator = (id: string) => [
   {
     title: "Project",
     href: basePath(id),
+  },
+  {
+    title: "Edit",
+    href: basePath(id) + "/edit",
   },
   {
     title: "Items",

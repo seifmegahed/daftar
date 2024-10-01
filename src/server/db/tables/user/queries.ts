@@ -257,6 +257,7 @@ export const updateUserName = async (
 export type UserBriefType = {
   id: number;
   name: string;
+  role?: string;
 };
 
 export const listAllUsers = async (): Promise<ReturnTuple<UserBriefType[]>> => {

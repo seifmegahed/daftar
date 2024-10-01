@@ -12,10 +12,12 @@ import {
   type GetProjectItemType,
   type GetProjectLinkedDocumentsType,
   getProjectsCount,
+  getProjectBriefById,
 } from "@/server/db/tables/project/queries";
 import {
   insertProjectItemSchema,
   insertProjectSchema,
+  type SelectProjectType,
   type InsertProjectItemType,
 } from "@/server/db/tables/project/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
@@ -37,6 +39,14 @@ export const getProjectsBriefAction = async (
   const [projects, error] = await getProjectsBrief(page, search);
   if (error !== null) return [null, error];
   return [projects, null];
+};
+
+export const getProjectBriefByIdAction = async (
+  id: number,
+): Promise<ReturnTuple<SelectProjectType>> => {
+  const [project, error] = await getProjectBriefById(id);
+  if (error !== null) return [null, error];
+  return [project, null];
 };
 
 export const getProjectByIdAction = async (

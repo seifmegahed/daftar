@@ -69,7 +69,11 @@ export const getCurrentUserAction = async (): Promise<
   if (decoded === null) return [null, userErrors.userNotFound];
   const id = Number(decoded.payload.id);
   if (isNaN(id)) return [null, userErrors.userNotFound];
-  return await getUserByIdAction(id);
+
+  const [user, error] = await getUserByIdAction(id);
+
+  if (error !== null) return [null, error];
+  return [user, null];
 };
 
 export const getCurrentUserIdAction = async (): Promise<
@@ -117,11 +121,9 @@ export const getAllUsersAction = async (): Promise<
 export const getUserByIdAction = async (
   id: number,
 ): Promise<ReturnTuple<GetPartialUserType>> => {
-  try {
-    return await getUserById(id);
-  } catch (error) {
-    return [null, getErrorMessage(error)];
-  }
+  const [user, error] = await getUserById(id);
+  if (error !== null) return [null, error];
+  return [user, null];
 };
 
 /******************************************************************************/
