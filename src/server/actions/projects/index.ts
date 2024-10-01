@@ -122,7 +122,7 @@ const updateProjectStatusSchema = insertProjectSchema.pick({
 
 type UpdateProjectStatusFormType = z.infer<typeof updateProjectStatusSchema>;
 
-export const adminUpdateProjectStatusAction = async (
+export const updateProjectStatusAction = async (
   id: number,
   data: UpdateProjectStatusFormType,
 ): Promise<ReturnTuple<number>> => {
@@ -148,7 +148,7 @@ const updateProjectNameSchema = insertProjectSchema.pick({
 
 type UpdateProjectNameFormType = z.infer<typeof updateProjectNameSchema>;
 
-export const adminUpdateProjectNameAction = async (
+export const updateProjectNameAction = async (
   id: number,
   data: UpdateProjectNameFormType,
 ): Promise<ReturnTuple<number>> => {

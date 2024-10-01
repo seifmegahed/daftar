@@ -44,17 +44,22 @@ function DatesForm({
   });
 
   const onSubmit = async (data: FormDataType) => {
-    const [, error] = await updateProjectDatesAction(projectId, {
-      startDate: toDBDate(data.startDate),
-      endDate: toDBDate(data.endDate),
-    });
-    if (error !== null) {
+    try {
+      const [, error] = await updateProjectDatesAction(projectId, {
+        startDate: toDBDate(data.startDate),
+        endDate: toDBDate(data.endDate),
+      });
+      if (error !== null) {
+        console.log(error);
+        toast.error("Error updating project dates");
+      } else {
+        toast.success("Project dates updated successfully");
+        setDefaultValues(data);
+        form.reset(data);
+      }
+    } catch (error) {
       console.log(error);
       toast.error("Error updating project dates");
-    } else {
-      toast.success("Project dates updated successfully");
-      setDefaultValues(data);
-      form.reset(data);
     }
   };
 

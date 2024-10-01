@@ -20,6 +20,8 @@ import {
 } from "@/components/ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { toast } from "sonner";
+import { updateProjectStatusAction } from "@/server/actions/projects";
 
 const schema = z.object({
   status: z.preprocess((value: unknown) => Number(value), z.number()),
@@ -27,16 +29,32 @@ const schema = z.object({
 
 type FormDataType = z.infer<typeof schema>;
 
-function StatusForm({ status }: { status: number }) {
+function StatusForm({
+  status,
+  projectId,
+}: {
+  status: number;
+  projectId: number;
+}) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { status },
   });
 
   const onSubmit = async (data: FormDataType) => {
-    console.log(data);
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    form.reset(data);
+    try {
+      const [, error] = await updateProjectStatusAction(projectId, data);
+      if (error !== null) {
+        console.log(error);
+        toast.error("Error updating project status");
+      } else {
+        toast.success("Project status updated successfully");
+        form.reset(data);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Error updating project status");
+    }
   };
 
   return (
