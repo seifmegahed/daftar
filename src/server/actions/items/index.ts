@@ -10,6 +10,7 @@ import {
   type ItemListType,
   getAllItemsBrief,
   getItemDetail,
+  getItemsCount,
   insertItem,
   listAllItems,
 } from "@/server/db/tables/item/queries";
@@ -63,6 +64,14 @@ export const listAllItemsAction = async (): Promise<
   ReturnTuple<ItemListType[]>
 > => {
   const [items, itemsError] = await listAllItems();
+  if (itemsError !== null) return [null, itemsError];
+  return [items, null];
+};
+
+export const getItemsCountAction = async (): Promise<
+  ReturnTuple<number>
+> => {
+  const [items, itemsError] = await getItemsCount();
   if (itemsError !== null) return [null, itemsError];
   return [items, null];
 };
