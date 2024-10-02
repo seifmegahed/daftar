@@ -1,16 +1,6 @@
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../ui/skeleton";
 
-function SkeletonList({ pageLimit = 10 }: { pageLimit?: number }) {
-  return (
-    <div className="flex flex-col gap-4">
-      {Array.from({ length: pageLimit }).map((_, i) => (
-        <SkeletonCard key={"skeleton-card-" + i} />
-      ))}
-    </div>
-  );
-}
-
-const SkeletonCard = () => {
+export const SkeletonCardB = () => {
   return (
     <div className="flex items-center gap-5 rounded-xl border p-4">
       <Skeleton className="ml-1 h-8 w-10" />
@@ -24,9 +14,7 @@ const SkeletonCard = () => {
           <Skeleton className="h-[0.8rem] w-[7rem]" />
         </div>
       </div>
-      <Skeleton className="w-8 h-7 rounded-full" />
+      <Skeleton className="h-7 w-8 rounded-full" />
     </div>
   );
 };
-
-export default SkeletonList;

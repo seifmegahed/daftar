@@ -5,7 +5,7 @@ import {
   suppliersTable,
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { asc, count, eq, sql, desc } from "drizzle-orm";
+import { asc, count, sql, desc } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
 import { prepareSearchText } from "@/utils/common";
@@ -47,7 +47,6 @@ export const getSuppliersBrief = async (
           : sql`1`,
       })
       .from(suppliersTable)
-      .where(eq(suppliersTable.isActive, true))
       .orderBy((table) =>
         searchText ? desc(table.rank) : desc(suppliersTable.id),
       )

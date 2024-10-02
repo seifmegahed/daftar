@@ -6,8 +6,10 @@ import {
   type DocumentRelationsType,
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { count, eq } from "drizzle-orm";
+import { count, eq, desc, sql } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
+import { prepareSearchText } from "@/utils/common";
+import { defaultPageLimit } from "@/data/config";
 
 export const insertDocument = async (
   data: DocumentDataType,
@@ -59,6 +61,7 @@ export type SimpDoc = {
   extension: string;
   path?: string;
   relationId?: number;
+  createdAt?: Date;
 };
 
 export const getClientDocuments = async (
@@ -167,15 +170,41 @@ export const getProjectDocuments = async (
   }
 };
 
-export const getDocuments = async (): Promise<ReturnTuple<SimpDoc[]>> => {
+const documentSearchQuery = (searchText: string) =>
+  sql`
+    (
+      setweight(to_tsvector('english', ${documentsTable.name}), 'A') ||
+      setweight(to_tsvector('english', ${documentsTable.extension}), 'B')
+    ), to_tsquery(${prepareSearchText(searchText)})
+  `;
+
+export type BriefDocumentType = Required<
+  Pick<SimpDoc, "id" | "name" | "extension" | "createdAt">
+>;
+
+export const getDocuments = async (
+  page: number,
+  searchText?: string,
+  limit = defaultPageLimit,
+): Promise<ReturnTuple<BriefDocumentType[]>> => {
   try {
     const documents = await db
       .select({
         id: documentsTable.id,
         name: documentsTable.name,
         extension: documentsTable.extension,
+        createdAt: documentsTable.createdAt,
+        rank: searchText
+          ? sql`ts_rank(${documentSearchQuery(searchText)})`
+          : sql`1`,
       })
-      .from(documentsTable);
+      .from(documentsTable)
+      .orderBy((table) =>
+        searchText ? desc(table.rank) : desc(documentsTable.id),
+      )
+      .limit(limit)
+      .offset((page - 1) * limit);
+
     if (!documents) return [null, "Error getting documents"];
 
     return [documents, null];

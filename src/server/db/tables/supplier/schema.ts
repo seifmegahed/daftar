@@ -41,8 +41,8 @@ export const suppliersTable = pgTable(
     suppliersSearchIndex: index("suppliers_search_index").using(
       "gin",
       sql`(
-      setweight(to_tsvector('english', ${table.name}), 'A') ||
-      setweight(to_tsvector('english', ${table.field}), 'B')
+        setweight(to_tsvector('english', ${table.name}), 'A') ||
+        setweight(to_tsvector('english', ${table.field}), 'B')
     )`,
     ),
   }),

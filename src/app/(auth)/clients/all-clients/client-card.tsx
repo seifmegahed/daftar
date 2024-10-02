@@ -6,7 +6,7 @@ import ClientCardContextMenu from "./card-menu";
 const ClientCard = ({ client }: { client: BriefClientType }) => {
   return (
     <div className="flex items-center gap-5 rounded-xl border p-4">
-      <Link href={`/project/${client.id}`}>
+      <Link href={`/client/${client.id}`}>
         <div className="flex cursor-pointer items-center justify-center">
           <p className="w-10 text-right text-2xl font-bold text-foreground">
             {client.id}
@@ -14,7 +14,7 @@ const ClientCard = ({ client }: { client: BriefClientType }) => {
         </div>
       </Link>
       <div className="flex w-full items-center justify-between">
-        <Link href={`/project/${client.id}`}>
+        <Link href={`/client/${client.id}`}>
           <p className="cursor-pointer text-foreground hover:underline text-xl line-clamp-1">
             {client.name}
           </p>

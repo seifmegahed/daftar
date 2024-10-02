@@ -1,4 +1,5 @@
 import {
+  index,
   integer,
   pgTable,
   serial,
@@ -10,26 +11,38 @@ import { projectsTable } from "../project/schema";
 import { itemsTable } from "../item/schema";
 import { suppliersTable } from "../supplier/schema";
 import { clientsTable } from "../client/schema";
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { createInsertSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { isExactlyOneDefined } from "@/utils/common";
 import { notesMaxLength } from "@/data/config";
 
-export const documentsTable = pgTable("document", {
-  id: serial("id").primaryKey(),
-  // Data fields
-  name: varchar("name", { length: 64 }).notNull().unique(),
-  path: varchar("path", { length: 256 }).notNull(),
-  notes: varchar("notes", { length: notesMaxLength }),
-  extension: varchar("extension", { length: 8 }).notNull(),
+export const documentsTable = pgTable(
+  "document",
+  {
+    id: serial("id").primaryKey(),
+    // Data fields
+    name: varchar("name", { length: 64 }).notNull().unique(),
+    path: varchar("path", { length: 256 }).notNull(),
+    notes: varchar("notes", { length: notesMaxLength }),
+    extension: varchar("extension", { length: 8 }).notNull(),
 
-  // Interaction fields
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  createdBy: integer("created_by")
-    .references(() => usersTable.id)
-    .notNull(),
-});
+    // Interaction fields
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    createdBy: integer("created_by")
+      .references(() => usersTable.id)
+      .notNull(),
+  },
+  (table) => ({
+    documentsSearchIndex: index("documents_search_index").using(
+      "gin",
+      sql`(
+      setweight(to_tsvector('english', ${table.name}), 'A') ||
+      setweight(to_tsvector('english', ${table.extension}), 'B')
+    )`,
+    ),
+  }),
+);
 
 export const documentRelations = relations(documentsTable, ({ one }) => ({
   creator: one(usersTable, {

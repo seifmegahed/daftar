@@ -1,4 +1,4 @@
-"use client";
+"use document";
 
 import Link from "next/link";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 
-const ClientCardContextMenu = ({ clientId }: { clientId: number }) => {
+const DocumentCardContextMenu = ({ documentId }: { documentId: number }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -19,19 +19,16 @@ const ClientCardContextMenu = ({ clientId }: { clientId: number }) => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <Link href={`/client/${clientId}`}>
-          <DropdownMenuItem>Client Page</DropdownMenuItem>
-        </Link>
-        <Link href={`/client/${clientId}/documents`}>
-          <DropdownMenuItem>Client Documents</DropdownMenuItem>
+        <Link href={`/document/${documentId}`}>
+          <DropdownMenuItem>Document Page</DropdownMenuItem>
         </Link>
         <Separator className="my-1" />
-        <Link href={`/client/${clientId}/edit`}>
-          <DropdownMenuItem>Edit Client</DropdownMenuItem>
+        <Link href={`/document/${documentId}/edit`}>
+          <DropdownMenuItem>Edit Document</DropdownMenuItem>
         </Link>
-        <Link href={`/client/${clientId}/edit#delete`} scroll>
+        <Link href={`/document/${documentId}/edit#delete`} scroll>
           <DropdownMenuItem>
-            <p className="text-red-500">Delete Client</p>
+            <p className="text-red-500">Delete Document</p>
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>
@@ -39,4 +36,4 @@ const ClientCardContextMenu = ({ clientId }: { clientId: number }) => {
   );
 };
 
-export default ClientCardContextMenu;
+export default DocumentCardContextMenu;

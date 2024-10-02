@@ -10,6 +10,7 @@ import {
   getItemDocuments,
   getProjectDocuments,
   getSupplierDocuments,
+  type BriefDocumentType,
   type DocumentType,
   type SimpDoc,
 } from "@/server/db/tables/document/queries";
@@ -96,8 +97,16 @@ export const getProjectDocumentsCountAction = async (
   return [documents.length, null];
 };
 
-export const getDocumentsAction = async (): Promise<ReturnTuple<SimpDoc[]>> => {
-  const [documents, documentsError] = await getDocuments();
+export const getDocumentsAction = async (
+  page: number,
+  searchText?: string,
+  limit?: number,
+): Promise<ReturnTuple<BriefDocumentType[]>> => {
+  const [documents, documentsError] = await getDocuments(
+    page,
+    searchText,
+    limit,
+  );
   if (documentsError !== null) return [null, documentsError];
   return [documents, null];
 };
