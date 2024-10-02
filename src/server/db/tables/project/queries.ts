@@ -44,6 +44,25 @@ export const getProjectsCount = async (): Promise<ReturnTuple<number>> => {
   }
 };
 
+export const getClientProjectsCount = async (
+  clientId: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [projectCount] = await db
+      .select({
+        count: count(),
+      })
+      .from(projectsTable)
+      .where(eq(projectsTable.clientId, clientId))
+      .limit(1);
+    if (!projectCount) return [null, "Error getting project count"];
+    return [projectCount.count, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting project count"];
+  }
+};
+
 const briefProjectSchema = z.object({
   id: z.number(),
   name: z.string(),
@@ -107,6 +126,46 @@ export const getProjectsBrief = async (
     return [null, "Error getting projects"];
   }
 };
+
+const briefClientProjectSchema = briefProjectSchema.omit({
+  ownerId: true,
+  ownerName: true,
+  description: true,
+});
+
+export type BriefClientProjectType = z.infer<typeof briefClientProjectSchema>;
+
+export const getClientProjects = async (
+  clientId: number,
+): Promise<ReturnTuple<BriefClientProjectType[]>> => {
+  try {
+    const projectsResult = await db
+      .select({
+        id: projectsTable.id,
+        name: projectsTable.name,
+        status: projectsTable.status,
+        clientId: projectsTable.clientId,
+        clientName: clientsTable.name,
+        createdAt: projectsTable.createdAt,
+      })
+      .from(projectsTable)
+      .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
+      .where(eq(projectsTable.clientId, clientId))
+      .orderBy(desc(projectsTable.id));
+
+    const projects = z
+      .array(briefClientProjectSchema)
+      .safeParse(projectsResult);
+
+    if (!projects.success) return [null, "Error getting projects"];
+
+    return [projects.data, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting projects"];
+  }
+};
+
 
 export const insertProject = async (
   data: InsertProjectType,

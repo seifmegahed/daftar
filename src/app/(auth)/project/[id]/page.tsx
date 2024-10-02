@@ -1,4 +1,3 @@
-import { Separator } from "@/components/ui/separator";
 import { getCurrencyLabel, getStatusLabel } from "@/data/lut";
 import {
   getProjectByIdAction,
@@ -11,7 +10,8 @@ import Link from "next/link";
 import DocumentCard from "@/components/document-card";
 import { DownloadIcon } from "lucide-react";
 import Section from "@/components/info-section";
-import ClientSection from "@/components/common/client-section";
+import ClientSection from "@/components/common-sections/client-section";
+import InfoPageWrapper from "@/components/info-page-wrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -22,14 +22,12 @@ async function ProjectPage({ params }: { params: { id: string } }) {
   if (projectErrors !== null) return <p>projectErrors: {projectErrors}</p>;
   const [documents] = await getProjectLinkedDocumentsAction(project.id);
   return (
-    <div className="mt-4 flex flex-col gap-y-4">
-      <h1 className="text-2xl font-bold tracking-tight">{project.name}</h1>
-      <Separator />
-      <p className="text-muted-foreground">
-        This is the project page for {project.name}. Here you can view all
+    <InfoPageWrapper
+      title={project.name}
+      subtitle={`This is the project page for ${project.name}. Here you can view all
         information about the project. You can also view the documents and items
-        linked to this project.
-      </p>
+        linked to this project.`}
+    >
       <Section title="Description">
         <p>{project.description}</p>
       </Section>
@@ -84,7 +82,7 @@ async function ProjectPage({ params }: { params: { id: string } }) {
           <ProjectDocuments id={project.id} documents={documents} />
         )}
       </Section>
-    </div>
+    </InfoPageWrapper>
   );
 }
 
@@ -214,6 +212,5 @@ const ProjectItems = ({
     </table>
   );
 };
-
 
 export default ProjectPage;

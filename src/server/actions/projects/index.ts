@@ -7,15 +7,18 @@ import {
   insertProjectItem,
   getProjectItems,
   getProjectLinkedDocuments,
-  type GetProjectType,
-  type BriefProjectType,
-  type GetProjectItemType,
-  type GetProjectLinkedDocumentsType,
   getProjectsCount,
   getProjectBriefById,
   updateProject,
   deleteProject,
   deleteProjectItem,
+  getClientProjectsCount,
+  getClientProjects,
+  type BriefClientProjectType,
+  type GetProjectType,
+  type BriefProjectType,
+  type GetProjectItemType,
+  type GetProjectLinkedDocumentsType,
 } from "@/server/db/tables/project/queries";
 import {
   insertProjectItemSchema,
@@ -36,11 +39,27 @@ export const getProjectsCountAction = async (): Promise<
   return [projectCount, null];
 };
 
+export const getClientProjectsCountAction = async (
+  clientId: number,
+): Promise<ReturnTuple<number>> => {
+  const [projectCount, error] = await getClientProjectsCount(clientId);
+  if (error !== null) return [null, error];
+  return [projectCount, null];
+};
+
 export const getProjectsBriefAction = async (
   page: number,
   search?: string,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {
   const [projects, error] = await getProjectsBrief(page, search);
+  if (error !== null) return [null, error];
+  return [projects, null];
+};
+
+export const getClientProjectsAction = async (
+  clientId: number,
+): Promise<ReturnTuple<BriefClientProjectType[]>> => {
+  const [projects, error] = await getClientProjects(clientId);
   if (error !== null) return [null, error];
   return [projects, null];
 };

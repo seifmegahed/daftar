@@ -3,6 +3,7 @@ import { SidebarNav } from "@/components/nav";
 import { getClientAddressesCountAction } from "@/server/actions/addresses";
 import { getClientContactsCountAction } from "@/server/actions/contacts";
 import { getClientDocumentsCountAction } from "@/server/actions/documents";
+import { getClientProjectsCountAction } from "@/server/actions/projects";
 
 const basePath = (id: string) => "/client/" + id;
 
@@ -22,6 +23,7 @@ export default async function SettingsLayout({
   const [clientDocumentsCount] = await getClientDocumentsCountAction(clientId);
   const [clientAddressesCount] = await getClientAddressesCountAction(clientId);
   const [clientContactsCount] = await getClientContactsCountAction(clientId);
+  const [clientProjectsCount] = await getClientProjectsCountAction(clientId);
 
   const sidebarNavItemsGenerator = (id: string) => [
     {
@@ -46,6 +48,7 @@ export default async function SettingsLayout({
     {
       title: "Projects",
       href: basePath(id) + "/projects",
+      amount: clientProjectsCount ?? 0,
     },
     {
       title: "New Address",
