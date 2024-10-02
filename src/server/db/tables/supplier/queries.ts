@@ -5,31 +5,54 @@ import {
   suppliersTable,
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { asc, count, eq } from "drizzle-orm";
+import { asc, count, eq, sql, desc } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
+import { defaultPageLimit } from "@/data/config";
+import { prepareSearchText } from "@/utils/common";
 
 /**
  * Getters
  */
 
-export type BriefSupplierType = Pick<
-  SelectSupplierType,
-  "id" | "name" | "registrationNumber"
+const supplierSearchQuery = (searchText: string) =>
+  sql`
+    (
+      setweight(to_tsvector('english', ${suppliersTable.name}), 'A') ||
+      setweight(to_tsvector('english', ${suppliersTable.field}), 'B')
+    ), to_tsquery(${prepareSearchText(searchText)})
+  `;
+
+export type BriefSupplierType = Required<
+  Pick<
+    SelectSupplierType,
+    "id" | "name" | "registrationNumber" | "createdAt" | "field"
+  >
 >;
 
-export const getAllSuppliersBrief = async (): Promise<
-  ReturnTuple<BriefSupplierType[]>
-> => {
+export const getSuppliersBrief = async (
+  page: number,
+  searchText?: string,
+  limit = defaultPageLimit,
+): Promise<ReturnTuple<BriefSupplierType[]>> => {
   try {
     const allSuppliers = await db
       .select({
         id: suppliersTable.id,
         name: suppliersTable.name,
         registrationNumber: suppliersTable.registrationNumber,
+        createdAt: suppliersTable.createdAt,
+        field: suppliersTable.field,
+        rank: searchText
+          ? sql`ts_rank(${supplierSearchQuery(searchText ?? "")})`
+          : sql`1`,
       })
       .from(suppliersTable)
       .where(eq(suppliersTable.isActive, true))
-      .orderBy(asc(suppliersTable.id));
+      .orderBy((table) =>
+        searchText ? desc(table.rank) : desc(suppliersTable.id),
+      )
+      .limit(limit)
+      .offset((page - 1) * limit);
 
     return [allSuppliers, null];
   } catch (error) {

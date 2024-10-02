@@ -50,7 +50,7 @@ export const projectsTable = pgTable(
     searchIndex: index("search_index").using(
       "gin",
       sql`(
-        setweight(to_tsvector('english', coalesce(${table.name}, '')), 'A') ||
+        setweight(to_tsvector('english', ${table.name}), 'A') ||
         setweight(to_tsvector('english', coalesce(${table.description}, '')), 'B')
       )`,
     ),

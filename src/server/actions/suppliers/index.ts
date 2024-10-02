@@ -7,7 +7,7 @@ import {
   type BriefSupplierType,
   type GetSupplierType,
   type SupplierListType,
-  getAllSuppliersBrief,
+  getSuppliersBrief,
   getSupplierFullById,
   getSuppliersCount,
   insertNewSupplier,
@@ -15,10 +15,16 @@ import {
 } from "@/server/db/tables/supplier/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 
-export const getAllSuppliersBriefAction = async (): Promise<
-  ReturnTuple<BriefSupplierType[]>
-> => {
-  const [suppliers, suppliersError] = await getAllSuppliersBrief();
+export const getSuppliersBriefAction = async (
+  page: number,
+  searchText?: string,
+  limit?: number,
+): Promise<ReturnTuple<BriefSupplierType[]>> => {
+  const [suppliers, suppliersError] = await getSuppliersBrief(
+    page,
+    searchText,
+    limit,
+  );
   if (suppliersError !== null) return [null, suppliersError];
   return [suppliers, null];
 };
