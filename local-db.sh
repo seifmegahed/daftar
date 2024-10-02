@@ -37,9 +37,9 @@ stop_db() {
 cleanup_db() {
   echo "Cleaning up database and user..."
   psql postgres -c "DROP DATABASE IF EXISTS $DB_NAME;" || echo "Error: Failed to drop database '$DB_NAME'."
-  psql postgres -c "DROP USER IF EXISTS $DB_USER;" || echo "Error: Failed to drop user '$DB_USER'."
-
-  echo "Database '$DB_NAME' and user '$DB_USER' have been removed."
+  # psql postgres -c "DROP USER IF EXISTS $DB_USER;" || echo "Error: Failed to drop user '$DB_USER'."
+  
+  echo "Database '$DB_NAME' has been removed."
 }
 
 case $ACTION in

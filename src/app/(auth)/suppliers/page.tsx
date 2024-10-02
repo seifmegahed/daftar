@@ -11,7 +11,7 @@ const pageLimit = defaultPageLimit;
 
 export const dynamic = "force-dynamic";
 
-async function suppliersPage({
+async function SuppliersPage({
   searchParams,
 }: {
   searchParams: { page?: string; query?: string };
@@ -35,4 +35,4 @@ async function suppliersPage({
   );
 }
 
-export default suppliersPage;
+export default SuppliersPage;

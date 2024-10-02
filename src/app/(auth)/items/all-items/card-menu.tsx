@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 
-const SupplierCardContextMenu = ({ supplierId }: { supplierId: number }) => {
+const ItemCardContextMenu = ({ itemId }: { itemId: number }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -19,19 +19,19 @@ const SupplierCardContextMenu = ({ supplierId }: { supplierId: number }) => {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <Link href={`/supplier/${supplierId}`}>
-          <DropdownMenuItem>Supplier Page</DropdownMenuItem>
+        <Link href={`/item/${itemId}`}>
+          <DropdownMenuItem>Item Page</DropdownMenuItem>
         </Link>
-        <Link href={`/supplier/${supplierId}/documents`}>
-          <DropdownMenuItem>Supplier Documents</DropdownMenuItem>
+        <Link href={`/item/${itemId}/documents`}>
+          <DropdownMenuItem>Item Documents</DropdownMenuItem>
         </Link>
         <Separator className="my-1" />
-        <Link href={`/supplier/${supplierId}/edit`}>
-          <DropdownMenuItem>Edit Supplier</DropdownMenuItem>
+        <Link href={`/item/${itemId}/edit`}>
+          <DropdownMenuItem>Edit Item</DropdownMenuItem>
         </Link>
-        <Link href={`/supplier/${supplierId}/edit#delete`} scroll>
+        <Link href={`/item/${itemId}/edit#delete`} scroll>
           <DropdownMenuItem>
-            <p className="text-red-500">Delete Supplier</p>
+            <p className="text-red-500">Delete Item</p>
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>
@@ -39,4 +39,4 @@ const SupplierCardContextMenu = ({ supplierId }: { supplierId: number }) => {
   );
 };
 
-export default SupplierCardContextMenu;
+export default ItemCardContextMenu;

@@ -2,7 +2,9 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { itemsTable, type AddItemType, type SelectItemType } from "./schema";
 import { db } from "@/server/db";
 import { getErrorMessage } from "@/lib/exceptions";
-import { asc, count, desc } from "drizzle-orm";
+import { asc, count, desc, sql } from "drizzle-orm";
+import { prepareSearchText } from "@/utils/common";
+import { defaultPageLimit } from "@/data/config";
 
 export const insertItem = async (
   data: AddItemType,
@@ -23,14 +25,25 @@ export const insertItem = async (
   }
 };
 
-export type GetItemBriefType = Pick<
+const itemSearchQuery = (searchText: string) =>
+  sql`
+    (
+      setweight(to_tsvector('english', ${itemsTable.name}), 'A') ||
+      setweight(to_tsvector('english', coalesce(${itemsTable.type}, '')), 'B') ||
+      setweight(to_tsvector('english', coalesce(${itemsTable.make}, '')), 'C')
+    ), to_tsquery(${prepareSearchText(searchText)})
+  `;
+
+export type BriefItemType = Pick<
   SelectItemType,
-  "id" | "name" | "type" | "make"
+  "id" | "name" | "type" | "make" | "createdAt"
 >;
 
-export const getAllItemsBrief = async (): Promise<
-  ReturnTuple<GetItemBriefType[]>
-> => {
+export const getAllItemsBrief = async (
+  page: number,
+  searchText?: string,
+  limit = defaultPageLimit,
+): Promise<ReturnTuple<BriefItemType[]>> => {
   try {
     const allItems = await db
       .select({
@@ -38,9 +51,15 @@ export const getAllItemsBrief = async (): Promise<
         name: itemsTable.name,
         type: itemsTable.type,
         make: itemsTable.make,
+        createdAt: itemsTable.createdAt,
+        rank: searchText
+          ? sql`ts_rank(${itemSearchQuery(searchText)})`
+          : sql`1`,
       })
       .from(itemsTable)
-      .orderBy(desc(itemsTable.id));
+      .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
+      .limit(limit)
+      .offset((page - 1) * limit);
 
     if (!allItems) return [null, "Error getting items"];
 
@@ -115,7 +134,7 @@ export const listAllItems = async (): Promise<ReturnTuple<ItemListType[]>> => {
 export const getItemsCount = async (): Promise<ReturnTuple<number>> => {
   try {
     const [items] = await db
-      .select({ count: count()})
+      .select({ count: count() })
       .from(itemsTable)
       .limit(1);
 

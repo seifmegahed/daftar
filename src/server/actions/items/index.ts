@@ -5,7 +5,7 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import type { z } from "zod";
 import { getCurrentUserIdAction } from "../users";
 import {
-  type GetItemBriefType,
+  type BriefItemType,
   type GetItemDetailType,
   type ItemListType,
   getAllItemsBrief,
@@ -44,10 +44,12 @@ export const addItemAction = async (
   return [itemId, null];
 };
 
-export const getAllItemsBriefAction = async (): Promise<
-  ReturnTuple<GetItemBriefType[]>
-> => {
-  const [items, itemsError] = await getAllItemsBrief();
+export const getItemsAction = async (
+  page: number,
+  searchText?: string,
+  limit?: number,
+): Promise<ReturnTuple<BriefItemType[]>> => {
+  const [items, itemsError] = await getAllItemsBrief(page, searchText, limit);
   if (itemsError !== null) return [null, itemsError];
   return [items, null];
 };
@@ -68,9 +70,7 @@ export const listAllItemsAction = async (): Promise<
   return [items, null];
 };
 
-export const getItemsCountAction = async (): Promise<
-  ReturnTuple<number>
-> => {
+export const getItemsCountAction = async (): Promise<ReturnTuple<number>> => {
   const [items, itemsError] = await getItemsCount();
   if (itemsError !== null) return [null, itemsError];
   return [items, null];

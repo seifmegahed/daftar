@@ -2,42 +2,40 @@
 
 import Link from "next/link";
 import { format } from "date-fns";
-import { type BriefSupplierType } from "@/server/db/tables/supplier/queries";
-import SupplierCardContextMenu from "./card-menu";
+import { type BriefItemType } from "@/server/db/tables/item/queries";
+import ItemCardContextMenu from "./card-menu";
 
-const SupplierCard = ({ supplier }: { supplier: BriefSupplierType }) => {
+const ItemCard = ({ item }: { item: BriefItemType }) => {
   return (
     <div className="flex items-center gap-5 rounded-xl border p-4">
-      <Link href={`/supplier/${supplier.id}`}>
+      <Link href={`/item/${item.id}`}>
         <div className="flex cursor-pointer items-center justify-center">
           <p className="w-10 text-right text-2xl font-bold text-foreground">
-            {supplier.id}
+            {item.id}
           </p>
         </div>
       </Link>
       <div className="flex w-full items-center justify-between">
         <div>
-          <Link href={`/supplier/${supplier.id}`}>
+          <Link href={`/item/${item.id}`}>
             <p className="line-clamp-1 cursor-pointer text-foreground hover:underline">
-              {supplier.name}
+              {item.name}
             </p>
           </Link>
           <p className="cursor-pointer text-xs text-muted-foreground">
-            {supplier.field}
+            {item.make}
           </p>
         </div>
         <div className="w-56 text-right">
-          <p className="line-clamp-1 text-foreground">
-            {supplier.registrationNumber}
-          </p>
+          <p className="line-clamp-1 text-foreground">{item.type}</p>
           <p className="text-xs text-muted-foreground">
-            {format(supplier.createdAt, "PP")}
+            {format(item.createdAt, "PP")}
           </p>
         </div>
       </div>
-      <SupplierCardContextMenu supplierId={supplier.id} />
+      <ItemCardContextMenu itemId={item.id} />
     </div>
   );
 };
 
-export default SupplierCard;
+export default ItemCard;

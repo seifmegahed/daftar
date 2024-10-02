@@ -48,7 +48,7 @@ export const getSuppliersBrief = async (
       })
       .from(suppliersTable)
       .orderBy((table) =>
-        searchText ? desc(table.rank) : desc(suppliersTable.id),
+        searchText ? desc(table.rank) : desc(table.id),
       )
       .limit(limit)
       .offset((page - 1) * limit);
