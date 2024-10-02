@@ -9,6 +9,7 @@ import {
   type GetClientType,
   getAllClientsBrief,
   getClientFullById,
+  getClientsCount,
   insertNewClient,
   listAllClients,
 } from "@/server/db/tables/client/queries";
@@ -109,6 +110,14 @@ export const listAllClientsAction = async (): Promise<
   ReturnTuple<ClientListType[]>
 > => {
   const [clients, clientsError] = await listAllClients();
+  if (clientsError !== null) return [null, clientsError];
+  return [clients, null];
+};
+
+export const getClientsCountAction = async (): Promise<
+  ReturnTuple<number>
+> => {
+  const [clients, clientsError] = await getClientsCount();
   if (clientsError !== null) return [null, clientsError];
   return [clients, null];
 };

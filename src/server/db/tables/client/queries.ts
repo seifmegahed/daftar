@@ -1,12 +1,9 @@
 import { db } from "@/server/db";
 import { type InsertClientDataType, clientsTable } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { asc, eq } from "drizzle-orm";
+import { asc, count, eq } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
-import {
-  addressesTable,
-  type InsertAddressType,
-} from "../address/schema";
+import { addressesTable, type InsertAddressType } from "../address/schema";
 import { contactsTable, type InsertContactType } from "../contact/schema";
 
 /**
@@ -203,5 +200,20 @@ export const listAllClients = async (): Promise<
   } catch (error) {
     console.log(error);
     return [null, "Error getting clients"];
+  }
+};
+
+export const getClientsCount = async (): Promise<ReturnTuple<number>> => {
+  try {
+    const [clients] = await db
+      .select({ count: count() })
+      .from(clientsTable)
+      .limit(1);
+
+    if (!clients) return [null, "Error getting clients count"];
+    return [clients.count, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting clients count"];
   }
 };

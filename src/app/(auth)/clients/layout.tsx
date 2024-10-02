@@ -1,33 +1,35 @@
-import { Separator } from "@/components/ui/separator"
-import { SidebarNav } from "@/components/nav"
-
+import { Separator } from "@/components/ui/separator";
+import { SidebarNav } from "@/components/nav";
+import { getClientsCountAction } from "@/server/actions/clients";
 
 interface SettingsLayoutProps {
-  children: React.ReactNode
+  children: React.ReactNode;
 }
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
-export default async function SettingsLayout({ children }: SettingsLayoutProps) {
+export default async function SettingsLayout({
+  children,
+}: SettingsLayoutProps) {
+  const [numberOfClients] = await getClientsCountAction();
   const sidebarNavItems = [
     {
       title: "All Clients",
       href: "/clients",
+      amount: numberOfClients ?? 0,
     },
     {
       title: "New Client",
       href: "/clients/new-client",
     },
-  ]
+  ];
   return (
     // this should be in root layout, but we're doing it here for testing purposes
-    <div className="bg-background -m-10 h-full min-h-[calc(100vh_-_theme(spacing.16))]">
+    <div className="-m-10 h-full min-h-[calc(100vh_-_theme(spacing.16))] bg-background">
       <div className="space-y-6 p-10 pb-16">
         <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">Clients</h2>
-          <p className="text-muted-foreground">
-            Manage your client accounts.
-          </p>
+          <p className="text-muted-foreground">Manage your client accounts.</p>
         </div>
         <Separator className="my-6" />
         <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
@@ -38,5 +40,5 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
         </div>
       </div>
     </div>
-  )
+  );
 }
