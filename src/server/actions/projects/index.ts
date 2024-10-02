@@ -110,6 +110,14 @@ export const getProjectItemsAction = async (
   return [projectItems, null];
 };
 
+export const getProjectItemsCountAction = async (
+  projectId: number,
+): Promise<ReturnTuple<number>> => {
+  const [projectItems, projectItemsError] = await getProjectItems(projectId);
+  if (projectItemsError !== null) return [null, projectItemsError];
+  return [projectItems.length, null];
+};
+
 export const getProjectLinkedDocumentsAction = async (
   projectId: number,
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {

@@ -10,6 +10,7 @@ interface SidebarNavProps extends React.HTMLAttributes<HTMLElement> {
   items: {
     href: string;
     title: string;
+    amount?: number;
   }[];
 }
 
@@ -32,11 +33,17 @@ function SidebarNav({ className, items, ...props }: SidebarNavProps) {
             buttonVariants({ variant: "ghost" }),
             pathname === item.href
               ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent hover:underline",
-            "justify-start",
+              : "hover:bg-transparent group",
           )}
         >
-          {item.title}
+          {item.amount !== undefined ? (
+            <div className="flex items-center justify-between w-full">
+              <p className="group-hover:underline">{item.title}</p>
+              <p className="text-xs font-thin">{item.amount}</p>
+            </div>
+          ) : (
+            <p className="w-full">{item.title}</p>
+          )}
         </Link>
       ))}
     </nav>

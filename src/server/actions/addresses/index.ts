@@ -1,6 +1,9 @@
 "use server";
 
-import { insertNewAddress } from "@/server/db/tables/address/queries";
+import {
+  getClientAddressesCount,
+  insertNewAddress,
+} from "@/server/db/tables/address/queries";
 import {
   insertAddressSchemaRaw,
   insertAddressSchemaRefineCallback,
@@ -40,4 +43,12 @@ export const addNewAddressAction = async (
   if (addressInsertError !== null) return [null, addressInsertError];
 
   return [addressId, null];
+};
+
+export const getClientAddressesCountAction = async (
+  clientId: number,
+): Promise<ReturnTuple<number>> => {
+  const [addressesCount, error] = await getClientAddressesCount(clientId);
+  if (error !== null) return [null, error];
+  return [addressesCount, null];
 };

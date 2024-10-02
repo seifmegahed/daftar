@@ -1,22 +1,28 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "@/components/nav"
+import { getProjectsCount } from "@/server/db/tables/project/queries"
 
-const sidebarNavItems = [
-  {
-    title: "All Projects",
-    href: "/projects",
-  },
-  {
-    title: "New Project",
-    href: "/projects/new-project",
-  },
-]
 
 interface SettingsLayoutProps {
   children: React.ReactNode
-}
+} 
 
-export default function SettingsLayout({ children }: SettingsLayoutProps) {
+export default async function SettingsLayout({ children }: SettingsLayoutProps) {
+  const [numberOfProjects, error] = await getProjectsCount()
+  if (error !== null) return <div>Something went wrong. Please try again later.</div>
+  
+  const sidebarNavItems = [
+    {
+      title: "All Projects",
+      href: "/projects",
+      amount: numberOfProjects
+    },
+    {
+      title: "New Project",
+      href: "/projects/new-project",
+    },
+  ]
+
   return (
     // this should be in root layout, but we're doing it here for testing purposes
     <div className="bg-background -m-10 h-full min-h-[calc(100vh_-_theme(spacing.16))]">

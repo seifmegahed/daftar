@@ -1,6 +1,9 @@
 "use server";
 
-import { insertNewContact } from "@/server/db/tables/contact/queries";
+import {
+  getClientContactsCount,
+  insertNewContact,
+} from "@/server/db/tables/contact/queries";
 import {
   insertContactSchemaRaw,
   insertContactSchemaRefineCallback,
@@ -39,4 +42,12 @@ export const addNewContactAction = async (
   if (contactInsertError !== null) return [null, contactInsertError];
 
   return [contactId, null];
+};
+
+export const getClientContactsCountAction = async (
+  clientId: number,
+): Promise<ReturnTuple<number>> => {
+  const [contactsCount, error] = await getClientContactsCount(clientId);
+  if (error !== null) return [null, error];
+  return [contactsCount, null];
 };

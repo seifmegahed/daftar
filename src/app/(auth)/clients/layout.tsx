@@ -1,22 +1,24 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "@/components/nav"
 
-const sidebarNavItems = [
-  {
-    title: "All Clients",
-    href: "/clients",
-  },
-  {
-    title: "New Client",
-    href: "/clients/new-client",
-  },
-]
 
 interface SettingsLayoutProps {
   children: React.ReactNode
 }
 
-export default function SettingsLayout({ children }: SettingsLayoutProps) {
+export const dynamic = "force-dynamic"
+
+export default async function SettingsLayout({ children }: SettingsLayoutProps) {
+  const sidebarNavItems = [
+    {
+      title: "All Clients",
+      href: "/clients",
+    },
+    {
+      title: "New Client",
+      href: "/clients/new-client",
+    },
+  ]
   return (
     // this should be in root layout, but we're doing it here for testing purposes
     <div className="bg-background -m-10 h-full min-h-[calc(100vh_-_theme(spacing.16))]">
