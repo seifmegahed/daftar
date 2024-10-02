@@ -5,7 +5,7 @@ import {
   suppliersTable,
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { asc, eq } from "drizzle-orm";
+import { asc, count, eq } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
 
 /**
@@ -137,7 +137,9 @@ export type SupplierListType = {
   name: string;
 };
 
-export const listAllSuppliers = async (): Promise<ReturnTuple<SupplierListType[]>> => {
+export const listAllSuppliers = async (): Promise<
+  ReturnTuple<SupplierListType[]>
+> => {
   try {
     const suppliers = await db
       .select({
@@ -152,5 +154,19 @@ export const listAllSuppliers = async (): Promise<ReturnTuple<SupplierListType[]
   } catch (error) {
     console.log(error);
     return [null, "Error getting suppliers"];
+  }
+};
+
+export const getSuppliersCount = async (): Promise<ReturnTuple<number>> => {
+  try {
+    const [suppliers] = await db
+      .select({ count: count() })
+      .from(suppliersTable)
+      .limit(1);
+
+    if (!suppliers) return [null, "Error getting suppliers count"];
+    return [suppliers.count, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
   }
 };

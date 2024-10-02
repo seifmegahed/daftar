@@ -6,6 +6,7 @@ import {
   getClientDocuments,
   getDocumentById,
   getDocuments,
+  getDocumentsCount,
   getItemDocuments,
   getProjectDocuments,
   getSupplierDocuments,
@@ -115,4 +116,12 @@ export const unlinkDocumentAction = async (
   const [deleted, deleteError] = await deleteDocumentRelation(relationId);
   if (deleteError !== null) return [null, deleteError];
   return [deleted, null];
+};
+
+export const getDocumentsCountAction = async (): Promise<
+  ReturnTuple<number>
+> => {
+  const [documents, documentsError] = await getDocumentsCount();
+  if (documentsError !== null) return [null, documentsError];
+  return [documents, null];
 };

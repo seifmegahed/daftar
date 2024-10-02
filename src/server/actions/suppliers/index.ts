@@ -9,6 +9,7 @@ import {
   type SupplierListType,
   getAllSuppliersBrief,
   getSupplierFullById,
+  getSuppliersCount,
   insertNewSupplier,
   listAllSuppliers,
 } from "@/server/db/tables/supplier/queries";
@@ -62,6 +63,14 @@ export const listAllSuppliersAction = async (): Promise<
   ReturnTuple<SupplierListType[]>
 > => {
   const [suppliers, suppliersError] = await listAllSuppliers();
+  if (suppliersError !== null) return [null, suppliersError];
+  return [suppliers, null];
+};
+
+export const getSuppliersCountAction = async (): Promise<
+  ReturnTuple<number>
+> => {
+  const [suppliers, suppliersError] = await getSuppliersCount();
   if (suppliersError !== null) return [null, suppliersError];
   return [suppliers, null];
 };

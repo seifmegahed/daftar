@@ -1,22 +1,27 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "@/components/nav"
+import { getSuppliersCountAction } from "@/server/actions/suppliers"
 
-const sidebarNavItems = [
-  {
-    title: "All Suppliers",
-    href: "/suppliers",
-  },
-  {
-    title: "New Supplier",
-    href: "/suppliers/new-supplier",
-  },
-]
+export const dynamic = "force-dynamic"
 
 interface SettingsLayoutProps {
   children: React.ReactNode
 }
 
-export default function SettingsLayout({ children }: SettingsLayoutProps) {
+export default async function SettingsLayout({ children }: SettingsLayoutProps) {
+  const [numberOfSuppliers] = await getSuppliersCountAction()
+
+  const sidebarNavItems = [
+    {
+      title: "All Suppliers",
+      href: "/suppliers",
+      amount: numberOfSuppliers ?? 0
+    },
+    {
+      title: "New Supplier",
+      href: "/suppliers/new-supplier",
+    },
+  ]
   return (
     // this should be in root layout, but we're doing it here for testing purposes
     <div className="bg-background -m-10 h-full min-h-[calc(100vh_-_theme(spacing.16))]">

@@ -6,7 +6,8 @@ import {
   type DocumentRelationsType,
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
+import { getErrorMessage } from "@/lib/exceptions";
 
 export const insertDocument = async (
   data: DocumentDataType,
@@ -251,5 +252,19 @@ export const deleteDocumentRelation = async (
   } catch (error) {
     console.log(error);
     return [null, "Error deleting document relation"];
+  }
+};
+
+export const getDocumentsCount = async (): Promise<ReturnTuple<number>> => {
+  try {
+    const [documents] = await db
+      .select({ count: count() })
+      .from(documentsTable)
+      .limit(1);
+
+    if (!documents) return [null, "Error getting documents count"];
+    return [documents.count, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
   }
 };
