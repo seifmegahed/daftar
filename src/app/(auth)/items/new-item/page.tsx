@@ -70,7 +70,6 @@ function NewItemForm() {
     try {
       const [, error] = await addItemAction(data);
       if (error !== null) return toast.error(error);
-      console.log(data);
       toast.success("Item added successfully");
       form.reset();
     } catch (error) {

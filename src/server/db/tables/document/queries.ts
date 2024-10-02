@@ -52,7 +52,13 @@ export const insertDocumentWithRelation = async (
   }
 };
 
-export type SimpDoc = {id: number, name: string, extension: string, path?: string};
+export type SimpDoc = {
+  id: number;
+  name: string;
+  extension: string;
+  path?: string;
+  relationId?: number;
+};
 
 export const getClientDocuments = async (
   clientId: number,
@@ -61,7 +67,7 @@ export const getClientDocuments = async (
     const documents = await db.query.documentRelationsTable.findMany({
       where: (documentRelation, { eq }) =>
         eq(documentRelation.clientId, clientId),
-      columns: {},
+      columns: { id: true },
       with: {
         document: {
           columns: {
@@ -74,7 +80,7 @@ export const getClientDocuments = async (
     });
     if (!documents) return [null, "Error getting client documents"];
 
-    return [documents.map((x) => x.document), null];
+    return [documents.map((x) => ({ ...x.document, relationId: x.id })), null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting client documents"];
@@ -88,7 +94,7 @@ export const getSupplierDocuments = async (
     const documents = await db.query.documentRelationsTable.findMany({
       where: (documentRelation, { eq }) =>
         eq(documentRelation.supplierId, supplierId),
-      columns: {},
+      columns: { id: true },
       with: {
         document: {
           columns: {
@@ -101,7 +107,7 @@ export const getSupplierDocuments = async (
     });
     if (!documents) return [null, "Error getting supplier documents"];
 
-    return [documents.map((x) => x.document), null];
+    return [documents.map((x) => ({ ...x.document, relationId: x.id })), null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting supplier documents"];
@@ -114,7 +120,7 @@ export const getItemDocuments = async (
   try {
     const documents = await db.query.documentRelationsTable.findMany({
       where: (documentRelation, { eq }) => eq(documentRelation.itemId, itemId),
-      columns: {},
+      columns: { id: true },
       with: {
         document: {
           columns: {
@@ -127,7 +133,7 @@ export const getItemDocuments = async (
     });
     if (!documents) return [null, "Error getting item documents"];
 
-    return [documents.map((x) => x.document), null];
+    return [documents.map((x) => ({ ...x.document, relationId: x.id })), null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting item documents"];
@@ -141,7 +147,7 @@ export const getProjectDocuments = async (
     const documents = await db.query.documentRelationsTable.findMany({
       where: (documentRelation, { eq }) =>
         eq(documentRelation.projectId, projectId),
-      columns: {},
+      columns: { id: true },
       with: {
         document: {
           columns: {
@@ -153,7 +159,7 @@ export const getProjectDocuments = async (
       },
     });
     if (!documents) return [null, "Error getting project documents"];
-    return [documents.map((x) => x.document), null];
+    return [documents.map((x) => ({ ...x.document, relationId: x.id })), null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting project documents"];
@@ -212,7 +218,7 @@ export const getDocumentById = async (
 
 export const getDocumentPath = async (
   id: number,
-): Promise<ReturnTuple<{ name: string; path: string, extension: string }>> => {
+): Promise<ReturnTuple<{ name: string; path: string; extension: string }>> => {
   try {
     const [path] = await db
       .select({
@@ -229,5 +235,21 @@ export const getDocumentPath = async (
   } catch (error) {
     console.log(error);
     return [null, "Error getting document path"];
+  }
+};
+
+export const deleteDocumentRelation = async (
+  relationId: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [result] = await db
+      .delete(documentRelationsTable)
+      .where(eq(documentRelationsTable.id, relationId))
+      .returning({ id: documentRelationsTable.id });
+    if (!result) return [null, "Error deleting document relation"];
+    return [result.id, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error deleting document relation"];
   }
 };

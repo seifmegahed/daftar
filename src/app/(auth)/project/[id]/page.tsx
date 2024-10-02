@@ -9,7 +9,7 @@ import { type ProjectClientType } from "@/server/db/tables/project/queries";
 import { numberWithCommas } from "@/utils/common";
 import { format } from "date-fns";
 import Link from "next/link";
-import DocumentCard from "./document-card";
+import DocumentCard from "@/components/document-card";
 import { DownloadIcon } from "lucide-react";
 
 export const dynamic = "force-dynamic";
@@ -102,15 +102,6 @@ const ProjectDocuments = ({
 }) => {
   return (
     <div className="flex flex-col gap-y-2 text-muted-foreground">
-      {documents.projectDocuments.length === 0 &&
-      documents.clientDocuments.length === 0 &&
-      documents.itemsDocuments.length === 0 &&
-      documents.suppliersDocuments.length === 0 ? null : (
-        <DocumentsDisplay
-          documents={documents.projectDocuments}
-          title="Project's Documents"
-        />
-      )}
       <DownloadAllDocumentsButton id={id} />
       <DocumentsDisplay
         documents={documents.projectDocuments}

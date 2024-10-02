@@ -370,7 +370,6 @@ export const adminUpdateUserDisplayNameAction = async (
   if (isAdminError !== null) return [null, isAdminError];
 
   const isValid = updateUserNameSchema.safeParse(data);
-  console.log(isValid.error?.message);
   if (!isValid.success) return [null, userErrors.invalidData];
 
   const result = await updateUserName(data.id, data.name);

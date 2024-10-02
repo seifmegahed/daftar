@@ -2,6 +2,7 @@
 
 import { getErrorMessage } from "@/lib/exceptions";
 import {
+  deleteDocumentRelation,
   getClientDocuments,
   getDocumentById,
   getDocuments,
@@ -90,4 +91,12 @@ export const getDocumentByIdAction = async (
   const [document, documentError] = await getDocumentById(id);
   if (documentError !== null) return [null, documentError];
   return [document, null];
+};
+
+export const unlinkDocumentAction = async (
+  relationId: number,
+): Promise<ReturnTuple<number>> => {
+  const [deleted, deleteError] = await deleteDocumentRelation(relationId);
+  if (deleteError !== null) return [null, deleteError];
+  return [deleted, null];
 };

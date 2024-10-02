@@ -1,6 +1,7 @@
-import { MoreHorizontal, FileIcon } from "lucide-react";
+import { FileIcon } from "lucide-react";
 import Link from "next/link";
 import { type SimpDoc } from "@/server/db/tables/document/queries";
+import DocumentCardContextMenu from "./context-menu";
 
 const DocumentCard = ({ document }: { document: SimpDoc }) => {
   return (
@@ -19,9 +20,7 @@ const DocumentCard = ({ document }: { document: SimpDoc }) => {
           {document.name}
         </Link>
       </div>
-      <div className="flex rounded-full p-2 hover:bg-muted">
-        <MoreHorizontal className="h-4 w-4" />
-      </div>
+      <DocumentCardContextMenu document={document} />
     </div>
   );
 };
