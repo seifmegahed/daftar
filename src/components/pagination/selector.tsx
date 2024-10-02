@@ -19,6 +19,9 @@ const Selector = ({
   const ceiledPage = Math.ceil(numberOfElements / 2);
   const flooredPage = Math.floor(numberOfElements / 2);
 
+  // None
+  if (totalPages <= 1) return null;
+
   // Full
   if (totalPages <= numberOfElements + 2)
     return (
