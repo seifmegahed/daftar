@@ -1,3 +1,4 @@
+import ProjectCard from "@/app/(auth)/projects/all-projects/project-card";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getClientProjectsAction } from "@/server/actions/projects";
 
@@ -10,7 +11,11 @@ async function ClientProjectsPage({ params }: { params: { id: string } }) {
       title="Client's Projects"
       subtitle="This is a list of the client's projects."
     >
-      <pre>{JSON.stringify(projects, null, 2)}</pre>
+      <div className="flex flex-col gap-4">
+        {projects.map((project) => (
+          <ProjectCard key={project.id} project={project} />
+        ))}
+      </div>
     </InfoPageWrapper>
   );
 }

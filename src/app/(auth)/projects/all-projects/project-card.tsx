@@ -3,10 +3,20 @@
 import { getStatusLabel } from "@/data/lut";
 import Link from "next/link";
 import { format } from "date-fns";
-import { type BriefProjectType } from "@/server/db/tables/project/queries";
 import ProjectCardContextMenu from "./card-menu";
 
-const ProjectCard = ({ project }: { project: BriefProjectType }) => {
+const ProjectCard = ({
+  project,
+}: {
+  project: {
+    id: number;
+    name: string;
+    status: number;
+    clientId: number;
+    clientName: string;
+    createdAt: Date;
+  };
+}) => {
   return (
     <div className="flex items-center gap-5 rounded-xl border p-4">
       <Link href={`/project/${project.id}`}>
