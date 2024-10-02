@@ -1,11 +1,12 @@
 import { Suspense } from "react";
 import Pagination from "@/components/pagination";
 import ProjectsList from "./all-projects/projects-list";
-import SearchBar from "./all-projects/search-bar";
+import SearchBar from "./all-projects/filter-and-search";
 import SkeletonList from "./all-projects/project-list-skeleton";
 import { getProjectsCountAction } from "@/server/actions/projects";
+import { defaultPageLimit } from "@/data/config";
 
-const pageLimit = 10;
+const pageLimit = defaultPageLimit;
 
 export const dynamic = "force-dynamic";
 

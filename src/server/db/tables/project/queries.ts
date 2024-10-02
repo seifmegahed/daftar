@@ -15,6 +15,8 @@ import { z } from "zod";
 import { clientsTable } from "../client/schema";
 import { usersTable } from "../user/schema";
 import { documentRelationsTable } from "../document/schema";
+import { prepareSearchText } from "@/utils/common";
+import { defaultPageLimit } from "@/data/config";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -57,14 +59,6 @@ const briefProjectSchema = z.object({
   ownerName: z.string(),
 });
 
-const prepareSearchText = (searchText: string) => {
-  searchText = searchText.trim().replace(/\s+/g, " ").toLowerCase();
-  if (!searchText) return "";
-  const searchTextArray = searchText.split(" ");
-  searchTextArray[searchTextArray.length - 1] += ":*";
-  return searchTextArray.join(" | ");
-};
-
 const projectSearchQuery = (searchText: string) =>
   sql`
     (
@@ -78,7 +72,7 @@ const projectSearchQuery = (searchText: string) =>
 export const getProjectsBrief = async (
   page: number,
   searchText?: string,
-  limit = 10,
+  limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {
   try {
     const projectsResult = await db

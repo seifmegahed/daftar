@@ -7,7 +7,7 @@ import {
   type BriefClientType,
   type ClientListType,
   type GetClientType,
-  getAllClientsBrief,
+  getClientsBrief,
   getClientFullById,
   getClientsCount,
   insertNewClient,
@@ -17,10 +17,12 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
 import { insertContactSchemaRaw } from "@/server/db/tables/contact/schema";
 
-export const getAllClientsBriefAction = async (): Promise<
-  ReturnTuple<BriefClientType[]>
-> => {
-  const [clients, clientsError] = await getAllClientsBrief();
+export const getClientsBriefAction = async (
+  page: number,
+  query?: string,
+  limit?: number,
+): Promise<ReturnTuple<BriefClientType[]>> => {
+  const [clients, clientsError] = await getClientsBrief(page, query, limit);
   if (clientsError !== null) return [null, clientsError];
   return [clients, null];
 };
@@ -114,9 +116,7 @@ export const listAllClientsAction = async (): Promise<
   return [clients, null];
 };
 
-export const getClientsCountAction = async (): Promise<
-  ReturnTuple<number>
-> => {
+export const getClientsCountAction = async (): Promise<ReturnTuple<number>> => {
   const [clients, clientsError] = await getClientsCount();
   if (clientsError !== null) return [null, clientsError];
   return [clients, null];

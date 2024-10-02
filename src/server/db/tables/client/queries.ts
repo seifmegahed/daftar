@@ -1,33 +1,50 @@
 import { db } from "@/server/db";
 import { type InsertClientDataType, clientsTable } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { asc, count, eq } from "drizzle-orm";
+import { asc, count, eq, sql, desc } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
 import { addressesTable, type InsertAddressType } from "../address/schema";
 import { contactsTable, type InsertContactType } from "../contact/schema";
+import { prepareSearchText } from "@/utils/common";
+import { defaultPageLimit } from "@/data/config";
 
 /**
  * Getters
  */
 
-export type BriefClientType = Pick<
-  InsertClientDataType,
-  "id" | "name" | "registrationNumber"
+const projectSearchQuery = (searchText: string) =>
+  sql`
+      to_tsvector('english', ${clientsTable.name}) ,
+      to_tsquery(${prepareSearchText(searchText)})
+  `;
+
+export type BriefClientType = Required<
+  Pick<InsertClientDataType, "id" | "name" | "registrationNumber" | "createdAt">
 >;
 
-export const getAllClientsBrief = async (): Promise<
-  ReturnTuple<BriefClientType[]>
-> => {
+export const getClientsBrief = async (
+  page: number,
+  searchText?: string,
+  limit = defaultPageLimit,
+): Promise<ReturnTuple<BriefClientType[]>> => {
   try {
     const allClients = await db
       .select({
         id: clientsTable.id,
         name: clientsTable.name,
         registrationNumber: clientsTable.registrationNumber,
+        createdAt: clientsTable.createdAt,
+        rank: searchText
+          ? sql`ts_rank(${projectSearchQuery(searchText ?? "")})`
+          : sql`1`,
       })
       .from(clientsTable)
       .where(eq(clientsTable.isActive, true))
-      .orderBy(asc(clientsTable.id));
+      .orderBy((table) =>
+        searchText ? desc(table.rank) : desc(clientsTable.id),
+      )
+      .limit(limit)
+      .offset((page - 1) * limit);
 
     return [allClients, null];
   } catch (error) {
