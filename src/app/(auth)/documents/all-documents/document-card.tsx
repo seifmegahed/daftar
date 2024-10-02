@@ -6,7 +6,7 @@ import DocumentCardContextMenu from "./card-menu";
 const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
   return (
     <div className="flex items-center gap-5 rounded-xl border p-4">
-      <Link href={`/project/${document.id}`}>
+      <Link href={`/document/${document.id}`}>
         <div className="flex cursor-pointer items-center justify-center">
           <p className="w-10 text-right text-2xl font-bold text-foreground">
             {document.id}
@@ -14,7 +14,7 @@ const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
         </div>
       </Link>
       <div className="flex w-full items-center justify-between">
-        <Link href={`/project/${document.id}`}>
+        <Link href={`/document/${document.id}`}>
           <p className="line-clamp-1 cursor-pointer text-xl text-foreground hover:underline">
             {document.name}
           </p>
