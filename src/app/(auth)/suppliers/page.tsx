@@ -1,10 +1,10 @@
 import { Suspense } from "react";
 import Pagination from "@/components/pagination";
 import SuppliersList from "./all-suppliers/suppliers-list";
-import SkeletonList from "./all-suppliers/suppliers-list-skeleton";
 import { defaultPageLimit } from "@/data/config";
 import { getSuppliersCountAction } from "@/server/actions/suppliers";
 import FilterAndSearch from "./all-suppliers/filter-and-search";
+import SkeletonList from "@/components/skeletons";
 
 
 const pageLimit = defaultPageLimit;
@@ -27,7 +27,7 @@ async function suppliersPage({
     <div className="space-y-6">
       <h3 className="text-lg font-medium">All Suppliers Page</h3>
       <FilterAndSearch />
-      <Suspense key={page + query} fallback={<SkeletonList />}>
+      <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
         <SuppliersList page={page} query={query === "" ? undefined : query} />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
