@@ -1,5 +1,5 @@
 import { getProjectDocumentsAction } from "@/server/actions/documents";
-import DocumentsList from "./documentsList";
+import DocumentsList from "@/components/documents-list";
 
 async function ProjectDocumentsPage({ params }: { params: { id: string } }) {
   const [documents, error] = await getProjectDocumentsAction(Number(params.id));
