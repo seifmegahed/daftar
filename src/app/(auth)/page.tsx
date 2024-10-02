@@ -1,7 +1,12 @@
-export default function HomePage() {
-  return (
-    <div className="flex w-full p-5">
-      <h1 className="text-3xl font-bold">Daftar Dashboard</h1>
-    </div>
-  );
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+
+export default function Page() {
+  const navigate = useRouter();
+  useEffect(() => {
+    navigate.push("/projects");
+  });
+  return <></>;
 }
