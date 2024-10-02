@@ -72,9 +72,9 @@ type UserDataType = {
   name: string;
 };
 
-export interface GetClientType extends InsertClientDataType {
-  contacts: ContactDataType[];
-  addresses: AddressDataType[];
+export interface GetClientType extends Required<InsertClientDataType> {
+  primaryContact: ContactDataType | null;
+  primaryAddress: AddressDataType | null;
   creator: UserDataType;
   updater: UserDataType | null;
 }
@@ -86,21 +86,21 @@ export const getClientFullById = async (
     const client = await db.query.clientsTable.findFirst({
       where: (client, { eq }) => eq(client.id, id),
       with: {
-        contacts: {
-          columns: {
-            id: true,
-            name: true,
-            phoneNumber: true,
-            email: true,
-          },
-        },
-        addresses: {
+        primaryAddress: {
           columns: {
             id: true,
             name: true,
             addressLine: true,
             country: true,
             city: true,
+          },
+        },
+        primaryContact: {
+          columns: {
+            id: true,
+            name: true,
+            phoneNumber: true,
+            email: true,
           },
         },
         creator: {

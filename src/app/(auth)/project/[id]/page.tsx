@@ -5,12 +5,13 @@ import {
   getProjectLinkedDocumentsAction,
 } from "@/server/actions/projects";
 import { type SimpDoc } from "@/server/db/tables/document/queries";
-import { type ProjectClientType } from "@/server/db/tables/project/queries";
 import { numberWithCommas } from "@/utils/common";
 import { format } from "date-fns";
 import Link from "next/link";
 import DocumentCard from "@/components/document-card";
 import { DownloadIcon } from "lucide-react";
+import Section from "@/components/info-section";
+import ClientSection from "@/components/common/client-section";
 
 export const dynamic = "force-dynamic";
 
@@ -27,8 +28,7 @@ async function ProjectPage({ params }: { params: { id: string } }) {
       <p className="text-muted-foreground">
         This is the project page for {project.name}. Here you can view all
         information about the project. You can also view the documents and items
-        linked to this project. <br />
-        You can use this page to enter journal entries for the project.
+        linked to this project.
       </p>
       <Section title="Description">
         <p>{project.description}</p>
@@ -215,88 +215,5 @@ const ProjectItems = ({
   );
 };
 
-const ClientSection = ({ client }: { client: ProjectClientType }) => {
-  const { name, registrationNumber, website, primaryAddress, primaryContact } =
-    client;
-  return (
-    <>
-      <div className="flex justify-between">
-        <p>Name</p>
-        <Link
-          href={`/client/${client.id}`}
-          className="text-blue-400 hover:underline"
-        >
-          {name}
-        </Link>
-      </div>
-      {registrationNumber ? (
-        <div className="flex justify-between">
-          <p>Registration Number</p>
-          <p>{registrationNumber}</p>
-        </div>
-      ) : null}
-      {website ? (
-        <div className="flex justify-between">
-          <p>Website</p>
-          <Link
-            href={"https://" + website}
-            target="_blank"
-            rel="noreferrer"
-            className="text-blue-400 hover:underline"
-          >
-            {website}
-          </Link>
-        </div>
-      ) : null}
-      {primaryAddress ? (
-        <div className="flex justify-between text-right">
-          <p>Address</p>
-          <div>
-            <p>{primaryAddress.addressLine}</p>
-            <p>
-              {primaryAddress.city ? primaryAddress.city + ", " : ""}
-              {primaryAddress.country}
-            </p>
-          </div>
-        </div>
-      ) : null}
-      {primaryContact ? (
-        <div className="flex justify-between text-right">
-          <p>Contact</p>
-          <div>
-            <p>{primaryContact.name}</p>
-            {primaryContact.email ? (
-              <Link
-                className="text-blue-400 hover:underline"
-                href={"mailto:" + primaryContact.email}
-              >
-                {primaryContact.email}
-              </Link>
-            ) : null}
-            {primaryContact.phoneNumber ? (
-              <p>{primaryContact.phoneNumber}</p>
-            ) : null}
-          </div>
-        </div>
-      ) : null}
-    </>
-  );
-};
-
-const Section = ({
-  title,
-  children,
-}: {
-  title: string;
-  children: React.ReactNode;
-}) => (
-  <>
-    <h2 className="text-xl font-bold tracking-tight">{title}</h2>
-    <Separator />
-    <div className="flex flex-col gap-y-2 text-muted-foreground">
-      {children}
-    </div>
-  </>
-);
 
 export default ProjectPage;

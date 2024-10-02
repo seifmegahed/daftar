@@ -11,7 +11,7 @@ interface SettingsLayoutProps {
   params: { id: string };
 }
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export default async function SettingsLayout({
   children,
@@ -42,6 +42,10 @@ export default async function SettingsLayout({
       title: "Contacts",
       href: basePath(id) + "/contacts",
       amount: clientContactsCount ?? 0,
+    },
+    {
+      title: "Projects",
+      href: basePath(id) + "/projects",
     },
     {
       title: "New Address",
