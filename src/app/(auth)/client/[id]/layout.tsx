@@ -31,6 +31,11 @@ export default async function SettingsLayout({
       href: basePath(id),
     },
     {
+      title: "Projects",
+      href: basePath(id) + "/projects",
+      amount: clientProjectsCount ?? 0,
+    },
+    {
       title: "Documents",
       href: basePath(id) + "/documents",
       amount: clientDocumentsCount ?? 0,
@@ -44,11 +49,6 @@ export default async function SettingsLayout({
       title: "Contacts",
       href: basePath(id) + "/contacts",
       amount: clientContactsCount ?? 0,
-    },
-    {
-      title: "Projects",
-      href: basePath(id) + "/projects",
-      amount: clientProjectsCount ?? 0,
     },
     {
       title: "New Address",

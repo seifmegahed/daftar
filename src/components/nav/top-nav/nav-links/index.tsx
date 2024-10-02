@@ -5,14 +5,14 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useState } from "react";
 
 const routes = [
-  { name: "Projects", href: "/projects" },
-  { name: "Clients", href: "/clients" },
-  { name: "Suppliers", href: "/suppliers" },
-  { name: "Documents", href: "/documents" },
-  { name: "Items", href: "/items" },
+  { name: "Projects", href: "/projects", alt: "/project" },
+  { name: "Clients", href: "/clients", alt: "/client" },
+  { name: "Suppliers", href: "/suppliers", alt: "/supplier" },
+  { name: "Documents", href: "/documents", alt: "/document" },
+  { name: "Items", href: "/items", alt: "/item" },
 ];
 
-const protectedRoutes = [{ name: "Admin", href: "/admin" }];
+const protectedRoutes = [{ name: "Admin", href: "/admin", alt: "/admin" }];
 
 function NavLinks({ admin }: { admin: boolean }) {
   const data = useMemo(
@@ -22,7 +22,9 @@ function NavLinks({ admin }: { admin: boolean }) {
   const pathname = "/" + usePathname().split("/")[1];
   const [activeLinkIndex, setActiveLinkIndex] = useState(-1);
   useEffect(() => {
-    setActiveLinkIndex(() => data.findIndex((link) => link.href === pathname));
+    setActiveLinkIndex(() =>
+      data.findIndex((link) => link.href === pathname || link.alt === pathname),
+    );
   }, [pathname, data]);
   return (
     <>
