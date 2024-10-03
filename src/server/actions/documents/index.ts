@@ -89,6 +89,14 @@ export const getItemDocumentsAction = async (
   return [documents, null];
 };
 
+export const getItemDocumentsCountAction = async (
+  itemId: number,
+): Promise<ReturnTuple<number>> => {
+  const [documents, countError] = await getItemDocuments(itemId);
+  if (countError !== null) return [null, countError];
+  return [documents.length, null];
+};
+
 export const getProjectDocumentsAction = async (
   projectId: number,
 ): Promise<ReturnTuple<SimpDoc[]>> => {

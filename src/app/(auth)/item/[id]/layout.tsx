@@ -1,33 +1,40 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
+import { getItemDocumentsCountAction } from "@/server/actions/documents";
 
-const basePath = (id: string) => "/item/" + id;
+export const dynamic = "force-dynamic";
 
-const sidebarNavItemsGenerator = (id: string) => [
-  {
-    title: "Item",
-    href: basePath(id),
-  },
-  {
-    title: "Documents",
-    href: basePath(id) + "/documents",
-  },
-  {
-    title: "New Document",
-    href: basePath(id) + "/new-document",
-  },
-];
+const basePath = (id: number) => "/item/" + id;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
   params: { id: string };
 }
 
-export default function SettingsLayout({
+export default async function SettingsLayout({
   children,
   params,
 }: SettingsLayoutProps) {
-  const sidebarNavItems = sidebarNavItemsGenerator(params.id);
+  const itemId = Number(params.id);
+
+  const [documentsCount] = await getItemDocumentsCountAction(itemId);
+
+  const sidebarNavItemsGenerator = (id: number) => [
+    {
+      title: "Item",
+      href: basePath(id),
+    },
+    {
+      title: "Documents",
+      href: basePath(id) + "/documents",
+      amount: documentsCount ?? 0,
+    },
+    {
+      title: "New Document",
+      href: basePath(id) + "/new-document",
+    },
+  ];
+  const sidebarNavItems = sidebarNavItemsGenerator(itemId);
 
   return (
     // this should be in root layout, but we're doing it here for testing purposes
