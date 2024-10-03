@@ -9,6 +9,8 @@ import { asc, count, sql, desc, eq } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
 import { prepareSearchText } from "@/utils/common";
+import { addressesTable, type InsertAddressType } from "../address/schema";
+import { contactsTable, type InsertContactType } from "../contact/schema";
 
 /**
  * Getters
@@ -134,20 +136,64 @@ export const getSupplierFullById = async (
 };
 
 export const insertNewSupplier = async (
-  data: InsertSupplierType,
+  supplierData: InsertSupplierType,
+  addressData: InsertAddressType,
+  contactData: InsertContactType,
 ): Promise<ReturnTuple<number>> => {
   try {
-    const [supplier] = await db
-      .insert(suppliersTable)
-      .values(data)
-      .returning({ id: suppliersTable.id });
+    const supplier = await db.transaction(async (tx) => {
+      const [supplier] = await tx
+        .insert(suppliersTable)
+        .values(supplierData)
+        .returning({ id: suppliersTable.id });
 
+      if (!supplier) {
+        tx.rollback();
+        return;
+      }
+
+      const [address] = await tx
+        .insert(addressesTable)
+        .values({ ...addressData, supplierId: supplier.id })
+        .returning({ id: addressesTable.id });
+
+      if (!address) {
+        tx.rollback();
+        return;
+      }
+
+      const [contact] = await tx
+        .insert(contactsTable)
+        .values({ ...contactData, supplierId: supplier.id })
+        .returning({ id: contactsTable.id });
+
+      if (!contact) {
+        tx.rollback();
+        return;
+      }
+
+      const [updatedSupplier] = await tx
+        .update(suppliersTable)
+        .set({
+          primaryAddressId: address.id,
+          primaryContactId: contact.id,
+        })
+        .where(eq(suppliersTable.id, supplier.id))
+        .returning({ id: suppliersTable.id });
+
+      if (!updatedSupplier) {
+        tx.rollback();
+        return;
+      }
+
+      return updatedSupplier;
+    });
     if (!supplier) throw new Error("Error inserting new supplier");
     return [supplier.id, null];
   } catch (error) {
     const errorMessage = getErrorMessage(error);
     if (errorMessage.includes("unique"))
-      return [null, `Supplier with name ${data.name} already exists`];
+      return [null, `Supplier with name ${supplierData.name} already exists`];
     return [null, getErrorMessage(error)];
   }
 };

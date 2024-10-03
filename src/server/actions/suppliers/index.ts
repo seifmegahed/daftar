@@ -15,6 +15,8 @@ import {
   updateSupplier,
 } from "@/server/db/tables/supplier/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { insertContactSchemaRaw } from "@/server/db/tables/contact/schema";
+import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
 
 export const updateSupplierPrimaryAddressAction = async (
   supplierId: number,
@@ -47,23 +49,66 @@ const addSupplierSchema = insertSupplierSchema.omit({
 
 export type AddSupplierFormType = z.infer<typeof addSupplierSchema>;
 
+const addClientAddressSchema = insertAddressSchemaRaw.omit({
+  clientId: true,
+  supplierId: true,
+  createdBy: true,
+  createdAt: true,
+});
+
+type AddSupplierAddressType = z.infer<typeof addClientAddressSchema>;
+
+const addClientContactSchema = insertContactSchemaRaw.omit({
+  clientId: true,
+  supplierId: true,
+  createdBy: true,
+  createdAt: true,
+});
+
+type AddSupplierContactType = z.infer<typeof addClientContactSchema>;
+
 export const addSupplierAction = async (
-  data: AddSupplierFormType,
+  clientData: AddSupplierFormType,
+  addressData: AddSupplierAddressType,
+  contactData: AddSupplierContactType,
 ): Promise<ReturnTuple<number>> => {
-  const isValid = addSupplierSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
+  const isSupplierValid = addSupplierSchema.safeParse(clientData);
+  if (!isSupplierValid.success) return [null, "Invalid data"];
+
+  const isAddressValid = addClientAddressSchema.safeParse(addressData);
+  if (!isAddressValid.success) return [null, "Invalid data"];
+
+  const isContactValid = addClientContactSchema.safeParse(contactData);
+  if (!isContactValid.success) return [null, "Invalid data"];
 
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];
 
-  const [supplierId, supplierInsertError] = await insertNewSupplier({
-    name: isValid.data.name,
-    field: isValid.data.field,
-    registrationNumber: isValid.data.registrationNumber,
-    website: isValid.data.website,
-    notes: isValid.data.notes,
-    createdBy: userId,
-  });
+  const [supplierId, supplierInsertError] = await insertNewSupplier(
+    {
+      name: clientData.name,
+      field: clientData.field,
+      registrationNumber: clientData.registrationNumber,
+      website: clientData.website,
+      notes: clientData.notes,
+      createdBy: userId,
+    },
+    {
+      name: addressData.name,
+      addressLine: addressData.addressLine,
+      country: addressData.country,
+      city: addressData.city,
+      notes: addressData.notes,
+      createdBy: userId,
+    },
+    {
+      name: contactData.name,
+      phoneNumber: contactData.phoneNumber,
+      email: contactData.email,
+      notes: contactData.notes,
+      createdBy: userId,
+    },
+  );
   if (supplierInsertError !== null) return [null, supplierInsertError];
 
   return [supplierId, null];
