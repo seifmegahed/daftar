@@ -201,31 +201,6 @@ table DocumentsRelations (
 This allows for a more flexible design that can accommodate new relationships without requiring schema changes, but lacks foreign key referential integrity, and it requires complex queries to retrieve related data. 
 So I decided to go with the strict referential integrity design.
 
-
-## TODO
-
-- [x] Add a database
-- [x] Define User table
-- [x] Implement Auth middleware with JWT
-- [x] Implement Login functionality
-- [x] Implement Change Password functionality
-- [x] Implement Nodejs SuperAdmin add user functionality
-- [x] Implement Logout functionality
-- [x] Role protected Admin page
-- [x] Error Boundary Page
-- [x] Setup app layout
-- [x] Implement Admin add user functionality
-- [x] Implement Go's tuple return concept to properly handle and parse errors
-- [x] Add Last Active, Created, Updated, and Deactivated columns to the User table
-- [x] Implement Admin change user password functionality
-- [x] Implement Admin edit user role functionality
-- [x] Implement Admin deactivate user functionality
-- [x] Implement Admin edit user name functionality
-- [x] Implement User settings page
-- [x] Implement User change name form
-- [x] Implement User change password form
-- [x] Implement Password validation for user to change password
-
 ## Environment Variables
 You can find an example of the environment variables in the `.env-e` file.
 Copy the `.env-e` file to `.env` and fill in the values.

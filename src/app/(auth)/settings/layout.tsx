@@ -14,10 +14,10 @@ const sidebarNavItems = [
     title: "Appearance",
     href: "/settings/appearance",
   },
-  {
-    title: "Display",
-    href: "/settings/display",
-  },
+  // {
+  //   title: "Display",
+  //   href: "/settings/display",
+  // },
 ]
 
 interface SettingsLayoutProps {
