@@ -123,7 +123,10 @@ function DocumentForm({ relationData }: { relationData?: RelationDataType }) {
   };
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)}>
+    <form
+      onSubmit={form.handleSubmit(onSubmit)}
+      className="flex flex-col gap-4"
+    >
       <Form {...form}>
         <h2 className="text-2xl font-bold">Document Form</h2>
         <Separator />

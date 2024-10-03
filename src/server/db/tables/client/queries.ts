@@ -7,6 +7,7 @@ import { addressesTable, type InsertAddressType } from "../address/schema";
 import { contactsTable, type InsertContactType } from "../contact/schema";
 import { prepareSearchText } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
+import { documentRelationsTable } from "../document/schema";
 
 /**
  * Getters
@@ -282,6 +283,37 @@ export const updateClient = async (
       .returning({ id: clientsTable.id });
 
     if (!client) return [null, "Error updating client"];
+    return [client.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const deleteClient = async (
+  id: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const client = await db.transaction(async (tx) => {
+      await tx
+        .delete(addressesTable)
+
+        .where(eq(addressesTable.clientId, id));
+
+      await tx.delete(contactsTable).where(eq(contactsTable.clientId, id));
+
+      await tx
+        .delete(documentRelationsTable)
+        .where(eq(documentRelationsTable.clientId, id));
+
+      const [client] = await tx
+        .delete(clientsTable)
+        .where(eq(clientsTable.id, id))
+        .returning({ id: clientsTable.id });
+
+      return client;
+    });
+
+    if (!client) throw new Error("Error deleting client");
     return [client.id, null];
   } catch (error) {
     return [null, getErrorMessage(error)];

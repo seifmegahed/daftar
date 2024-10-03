@@ -222,7 +222,6 @@ export const sensitiveGetUserByUsername = async (
         and(eq(usersTable.username, username), eq(usersTable.active, true)),
       );
 
-    console.log(user);
     if (!user) return [null, userErrors.userNotFound];
 
     return [user, null];

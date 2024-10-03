@@ -16,7 +16,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { notesMaxLength } from "@/data/config";
 import { emptyToUndefined } from "@/utils/common";
 import { toast } from "sonner";
-import { updateProjectNotesAction } from "@/server/actions/projects";
+import { updateClientNotesAction } from "@/server/actions/clients";
 
 const schema = z.object({
   notes: z.preprocess(
@@ -32,7 +32,7 @@ const schema = z.object({
 
 type FormDataType = z.infer<typeof schema>;
 
-function NotesForm({ projectId, notes }: { projectId: number; notes: string }) {
+function NotesForm({ clientId, notes }: { clientId: number; notes: string }) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { notes },
@@ -40,7 +40,7 @@ function NotesForm({ projectId, notes }: { projectId: number; notes: string }) {
 
   const onSubmit = async (data: FormDataType) => {
     try {
-      const [, error] = await updateProjectNotesAction(projectId, {
+      const [, error] = await updateClientNotesAction(clientId, {
         notes: data.notes,
       });
       if (error !== null) {
@@ -78,7 +78,7 @@ function NotesForm({ projectId, notes }: { projectId: number; notes: string }) {
               />
               <FormMessage />
               <FormDescription>
-                Update project notes, this will change the notes of the project
+                Update client notes, this will change the notes of the project
                 across all references and the previous notes will be lost. After
                 typing the updated description press the update button to
                 persist the change.

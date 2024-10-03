@@ -10,6 +10,7 @@ import OwnerForm from "./owner-form";
 import DatesForm from "./dates-form";
 import NotesForm from "./notes-form";
 import DeleteProjectForm from "./delete-project";
+import InfoPageWrapper from "@/components/info-page-wrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -26,14 +27,10 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
     false;
 
   return (
-    <div className="flex flex-col gap-10">
-      <h1 className="text-2xl font-bold">Edit Project</h1>
-      <p className="text-muted-foreground">
-        In this page you can edit the project {project.name}. Here you can
-        change the name, description, status, and more. Updating any field will
-        update the project in all references. and will{" "}
-        <strong>register you as the last updater.</strong>
-      </p>
+    <InfoPageWrapper
+      title="Edit Project"
+      subtitle={`This is the edit page for the project: ${project.name}. Here you can edit the project details.`}
+    >
       <StatusForm projectId={project.id} status={project.status} />
       <NameForm
         projectId={project.id}
@@ -65,7 +62,7 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
         access={hasFullAccess}
         ownerId={project.ownerId}
       />
-    </div>
+    </InfoPageWrapper>
   );
 }
 
