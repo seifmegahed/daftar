@@ -115,8 +115,8 @@ type UserDataType = {
 };
 
 export interface GetSupplierType extends SelectSupplierType {
-  contacts: ContactDataType[];
-  addresses: AddressDataType[];
+  primaryAddress: AddressDataType | null;
+  primaryContact: ContactDataType | null;
   creator: UserDataType | null;
   updater: UserDataType | null;
 }
@@ -128,7 +128,7 @@ export const getSupplierFullById = async (
     const supplier = await db.query.suppliersTable.findFirst({
       where: (supplier, { eq }) => eq(supplier.id, id),
       with: {
-        contacts: {
+        primaryContact: {
           columns: {
             id: true,
             name: true,
@@ -136,7 +136,7 @@ export const getSupplierFullById = async (
             email: true,
           },
         },
-        addresses: {
+        primaryAddress: {
           columns: {
             id: true,
             name: true,

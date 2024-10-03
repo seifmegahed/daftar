@@ -63,6 +63,14 @@ export const supplierRelations = relations(suppliersTable, ({ many, one }) => ({
     fields: [suppliersTable.updatedBy],
     references: [usersTable.id],
   }),
+  primaryAddress: one(addressesTable, {
+    fields: [suppliersTable.primaryAddressId],
+    references: [addressesTable.id],
+  }),
+  primaryContact: one(contactsTable, {
+    fields: [suppliersTable.primaryContactId],
+    references: [contactsTable.id],
+  }),
 }));
 
 export const insertSupplierSchema = createInsertSchema(suppliersTable);
