@@ -7,7 +7,7 @@ import { type SimpDoc } from "@/server/db/tables/document/queries";
 import { numberWithCommas } from "@/utils/common";
 import { format } from "date-fns";
 import Link from "next/link";
-import DocumentCard from "@/components/document-card";
+import DocumentCard from "@/components/common-cards/document";
 import { DownloadIcon } from "lucide-react";
 import Section from "@/components/info-section";
 import ClientSection from "@/components/common-sections/client-section";
