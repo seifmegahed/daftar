@@ -8,8 +8,8 @@ const routes = [
   { name: "Projects", href: "/projects", alt: "/project" },
   { name: "Clients", href: "/clients", alt: "/client" },
   { name: "Suppliers", href: "/suppliers", alt: "/supplier" },
-  { name: "Documents", href: "/documents", alt: "/document" },
   { name: "Items", href: "/items", alt: "/item" },
+  { name: "Documents", href: "/documents", alt: "/document" },
 ];
 
 const protectedRoutes = [{ name: "Admin", href: "/admin", alt: "/admin" }];

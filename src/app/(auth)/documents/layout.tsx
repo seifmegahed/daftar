@@ -13,12 +13,12 @@ export default async function SettingsLayout({ children }: SettingsLayoutProps) 
 
   const sidebarNavItems = [
     {
-      title: "All Items",
+      title: "All Documents",
       href: "/documents",
       amount: numberOfDocuments ?? 0
     },
     {
-      title: "New Item",
+      title: "New Document",
       href: "/documents/new-document",
     },
   ]
