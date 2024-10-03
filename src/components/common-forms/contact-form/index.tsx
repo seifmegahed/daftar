@@ -15,6 +15,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import Separator from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import SubmitButton from "@/components/buttons/submit-button";
@@ -36,11 +37,9 @@ const formSchema = z.object({
       .max(64, { message: "Email must not be longer than 64 characters" })
       .optional(),
   ),
-  notes: z
-    .string()
-    .max(notesMaxLength, {
-      message: `Notes must not be longer than ${notesMaxLength} characters`,
-    }),
+  notes: z.string().max(notesMaxLength, {
+    message: `Notes must not be longer than ${notesMaxLength} characters`,
+  }),
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -86,8 +85,9 @@ function NewContactForm({
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      <h1 className="text-2xl font-bold">Contact Form</h1>
       <Form {...form}>
+        <h2 className="text-2xl font-bold">Contact Form</h2>
+        <Separator />
         <FormField
           name="name"
           render={({ field }) => (

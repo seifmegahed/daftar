@@ -10,6 +10,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { notesMaxLength } from "@/data/config";
 
@@ -124,7 +125,8 @@ function DocumentForm({ relationData }: { relationData?: RelationDataType }) {
   return (
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <Form {...form}>
-        <h1>Document Form</h1>
+        <h2 className="text-2xl font-bold">Document Form</h2>
+        <Separator />
         <FormField
           name="name"
           render={({ field }) => (

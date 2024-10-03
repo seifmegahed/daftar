@@ -151,6 +151,8 @@ function NewSupplierForm() {
       autoComplete="off"
     >
       <Form {...form}>
+        <h2 className="text-2xl font-bold">Supplier Form</h2>
+        <Separator />
         <FormField
           control={form.control}
           name="name"

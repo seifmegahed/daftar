@@ -22,6 +22,7 @@ import SubmitButton from "@/components/buttons/submit-button";
 
 import { countries } from "@/lib/countries";
 import { notesMaxLength } from "@/data/config";
+import { Separator } from "@/components/ui/separator";
 
 const formSchema = z.object({
   name: z
@@ -82,8 +83,9 @@ function NewAddressForm({
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      <h1 className="text-2xl font-bold">Address Form</h1>
       <Form {...form}>
+        <h2 className="text-2xl font-bold">Address Form</h2>
+        <Separator />
         <FormField
           name="name"
           render={({ field }) => (

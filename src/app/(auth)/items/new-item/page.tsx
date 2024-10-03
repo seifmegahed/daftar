@@ -22,6 +22,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { getErrorMessage } from "@/lib/exceptions";
 import { notesMaxLength } from "@/data/config";
+import { Separator } from "@/components/ui/separator";
 
 const schema = z.object({
   name: z
@@ -31,22 +32,18 @@ const schema = z.object({
   type: z
     .string()
     .max(64, { message: "Type must not be longer than 64 characters" }),
-  description: z
-    .string()
-    .max(notesMaxLength, {
-      message: `Description must not be longer than ${notesMaxLength} characters`,
-    }),
+  description: z.string().max(notesMaxLength, {
+    message: `Description must not be longer than ${notesMaxLength} characters`,
+  }),
   mpn: z
     .string()
     .max(64, { message: "MPN must not be longer than 64 characters" }),
   make: z
     .string()
     .max(64, { message: "Make must not be longer than 64 characters" }),
-  notes: z
-    .string()
-    .max(notesMaxLength, {
-      message: `Notes must not be longer than ${notesMaxLength} characters`,
-    }),
+  notes: z.string().max(notesMaxLength, {
+    message: `Notes must not be longer than ${notesMaxLength} characters`,
+  }),
 });
 
 type ItemFormSchemaType = z.infer<typeof schema>;
@@ -85,6 +82,8 @@ function NewItemForm() {
       autoComplete="off"
     >
       <Form {...form}>
+        <h2 className="text-2xl font-bold">Item Form</h2>
+        <Separator />
         <FormField
           control={form.control}
           name="name"

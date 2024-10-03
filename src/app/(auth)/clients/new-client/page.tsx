@@ -138,7 +138,7 @@ function NewClientPage() {
       autoComplete="off"
     >
       <Form {...form}>
-        <h2 className="text-xl font-bold">Client Details</h2>
+        <h2 className="text-2xl font-bold">Client Form</h2>
         <Separator />
         <FormField
           control={form.control}

@@ -32,6 +32,7 @@ import ComboSelect from "@/components/combo-select-obj";
 import { addProjectAction } from "@/server/actions/projects";
 import { statusCodes } from "@/data/lut";
 import { notesMaxLength } from "@/data/config";
+import { Separator } from "@/components/ui/separator";
 
 const schema = z.object({
   name: z
@@ -92,6 +93,8 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
       autoComplete="off"
     >
       <Form {...form}>
+        <h2 className="text-2xl font-bold">Project Form</h2>
+        <Separator />
         <FormField
           control={form.control}
           name="name"
