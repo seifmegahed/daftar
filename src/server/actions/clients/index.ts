@@ -12,10 +12,40 @@ import {
   getClientsCount,
   insertNewClient,
   listAllClients,
+  getClientPrimaryAddressId,
+  getClientPrimaryContactId,
+  updateClient,
 } from "@/server/db/tables/client/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
 import { insertContactSchemaRaw } from "@/server/db/tables/contact/schema";
+
+export const getClientPrimaryAddressIdAction = async (
+  clientId: number,
+): Promise<ReturnTuple<number>> => {
+  const [addressId, addressError] = await getClientPrimaryAddressId(clientId);
+  if (addressError !== null) return [null, addressError];
+  return [addressId, null];
+};
+
+export const updateClientPrimaryAddressAction = async (
+  clientId: number,
+  addressId: number,
+): Promise<ReturnTuple<number>> => {
+  const [returnValue, addressError] = await updateClient(clientId, {
+    primaryAddressId: addressId,
+  });
+  if (addressError !== null) return [null, addressError];
+  return [returnValue, null];
+};
+
+export const getClientPrimaryContactIdAction = async (
+  clientId: number,
+): Promise<ReturnTuple<number>> => {
+  const [contactId, contactError] = await getClientPrimaryContactId(clientId);
+  if (contactError !== null) return [null, contactError];
+  return [contactId, null];
+};
 
 export const getClientsBriefAction = async (
   page: number,

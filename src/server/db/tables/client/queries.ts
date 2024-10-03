@@ -12,6 +12,41 @@ import { defaultPageLimit } from "@/data/config";
  * Getters
  */
 
+export const getClientPrimaryAddressId = async (
+  clientId: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [address] = await db
+      .select({ primaryAddressId: clientsTable.primaryAddressId })
+      .from(clientsTable)
+      .where(eq(clientsTable.id, clientId))
+      .limit(1);
+
+    if (!address?.primaryAddressId)
+      return [null, "Error getting client primary address"];
+    return [address.primaryAddressId, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const getClientPrimaryContactId = async (
+  clientId: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [contact] = await db
+      .select({ id: clientsTable.primaryContactId })
+      .from(clientsTable)
+      .where(eq(clientsTable.id, clientId))
+      .limit(1);
+
+    if (!contact?.id) return [null, "Error getting client primary contact"];
+    return [contact.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
 const projectSearchQuery = (searchText: string) =>
   sql`
       to_tsvector('english', ${clientsTable.name}) ,
@@ -232,5 +267,23 @@ export const getClientsCount = async (): Promise<ReturnTuple<number>> => {
   } catch (error) {
     console.log(error);
     return [null, "Error getting clients count"];
+  }
+};
+
+export const updateClient = async (
+  id: number,
+  data: Partial<InsertClientDataType>,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [client] = await db
+      .update(clientsTable)
+      .set(data)
+      .where(eq(clientsTable.id, id))
+      .returning({ id: clientsTable.id });
+
+    if (!client) return [null, "Error updating client"];
+    return [client.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
   }
 };

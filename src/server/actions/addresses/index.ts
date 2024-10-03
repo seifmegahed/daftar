@@ -1,12 +1,17 @@
 "use server";
 
 import {
+  deleteAddress,
+  getClientAddresses,
   getClientAddressesCount,
+  getSupplierAddresses,
+  getSupplierAddressesCount,
   insertNewAddress,
 } from "@/server/db/tables/address/queries";
 import {
   insertAddressSchemaRaw,
   insertAddressSchemaRefineCallback,
+  type SelectAddressType,
 } from "@/server/db/tables/address/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "../users";
@@ -51,4 +56,36 @@ export const getClientAddressesCountAction = async (
   const [addressesCount, error] = await getClientAddressesCount(clientId);
   if (error !== null) return [null, error];
   return [addressesCount, null];
+};
+
+export const getClientAddressesAction = async (
+  clientId: number,
+): Promise<ReturnTuple<SelectAddressType[]>> => {
+  const [addresses, error] = await getClientAddresses(clientId);
+  if (error !== null) return [null, error];
+  return [addresses, null];
+};
+
+export const getSupplierAddressesCountAction = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  const [addressesCount, error] = await getSupplierAddressesCount(supplierId);
+  if (error !== null) return [null, error];
+  return [addressesCount, null];
+};
+
+export const getSupplierAddressesAction = async (
+  supplierId: number,
+): Promise<ReturnTuple<SelectAddressType[]>> => {
+  const [addresses, error] = await getSupplierAddresses(supplierId);
+  if (error !== null) return [null, error];
+  return [addresses, null];
+};
+
+export const deleteAddressAction = async (
+  addressId: number,
+): Promise<ReturnTuple<number>> => {
+  const [returnValue, error] = await deleteAddress(addressId);
+  if (error !== null) return [null, error];
+  return [returnValue, null];
 };
