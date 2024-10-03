@@ -43,6 +43,8 @@ const AddressActionButtons = ({
   };
 
   const handleDelete = async () => {
+    const result = confirm("Are you sure you want to delete this address?");
+    if (!result) return;
     try {
       setDeleteLoading(true);
       const [, error] = await deleteAddressAction(addressId);
@@ -86,8 +88,8 @@ const AddressActionButtons = ({
         </Button>
       )}
       <Button
-        variant="destructive"
-        className="h-[32px] w-32 rounded-full px-3 py-1 text-xs font-normal"
+        variant="outline"
+        className="h-[32px] w-32 rounded-full px-3 py-1 text-xs font-normal text-destructive"
         disabled={isPrimary || deleteLoading}
         onClick={handleDelete}
       >
