@@ -17,6 +17,7 @@ import { usersTable } from "../user/schema";
 import { documentRelationsTable } from "../document/schema";
 import { prepareSearchText } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
+import { getErrorMessage } from "@/lib/exceptions";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -573,5 +574,22 @@ export const deleteProjectItem = async (
   } catch (error) {
     console.log(error);
     return [null, "Error deleting project item"];
+  }
+};
+
+export const getSupplierItemsCount = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [items] = await db
+      .select({ count: count() })
+      .from(projectItemsTable)
+      .where(eq(projectItemsTable.supplierId, supplierId))
+      .limit(1);
+
+    if (!items) return [null, "Error getting items count"];
+    return [items.count, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
   }
 };

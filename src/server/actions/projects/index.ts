@@ -19,6 +19,7 @@ import {
   type BriefProjectType,
   type GetProjectItemType,
   type GetProjectLinkedDocumentsType,
+  getSupplierItemsCount,
 } from "@/server/db/tables/project/queries";
 import {
   insertProjectItemSchema,
@@ -337,4 +338,12 @@ export const deleteProjectItemAction = async (
   const [returnValue, error] = await deleteProjectItem(projectItemId);
   if (error !== null) return [null, error];
   return [returnValue, null];
+};
+
+export const getSupplierItemsCountAction = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  const [itemsCount, error] = await getSupplierItemsCount(supplierId);
+  if (error !== null) return [null, error];
+  return [itemsCount, null];
 };

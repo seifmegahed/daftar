@@ -1,53 +1,73 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
+import { getSupplierDocumentsCountAction } from "@/server/actions/documents";
+import { getSupplierItemsCountAction } from "@/server/actions/projects";
+import { getSupplierAddressesCountAction } from "@/server/actions/addresses";
+import { getSupplierContactsCountAction } from "@/server/actions/contacts";
 
-const basePath = (id: string) => "/supplier/" + id;
+export const dynamic = "force-dynamic";
 
-const sidebarNavItemsGenerator = (id: string) => [
-  {
-    title: "Supplier",
-    href: basePath(id),
-  },
-  {
-    title: "Items",
-    href: basePath(id) + "/items",
-  },
-  {
-    title: "Documents",
-    href: basePath(id) + "/documents",
-  },
-  {
-    title: "Addresses",
-    href: basePath(id) + "/addresses",
-  },
-  {
-    title: "Contacts",
-    href: basePath(id) + "/contacts",
-  },
-  {
-    title: "New Address",
-    href: basePath(id) + "/new-address",
-  },
-  {
-    title: "New Contact",
-    href: basePath(id) + "/new-contact",
-  },
-  {
-    title: "New Document",
-    href: basePath(id) + "/new-document",
-  },
-];
+const basePath = (id: number) => "/supplier/" + id;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
   params: { id: string };
 }
 
-export default function SettingsLayout({
+export default async function SettingsLayout({
   children,
   params,
 }: SettingsLayoutProps) {
-  const sidebarNavItems = sidebarNavItemsGenerator(params.id);
+  const supplierId = Number(params.id);
+  if (isNaN(supplierId)) return <p>Error: Supplier ID is not a number</p>;
+
+  const [itemsCount] = await getSupplierItemsCountAction(supplierId);
+
+  const [documentsCount] = await getSupplierDocumentsCountAction(supplierId);
+
+  const [addressesCount] = await getSupplierAddressesCountAction(supplierId);
+
+  const [contactsCount] = await getSupplierContactsCountAction(supplierId);
+
+  const sidebarNavItemsGenerator = (id: number) => [
+    {
+      title: "Supplier",
+      href: basePath(id),
+    },
+    {
+      title: "Items",
+      href: basePath(id) + "/items",
+      amount: itemsCount ?? 0,
+    },
+    {
+      title: "Documents",
+      href: basePath(id) + "/documents",
+      amount: documentsCount ?? 0,
+    },
+    {
+      title: "Addresses",
+      href: basePath(id) + "/addresses",
+      amount: addressesCount ?? 0,
+    },
+    {
+      title: "Contacts",
+      href: basePath(id) + "/contacts",
+      amount: contactsCount ?? 0,
+    },
+    {
+      title: "New Address",
+      href: basePath(id) + "/new-address",
+    },
+    {
+      title: "New Contact",
+      href: basePath(id) + "/new-contact",
+    },
+    {
+      title: "New Document",
+      href: basePath(id) + "/new-document",
+    },
+  ];
+  const sidebarNavItems = sidebarNavItemsGenerator(supplierId);
 
   return (
     // this should be in root layout, but we're doing it here for testing purposes
