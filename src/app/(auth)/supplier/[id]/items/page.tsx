@@ -1,5 +1,8 @@
 import { getSupplierItemsAction } from "@/server/actions/projects";
+import { type SupplierItemType } from "@/server/db/tables/project/queries";
 import InfoPageWrapper from "@/components/info-page-wrapper";
+import { numberWithCommas } from "@/utils/common";
+import Link from "next/link";
 
 async function SuppliersItemsPage({ params }: { params: { id: string } }) {
   const supplierId = Number(params.id);
@@ -14,19 +17,54 @@ async function SuppliersItemsPage({ params }: { params: { id: string } }) {
       title="Supplier's Items"
       subtitle="This is a list of the supplier's items."
     >
-      {/* <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         {items.map((item) => (
-          <SupplierItemCard
-            key={item.itemId}
-            item={item}
-            projectId={item.projectId}
-            projectName={item.projectName}
-          />
+          <SupplierItemCard key={item.itemId} item={item} />
         ))}
-      </div> */}
-      <pre>{JSON.stringify(items, null, 2)}</pre>
+      </div>
     </InfoPageWrapper>
   );
 }
+
+const SupplierItemCard = ({ item }: { item: SupplierItemType }) => {
+  return (
+    <div className="flex items-center gap-5 rounded-xl border p-4">
+      <Link href={`/item/${item.itemId}`}>
+        <div className="flex cursor-pointer items-center justify-center">
+          <p className="w-10 text-right text-2xl font-bold text-foreground">
+            {item.itemId}
+          </p>
+        </div>
+      </Link>
+      <div className="flex w-full items-center justify-between">
+        <div>
+          <Link href={`/item/${item.itemId}`}>
+            <p className="cursor-pointer text-foreground hover:underline">
+              {item.itemName}
+            </p>
+          </Link>
+          <p className="cursor-pointer text-xs text-muted-foreground">
+            {item.itemMake}
+          </p>
+        </div>
+        <div className="w-72 text-right">
+          <Link href={`/project/${item.projectId}`}>
+            <p className="line-clamp-1 text-foreground hover:underline">
+              {item.projectName}
+            </p>
+          </Link>
+          <div className="flex justify-end gap-4">
+            <p className="text-xs text-muted-foreground">
+              {"Quantity: " + item.quantity}
+            </p>
+            <p className="text-xs text-muted-foreground min-w-24">
+              {"Price: " + numberWithCommas(Number(item.price))}
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 export default SuppliersItemsPage;

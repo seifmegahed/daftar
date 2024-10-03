@@ -605,11 +605,11 @@ const SupplierItemsSchema = z.object({
   createdAt: z.date(),
 });
 
-export type SupplierItemsType = z.infer<typeof SupplierItemsSchema>;
+export type SupplierItemType = z.infer<typeof SupplierItemsSchema>;
 
 export const getSupplierItems = async (
   supplierId: number,
-): Promise<ReturnTuple<SupplierItemsType[]>> => {
+): Promise<ReturnTuple<SupplierItemType[]>> => {
   try {
     const items = await db
       .select({

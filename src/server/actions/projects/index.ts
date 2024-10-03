@@ -24,7 +24,7 @@ import type {
   BriefProjectType,
   GetProjectItemType,
   GetProjectLinkedDocumentsType,
-  SupplierItemsType,
+  SupplierItemType,
 } from "@/server/db/tables/project/queries";
 
 import {
@@ -356,7 +356,7 @@ export const getSupplierItemsCountAction = async (
 
 export const getSupplierItemsAction = async (
   supplierId: number,
-): Promise<ReturnTuple<SupplierItemsType[]>> => {
+): Promise<ReturnTuple<SupplierItemType[]>> => {
   const [items, error] = await getSupplierItems(supplierId);
   if (error !== null) return [null, error];
   return [items, null];
