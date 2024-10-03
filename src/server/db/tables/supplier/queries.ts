@@ -16,6 +16,41 @@ import { contactsTable, type InsertContactType } from "../contact/schema";
  * Getters
  */
 
+export const getSupplierPrimaryAddressId = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [supplier] = await db
+      .select({ primaryAddressId: suppliersTable.primaryAddressId })
+      .from(suppliersTable)
+      .where(eq(suppliersTable.id, supplierId))
+      .limit(1);
+
+    if (!supplier?.primaryAddressId)
+      return [null, "Error getting supplier primary address"];
+    return [supplier.primaryAddressId, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const getSupplierPrimaryContactId = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [supplier] = await db
+      .select({ id: suppliersTable.primaryContactId })
+      .from(suppliersTable)
+      .where(eq(suppliersTable.id, supplierId))
+      .limit(1);
+
+    if (!supplier?.id) return [null, "Error getting supplier primary contact"];
+    return [supplier.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
 const supplierSearchQuery = (searchText: string) =>
   sql`
     (

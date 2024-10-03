@@ -1,7 +1,7 @@
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getClientAddressesAction } from "@/server/actions/addresses";
 import { getClientPrimaryAddressIdAction } from "@/server/actions/clients";
-import AddressCard from "./address-card";
+import AddressCard from "@/components/common-cards/address";
 
 async function ClientAddressesPage({ params }: { params: { id: string } }) {
   const clientId = Number(params.id);

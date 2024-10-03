@@ -13,10 +13,28 @@ import {
   insertNewSupplier,
   listAllSuppliers,
   updateSupplier,
+  getSupplierPrimaryAddressId,
+  getSupplierPrimaryContactId,
 } from "@/server/db/tables/supplier/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { insertContactSchemaRaw } from "@/server/db/tables/contact/schema";
 import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
+
+export const getSupplierPrimaryAddressIdAction = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  const [addressId, error] = await getSupplierPrimaryAddressId(supplierId);
+  if (error !== null) return [null, error];
+  return [addressId, null];
+};
+
+export const getSupplierPrimaryContactIdAction = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  const [contactId, error] = await getSupplierPrimaryContactId(supplierId);
+  if (error !== null) return [null, error];
+  return [contactId, null];
+};
 
 export const updateSupplierPrimaryAddressAction = async (
   supplierId: number,

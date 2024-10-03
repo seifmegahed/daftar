@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { type SelectAddressType } from "@/server/db/tables/address/schema";
 import { format } from "date-fns";
-import AddressActionButtons from "./address-card-action-buttons";
+import AddressActionButtons from "./action-buttons";
 
 const AddressCard = ({
   address,
