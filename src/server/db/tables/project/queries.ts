@@ -18,6 +18,7 @@ import { documentRelationsTable } from "../document/schema";
 import { prepareSearchText } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
 import { getErrorMessage } from "@/lib/exceptions";
+import { itemsTable } from "../item/schema";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -166,7 +167,6 @@ export const getClientProjects = async (
     return [null, "Error getting projects"];
   }
 };
-
 
 export const insertProject = async (
   data: InsertProjectType,
@@ -590,6 +590,53 @@ export const getSupplierItemsCount = async (
     if (!items) return [null, "Error getting items count"];
     return [items.count, null];
   } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+const SupplierItemsSchema = z.object({
+  itemId: z.number(),
+  itemName: z.string(),
+  itemMake: z.string(),
+  quantity: z.number(),
+  price: z.string(),
+  projectId: z.number(),
+  projectName: z.string(),
+  createdAt: z.date(),
+});
+
+export type SupplierItemsType = z.infer<typeof SupplierItemsSchema>;
+
+export const getSupplierItems = async (
+  supplierId: number,
+): Promise<ReturnTuple<SupplierItemsType[]>> => {
+  try {
+    const items = await db
+      .select({
+        itemId: itemsTable.id,
+        itemName: itemsTable.name,
+        itemMake: itemsTable.make,
+        quantity: projectItemsTable.quantity,
+        price: projectItemsTable.price,
+        projectId: projectsTable.id,
+        projectName: projectsTable.name,
+        createdAt: projectsTable.createdAt,
+      })
+      .from(projectItemsTable)
+      .where(eq(projectItemsTable.supplierId, supplierId))
+      .leftJoin(
+        projectsTable,
+        eq(projectItemsTable.projectId, projectsTable.id),
+      )
+      .leftJoin(itemsTable, eq(projectItemsTable.itemId, itemsTable.id));
+
+    const parsedItems = z.array(SupplierItemsSchema).safeParse(items);
+
+    if (parsedItems.error) return [null, "Error getting supplier items"];
+
+    return [parsedItems.data, null];
+  } catch (error) {
+    console.log(error);
     return [null, getErrorMessage(error)];
   }
 };

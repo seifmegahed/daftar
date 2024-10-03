@@ -14,13 +14,19 @@ import {
   deleteProjectItem,
   getClientProjectsCount,
   getClientProjects,
-  type BriefClientProjectType,
-  type GetProjectType,
-  type BriefProjectType,
-  type GetProjectItemType,
-  type GetProjectLinkedDocumentsType,
   getSupplierItemsCount,
+  getSupplierItems,
 } from "@/server/db/tables/project/queries";
+
+import type {
+  BriefClientProjectType,
+  GetProjectType,
+  BriefProjectType,
+  GetProjectItemType,
+  GetProjectLinkedDocumentsType,
+  SupplierItemsType,
+} from "@/server/db/tables/project/queries";
+
 import {
   insertProjectItemSchema,
   insertProjectSchema,
@@ -346,4 +352,12 @@ export const getSupplierItemsCountAction = async (
   const [itemsCount, error] = await getSupplierItemsCount(supplierId);
   if (error !== null) return [null, error];
   return [itemsCount, null];
+};
+
+export const getSupplierItemsAction = async (
+  supplierId: number,
+): Promise<ReturnTuple<SupplierItemsType[]>> => {
+  const [items, error] = await getSupplierItems(supplierId);
+  if (error !== null) return [null, error];
+  return [items, null];
 };
