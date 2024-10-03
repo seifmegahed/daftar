@@ -35,7 +35,7 @@ const DocumentCardContextMenu = ({ document }: { document: SimpDoc }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <div className="z-50 flex cursor-pointer items-center justify-center rounded-full p-2 hover:bg-muted">
+        <div className="flex cursor-pointer items-center justify-center rounded-full p-2 hover:bg-muted">
           <DotsVerticalIcon />
         </div>
       </DropdownMenuTrigger>
