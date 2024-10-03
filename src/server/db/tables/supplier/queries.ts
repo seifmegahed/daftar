@@ -5,7 +5,7 @@ import {
   suppliersTable,
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { asc, count, sql, desc } from "drizzle-orm";
+import { asc, count, sql, desc, eq } from "drizzle-orm";
 import { getErrorMessage } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
 import { prepareSearchText } from "@/utils/common";
@@ -47,9 +47,7 @@ export const getSuppliersBrief = async (
           : sql`1`,
       })
       .from(suppliersTable)
-      .orderBy((table) =>
-        searchText ? desc(table.rank) : desc(table.id),
-      )
+      .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
       .limit(limit)
       .offset((page - 1) * limit);
 
@@ -188,6 +186,24 @@ export const getSuppliersCount = async (): Promise<ReturnTuple<number>> => {
 
     if (!suppliers) return [null, "Error getting suppliers count"];
     return [suppliers.count, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const updateSupplier = async (
+  supplierId: number,
+  data: Partial<InsertSupplierType>,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [returnValue] = await db
+      .update(suppliersTable)
+      .set(data)
+      .where(eq(suppliersTable.id, supplierId))
+      .returning({ id: suppliersTable.id });
+
+    if (!returnValue) return [null, "Error updating supplier primary address"];
+    return [returnValue.id, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }

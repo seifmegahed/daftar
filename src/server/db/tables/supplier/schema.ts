@@ -29,6 +29,9 @@ export const suppliersTable = pgTable(
 
     isActive: boolean("is_active").notNull().default(true),
 
+    primaryAddressId: integer("primary_address_id"),
+    primaryContactId: integer("primary_contact_id"),
+
     // Interaction fields
     createdAt: timestamp("created_at").defaultNow().notNull(),
     updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),

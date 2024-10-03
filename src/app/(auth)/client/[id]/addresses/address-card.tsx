@@ -6,11 +6,13 @@ import AddressActionButtons from "./address-card-action-buttons";
 const AddressCard = ({
   address,
   isPrimary,
-  clientId,
+  referenceId,
+  referenceType,
 }: {
   address: SelectAddressType;
   isPrimary: boolean;
-  clientId: number;
+  referenceId: number;
+  referenceType: "client" | "supplier";
 }) => {
   return (
     <div className="flex flex-col gap-4 rounded-lg border p-4">
@@ -18,8 +20,9 @@ const AddressCard = ({
         <h2 className="text-2xl font-bold">{address.name}</h2>
         <AddressActionButtons
           isPrimary={isPrimary}
-          clientId={clientId}
           addressId={address.id}
+          referenceId={referenceId}
+          referenceType={referenceType}
         />
       </div>
       <Separator />

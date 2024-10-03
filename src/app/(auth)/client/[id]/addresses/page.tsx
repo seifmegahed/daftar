@@ -27,7 +27,8 @@ async function ClientAddressesPage({ params }: { params: { id: string } }) {
           <AddressCard
             key={address.id}
             address={address}
-            clientId={clientId}
+            referenceId={clientId}
+            referenceType="client"
             isPrimary={address.id === primaryAddressId}
           />
         ))}

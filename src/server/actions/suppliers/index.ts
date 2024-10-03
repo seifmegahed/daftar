@@ -12,8 +12,20 @@ import {
   getSuppliersCount,
   insertNewSupplier,
   listAllSuppliers,
+  updateSupplier,
 } from "@/server/db/tables/supplier/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
+
+export const updateSupplierPrimaryAddressAction = async (
+  supplierId: number,
+  addressId: number,
+): Promise<ReturnTuple<number>> => {
+  const [returnValue, error] = await updateSupplier(supplierId, {
+    primaryAddressId: addressId,
+  });
+  if (error !== null) return [null, error];
+  return [returnValue, null];
+};
 
 export const getSuppliersBriefAction = async (
   page: number,

@@ -4,18 +4,21 @@ import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { deleteAddressAction } from "@/server/actions/addresses";
 import { updateClientPrimaryAddressAction } from "@/server/actions/clients";
+import { updateSupplierPrimaryAddressAction } from "@/server/actions/suppliers";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 const AddressActionButtons = ({
   isPrimary,
-  clientId,
   addressId,
+  referenceId,
+  referenceType,
 }: {
   isPrimary: boolean;
-  clientId: number;
   addressId: number;
+  referenceId: number;
+  referenceType: "client" | "supplier";
 }) => {
   const navigate = useRouter();
   const [primaryLoading, setPrimaryLoading] = useState(false);
@@ -24,10 +27,10 @@ const AddressActionButtons = ({
   const handleClick = async () => {
     try {
       setPrimaryLoading(true);
-      const [, error] = await updateClientPrimaryAddressAction(
-        clientId,
-        addressId,
-      );
+      const [, error] =
+        referenceType === "client"
+          ? await updateClientPrimaryAddressAction(referenceId, addressId)
+          : await updateSupplierPrimaryAddressAction(referenceId, addressId);
       if (error !== null) {
         console.log(error);
         toast.error("Error updating primary address");
