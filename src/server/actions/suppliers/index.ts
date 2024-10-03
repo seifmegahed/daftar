@@ -47,6 +47,17 @@ export const updateSupplierPrimaryAddressAction = async (
   return [returnValue, null];
 };
 
+export const updateSupplierPrimaryContactAction = async (
+  supplierId: number,
+  contactId: number,
+): Promise<ReturnTuple<number>> => {
+  const [returnValue, error] = await updateSupplier(supplierId, {
+    primaryContactId: contactId,
+  });
+  if (error !== null) return [null, error];
+  return [returnValue, null];
+};
+
 export const getSuppliersBriefAction = async (
   page: number,
   searchText?: string,

@@ -1,4 +1,4 @@
-import DocumentCard from "@/components/document-card";
+import DocumentCard from "@/components/common-cards/document";
 import { type SimpDoc } from "@/server/db/tables/document/queries";
 
 function DocumentsList({ documents }: { documents: SimpDoc[] }) {

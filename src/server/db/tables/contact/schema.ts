@@ -9,7 +9,7 @@ import { usersTable } from "../user/schema";
 import { suppliersTable } from "../supplier/schema";
 import { clientsTable } from "../client/schema";
 import { relations } from "drizzle-orm";
-import { createInsertSchema } from "drizzle-zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { notesMaxLength } from "@/data/config";
 
@@ -65,7 +65,11 @@ export const contactRelations = relations(contactsTable, ({ one }) => ({
 
 export const insertContactSchemaRaw = createInsertSchema(contactsTable);
 
+export const selectContactSchema = createSelectSchema(contactsTable);
+
 type InsertContactTypeRaw = z.infer<typeof insertContactSchemaRaw>;
+
+export type SelectContactType = z.infer<typeof selectContactSchema>;
 
 export const insertContactSchemaRefineCallback = (
   data: Partial<InsertContactTypeRaw>,

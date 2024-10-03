@@ -39,6 +39,17 @@ export const updateClientPrimaryAddressAction = async (
   return [returnValue, null];
 };
 
+export const updateClientPrimaryContactAction = async (
+  clientId: number,
+  contactId: number,
+): Promise<ReturnTuple<number>> => {
+  const [returnValue, contactError] = await updateClient(clientId, {
+    primaryContactId: contactId,
+  });
+  if (contactError !== null) return [null, contactError];
+  return [returnValue, null];
+};
+
 export const getClientPrimaryContactIdAction = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {

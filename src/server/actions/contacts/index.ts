@@ -1,12 +1,17 @@
 "use server";
 
 import {
+  deleteContact,
+  getClientContacts,
   getClientContactsCount,
+  getSupplierContacts,
+  getSupplierContactsCount,
   insertNewContact,
 } from "@/server/db/tables/contact/queries";
 import {
   insertContactSchemaRaw,
   insertContactSchemaRefineCallback,
+  type SelectContactType,
 } from "@/server/db/tables/contact/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "../users";
@@ -50,4 +55,36 @@ export const getClientContactsCountAction = async (
   const [contactsCount, error] = await getClientContactsCount(clientId);
   if (error !== null) return [null, error];
   return [contactsCount, null];
+};
+
+export const getClientContactsAction = async (
+  clientId: number,
+): Promise<ReturnTuple<SelectContactType[]>> => {
+  const [contacts, error] = await getClientContacts(clientId);
+  if (error !== null) return [null, error];
+  return [contacts, null];
+};
+
+export const getSupplierContactsCountAction = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  const [contactsCount, error] = await getSupplierContactsCount(supplierId);
+  if (error !== null) return [null, error];
+  return [contactsCount, null];
+};
+
+export const getSupplierContactsAction = async (
+  supplierId: number,
+): Promise<ReturnTuple<SelectContactType[]>> => {
+  const [contacts, error] = await getSupplierContacts(supplierId);
+  if (error !== null) return [null, error];
+  return [contacts, null];
+};
+
+export const deleteContactAction = async (
+  contactId: number,
+): Promise<ReturnTuple<number>> => {
+  const [returnValue, error] = await deleteContact(contactId);
+  if (error !== null) return [null, error];
+  return [returnValue, null];
 };
