@@ -31,7 +31,7 @@ export default async function SettingsLayout({
 
   const sidebarNavItemsGenerator = (id: number) => [
     {
-      title: "document",
+      title: "Document",
       href: basePath(id),
     },
     {

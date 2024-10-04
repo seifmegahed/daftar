@@ -1,3 +1,5 @@
+"use server";
+
 import { deleteDocument } from "@/server/db/tables/document/queries";
 import { getCurrentUserAction } from "../users";
 import type { ReturnTuple } from "@/utils/type-utils";
