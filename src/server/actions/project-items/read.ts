@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  getItemProjects,
   getProjectItems,
   getSupplierItems,
   getSupplierItemsCount,
@@ -8,6 +9,7 @@ import {
 } from "@/server/db/tables/project-item/queries";
 import type {
   GetProjectItemType,
+  ItemProjectsType,
   SupplierItemType,
   SupplierProjectsType,
 } from "@/server/db/tables/project-item/queries";
@@ -45,6 +47,14 @@ export const getProjectItemsCountAction = async (
   return [projectItems.length, null];
 };
 
+export const getSupplierItemsAction = async (
+  supplierId: number,
+): Promise<ReturnTuple<SupplierItemType[]>> => {
+  const [items, error] = await getSupplierItems(supplierId);
+  if (error !== null) return [null, error];
+  return [items, null];
+};
+
 export const getSupplierItemsCountAction = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
@@ -53,10 +63,18 @@ export const getSupplierItemsCountAction = async (
   return [itemsCount, null];
 };
 
-export const getSupplierItemsAction = async (
-  supplierId: number,
-): Promise<ReturnTuple<SupplierItemType[]>> => {
-  const [items, error] = await getSupplierItems(supplierId);
+export const getItemProjectsAction = async (
+  itemId: number,
+): Promise<ReturnTuple<ItemProjectsType[]>> => {
+  const [projects, error] = await getItemProjects(itemId);
   if (error !== null) return [null, error];
-  return [items, null];
+  return [projects, null];
+};
+
+export const getItemProjectsCountAction = async (
+  itemId: number,
+): Promise<ReturnTuple<number>> => {
+  const [itemProjects, error] = await getItemProjects(itemId);
+  if (error !== null) return [null, error];
+  return [itemProjects.length, null];
 };

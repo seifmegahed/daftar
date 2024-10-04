@@ -226,3 +226,55 @@ export const getSupplierProjects = async (
     return [null, getErrorMessage(error)];
   }
 };
+
+const itemProjectsSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  clientId: z.number(),
+  clientName: z.string(),
+  status: z.number(),
+  createdAt: z.date(),
+});
+
+export type ItemProjectsType = z.infer<typeof itemProjectsSchema>;
+
+export const getItemProjects = async (
+  itemId: number,
+): Promise<ReturnTuple<ItemProjectsType[]>> => {
+  try {
+    const projectItems = await db
+      .select({
+        id: projectsTable.id,
+        name: projectsTable.name,
+        clientId: projectsTable.clientId,
+        clientName: clientsTable.name,
+        status: projectsTable.status,
+        createdAt: projectsTable.createdAt,
+      })
+      .from(projectItemsTable)
+      .where(eq(projectItemsTable.itemId, itemId))
+      .leftJoin(
+        projectsTable,
+        eq(projectItemsTable.projectId, projectsTable.id),
+      )
+      .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
+      .orderBy(desc(projectsTable.createdAt));
+
+    const parsedProjects = z.array(itemProjectsSchema).safeParse(projectItems);
+
+    if (parsedProjects.error) return [null, "Error getting item projects"];
+
+    const uniqueProjects: ItemProjectsType[] = [];
+
+    parsedProjects.data.forEach((project) => {
+      if (!uniqueProjects.find((_project) => _project.id === project.id)) {
+        uniqueProjects.push(project);
+      }
+    });
+
+    return [uniqueProjects, null];
+  } catch (error) {
+    console.log(error);
+    return [null, getErrorMessage(error)];
+  }
+};
