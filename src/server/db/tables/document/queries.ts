@@ -90,7 +90,7 @@ export type DocumentType = DocumentDataType & {
 
 export const getDocumentById = async (
   id: number,
-): Promise<ReturnTuple<DocumentType>> => {
+): Promise<ReturnTuple<Required<DocumentType>>> => {
   try {
     const document = await db.query.documentsTable.findFirst({
       where: (document, { eq }) => eq(document.id, id),

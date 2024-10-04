@@ -61,7 +61,7 @@ export const getDocumentsAction = async (
 
 export const getDocumentByIdAction = async (
   id: number,
-): Promise<ReturnTuple<DocumentType>> => {
+): Promise<ReturnTuple<Required<DocumentType>>> => {
   const [document, documentError] = await getDocumentById(id);
   if (documentError !== null) return [null, documentError];
   return [document, null];
