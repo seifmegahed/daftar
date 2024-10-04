@@ -6,6 +6,7 @@ import {
   type InsertProjectItemType,
   type InsertProjectType,
   type SelectProjectType,
+  projectItemsRelations,
 } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { UserBriefType } from "../user/queries";
@@ -640,3 +641,56 @@ export const getSupplierItems = async (
     return [null, getErrorMessage(error)];
   }
 };
+
+const supplierProjectsSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  clientId: z.number(),
+  clientName: z.string(),
+  status: z.number(),
+  createdAt: z.date(),
+});
+
+export type SupplierProjectsType = z.infer<typeof supplierProjectsSchema>;
+
+export const getSupplierProjects = async (
+  supplierId: number,
+): Promise<ReturnTuple<SupplierProjectsType[]>> => {
+  try {
+    const projects = await db
+      .select({
+        id: projectsTable.id,
+        name: projectsTable.name,
+        clientId: projectsTable.clientId,
+        clientName: clientsTable.name,
+        status: projectsTable.status,
+        createdAt: projectsTable.createdAt,
+      })
+      .from(projectItemsTable)
+      .where(eq(projectItemsTable.supplierId, supplierId))
+      .leftJoin(
+        projectsTable,
+        eq(projectItemsTable.projectId, projectsTable.id),
+      )
+      .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
+      .orderBy(desc(projectsTable.createdAt));
+
+    const parsedProjects = z.array(supplierProjectsSchema).safeParse(projects);
+
+    if (parsedProjects.error) return [null, "Error getting supplier projects"];
+
+    let uniqueProjects: SupplierProjectsType[] = [];
+
+    parsedProjects.data.forEach((project) => {
+      if (!uniqueProjects.find((_project) => _project.id === project.id)) {
+        uniqueProjects.push(project);
+      }
+    });
+
+    return [uniqueProjects, null];
+  } catch (error) {
+    console.log(error);
+    return [null, getErrorMessage(error)];
+  }
+};
+

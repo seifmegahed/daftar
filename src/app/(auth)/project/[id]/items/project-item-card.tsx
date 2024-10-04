@@ -33,7 +33,7 @@ function ProjectItemCard({
           </div>
         </div>
         <div className="w-full text-right flex-grow">
-          <Link href={`/suppliers/${projectItem.supplier.id}`}>
+          <Link href={`/supplier/${projectItem.supplier.id}`}>
             <p className="line-clamp-1 cursor-pointer hover:underline">
               {projectItem.supplier.name}
             </p>

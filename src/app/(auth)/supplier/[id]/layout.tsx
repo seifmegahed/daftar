@@ -4,6 +4,7 @@ import { getSupplierDocumentsCountAction } from "@/server/actions/documents";
 import { getSupplierItemsCountAction } from "@/server/actions/projects";
 import { getSupplierAddressesCountAction } from "@/server/actions/addresses";
 import { getSupplierContactsCountAction } from "@/server/actions/contacts";
+import { getSupplierProjectsCountAction } from "@/server/actions/projects/read";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,8 @@ export default async function SettingsLayout({
   if (isNaN(supplierId)) return <p>Error: Supplier ID is not a number</p>;
 
   const [itemsCount] = await getSupplierItemsCountAction(supplierId);
+
+  const [projectsCount] = await getSupplierProjectsCountAction(supplierId);
 
   const [documentsCount] = await getSupplierDocumentsCountAction(supplierId);
 
@@ -42,6 +45,11 @@ export default async function SettingsLayout({
       title: "Items",
       href: basePath(id) + "/items",
       amount: itemsCount ?? 0,
+    },
+    {
+      title: "Projects",
+      href: basePath(id) + "/projects",
+      amount: projectsCount ?? 0,
     },
     {
       title: "Documents",
