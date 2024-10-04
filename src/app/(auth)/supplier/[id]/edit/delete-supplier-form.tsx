@@ -69,7 +69,7 @@ function DeleteSupplierForm({
 
   return (
     <div className="flex flex-col gap-4 scroll-smooth" id="delete">
-      <h2 className="text-xl font-bold">Delete Client</h2>
+      <h2 className="text-xl font-bold">Delete Supplier</h2>
       <Separator />
       <form
         className="flex flex-col gap-4"

@@ -103,8 +103,8 @@ function DeleteClientForm({
                       related to the client also the deletion is permanent, you
                       will not be able to undo this action.
                     </strong>{" "}
-                    Please type the name of the project to confirm. After typing
-                    the name press the delete button to delete the project.{" "}
+                    Please type the name of the client to confirm. After typing
+                    the name press the delete button to delete the client.{" "}
                     <br />
                     <strong>Note:</strong> Only an admin can delete a client.
                   </FormDescription>
