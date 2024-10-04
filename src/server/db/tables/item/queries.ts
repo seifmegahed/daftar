@@ -2,7 +2,7 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { itemsTable, type AddItemType, type SelectItemType } from "./schema";
 import { db } from "@/server/db";
 import { getErrorMessage } from "@/lib/exceptions";
-import { asc, count, desc, sql } from "drizzle-orm";
+import { asc, count, desc, eq, sql } from "drizzle-orm";
 import { prepareSearchText } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
 
@@ -140,6 +140,24 @@ export const getItemsCount = async (): Promise<ReturnTuple<number>> => {
 
     if (!items) return [null, "Error getting items count"];
     return [items.count, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const updateItem = async (
+  id: number,
+  data: Partial<SelectItemType>,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [item] = await db
+      .update(itemsTable)
+      .set(data)
+      .where(eq(itemsTable.id, id))
+      .returning({ id: itemsTable.id });
+
+    if (!item) return [null, "Error updating item"];
+    return [item.id, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
