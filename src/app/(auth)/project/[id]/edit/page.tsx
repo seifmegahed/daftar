@@ -1,6 +1,9 @@
-import { getProjectBriefByIdAction } from "@/server/actions/projects";
+import {
+  getProjectBriefByIdAction,
+  updateProjectNameAction,
+  updateProjectNotesAction,
+} from "@/server/actions/projects";
 import StatusForm from "./status-form";
-import NameForm from "./name-form";
 import DescriptionForm from "./description-form";
 import {
   getAllUsersAction,
@@ -8,9 +11,10 @@ import {
 } from "@/server/actions/users";
 import OwnerForm from "./owner-form";
 import DatesForm from "./dates-form";
-import NotesForm from "./notes-form";
+import NotesForm from "@/components/common-forms/update-notes-form";
 import DeleteProjectForm from "./delete-project";
 import InfoPageWrapper from "@/components/info-page-wrapper";
+import NameForm from "@/components/common-forms/update-name-form";
 
 export const dynamic = "force-dynamic";
 
@@ -33,7 +37,9 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
     >
       <StatusForm projectId={project.id} status={project.status} />
       <NameForm
-        projectId={project.id}
+        id={project.id}
+        type="project"
+        updateCallbackActionWithOwner={updateProjectNameAction}
         name={project.name}
         access={hasFullAccess}
         ownerId={project.ownerId}
@@ -55,7 +61,12 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
         startDate={project.startDate ? new Date(project.startDate) : undefined}
         endDate={project.endDate ? new Date(project.endDate) : undefined}
       />
-      <NotesForm projectId={project.id} notes={project.notes ?? ""} />
+      <NotesForm
+        id={project.id}
+        updateCallbackAction={updateProjectNotesAction}
+        notes={project.notes ?? ""}
+        type="project"
+      />
       <DeleteProjectForm
         projectId={project.id}
         name={project.name}

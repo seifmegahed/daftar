@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { emptyToUndefined } from "@/utils/common";
 import { toast } from "sonner";
-import { updateProjectNameAction } from "@/server/actions/projects";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const schema = z.object({
   name: z.preprocess(
@@ -33,12 +33,25 @@ function NameForm({
   name,
   access,
   ownerId,
-  projectId,
+  id,
+  type,
+  updateCallbackAction = () =>
+    Promise.resolve([null, "Callback function missing"]),
+  updateCallbackActionWithOwner,
 }: {
   name: string;
   access: boolean;
-  ownerId: number;
-  projectId: number;
+  ownerId?: number;
+  id: number;
+  type: "client" | "supplier" | "project" | "item";
+  updateCallbackAction?: (
+    id: number,
+    data: { name: string },
+  ) => Promise<ReturnTuple<number>>;
+  updateCallbackActionWithOwner?: (
+    id: number,
+    data: { name: string; ownerId: number },
+  ) => Promise<ReturnTuple<number>>;
 }) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
@@ -46,26 +59,31 @@ function NameForm({
   });
 
   const onSubmit = async (data: FormDataType) => {
-    if(!access) {
-      toast.error("You do not have permission to change the project name");
+    if (!access) {
+      toast.error(`You do not have permission to change the ${type} name`);
       form.reset({ name });
       return;
     }
     try {
-      const [, error] = await updateProjectNameAction(projectId, {
-        name: data.name,
-        ownerId,
-      });
+      const [, error] =
+        ownerId && updateCallbackActionWithOwner
+          ? await updateCallbackActionWithOwner(id, {
+              name: data.name,
+              ownerId,
+            })
+          : await updateCallbackAction(id, {
+              name: data.name,
+            });
       if (error !== null) {
         console.log(error);
-        toast.error("Error updating project name");
+        toast.error("Error updating name");
       } else {
-        toast.success("Project name updated successfully");
+        toast.success("Name updated successfully");
         form.reset(data);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Error updating project name");
+      toast.error("Error updating name");
     }
   };
 
@@ -90,14 +108,14 @@ function NameForm({
                 />
                 <FormMessage />
                 <FormDescription>
-                  Update project name, this will change the name of the project
+                  Update {type} name, this will change the name of the {type}
                   across all references. After typing the updated name press the
-                  update button to persist the change. Project name is one of
-                  the fields used to search project. Project name must be
-                  unique.
+                  update button to persist the change. The {type} name field is
+                  one of the fields used to search {type}. Name of the {type}{" "}
+                  must be unique.
                   <br />
-                  <strong>Note:</strong> Only the owner or an admin can change
-                  the project name.
+                  <strong>Note:</strong> Only {ownerId ?? "the owner or"} an
+                  admin can change the {type} name.
                 </FormDescription>
               </FormItem>
             )}
