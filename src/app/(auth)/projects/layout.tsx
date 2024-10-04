@@ -2,6 +2,7 @@ import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "@/components/nav"
 import { getProjectsCount } from "@/server/db/tables/project/queries"
 
+export const dynamic = "force-dynamic"
 
 interface SettingsLayoutProps {
   children: React.ReactNode
