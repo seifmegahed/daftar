@@ -42,15 +42,15 @@ export const updateSupplierFieldAction = async (
   return [supplier, null];
 };
 
-export const updateSupplierRegistrationNumber = async (
+export const updateSupplierRegistrationNumberAction = async (
   supplierId: number,
-  registrationNumber: string,
+  data: { registrationNumber: string | undefined },
 ): Promise<ReturnTuple<number>> => {
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];
 
   const [supplier, supplierError] = await updateSupplier(supplierId, {
-    registrationNumber,
+    registrationNumber: data.registrationNumber,
     updatedBy: currentUser.id,
   });
 
@@ -58,15 +58,15 @@ export const updateSupplierRegistrationNumber = async (
   return [supplier, null];
 };
 
-export const updateSupplierWebsite = async (
+export const updateSupplierWebsiteAction = async (
   supplierId: number,
-  website: string,
+  data: { website: string | undefined },
 ): Promise<ReturnTuple<number>> => {
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];
 
   const [supplier, supplierError] = await updateSupplier(supplierId, {
-    website,
+    website: data.website,
     updatedBy: currentUser.id,
   });
 
@@ -74,15 +74,15 @@ export const updateSupplierWebsite = async (
   return [supplier, null];
 };
 
-export const updateSupplierNotes = async (
+export const updateSupplierNotesAction = async (
   supplierId: number,
-  notes: string,
+  data: { notes: string | undefined },
 ): Promise<ReturnTuple<number>> => {
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];
 
   const [supplier, supplierError] = await updateSupplier(supplierId, {
-    notes,
+    notes: data.notes,
     updatedBy: currentUser.id,
   });
 
