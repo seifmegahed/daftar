@@ -1,18 +1,35 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
 
-const basePath = (id: string) => "/document/" + id;
+import {
+  getDocumentProjectsCountAction,
+  getDocumentClientsCountAction,
+  getDocumentSuppliersCountAction,
+  getDocumentItemsCountAction,
+} from "@/server/actions/document-relations/read";
+
+export const dynamic = "force-dynamic";
+
+const basePath = (id: number) => "/document/" + id;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
   params: { id: string };
 }
 
-export default function SettingsLayout({
+export default async function SettingsLayout({
   children,
   params,
 }: SettingsLayoutProps) {
-  const sidebarNavItemsGenerator = (id: string) => [
+  const documentId = Number(params.id);
+  if (isNaN(documentId)) return <p>Error: Document ID is not a number</p>;
+
+  const [numberOfProjects] = await getDocumentProjectsCountAction(documentId);
+  const [numberOfClients] = await getDocumentClientsCountAction(documentId);
+  const [numberOfSuppliers] = await getDocumentSuppliersCountAction(documentId);
+  const [numberOfItems] = await getDocumentItemsCountAction(documentId);
+
+  const sidebarNavItemsGenerator = (id: number) => [
     {
       title: "document",
       href: basePath(id),
@@ -21,8 +38,28 @@ export default function SettingsLayout({
       title: "Edit",
       href: basePath(id) + "/edit",
     },
+    {
+      title: "Projects",
+      href: basePath(id) + "/projects",
+      amount: numberOfProjects ?? 0,
+    },
+    {
+      title: "Clients",
+      href: basePath(id) + "/clients",
+      amount: numberOfClients ?? 0,
+    },
+    {
+      title: "Suppliers",
+      href: basePath(id) + "/suppliers",
+      amount: numberOfSuppliers ?? 0,
+    },
+    {
+      title: "Items",
+      href: basePath(id) + "/items",
+      amount: numberOfItems ?? 0,
+    },
   ];
-  const sidebarNavItems = sidebarNavItemsGenerator(params.id);
+  const sidebarNavItems = sidebarNavItemsGenerator(documentId);
 
   return (
     // this should be in root layout, but we're doing it here for testing purposes

@@ -140,7 +140,7 @@ export const getDocumentProjectsAction = async (
 
 export const getDocumentProjectsCountAction = async (
   id: number,
-) => {
+): Promise<ReturnTuple<number>> => {
   const [count, countError] = await documentProjectsCount(id);
   if (countError !== null) return [null, countError];
   return [count, null];
