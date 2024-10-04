@@ -1,20 +1,53 @@
-import { type ProjectClientType } from "@/server/db/tables/project/queries";
 import Link from "next/link";
 
-const ClientSection = ({ client }: { client: ProjectClientType }) => {
-  const { name, registrationNumber, website, primaryAddress, primaryContact } =
-    client;
+const CompanySection = ({
+  data,
+  type,
+}: {
+  data: {
+    id: number;
+    name: string;
+    field?: string;
+    registrationNumber: string | null;
+    website: string | null;
+    primaryAddress: {
+      id: number;
+      addressLine: string;
+      city: string | null;
+      country: string;
+    } | null;
+    primaryContact: {
+      id: number;
+      name: string;
+      email: string | null;
+      phoneNumber: string | null;
+    } | null;
+  };
+  type: "client" | "supplier";
+}) => {
+  const {
+    id,
+    name,
+    field,
+    registrationNumber,
+    website,
+    primaryAddress,
+    primaryContact,
+  } = data;
   return (
     <>
       <div className="flex justify-between">
         <p>Name</p>
-        <Link
-          href={`/client/${client.id}`}
-          className="text-blue-400 hover:underline"
-        >
+        <Link href={`/${type}/${id}`} className="text-blue-400 hover:underline">
           {name}
         </Link>
       </div>
+      {field ? (
+        <div className="flex justify-between">
+          <p>Field of Business</p>
+          <p>{field}</p>
+        </div>
+      ) : null}
       {registrationNumber ? (
         <div className="flex justify-between">
           <p>Registration Number</p>
@@ -69,4 +102,4 @@ const ClientSection = ({ client }: { client: ProjectClientType }) => {
   );
 };
 
-export default ClientSection;
+export default CompanySection;

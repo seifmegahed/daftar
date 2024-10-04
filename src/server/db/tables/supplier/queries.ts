@@ -117,7 +117,7 @@ type UserDataType = {
 export interface GetSupplierType extends SelectSupplierType {
   primaryAddress: AddressDataType | null;
   primaryContact: ContactDataType | null;
-  creator: UserDataType | null;
+  creator: UserDataType;
   updater: UserDataType | null;
 }
 

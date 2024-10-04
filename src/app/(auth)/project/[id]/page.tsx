@@ -10,7 +10,7 @@ import Link from "next/link";
 import DocumentCard from "@/components/common-cards/document";
 import { DownloadIcon } from "lucide-react";
 import Section from "@/components/info-section";
-import ClientSection from "@/components/common-sections/client-section";
+import ClientSection from "@/components/common-sections/company-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 
 export const dynamic = "force-dynamic";
@@ -37,7 +37,7 @@ async function ProjectPage({ params }: { params: { id: string } }) {
         </div>
       </Section>
       <Section title="Client">
-        <ClientSection client={project.client} />
+        <ClientSection data={project.client} type="client" />
       </Section>
       <Section title="General Info">
         <div className="flex justify-between">

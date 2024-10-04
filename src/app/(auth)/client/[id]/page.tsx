@@ -1,6 +1,6 @@
 import { getClientFullByIdAction } from "@/server/actions/clients";
 import Section from "@/components/info-section";
-import ClientSection from "@/components/common-sections/client-section";
+import ClientSection from "@/components/common-sections/company-section";
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 
@@ -14,7 +14,7 @@ async function ClientPage({ params }: { params: { id: string } }) {
         information about the client.`}
     >
       <Section title="General Info">
-        <ClientSection client={client} />
+        <ClientSection data={client} type="client" />
       </Section>
       <Section title="Other Info">
         <UserInfoSection data={client} />
