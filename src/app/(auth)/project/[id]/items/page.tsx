@@ -1,4 +1,4 @@
-import { getProjectItemsAction } from "@/server/actions/projects";
+import { getProjectItemsAction } from "@/server/actions/project-items/read";
 import ProjectItemCard from "./project-item-card";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 

@@ -1,10 +1,10 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
 import { getSupplierDocumentsCountAction } from "@/server/actions/documents";
-import { getSupplierItemsCountAction } from "@/server/actions/projects";
+import { getSupplierItemsCountAction } from "@/server/actions/project-items/read";
 import { getSupplierAddressesCountAction } from "@/server/actions/addresses";
 import { getSupplierContactsCountAction } from "@/server/actions/contacts";
-import { getSupplierProjectsCountAction } from "@/server/actions/projects/read";
+import { getSupplierProjectsCountAction } from "@/server/actions/project-items/read";
 
 export const dynamic = "force-dynamic";
 

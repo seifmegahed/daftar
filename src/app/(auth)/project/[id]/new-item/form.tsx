@@ -25,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { currencyOptions } from "@/data/lut";
-import { addProjectItemAction } from "@/server/actions/projects";
+import { addProjectItemAction } from "@/server/actions/project-items/create";
 
 const schema = z.object({
   itemId: z.number({ message: "Item is required" }),

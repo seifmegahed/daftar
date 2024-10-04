@@ -1,5 +1,5 @@
-import { getSupplierItemsAction } from "@/server/actions/projects";
-import { type SupplierItemType } from "@/server/db/tables/project/queries";
+import { getSupplierItemsAction } from "@/server/actions/project-items/read";
+import type { SupplierItemType } from "@/server/db/tables/project-item/queries";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import { numberWithCommas } from "@/utils/common";
 import Link from "next/link";

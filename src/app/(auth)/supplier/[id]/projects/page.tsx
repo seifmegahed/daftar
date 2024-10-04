@@ -1,6 +1,6 @@
 import ProjectCard from "@/app/(auth)/projects/all-projects/project-card";
 import InfoPageWrapper from "@/components/info-page-wrapper";
-import { getSupplierProjectsAction } from "@/server/actions/projects/read";
+import { getSupplierProjectsAction } from "@/server/actions/project-items/read";
 
 async function SupplierProjectsPage({ params }: { params: { id: string } }) {
   const supplierId = Number(params.id);

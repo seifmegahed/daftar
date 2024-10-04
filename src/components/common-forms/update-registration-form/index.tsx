@@ -13,10 +13,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SubmitButton from "@/components/buttons/submit-button";
-import { updateClientRegistrationNumberAction } from "@/server/actions/clients";
 import { toast } from "sonner";
 import { emptyToUndefined } from "@/utils/common";
-import { ReturnTuple } from "@/utils/type-utils";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const schema = z.object({
   registrationNumber: z.preprocess(

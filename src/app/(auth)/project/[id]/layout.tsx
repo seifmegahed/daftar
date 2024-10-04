@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
 import { getProjectDocumentsCountAction } from "@/server/actions/documents";
-import { getProjectItemsCountAction } from "@/server/actions/projects";
+import { getProjectItemsCountAction } from "@/server/actions/project-items/read";
 
 const basePath = (id: string) => "/project/" + id;
 

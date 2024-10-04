@@ -1,42 +1,36 @@
 "use server";
 
+import type { z } from "zod";
+
+import { insertProjectSchema } from "@/server/db/tables/project/schema";
 import {
   getProjectById,
   getProjectsBrief,
   insertProject,
-  insertProjectItem,
-  getProjectItems,
   getProjectLinkedDocuments,
   getProjectsCount,
   getProjectBriefById,
   updateProject,
   deleteProject,
-  deleteProjectItem,
   getClientProjectsCount,
   getClientProjects,
-  getSupplierItemsCount,
-  getSupplierItems,
 } from "@/server/db/tables/project/queries";
 
 import type {
   BriefClientProjectType,
   GetProjectType,
   BriefProjectType,
-  GetProjectItemType,
   GetProjectLinkedDocumentsType,
-  SupplierItemType,
 } from "@/server/db/tables/project/queries";
+import type { SelectProjectType } from "@/server/db/tables/project/schema";
 
 import {
-  insertProjectItemSchema,
-  insertProjectSchema,
-  type SelectProjectType,
-  type InsertProjectItemType,
-} from "@/server/db/tables/project/schema";
-import type { ReturnTuple } from "@/utils/type-utils";
-import { getCurrentUserAction, getCurrentUserIdAction } from "../users";
-import type { z } from "zod";
+  getCurrentUserAction,
+  getCurrentUserIdAction,
+} from "@/server/actions/users";
 import { redirect } from "next/navigation";
+
+import type { ReturnTuple } from "@/utils/type-utils";
 
 export const getProjectsCountAction = async (): Promise<
   ReturnTuple<number>
@@ -114,34 +108,6 @@ export const addProjectAction = async (
   if (projectInsertError !== null) return [null, projectInsertError];
 
   return [projectId, null];
-};
-
-export const addProjectItemAction = async (
-  data: InsertProjectItemType,
-): Promise<ReturnTuple<number>> => {
-  const isValid = insertProjectItemSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
-
-  const [projectItemId, projectItemInsertError] = await insertProjectItem(data);
-  if (projectItemInsertError !== null) return [null, projectItemInsertError];
-
-  return [projectItemId, null];
-};
-
-export const getProjectItemsAction = async (
-  projectId: number,
-): Promise<ReturnTuple<GetProjectItemType[]>> => {
-  const [projectItems, projectItemsError] = await getProjectItems(projectId);
-  if (projectItemsError !== null) return [null, projectItemsError];
-  return [projectItems, null];
-};
-
-export const getProjectItemsCountAction = async (
-  projectId: number,
-): Promise<ReturnTuple<number>> => {
-  const [projectItems, projectItemsError] = await getProjectItems(projectId);
-  if (projectItemsError !== null) return [null, projectItemsError];
-  return [projectItems.length, null];
 };
 
 export const getProjectLinkedDocumentsAction = async (
@@ -336,28 +302,4 @@ export const deleteProjectAction = async (
   if (error !== null) return [null, error];
 
   redirect("/projects");
-};
-
-export const deleteProjectItemAction = async (
-  projectItemId: number,
-): Promise<ReturnTuple<number>> => {
-  const [returnValue, error] = await deleteProjectItem(projectItemId);
-  if (error !== null) return [null, error];
-  return [returnValue, null];
-};
-
-export const getSupplierItemsCountAction = async (
-  supplierId: number,
-): Promise<ReturnTuple<number>> => {
-  const [itemsCount, error] = await getSupplierItemsCount(supplierId);
-  if (error !== null) return [null, error];
-  return [itemsCount, null];
-};
-
-export const getSupplierItemsAction = async (
-  supplierId: number,
-): Promise<ReturnTuple<SupplierItemType[]>> => {
-  const [items, error] = await getSupplierItems(supplierId);
-  if (error !== null) return [null, error];
-  return [items, null];
 };

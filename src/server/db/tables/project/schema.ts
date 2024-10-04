@@ -2,7 +2,6 @@ import {
   date,
   index,
   integer,
-  numeric,
   pgTable,
   serial,
   timestamp,
@@ -11,13 +10,12 @@ import {
 
 import { usersTable } from "../user/schema";
 import { clientsTable } from "../client/schema";
-import { itemsTable } from "../item/schema";
-import { suppliersTable } from "../supplier/schema";
 import { relations, sql } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { documentRelationsTable } from "../document/schema";
 import { notesMaxLength } from "@/data/config";
+import { projectItemsTable } from "../project-item/schema";
 
 export const projectsTable = pgTable(
   "project",
@@ -83,43 +81,3 @@ export const selectProjectSchema = createSelectSchema(projectsTable);
 
 export type InsertProjectType = z.infer<typeof insertProjectSchema>;
 export type SelectProjectType = z.infer<typeof selectProjectSchema>;
-
-export const projectItemsTable = pgTable("project_items", {
-  id: serial("id").primaryKey(),
-  projectId: integer("project_id")
-    .references(() => projectsTable.id)
-    .notNull(),
-  itemId: integer("item_id")
-    .references(() => itemsTable.id)
-    .notNull(),
-  supplierId: integer("supplier_id")
-    .references(() => suppliersTable.id)
-    .notNull(),
-  price: numeric("price", { precision: 10, scale: 2 }).notNull(),
-  currency: integer("currency").notNull(),
-  quantity: integer("quantity").notNull(),
-});
-
-export const projectItemsRelations = relations(
-  projectItemsTable,
-  ({ one }) => ({
-    project: one(projectsTable, {
-      fields: [projectItemsTable.projectId],
-      references: [projectsTable.id],
-    }),
-    item: one(itemsTable, {
-      fields: [projectItemsTable.itemId],
-      references: [itemsTable.id],
-    }),
-    supplier: one(suppliersTable, {
-      fields: [projectItemsTable.supplierId],
-      references: [suppliersTable.id],
-    }),
-  }),
-);
-
-export const insertProjectItemSchema = createInsertSchema(projectItemsTable);
-export const selectProjectItemSchema = createSelectSchema(projectItemsTable);
-
-export type InsertProjectItemType = z.infer<typeof insertProjectItemSchema>;
-export type SelectProjectItemType = z.infer<typeof selectProjectItemSchema>;
