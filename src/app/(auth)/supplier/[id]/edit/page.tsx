@@ -10,6 +10,7 @@ import {
   updateSupplierWebsiteAction,
 } from "@/server/actions/suppliers/update";
 import { getSupplierFullByIdAction } from "@/server/actions/suppliers/read";
+import FieldUpdateForm from "./update-field-form";
 
 async function EditSupplierPage({ params }: { params: { id: string } }) {
   const supplierId = Number(params.id);
@@ -26,6 +27,7 @@ async function EditSupplierPage({ params }: { params: { id: string } }) {
       title="Edit Supplier"
       subtitle={`This is the edit page for the supplier: ${supplier.name}. Here you can edit the supplier details.`}
     >
+      <FieldUpdateForm id={supplierId} field={supplier.field ?? ""} />
       <RegistrationNumberForm
         id={supplierId}
         updateRegistrationNumberCallbackAction={

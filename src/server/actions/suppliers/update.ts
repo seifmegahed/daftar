@@ -28,13 +28,13 @@ export const updateSupplierPrimaryContactAction = async (
 
 export const updateSupplierFieldAction = async (
   supplierId: number,
-  field: string,
+  data: { field: string },
 ): Promise<ReturnTuple<number>> => {
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];
 
   const [supplier, supplierError] = await updateSupplier(supplierId, {
-    field,
+    field: data.field,
     updatedBy: currentUser.id,
   });
 
