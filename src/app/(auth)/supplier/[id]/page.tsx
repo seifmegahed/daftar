@@ -24,7 +24,6 @@ async function SupplierPage({ params }: { params: { id: string } }) {
           <p>{supplier.notes}</p>
         </div>
       </Section>
-      <pre>{JSON.stringify(supplier, null, 2)}</pre>
     </InfoPageWrapper>
   );
 }
