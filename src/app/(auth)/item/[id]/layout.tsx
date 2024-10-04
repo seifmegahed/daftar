@@ -1,7 +1,10 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
 import { getItemDocumentsCountAction } from "@/server/actions/document-relations/read";
-import { getItemProjectsCountAction } from "@/server/actions/project-items/read";
+import {
+  getItemProjectsCountAction,
+  getItemSuppliersCountAction,
+} from "@/server/actions/project-items/read";
 
 export const dynamic = "force-dynamic";
 
@@ -20,6 +23,7 @@ export default async function SettingsLayout({
 
   const [documentsCount] = await getItemDocumentsCountAction(itemId);
   const [projectsCount] = await getItemProjectsCountAction(itemId);
+  const [suppliersCount] = await getItemSuppliersCountAction(itemId);
 
   const sidebarNavItemsGenerator = (id: number) => [
     {
@@ -30,6 +34,11 @@ export default async function SettingsLayout({
       title: "Projects",
       href: basePath(id) + "/projects",
       amount: projectsCount ?? 0,
+    },
+    {
+      title: "Suppliers",
+      href: basePath(id) + "/suppliers",
+      amount: suppliersCount ?? 0,
     },
     {
       title: "Documents",
