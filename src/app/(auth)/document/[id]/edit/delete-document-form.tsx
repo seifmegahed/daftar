@@ -97,7 +97,7 @@ function DeleteDocumentForm({
                     {`You cannot delete a document that is referenced in other
                     database entries. This document is linked to 
                     ${numberOfReferences} 
-                    ${numberOfReferences > 1 ? "entries" : "entry"}.`}
+                    ${numberOfReferences > 1 ? "entries" : "entry"}. If you want to delete this document, you must first unlink it from all its references.`}
                   </FormDescription>
                 ) : (
                   <FormDescription>
