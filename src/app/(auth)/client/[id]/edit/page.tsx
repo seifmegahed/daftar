@@ -1,8 +1,13 @@
 import InfoPageWrapper from "@/components/info-page-wrapper";
-import { getClientFullByIdAction } from "@/server/actions/clients";
-import NotesForm from "./notes-form";
-import RegistrationNumberForm from "./registration-number-form";
-import WebsiteForm from "./website-form";
+import {
+  getClientFullByIdAction,
+  updateClientRegistrationNumberAction,
+} from "@/server/actions/clients";
+import NotesForm from "@/components/common-forms/update-notes-form";
+import { updateClientNotesAction } from "@/server/actions/clients";
+import RegistrationNumberForm from "@/components/common-forms/update-registration-form";
+import WebsiteForm from "@/components/common-forms/update-website-form";
+import { updateClientWebsiteAction } from "@/server/actions/clients";
 import { getCurrentUserAction } from "@/server/actions/users";
 import DeleteClientForm from "./delete-client-form";
 import { getClientProjectsCountAction } from "@/server/actions/projects";
@@ -24,11 +29,25 @@ async function EditClientPage({ params }: { params: { id: string } }) {
       subtitle={`This is the edit page for the client: ${client.name}. Here you can edit the client details.`}
     >
       <RegistrationNumberForm
-        clientId={clientId}
+        id={clientId}
+        updateRegistrationNumberCallbackAction={
+          updateClientRegistrationNumberAction
+        }
+        type="client"
         registrationNumber={client.registrationNumber ?? ""}
       />
-      <WebsiteForm clientId={clientId} website={client.website ?? ""} />
-      <NotesForm clientId={clientId} notes={client.notes ?? ""} />
+      <WebsiteForm
+        id={clientId}
+        updateWebsiteCallbackAction={updateClientWebsiteAction}
+        website={client.website ?? ""}
+        type="client"
+      />
+      <NotesForm
+        id={clientId}
+        updateCallbackAction={updateClientNotesAction}
+        notes={client.notes ?? ""}
+        type="client"
+      />
       {clientProjects !== null && (
         <DeleteClientForm
           clientId={clientId}
