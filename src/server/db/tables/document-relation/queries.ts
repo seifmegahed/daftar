@@ -279,13 +279,14 @@ export const getDocumentClients = async (
       .where(
         and(
           eq(documentRelationsTable.documentId, id),
-          isNotNull(documentRelationsTable.projectId),
+          isNotNull(documentRelationsTable.clientId),
         ),
       )
       .leftJoin(clientsTable, eq(documentRelationsTable.clientId, clientsTable.id))
       .orderBy(desc(clientsTable.createdAt));
 
     const parsedClients = z.array(documentClientsSchema).safeParse(clients);
+
 
     if (parsedClients.error) return [null, "Error getting document clients"];
 
@@ -306,7 +307,7 @@ export const documentClientsCount = async (
       .where(
         and(
           eq(documentRelationsTable.documentId, id),
-          isNotNull(documentRelationsTable.projectId),
+          isNotNull(documentRelationsTable.clientId),
         ),
       )
       .limit(1);
@@ -396,6 +397,7 @@ const documentItemsSchema = z.object({
   name: z.string(),
   make: z.string(),
   mpn: z.string(),
+  type: z.string(),
   createdAt: z.date(),
 });
 
@@ -411,6 +413,7 @@ export const getDocumentItems = async (
         name: itemsTable.name,
         make: itemsTable.make,
         mpn: itemsTable.mpn,
+        type: itemsTable.type,
         createdAt: itemsTable.createdAt,
       })
       .from(documentRelationsTable)
