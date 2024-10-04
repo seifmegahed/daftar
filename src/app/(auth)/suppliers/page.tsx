@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Pagination from "@/components/pagination";
 import SuppliersList from "./all-suppliers/suppliers-list";
 import { defaultPageLimit } from "@/data/config";
-import { getSuppliersCountAction } from "@/server/actions/suppliers";
+import { getSuppliersCountAction } from "@/server/actions/suppliers/read";
 import FilterAndSearch from "./all-suppliers/filter-and-search";
 import SkeletonList from "@/components/skeletons";
 

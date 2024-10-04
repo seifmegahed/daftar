@@ -1,7 +1,7 @@
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getSupplierAddressesAction } from "@/server/actions/addresses";
 import AddressCard from "@/components/common-cards/address";
-import { getSupplierPrimaryAddressIdAction } from "@/server/actions/suppliers";
+import { getSupplierPrimaryAddressIdAction } from "@/server/actions/suppliers/read";
 
 async function SuppliersAddressesPage({ params }: { params: { id: string } }) {
   const supplierId = Number(params.id);

@@ -4,7 +4,7 @@ import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { deleteAddressAction } from "@/server/actions/addresses";
 import { updateClientPrimaryAddressAction } from "@/server/actions/clients";
-import { updateSupplierPrimaryAddressAction } from "@/server/actions/suppliers";
+import { updateSupplierPrimaryAddressAction } from "@/server/actions/suppliers/update";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";

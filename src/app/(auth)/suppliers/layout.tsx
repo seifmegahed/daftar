@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator"
 import { SidebarNav } from "@/components/nav"
-import { getSuppliersCountAction } from "@/server/actions/suppliers"
+import { getSuppliersCountAction } from "@/server/actions/suppliers/read"
 
 export const dynamic = "force-dynamic"
 

@@ -1,5 +1,5 @@
 import SupplierCard from "./supplier-card";
-import { getSuppliersBriefAction } from "@/server/actions/suppliers";
+import { getSuppliersBriefAction } from "@/server/actions/suppliers/read";
 
 async function SuppliersList({
   page = 1,

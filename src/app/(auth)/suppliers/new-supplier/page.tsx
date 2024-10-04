@@ -18,7 +18,7 @@ import SubmitButton from "@/components/buttons/submit-button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { toast } from "sonner";
-import { addSupplierAction } from "@/server/actions/suppliers";
+import { addSupplierAction } from "@/server/actions/suppliers/create";
 import { getErrorMessage } from "@/lib/exceptions";
 import { notesMaxLength } from "@/data/config";
 import { emptyToUndefined } from "@/utils/common";

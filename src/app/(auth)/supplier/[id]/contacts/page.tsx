@@ -1,7 +1,7 @@
 import ContactCard from "@/components/common-cards/contact";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getSupplierContactsAction } from "@/server/actions/contacts";
-import { getSupplierPrimaryContactIdAction } from "@/server/actions/suppliers";
+import { getSupplierPrimaryContactIdAction } from "@/server/actions/suppliers/read";
 
 async function SupplierContactsPage({ params }: { params: { id: string } }) {
   const supplierId = Number(params.id);

@@ -1,7 +1,7 @@
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import Section from "@/components/info-section";
-import { getSupplierFullByIdAction } from "@/server/actions/suppliers";
+import { getSupplierFullByIdAction } from "@/server/actions/suppliers/read";
 import SupplierSection from "@/components/common-sections/company-section";
 
 async function SupplierPage({ params }: { params: { id: string } }) {

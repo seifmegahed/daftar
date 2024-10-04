@@ -1,5 +1,5 @@
 import { listAllItemsAction } from "@/server/actions/items";
-import { listAllSuppliersAction } from "@/server/actions/suppliers";
+import { listAllSuppliersAction } from "@/server/actions/suppliers/read";
 import NewItemForm from "./form";
 
 export const dynamic = "force-dynamic";

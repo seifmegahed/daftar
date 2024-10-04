@@ -11,6 +11,7 @@ import { defaultPageLimit } from "@/data/config";
 import { prepareSearchText } from "@/utils/common";
 import { addressesTable, type InsertAddressType } from "../address/schema";
 import { contactsTable, type InsertContactType } from "../contact/schema";
+import { documentRelationsTable } from "../document/schema";
 
 /**
  * Getters
@@ -285,6 +286,41 @@ export const updateSupplier = async (
 
     if (!returnValue) return [null, "Error updating supplier primary address"];
     return [returnValue.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const deleteSupplier = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const supplier = await db.transaction(async (tx) => {
+      await tx
+        .delete(addressesTable)
+        .where(eq(addressesTable.supplierId, supplierId))
+        .returning({ id: addressesTable.id });
+
+      await tx
+        .delete(contactsTable)
+        .where(eq(contactsTable.supplierId, supplierId))
+        .returning({ id: contactsTable.id });
+
+      await tx
+        .delete(documentRelationsTable)
+        .where(eq(documentRelationsTable.supplierId, supplierId))
+        .returning({ id: documentRelationsTable.id });
+
+      const [supplier] = await tx
+        .delete(suppliersTable)
+        .where(eq(suppliersTable.id, supplierId))
+        .returning({ id: suppliersTable.id });
+
+      return supplier;
+    });
+
+    if (!supplier) return [null, "Error deleting supplier"];
+    return [supplier.id, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
