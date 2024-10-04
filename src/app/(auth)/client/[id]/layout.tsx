@@ -3,7 +3,7 @@ import { SidebarNav } from "@/components/nav";
 import { getClientAddressesCountAction } from "@/server/actions/addresses";
 import { getClientContactsCountAction } from "@/server/actions/contacts";
 import { getClientDocumentsCountAction } from "@/server/actions/document-relations/read";
-import { getClientProjectsCountAction } from "@/server/actions/projects";
+import { getClientProjectsCountAction } from "@/server/actions/projects/read";
 
 const basePath = (id: string) => "/client/" + id;
 

@@ -13,7 +13,7 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import DatePicker from "@/components/date-picker";
-import { updateProjectDatesAction } from "@/server/actions/projects";
+import { updateProjectDatesAction } from "@/server/actions/projects/update";
 import { toast } from "sonner";
 import { useState } from "react";
 import { toDBDate } from "@/utils/common";

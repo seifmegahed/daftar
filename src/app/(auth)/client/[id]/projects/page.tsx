@@ -1,6 +1,6 @@
 import ProjectCard from "@/app/(auth)/projects/all-projects/project-card";
 import InfoPageWrapper from "@/components/info-page-wrapper";
-import { getClientProjectsAction } from "@/server/actions/projects";
+import { getClientProjectsAction } from "@/server/actions/projects/read";
 
 async function ClientProjectsPage({ params }: { params: { id: string } }) {
   const [projects, error] = await getClientProjectsAction(Number(params.id));

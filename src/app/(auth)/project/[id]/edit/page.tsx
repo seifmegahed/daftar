@@ -1,9 +1,9 @@
+import { getProjectBriefByIdAction } from "@/server/actions/projects/read";
 import {
-  getProjectBriefByIdAction,
   updateProjectDescriptionAction,
   updateProjectNameAction,
   updateProjectNotesAction,
-} from "@/server/actions/projects";
+} from "@/server/actions/projects/update";
 import {
   getAllUsersAction,
   getCurrentUserAction,

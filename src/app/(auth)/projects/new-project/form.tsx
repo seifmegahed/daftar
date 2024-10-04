@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/select";
 import type { UserBriefType } from "@/server/db/tables/user/queries";
 import ComboSelect from "@/components/combo-select-obj";
-import { addProjectAction } from "@/server/actions/projects";
+import { addProjectAction } from "@/server/actions/projects/create";
 import { statusCodes } from "@/data/lut";
 import { notesMaxLength } from "@/data/config";
 import { Separator } from "@/components/ui/separator";

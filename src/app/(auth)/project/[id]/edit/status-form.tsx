@@ -21,7 +21,7 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import { updateProjectStatusAction } from "@/server/actions/projects";
+import { updateProjectStatusAction } from "@/server/actions/projects/update";
 
 const schema = z.object({
   status: z.preprocess((value: unknown) => Number(value), z.number()),

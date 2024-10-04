@@ -3,120 +3,14 @@
 import type { z } from "zod";
 
 import { insertProjectSchema } from "@/server/db/tables/project/schema";
-import {
-  getProjectById,
-  getProjectsBrief,
-  insertProject,
-  getProjectLinkedDocuments,
-  getProjectsCount,
-  getProjectBriefById,
-  updateProject,
-  deleteProject,
-  getClientProjectsCount,
-  getClientProjects,
-} from "@/server/db/tables/project/queries";
-
-import type {
-  BriefClientProjectType,
-  GetProjectType,
-  BriefProjectType,
-  GetProjectLinkedDocumentsType,
-} from "@/server/db/tables/project/queries";
-import type { SelectProjectType } from "@/server/db/tables/project/schema";
+import { updateProject } from "@/server/db/tables/project/queries";
 
 import {
   getCurrentUserAction,
   getCurrentUserIdAction,
 } from "@/server/actions/users";
-import { redirect } from "next/navigation";
 
 import type { ReturnTuple } from "@/utils/type-utils";
-
-export const getProjectsCountAction = async (): Promise<
-  ReturnTuple<number>
-> => {
-  const [projectCount, error] = await getProjectsCount();
-  if (error !== null) return [null, error];
-  return [projectCount, null];
-};
-
-export const getClientProjectsCountAction = async (
-  clientId: number,
-): Promise<ReturnTuple<number>> => {
-  const [projectCount, error] = await getClientProjectsCount(clientId);
-  if (error !== null) return [null, error];
-  return [projectCount, null];
-};
-
-export const getProjectsBriefAction = async (
-  page: number,
-  search?: string,
-): Promise<ReturnTuple<BriefProjectType[]>> => {
-  const [projects, error] = await getProjectsBrief(page, search);
-  if (error !== null) return [null, error];
-  return [projects, null];
-};
-
-export const getClientProjectsAction = async (
-  clientId: number,
-): Promise<ReturnTuple<BriefClientProjectType[]>> => {
-  const [projects, error] = await getClientProjects(clientId);
-  if (error !== null) return [null, error];
-  return [projects, null];
-};
-
-export const getProjectBriefByIdAction = async (
-  id: number,
-): Promise<ReturnTuple<SelectProjectType>> => {
-  const [project, error] = await getProjectBriefById(id);
-  if (error !== null) return [null, error];
-  return [project, null];
-};
-
-export const getProjectByIdAction = async (
-  id: number,
-): Promise<ReturnTuple<GetProjectType>> => {
-  const [project, error] = await getProjectById(id);
-  if (error !== null) return [null, error];
-  return [project, null];
-};
-
-const addProjectSchema = insertProjectSchema.omit({
-  createdBy: true,
-});
-
-type AddProjectFormType = z.infer<typeof addProjectSchema>;
-
-export const addProjectAction = async (
-  data: AddProjectFormType,
-): Promise<ReturnTuple<number>> => {
-  const isValid = addProjectSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
-
-  const [userId, userIdError] = await getCurrentUserIdAction();
-  if (userIdError !== null) return [null, userIdError];
-
-  const [projectId, projectInsertError] = await insertProject({
-    name: isValid.data.name,
-    status: isValid.data.status,
-    description: isValid.data.description,
-    notes: isValid.data.notes,
-    clientId: isValid.data.clientId,
-    ownerId: isValid.data.ownerId,
-    createdBy: userId,
-  });
-  if (projectInsertError !== null) return [null, projectInsertError];
-
-  return [projectId, null];
-};
-
-export const getProjectLinkedDocumentsAction = async (
-  projectId: number,
-): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
-  const [project, projectError] = await getProjectLinkedDocuments(projectId);
-  if (projectError !== null) return [null, projectError];
-  return [project, null];
-};
 
 const updateProjectStatusSchema = insertProjectSchema.pick({
   status: true,
@@ -277,29 +171,4 @@ export const updateProjectOwnerAction = async (
   if (error !== null) return [null, error];
 
   return [projectId, null];
-};
-
-const deleteProjectSchema = insertProjectSchema.pick({
-  ownerId: true,
-});
-
-type DeleteProjectFormType = z.infer<typeof deleteProjectSchema>;
-
-export const deleteProjectAction = async (
-  id: number,
-  data: DeleteProjectFormType,
-): Promise<ReturnTuple<number>> => {
-  const isValid = deleteProjectSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid form data"];
-
-  const [currentUser, currentUserError] = await getCurrentUserAction();
-  if (currentUserError !== null) return [null, currentUserError];
-
-  if (isValid.data.ownerId !== currentUser.id && currentUser.role !== "admin")
-    return [null, "Unauthorized"];
-
-  const [, error] = await deleteProject(id);
-  if (error !== null) return [null, error];
-
-  redirect("/projects");
 };

@@ -1,4 +1,4 @@
-import { getProjectsBriefAction } from "@/server/actions/projects";
+import { getProjectsBriefAction } from "@/server/actions/projects/read";
 import ProjectCard from "./project-card";
 
 async function ProjectsList({

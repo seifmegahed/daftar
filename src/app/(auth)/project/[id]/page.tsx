@@ -2,7 +2,7 @@ import { getCurrencyLabel, getStatusLabel } from "@/data/lut";
 import {
   getProjectByIdAction,
   getProjectLinkedDocumentsAction,
-} from "@/server/actions/projects";
+} from "@/server/actions/projects/read";
 import { type SimpDoc } from "@/server/db/tables/document/queries";
 import { numberWithCommas } from "@/utils/common";
 import { format } from "date-fns";

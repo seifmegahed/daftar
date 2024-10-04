@@ -3,7 +3,7 @@ import Pagination from "@/components/pagination";
 import ProjectsList from "./all-projects/projects-list";
 import SearchBar from "./all-projects/filter-and-search";
 import SkeletonList from "@/components/skeletons";
-import { getProjectsCountAction } from "@/server/actions/projects";
+import { getProjectsCountAction } from "@/server/actions/projects/read";
 import { defaultPageLimit } from "@/data/config";
 
 const pageLimit = defaultPageLimit;

@@ -5,7 +5,7 @@ import {
   updateClientRegistrationNumberAction,
 } from "@/server/actions/clients/update";
 import { getCurrentUserAction } from "@/server/actions/users";
-import { getClientProjectsCountAction } from "@/server/actions/projects";
+import { getClientProjectsCountAction } from "@/server/actions/projects/read";
 
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import NotesForm from "@/components/common-forms/update-notes-form";
