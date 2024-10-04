@@ -1,5 +1,5 @@
 import DocumentsList from "@/components/documents-list";
-import { getItemDocumentsAction } from "@/server/actions/documents";
+import { getItemDocumentsAction } from "@/server/actions/document-relations/read";
 
 async function ClientDocumentsPage({ params }: { params: { id: string } }) {
   const [documents, error] = await getItemDocumentsAction(Number(params.id));

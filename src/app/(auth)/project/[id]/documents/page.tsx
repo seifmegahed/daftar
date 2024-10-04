@@ -1,4 +1,4 @@
-import { getProjectDocumentsAction } from "@/server/actions/documents";
+import { getProjectDocumentsAction } from "@/server/actions/document-relations/read";
 import DocumentsList from "@/components/documents-list";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 

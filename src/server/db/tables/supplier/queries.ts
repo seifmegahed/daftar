@@ -1,17 +1,20 @@
 import { db } from "@/server/db";
-import {
-  type InsertSupplierType,
-  type SelectSupplierType,
-  suppliersTable,
-} from "./schema";
-import type { ReturnTuple } from "@/utils/type-utils";
 import { asc, count, sql, desc, eq } from "drizzle-orm";
+
+import { suppliersTable } from "./schema";
+import {
+  documentRelationsTable,
+  addressesTable,
+  contactsTable,
+} from "@/server/db/schema";
 import { getErrorMessage } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
 import { prepareSearchText } from "@/utils/common";
-import { addressesTable, type InsertAddressType } from "../address/schema";
-import { contactsTable, type InsertContactType } from "../contact/schema";
-import { documentRelationsTable } from "../document/schema";
+
+import type { InsertSupplierType, SelectSupplierType } from "./schema";
+import type { ReturnTuple } from "@/utils/type-utils";
+import type { InsertAddressType } from "../address/schema";
+import type { InsertContactType } from "../contact/schema";
 
 /**
  * Getters

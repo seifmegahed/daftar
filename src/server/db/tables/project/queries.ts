@@ -7,7 +7,7 @@ import { projectsTable } from "./schema";
 import { projectItemsTable } from "@/server/db/tables/project-item/schema";
 import { clientsTable } from "@/server/db/tables/client/schema";
 import { usersTable } from "@/server/db/tables/user/schema";
-import { documentRelationsTable } from "@/server/db/tables/document/schema";
+import { documentRelationsTable } from "@/server/db/tables/document-relation/schema";
 
 import { prepareSearchText } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";

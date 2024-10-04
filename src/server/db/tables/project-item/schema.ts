@@ -1,11 +1,9 @@
 import { integer, numeric, pgTable, serial } from "drizzle-orm/pg-core";
-
-import { itemsTable } from "../item/schema";
-import { suppliersTable } from "../supplier/schema";
+import type { z } from "zod";
 import { relations } from "drizzle-orm";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import type { z } from "zod";
-import { projectsTable } from "../project/schema";
+
+import { itemsTable, projectsTable, suppliersTable } from "@/server/db/schema";
 
 export const projectItemsTable = pgTable("project_items", {
   id: serial("id").primaryKey(),

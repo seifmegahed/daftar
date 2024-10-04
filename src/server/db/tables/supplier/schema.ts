@@ -1,3 +1,4 @@
+import type { z } from "zod";
 import {
   boolean,
   index,
@@ -7,13 +8,15 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { usersTable } from "../user/schema";
 import { relations, sql } from "drizzle-orm";
-import { contactsTable } from "../contact/schema";
-import { addressesTable } from "../address/schema";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import type { z } from "zod";
-import { documentRelationsTable } from "../document/schema";
+
+import {
+  usersTable,
+  addressesTable,
+  contactsTable,
+  documentRelationsTable,
+} from "@/server/db/schema";
 import { notesMaxLength } from "@/data/config";
 
 export const suppliersTable = pgTable(

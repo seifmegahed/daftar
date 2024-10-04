@@ -2,7 +2,7 @@ import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
 import { getClientAddressesCountAction } from "@/server/actions/addresses";
 import { getClientContactsCountAction } from "@/server/actions/contacts";
-import { getClientDocumentsCountAction } from "@/server/actions/documents";
+import { getClientDocumentsCountAction } from "@/server/actions/document-relations/read";
 import { getClientProjectsCountAction } from "@/server/actions/projects";
 
 const basePath = (id: string) => "/client/" + id;

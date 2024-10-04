@@ -7,7 +7,7 @@ import { addressesTable, type InsertAddressType } from "../address/schema";
 import { contactsTable, type InsertContactType } from "../contact/schema";
 import { prepareSearchText } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
-import { documentRelationsTable } from "../document/schema";
+import { documentRelationsTable } from "@/server/db/schema";
 
 /**
  * Getters

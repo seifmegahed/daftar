@@ -6,11 +6,11 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-import { usersTable } from "../user/schema";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
-import type { z } from "zod";
 import { relations, sql } from "drizzle-orm";
-import { documentRelationsTable } from "../document/schema";
+import type { z } from "zod";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+import { usersTable, documentRelationsTable } from "@/server/db/schema";
 import { notesMaxLength } from "@/data/config";
 
 export const itemsTable = pgTable(

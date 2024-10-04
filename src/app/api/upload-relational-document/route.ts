@@ -11,16 +11,17 @@
  * relations (project, item, supplier, or client) as per the DocumentsRelations
  * table.
  */
-import {
-  documentSchema,
-  documentRelationsSchema,
-  type DocumentRelationsType,
-} from "@/server/db/tables/document/schema";
-import { type NextRequest } from "next/server";
 import { z } from "zod";
+
+import { documentSchema } from "@/server/db/tables/document/schema";
+import { documentRelationsSchema } from "@/server/db/tables/document-relation/schema";
+
 import { saveDocumentFile } from "@/server/actions/documents";
-import { insertDocumentWithRelation } from "@/server/db/tables/document/queries";
+import { insertDocumentWithRelation } from "@/server/db/tables/document-relation/queries";
 import { getCurrentUserIdAction } from "@/server/actions/users";
+
+import type { NextRequest } from "next/server";
+import type { DocumentRelationsType } from "@/server/db/tables/document-relation/schema";
 
 const requestSchema = z.object({
   document: documentSchema.pick({
@@ -75,7 +76,8 @@ export async function POST(request: NextRequest) {
     if (saveError !== null) return new Response(saveError, { status: 500 });
 
     const extension = validatedFile.name.split(".").pop();
-    if (!extension) return new Response("Invalid file extension", { status: 400 });
+    if (!extension)
+      return new Response("Invalid file extension", { status: 400 });
 
     const [documentId, documentInsertError] = await insertDocumentWithRelation(
       {

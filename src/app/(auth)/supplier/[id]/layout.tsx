@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
-import { getSupplierDocumentsCountAction } from "@/server/actions/documents";
+import { getSupplierDocumentsCountAction } from "@/server/actions/document-relations/read";
 import { getSupplierItemsCountAction } from "@/server/actions/project-items/read";
 import { getSupplierAddressesCountAction } from "@/server/actions/addresses";
 import { getSupplierContactsCountAction } from "@/server/actions/contacts";

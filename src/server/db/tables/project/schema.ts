@@ -7,15 +7,17 @@ import {
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
-
-import { usersTable } from "../user/schema";
-import { clientsTable } from "../client/schema";
 import { relations, sql } from "drizzle-orm";
-import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
-import { documentRelationsTable } from "../document/schema";
+import { createInsertSchema, createSelectSchema } from "drizzle-zod";
+
+import {
+  documentRelationsTable,
+  projectItemsTable,
+  clientsTable,
+  usersTable,
+} from "@/server/db/schema";
 import { notesMaxLength } from "@/data/config";
-import { projectItemsTable } from "../project-item/schema";
 
 export const projectsTable = pgTable(
   "project",

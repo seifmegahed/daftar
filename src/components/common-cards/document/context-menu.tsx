@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { unlinkDocumentAction } from "@/server/actions/documents";
+import { unlinkDocumentAction } from "@/server/actions/document-relations/delete";
 import { type SimpDoc } from "@/server/db/tables/document/queries";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";

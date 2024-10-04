@@ -2,17 +2,13 @@
 
 import { getErrorMessage } from "@/lib/exceptions";
 import {
-  deleteDocumentRelation,
-  getClientDocuments,
   getDocumentById,
   getDocuments,
   getDocumentsCount,
-  getItemDocuments,
-  getProjectDocuments,
-  getSupplierDocuments,
-  type BriefDocumentType,
-  type DocumentType,
-  type SimpDoc,
+} from "@/server/db/tables/document/queries";
+import type {
+  BriefDocumentType,
+  DocumentType,
 } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 
@@ -49,70 +45,6 @@ export const saveDocumentFile = async (
   }
 };
 
-export const getClientDocumentsAction = async (
-  clientId: number,
-): Promise<ReturnTuple<SimpDoc[]>> => {
-  const [documents, documentsError] = await getClientDocuments(clientId);
-  if (documentsError !== null) return [null, documentsError];
-  return [documents, null];
-};
-
-export const getClientDocumentsCountAction = async (
-  clientId: number,
-): Promise<ReturnTuple<number>> => {
-  const [documents, countError] = await getClientDocuments(clientId);
-  if (countError !== null) return [null, countError];
-  return [documents.length, null];
-};
-
-export const getSupplierDocumentsAction = async (
-  supplierId: number,
-): Promise<ReturnTuple<SimpDoc[]>> => {
-  const [documents, documentsError] = await getSupplierDocuments(supplierId);
-  if (documentsError !== null) return [null, documentsError];
-  return [documents, null];
-};
-
-export const getSupplierDocumentsCountAction = async (
-  supplierId: number,
-): Promise<ReturnTuple<number>> => {
-  const [documents, countError] = await getSupplierDocuments(supplierId);
-  if (countError !== null) return [null, countError];
-  return [documents.length, null];
-};
-
-export const getItemDocumentsAction = async (
-  itemId: number,
-): Promise<ReturnTuple<SimpDoc[]>> => {
-  const [documents, documentsError] = await getItemDocuments(itemId);
-  if (documentsError !== null) return [null, documentsError];
-  return [documents, null];
-};
-
-export const getItemDocumentsCountAction = async (
-  itemId: number,
-): Promise<ReturnTuple<number>> => {
-  const [documents, countError] = await getItemDocuments(itemId);
-  if (countError !== null) return [null, countError];
-  return [documents.length, null];
-};
-
-export const getProjectDocumentsAction = async (
-  projectId: number,
-): Promise<ReturnTuple<SimpDoc[]>> => {
-  const [documents, documentsError] = await getProjectDocuments(projectId);
-  if (documentsError !== null) return [null, documentsError];
-  return [documents, null];
-};
-
-export const getProjectDocumentsCountAction = async (
-  projectId: number,
-): Promise<ReturnTuple<number>> => {
-  const [documents, countError] = await getProjectDocuments(projectId);
-  if (countError !== null) return [null, countError];
-  return [documents.length, null];
-};
-
 export const getDocumentsAction = async (
   page: number,
   searchText?: string,
@@ -133,14 +65,6 @@ export const getDocumentByIdAction = async (
   const [document, documentError] = await getDocumentById(id);
   if (documentError !== null) return [null, documentError];
   return [document, null];
-};
-
-export const unlinkDocumentAction = async (
-  relationId: number,
-): Promise<ReturnTuple<number>> => {
-  const [deleted, deleteError] = await deleteDocumentRelation(relationId);
-  if (deleteError !== null) return [null, deleteError];
-  return [deleted, null];
 };
 
 export const getDocumentsCountAction = async (): Promise<
