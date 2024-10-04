@@ -1,3 +1,5 @@
+"use server";
+
 import type { z } from "zod";
 import { updateItem } from "@/server/db/tables/item/queries";
 import { insertItemSchema } from "@/server/db/tables/item/schema";

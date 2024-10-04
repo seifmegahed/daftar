@@ -91,10 +91,10 @@ function NotesForm({
               />
               <FormMessage />
               <FormDescription>
-                Update {type} notes, this will change the notes of the {type}
+                {`Update ${type} notes, this will change the notes of the ${type} 
                 across all references and the previous notes will be lost. After
-                typing the updated description press the update button to
-                persist the change.
+                typing the updated notes press the update button to
+                persist the change.`}
               </FormDescription>
             </FormItem>
           )}
