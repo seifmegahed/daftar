@@ -9,6 +9,9 @@ import {
   updateItemNotesAction,
 } from "@/server/actions/items/update";
 import { getCurrentUserAction } from "@/server/actions/users";
+import TypeForm from "./type-form";
+import MakeForm from "./make-form";
+import MpnForm from "./mpn-form";
 
 async function EditItemPage({ params }: { params: { id: string } }) {
   const itemId = Number(params.id);
@@ -32,12 +35,15 @@ async function EditItemPage({ params }: { params: { id: string } }) {
         access={hasFullAccess}
         name={item.name}
       />
+      <TypeForm id={itemId} defaultValue={item.type ?? ""} />
       <DescriptionForm
         id={itemId}
         updateCallbackAction={updateItemDescriptionAction}
         description={item.description ?? ""}
         type="item"
       />
+      <MakeForm id={itemId} defaultValue={item.make ?? ""} />
+      <MpnForm id={itemId} defaultValue={item.mpn ?? ""} />
       <NotesForm
         id={itemId}
         updateCallbackAction={updateItemNotesAction}
