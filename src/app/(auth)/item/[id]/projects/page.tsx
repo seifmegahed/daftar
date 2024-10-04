@@ -11,7 +11,7 @@ async function ItemProjectsPage({params}: { params: { id: string } }) {
   return (
     <InfoPageWrapper
       title="Item's Projects"
-      subtitle="This is a list of the projects linked to the item."
+      subtitle="This is a list of the projects where this item is referenced."
     >
       <div className="flex flex-col gap-4">
         {projects.map((project) => (

@@ -15,6 +15,7 @@ import type {
   SelectProjectItemType,
 } from "@/server/db/tables/project-item/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { selectSupplierSchema, suppliersTable } from "../supplier/schema";
 
 export const getClientProjectsCount = async (
   clientId: number,
@@ -273,6 +274,55 @@ export const getItemProjects = async (
     });
 
     return [uniqueProjects, null];
+  } catch (error) {
+    console.log(error);
+    return [null, getErrorMessage(error)];
+  }
+};
+
+const ItemSuppliersSchema = selectSupplierSchema.pick({
+  id: true,
+  name: true,
+  field: true,
+  registrationNumber: true,
+  createdAt: true,
+});
+
+export type ItemSupplierType = z.infer<typeof ItemSuppliersSchema>;
+
+export const getItemSuppliers = async (
+  itemId: number,
+): Promise<ReturnTuple<ItemSupplierType[]>> => {
+  try {
+    const suppliers = await db
+      .select({
+        id: suppliersTable.id,
+        name: suppliersTable.name,
+        field: suppliersTable.field,
+        registrationNumber: suppliersTable.registrationNumber,
+        createdAt: suppliersTable.createdAt,
+      })
+      .from(projectItemsTable)
+      .where(eq(projectItemsTable.itemId, itemId))
+      .leftJoin(
+        suppliersTable,
+        eq(projectItemsTable.supplierId, suppliersTable.id),
+      )
+      .orderBy(desc(suppliersTable.createdAt));
+
+    const parsedSuppliers = z.array(ItemSuppliersSchema).safeParse(suppliers);
+
+    if (parsedSuppliers.error) return [null, "Error getting item suppliers"];
+
+    const uniqueSuppliers: ItemSupplierType[] = [];
+
+    parsedSuppliers.data.forEach((supplier) => {
+      if (!uniqueSuppliers.find((_supplier) => _supplier.id === supplier.id)) {
+        uniqueSuppliers.push(supplier);
+      }
+    });
+
+    return [uniqueSuppliers, null];
   } catch (error) {
     console.log(error);
     return [null, getErrorMessage(error)];

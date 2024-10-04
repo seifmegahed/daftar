@@ -2,6 +2,7 @@
 
 import {
   getItemProjects,
+  getItemSuppliers,
   getProjectItems,
   getSupplierItems,
   getSupplierItemsCount,
@@ -10,6 +11,7 @@ import {
 import type {
   GetProjectItemType,
   ItemProjectsType,
+  ItemSupplierType,
   SupplierItemType,
   SupplierProjectsType,
 } from "@/server/db/tables/project-item/queries";
@@ -77,4 +79,20 @@ export const getItemProjectsCountAction = async (
   const [itemProjects, error] = await getItemProjects(itemId);
   if (error !== null) return [null, error];
   return [itemProjects.length, null];
+};
+
+export const getItemSuppliersAction = async (
+  itemId: number,
+): Promise<ReturnTuple<ItemSupplierType[]>> => {
+  const [suppliers, error] = await getItemSuppliers(itemId);
+  if (error !== null) return [null, error];
+  return [suppliers, null];
+};
+
+export const getItemSuppliersCountAction = async (
+  itemId: number,
+): Promise<ReturnTuple<number>> => {
+  const [itemSuppliers, error] = await getItemSuppliers(itemId);
+  if (error !== null) return [null, error];
+  return [itemSuppliers.length, null];
 };
