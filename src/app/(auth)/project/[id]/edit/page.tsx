@@ -1,20 +1,23 @@
 import {
   getProjectBriefByIdAction,
+  updateProjectDescriptionAction,
   updateProjectNameAction,
   updateProjectNotesAction,
 } from "@/server/actions/projects";
-import StatusForm from "./status-form";
-import DescriptionForm from "./description-form";
 import {
   getAllUsersAction,
   getCurrentUserAction,
 } from "@/server/actions/users";
+
+import StatusForm from "./status-form";
 import OwnerForm from "./owner-form";
 import DatesForm from "./dates-form";
-import NotesForm from "@/components/common-forms/update-notes-form";
 import DeleteProjectForm from "./delete-project";
-import InfoPageWrapper from "@/components/info-page-wrapper";
+
+import NotesForm from "@/components/common-forms/update-notes-form";
 import NameForm from "@/components/common-forms/update-name-form";
+import DescriptionForm from "@/components/common-forms/update-description-form";
+import InfoPageWrapper from "@/components/info-page-wrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -45,8 +48,10 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
         ownerId={project.ownerId}
       />
       <DescriptionForm
-        projectId={project.id}
+        id={project.id}
         description={project.description ?? ""}
+        updateCallbackAction={updateProjectDescriptionAction}
+        type="project"
       />
       {usersError === null && currentUserError === null && (
         <OwnerForm

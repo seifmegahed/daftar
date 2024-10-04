@@ -16,7 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { notesMaxLength } from "@/data/config";
 import { emptyToUndefined } from "@/utils/common";
 import { toast } from "sonner";
-import { updateProjectDescriptionAction } from "@/server/actions/projects";
+
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const schema = z.object({
   description: z.preprocess(
@@ -33,11 +34,18 @@ const schema = z.object({
 type FormDataType = z.infer<typeof schema>;
 
 function DescriptionForm({
-  projectId,
+  id,
   description,
+  type,
+  updateCallbackAction,
 }: {
-  projectId: number;
+  id: number;
   description: string;
+  type: "client" | "supplier" | "project" | "item";
+  updateCallbackAction: (
+    id: number,
+    data: { description: string | undefined },
+  ) => Promise<ReturnTuple<number>>;
 }) {
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
@@ -46,25 +54,25 @@ function DescriptionForm({
 
   const onSubmit = async (data: FormDataType) => {
     try {
-      const [, error] = await updateProjectDescriptionAction(projectId, {
+      const [, error] = await updateCallbackAction(id, {
         description: data.description,
       });
       if (error !== null) {
         console.log(error);
-        toast.error("Error updating project description");
+        toast.error("Error updating description");
       } else {
-        toast.success("Project description updated successfully");
+        toast.success("Description updated successfully");
         form.reset(data);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Error updating project description");
+      toast.error("Error updating description");
     }
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold">Project Description</h2>
+      <h2 className="text-xl font-bold">Description</h2>
       <Separator />
       <form
         className="flex flex-col gap-4"
@@ -83,11 +91,11 @@ function DescriptionForm({
                 />
                 <FormMessage />
                 <FormDescription>
-                  Update project description, this will change the description
-                  of the project across all references. After typing the updated
+                  {`Update ${type} description, this will change the description
+                  of the ${type} across all references. After typing the updated
                   description press the update button to persist the change.
-                  Project description is one of the fields used to search
-                  projects.
+                  The ${type} description is one of the fields used to search
+                  ${type}s.`}
                 </FormDescription>
               </FormItem>
             )}

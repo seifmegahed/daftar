@@ -1,8 +1,10 @@
+import DescriptionForm from "@/components/common-forms/update-description-form";
 import NameForm from "@/components/common-forms/update-name-form";
 import NotesForm from "@/components/common-forms/update-notes-form";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getItemDetailsAction } from "@/server/actions/items";
 import {
+  updateItemDescriptionAction,
   updateItemNameAction,
   updateItemNotesAction,
 } from "@/server/actions/items/update";
@@ -29,6 +31,12 @@ async function EditItemPage({ params }: { params: { id: string } }) {
         type="item"
         access={hasFullAccess}
         name={item.name}
+      />
+      <DescriptionForm
+        id={itemId}
+        updateCallbackAction={updateItemDescriptionAction}
+        description={item.description ?? ""}
+        type="item"
       />
       <NotesForm
         id={itemId}
