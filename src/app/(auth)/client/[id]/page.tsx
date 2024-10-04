@@ -1,4 +1,4 @@
-import { getClientFullByIdAction } from "@/server/actions/clients";
+import { getClientFullByIdAction } from "@/server/actions/clients/read";
 import Section from "@/components/info-section";
 import ClientSection from "@/components/common-sections/company-section";
 import UserInfoSection from "@/components/common-sections/user-info-section";

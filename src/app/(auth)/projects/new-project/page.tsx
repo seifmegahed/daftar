@@ -1,4 +1,4 @@
-import { listAllClientsAction } from "@/server/actions/clients";
+import { listAllClientsAction } from "@/server/actions/clients/read";
 import { listAllUsersAction } from "@/server/actions/users";
 import NewProjectForm from "./form";
 

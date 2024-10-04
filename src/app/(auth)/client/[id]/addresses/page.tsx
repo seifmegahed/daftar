@@ -1,6 +1,6 @@
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getClientAddressesAction } from "@/server/actions/addresses";
-import { getClientPrimaryAddressIdAction } from "@/server/actions/clients";
+import { getClientPrimaryAddressIdAction } from "@/server/actions/clients/read";
 import AddressCard from "@/components/common-cards/address";
 
 async function ClientAddressesPage({ params }: { params: { id: string } }) {

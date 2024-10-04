@@ -1,6 +1,6 @@
 import ContactCard from "@/components/common-cards/contact";
 import InfoPageWrapper from "@/components/info-page-wrapper";
-import { getClientPrimaryContactIdAction } from "@/server/actions/clients";
+import { getClientPrimaryContactIdAction } from "@/server/actions/clients/read";
 import { getClientContactsAction } from "@/server/actions/contacts";
 
 async function ClientContactsPage({ params }: { params: { id: string } }) {

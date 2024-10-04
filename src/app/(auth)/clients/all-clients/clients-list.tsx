@@ -1,5 +1,5 @@
 import Client from "./client-card";
-import { getClientsBriefAction } from "@/server/actions/clients";
+import { getClientsBriefAction } from "@/server/actions/clients/read";
 
 async function ClientsList({
   page = 1,

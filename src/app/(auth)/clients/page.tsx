@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Pagination from "@/components/pagination";
 import ClientsList from "./all-clients/clients-list";
 import { defaultPageLimit } from "@/data/config";
-import { getClientsCountAction } from "@/server/actions/clients";
+import { getClientsCountAction } from "@/server/actions/clients/read";
 import FilterAndSearch from "./all-clients/filter-and-search";
 import SkeletonList from "@/components/skeletons";
 

@@ -18,7 +18,7 @@ import SubmitButton from "@/components/buttons/submit-button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { toast } from "sonner";
-import { addClientAction } from "@/server/actions/clients";
+import { addClientAction } from "@/server/actions/clients/create";
 import { getErrorMessage } from "@/lib/exceptions";
 import { countries } from "@/lib/countries";
 import { Separator } from "@/components/ui/separator";

@@ -3,7 +3,7 @@
 import Loading from "@/components/loading";
 import { Button } from "@/components/ui/button";
 import { deleteContactAction } from "@/server/actions/contacts";
-import { updateClientPrimaryContactAction } from "@/server/actions/clients";
+import { updateClientPrimaryContactAction } from "@/server/actions/clients/update";
 import { updateSupplierPrimaryContactAction } from "@/server/actions/suppliers/update";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";

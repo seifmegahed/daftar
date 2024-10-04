@@ -1,16 +1,17 @@
-import InfoPageWrapper from "@/components/info-page-wrapper";
+import { getClientFullByIdAction } from "@/server/actions/clients/read";
 import {
-  getClientFullByIdAction,
+  updateClientNotesAction,
+  updateClientWebsiteAction,
   updateClientRegistrationNumberAction,
-} from "@/server/actions/clients";
+} from "@/server/actions/clients/update";
+import { getCurrentUserAction } from "@/server/actions/users";
+import { getClientProjectsCountAction } from "@/server/actions/projects";
+
+import InfoPageWrapper from "@/components/info-page-wrapper";
 import NotesForm from "@/components/common-forms/update-notes-form";
-import { updateClientNotesAction } from "@/server/actions/clients";
 import RegistrationNumberForm from "@/components/common-forms/update-registration-form";
 import WebsiteForm from "@/components/common-forms/update-website-form";
-import { updateClientWebsiteAction } from "@/server/actions/clients";
-import { getCurrentUserAction } from "@/server/actions/users";
 import DeleteClientForm from "./delete-client-form";
-import { getClientProjectsCountAction } from "@/server/actions/projects";
 
 async function EditClientPage({ params }: { params: { id: string } }) {
   const clientId = Number(params.id);

@@ -15,7 +15,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { emptyToUndefined } from "@/utils/common";
 import { toast } from "sonner";
-import { deleteClientAction } from "@/server/actions/clients";
+import { deleteClientAction } from "@/server/actions/clients/delete";
 
 function DeleteClientForm({
   clientId,

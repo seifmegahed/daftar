@@ -1,6 +1,6 @@
 import { Separator } from "@/components/ui/separator";
 import { SidebarNav } from "@/components/nav";
-import { getClientsCountAction } from "@/server/actions/clients";
+import { getClientsCountAction } from "@/server/actions/clients/read";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
