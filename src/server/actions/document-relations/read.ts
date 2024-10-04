@@ -5,6 +5,7 @@ import {
   getSupplierDocuments,
   getItemDocuments,
   getProjectDocuments,
+  getDocumentRelationsCount,
 } from "@/server/db/tables/document-relation/queries";
 
 import type { SimpDoc } from "@/server/db/tables/document/queries";
@@ -72,4 +73,12 @@ export const getProjectDocumentsCountAction = async (
   const [documents, countError] = await getProjectDocuments(projectId);
   if (countError !== null) return [null, countError];
   return [documents.length, null];
+};
+
+export const getDocumentRelationsCountAction = async (
+  id: number,
+): Promise<ReturnTuple<number>> => {
+  const [count, countError] = await getDocumentRelationsCount(id);
+  if (countError !== null) return [null, countError];
+  return [count, null];
 };

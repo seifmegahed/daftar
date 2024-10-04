@@ -146,3 +146,37 @@ export const getDocumentsCount = async (): Promise<ReturnTuple<number>> => {
     return [null, getErrorMessage(error)];
   }
 };
+
+export const updateDocument = async (
+  id: number,
+  data: Partial<DocumentDataType>,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [document] = await db
+      .update(documentsTable)
+      .set(data)
+      .where(eq(documentsTable.id, id))
+      .returning({ id: documentsTable.id });
+
+    if (!document) return [null, "Error updating document"];
+    return [document.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const deleteDocument = async (
+  id: number,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [document] = await db
+      .delete(documentsTable)
+      .where(eq(documentsTable.id, id))
+      .returning({ id: documentsTable.id });
+
+    if (!document) return [null, "Error deleting document"];
+    return [document.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};

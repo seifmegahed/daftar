@@ -1,4 +1,4 @@
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { db } from "@/server/db";
 
 import { documentRelationsTable } from "./schema";
@@ -155,5 +155,22 @@ export const deleteDocumentRelation = async (
   } catch (error) {
     console.log(error);
     return [null, "Error deleting document relation"];
+  }
+};
+
+export const getDocumentRelationsCount = async (id: number): Promise<
+  ReturnTuple<number>
+> => {
+  try {
+    const [result] = await db
+      .select({ count: count() })
+      .from(documentRelationsTable)
+      .where(eq(documentRelationsTable.documentId, id))
+      .limit(1);
+    if (!result) return [null, "Error getting document relations count"];
+    return [result.count, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting document relations count"];
   }
 };

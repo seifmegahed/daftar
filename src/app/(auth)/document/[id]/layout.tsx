@@ -3,13 +3,6 @@ import { SidebarNav } from "@/components/nav";
 
 const basePath = (id: string) => "/document/" + id;
 
-const sidebarNavItemsGenerator = (id: string) => [
-  {
-    title: "document",
-    href: basePath(id),
-  },
-];
-
 interface SettingsLayoutProps {
   children: React.ReactNode;
   params: { id: string };
@@ -19,6 +12,16 @@ export default function SettingsLayout({
   children,
   params,
 }: SettingsLayoutProps) {
+  const sidebarNavItemsGenerator = (id: string) => [
+    {
+      title: "document",
+      href: basePath(id),
+    },
+    {
+      title: "Edit",
+      href: basePath(id) + "/edit",
+    },
+  ];
   const sidebarNavItems = sidebarNavItemsGenerator(params.id);
 
   return (

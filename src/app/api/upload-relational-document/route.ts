@@ -16,7 +16,7 @@ import { z } from "zod";
 import { documentSchema } from "@/server/db/tables/document/schema";
 import { documentRelationsSchema } from "@/server/db/tables/document-relation/schema";
 
-import { saveDocumentFile } from "@/server/actions/documents";
+import { saveDocumentFile } from "@/server/actions/documents/create";
 import { insertDocumentWithRelation } from "@/server/db/tables/document-relation/queries";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 

@@ -1,7 +1,7 @@
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import Section from "@/components/info-section";
-import { getDocumentByIdAction } from "@/server/actions/documents";
+import { getDocumentByIdAction } from "@/server/actions/documents/read";
 import { DownloadIcon } from "lucide-react";
 import Link from "next/link";
 

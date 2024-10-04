@@ -43,7 +43,7 @@ function NameForm({
   access: boolean;
   ownerId?: number;
   id: number;
-  type: "client" | "supplier" | "project" | "item";
+  type: "client" | "supplier" | "project" | "item" | "document";
   updateCallbackAction?: (
     id: number,
     data: { name: string },

@@ -1,4 +1,4 @@
-import { getDocumentsAction } from "@/server/actions/documents";
+import { getDocumentsAction } from "@/server/actions/documents/read";
 import DocumentCard from "./document-card";
 
 async function DocumentsList({

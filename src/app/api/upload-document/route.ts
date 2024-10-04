@@ -10,7 +10,7 @@
 import { z } from "zod";
 import { type NextRequest } from "next/server";
 import { documentSchema } from "@/server/db/tables/document/schema";
-import { saveDocumentFile } from "@/server/actions/documents";
+import { saveDocumentFile } from "@/server/actions/documents/create";
 import { insertDocument } from "@/server/db/tables/document/queries";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 
