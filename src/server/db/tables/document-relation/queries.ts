@@ -16,6 +16,23 @@ import type { SimpDoc } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { z } from "zod";
 
+export const insertDocumentRelation = async (
+  relation: DocumentRelationsType,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [result] = await db
+      .insert(documentRelationsTable)
+      .values(relation)
+      .returning({ id: documentRelationsTable.id });
+
+    if (!result) return [null, "Error inserting document relation"];
+    return [result.id, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error inserting document relation"];
+  }
+};
+
 export const insertDocumentWithRelation = async (
   document: DocumentDataType,
   relation: Omit<DocumentRelationsType, "documentId">,
@@ -282,11 +299,13 @@ export const getDocumentClients = async (
           isNotNull(documentRelationsTable.clientId),
         ),
       )
-      .leftJoin(clientsTable, eq(documentRelationsTable.clientId, clientsTable.id))
+      .leftJoin(
+        clientsTable,
+        eq(documentRelationsTable.clientId, clientsTable.id),
+      )
       .orderBy(desc(clientsTable.createdAt));
 
     const parsedClients = z.array(documentClientsSchema).safeParse(clients);
-
 
     if (parsedClients.error) return [null, "Error getting document clients"];
 

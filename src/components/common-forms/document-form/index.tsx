@@ -1,6 +1,7 @@
 import { Tabs, TabsTrigger, TabsList, TabsContent } from "@/components/ui/tabs";
 import NewDocumentForm from "./new-document-form";
 import ExistingDocumentForm from "./existing-document-form";
+import { getDocumentOptionsAction } from "@/server/actions/documents/read";
 
 type RelationDataType = {
   relationTo: "client" | "supplier" | "project" | "item";
@@ -77,15 +78,17 @@ async function DocumentForm({
   if (!relationData) return <NewDocumentForm />;
 
   const relation = generateRelation(relationData);
+  const [documents, documentsError] = await getDocumentOptionsAction();
+  if (documentsError !== null) return <NewDocumentForm />;
 
   return (
-    <Tabs defaultValue="new">
+    <Tabs defaultValue="existing">
       <TabsList className="h-12">
-        <TabsTrigger value="new" className="h-10 w-48">
-          New Document
-        </TabsTrigger>
         <TabsTrigger value="existing" className="h-10 w-48">
           Existing Document
+        </TabsTrigger>
+        <TabsTrigger value="new" className="h-10 w-48">
+          New Document
         </TabsTrigger>
       </TabsList>
       <div className="p-2">
@@ -93,7 +96,7 @@ async function DocumentForm({
           <NewDocumentForm relation={relation} />
         </TabsContent>
         <TabsContent value="existing">
-          <ExistingDocumentForm />
+          <ExistingDocumentForm documents={documents} relation={relation} />
         </TabsContent>
       </div>
     </Tabs>

@@ -2,6 +2,7 @@
 
 import {
   getDocumentById,
+  getDocumentOptions,
   getDocuments,
   getDocumentsCount,
 } from "@/server/db/tables/document/queries";
@@ -37,6 +38,14 @@ export const getDocumentsCountAction = async (): Promise<
   ReturnTuple<number>
 > => {
   const [documents, documentsError] = await getDocumentsCount();
+  if (documentsError !== null) return [null, documentsError];
+  return [documents, null];
+};
+
+export const getDocumentOptionsAction = async (): Promise<
+  ReturnTuple<Pick<BriefDocumentType, "id" | "name" | "extension">[]>
+> => {
+  const [documents, documentsError] = await getDocumentOptions();
   if (documentsError !== null) return [null, documentsError];
   return [documents, null];
 };

@@ -120,23 +120,6 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
             </FormItem>
           )}
         />
-        {/* <FormField
-          name="file"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>File</FormLabel>
-              <Input
-                type="file"
-                onChange={(e) => field.onChange(e.target.files?.[0])}
-              />
-              <FormDescription>
-                Upload the document file. This file will be stored in the
-                server.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
         <div className="flex justify-end">
           <SubmitButton
             loading={form.formState.isSubmitting}

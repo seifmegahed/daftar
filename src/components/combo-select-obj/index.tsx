@@ -60,7 +60,7 @@ function ComboSelect({
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
-        <Command>
+        <Command className="w-full max-h-[300px] overflow-y-auto">
           <CommandInput placeholder={searchMessage} />
           <CommandList>
             <CommandEmpty>{notFoundMessage}</CommandEmpty>

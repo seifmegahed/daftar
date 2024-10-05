@@ -180,3 +180,24 @@ export const deleteDocument = async (
     return [null, getErrorMessage(error)];
   }
 };
+
+export const getDocumentOptions = async (): Promise<
+  ReturnTuple<Pick<SimpDoc, "id" | "name" | "extension">[]>
+> => {
+  try {
+    const documents = await db
+      .select({
+        id: documentsTable.id,
+        name: documentsTable.name,
+        extension: documentsTable.extension,
+      })
+      .from(documentsTable)
+      .orderBy(desc(documentsTable.name));
+
+    if (!documents) return [null, "Error getting documents"];
+    return [documents, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting documents"];
+  }
+};
