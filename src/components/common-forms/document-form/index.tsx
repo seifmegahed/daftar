@@ -1,29 +1,37 @@
-"use client";
-
-import SubmitButton from "@/components/buttons/submit-button";
-import {
-  Form,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
-import { Textarea } from "@/components/ui/textarea";
-import { notesMaxLength } from "@/data/config";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-
-import { useForm } from "react-hook-form";
-import { toast } from "sonner";
-import { z } from "zod";
+import { Tabs, TabsTrigger, TabsList, TabsContent } from "@/components/ui/tabs";
+import NewDocumentForm from "./new-document-form";
+import ExistingDocumentForm from "./existing-document-form";
 
 type RelationDataType = {
   relationTo: "client" | "supplier" | "project" | "item";
   relationId: number;
 };
+
+export type GeneratedRelationType =
+  | {
+      clientId: number;
+      supplierId: null;
+      projectId: null;
+      itemId: null;
+    }
+  | {
+      clientId: null;
+      supplierId: number;
+      projectId: null;
+      itemId: null;
+    }
+  | {
+      clientId: null;
+      supplierId: null;
+      projectId: number;
+      itemId: null;
+    }
+  | {
+      clientId: null;
+      supplierId: null;
+      projectId: null;
+      itemId: number;
+    };
 
 function generateRelation(relation: RelationDataType) {
   const { relationTo, relationId } = relation;
@@ -61,127 +69,34 @@ function generateRelation(relation: RelationDataType) {
   }
 }
 
-const documentSchema = z.object({
-  name: z
-    .string({
-      required_error: "Name is required",
-    })
-    .min(4, { message: "Name must be at least 4 characters" })
-    .max(64, { message: "Name must not be longer than 64 characters" }),
-  notes: z.string().max(notesMaxLength, {
-    message: `Notes must not be longer than ${notesMaxLength} characters`,
-  }),
-  file: z.instanceof(File),
-});
+async function DocumentForm({
+  relationData,
+}: {
+  relationData?: RelationDataType;
+}) {
+  if (!relationData) return <NewDocumentForm />;
 
-type FormSchemaType = z.infer<typeof documentSchema>;
-
-function DocumentForm({ relationData }: { relationData?: RelationDataType }) {
-  const form = useForm<FormSchemaType>({
-    resolver: zodResolver(documentSchema),
-    defaultValues: {
-      name: "",
-      notes: "",
-      file: undefined,
-    },
-  });
-
-  const onSubmit = async (data: FormSchemaType) => {
-    if (relationData) {
-      const body = new FormData();
-      body.append("file", data.file);
-      body.append(
-        "document",
-        JSON.stringify({ name: data.name, notes: data.notes }),
-      );
-      const relation = generateRelation(relationData);
-      body.append("relation", JSON.stringify(relation));
-      const response = await fetch("/api/upload-relational-document", {
-        method: "POST",
-        body,
-      });
-      if (!response.ok) toast.error("Error adding document");
-      else {
-        toast.success("Document added successfully");
-      }
-    } else {
-      const body = new FormData();
-      body.append(
-        "document",
-        JSON.stringify({ name: data.name, notes: data.notes }),
-      );
-      body.append("file", data.file);
-      const response = await fetch("/api/upload-document", {
-        method: "POST",
-        body,
-      });
-      if (!response.ok) toast.error("Error adding document");
-      else {
-        toast.success("Document added successfully");
-      }
-    }
-  };
+  const relation = generateRelation(relationData);
 
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit)}
-      className="flex flex-col gap-4"
-    >
-      <Form {...form}>
-        <h2 className="text-2xl font-bold">Document Form</h2>
-        <Separator />
-        <FormField
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <Input {...field} />
-              <FormDescription>
-                Enter the name of the document. This is the name you will be
-                using to search and refer to the document.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <Textarea {...field} rows={3} className="resize-none" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="file"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>File</FormLabel>
-              <Input
-                type="file"
-                onChange={(e) => field.onChange(e.target.files?.[0])}
-              />
-              <FormDescription>
-                Upload the document file. This file will be stored in the
-                server.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end">
-          <SubmitButton
-            loading={form.formState.isSubmitting}
-            disabled={form.formState.isSubmitting || !form.formState.isDirty}
-            type="submit"
-          >
-            Submit
-          </SubmitButton>
-        </div>
-      </Form>
-    </form>
+    <Tabs defaultValue="new">
+      <TabsList className="h-12">
+        <TabsTrigger value="new" className="h-10 w-48">
+          New Document
+        </TabsTrigger>
+        <TabsTrigger value="existing" className="h-10 w-48">
+          Existing Document
+        </TabsTrigger>
+      </TabsList>
+      <div className="p-2">
+        <TabsContent value="new">
+          <NewDocumentForm relation={relation} />
+        </TabsContent>
+        <TabsContent value="existing">
+          <ExistingDocumentForm />
+        </TabsContent>
+      </div>
+    </Tabs>
   );
 }
 

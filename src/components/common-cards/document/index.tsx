@@ -10,7 +10,9 @@ const DocumentCard = ({ document }: { document: SimpDoc }) => {
         <div className="relative cursor-pointer">
           <FileIcon className="h-8 w-8" />
           <p className="absolute left-2 top-3 w-4 select-none text-center text-[6pt] font-medium">
-            {document.extension}
+            {document.extension.length > 3
+              ? document.extension.slice(0, 3)
+              : document.extension}
           </p>
         </div>
         <Link

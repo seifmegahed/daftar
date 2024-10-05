@@ -64,7 +64,7 @@ function DeleteDocumentForm({
       const [, error] = await deleteDocumentAction(documentId);
       if (error !== null) {
         console.log(error);
-        toast.error("Error deleting client");
+        toast.error("Error deleting document");
       }
     } catch (error) {
       console.log(error);
