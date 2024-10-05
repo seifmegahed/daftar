@@ -4,6 +4,9 @@ import { deleteDocument } from "@/server/db/tables/document/queries";
 import { getCurrentUserAction } from "../users";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getDocumentRelationsCountAction } from "../document-relations/read";
+import { getDocumentByIdAction } from "./read";
+import { redirect } from "next/navigation";
+import fs from "fs";
 
 export const deleteDocumentAction = async (
   id: number,
@@ -23,7 +26,18 @@ export const deleteDocumentAction = async (
       "You cannot delete a document that is linked to other documents",
     ];
 
-  const [document, documentError] = await deleteDocument(id);
+  const [document, documentError] = await getDocumentByIdAction(id);
   if (documentError !== null) return [null, documentError];
-  return [document, null];
+
+  try {
+    fs.unlinkSync(document.path);
+  } catch (error) {
+    console.log(error);
+    return [null, "Error deleting document"];
+  }
+
+  const [, documentIdError] = await deleteDocument(id);
+  if (documentIdError !== null) return [null, documentIdError];
+
+  redirect("/documents");
 };
