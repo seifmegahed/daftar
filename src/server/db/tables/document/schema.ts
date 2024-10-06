@@ -19,6 +19,7 @@ export const documentsTable = pgTable(
     // Data fields
     name: varchar("name", { length: 64 }).notNull().unique(),
     path: varchar("path", { length: 256 }).notNull(),
+    // path: varchar("path", { length: 256 }).notNull().unique(), // For production
     notes: varchar("notes", { length: notesMaxLength }),
     extension: varchar("extension", { length: 8 }).notNull(),
 
