@@ -64,6 +64,22 @@ const config = {
         ]
       }
     ]
+    // "no-restricted-imports": [
+    //   "error",
+    //   {
+    //     paths: [
+    //       {
+    //         name: "@/server/db/tables/user/queries",
+    //         importNames: ["sensitiveGetUserPasswordById", "sensitiveGetUserByUsername"],
+    //         message: "This function can only be imported from within the actions/auth folder or the actions/users folder.",
+    //       },
+    //     ],
+    //     patterns: [
+    //       "!**/server/db/actions/auth/login/index.ts",
+    //       "!**/server/actions/users/index.ts"
+    //     ],
+    //   },
+    // ],
   }
 }
 module.exports = config;

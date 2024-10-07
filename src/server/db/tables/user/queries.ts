@@ -182,6 +182,11 @@ export const sensitiveGetUserPasswordById = async (
   }
 };
 
+type SensitiveGetUserType = Pick<
+UserDataType,
+"id" | "name" | "username" | "role" | "active" | "password"
+>;
+
 /**
  *
  * Sensitive Get User By Username
@@ -199,11 +204,6 @@ export const sensitiveGetUserPasswordById = async (
  * @param username
  * @returns - Tuple containing the user's information or an error message if there is one
  */
-type SensitiveGetUserType = Pick<
-  UserDataType,
-  "id" | "name" | "username" | "role" | "active" | "password"
->;
-
 export const sensitiveGetUserByUsername = async (
   username: string,
 ): Promise<ReturnTuple<SensitiveGetUserType>> => {
