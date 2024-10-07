@@ -1,4 +1,4 @@
-import { getItemsAction } from "@/server/actions/items";
+import { getItemsAction } from "@/server/actions/items/read";
 import ItemCard from "./item-card";
 
 async function ItemsList({

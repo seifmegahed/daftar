@@ -4,7 +4,7 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { addItemAction } from "@/server/actions/items";
+import { addItemAction } from "@/server/actions/items/create";
 import { toast } from "sonner";
 
 import {

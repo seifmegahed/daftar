@@ -1,7 +1,7 @@
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import Section from "@/components/info-section";
-import { getItemDetailsAction } from "@/server/actions/items";
+import { getItemDetailsAction } from "@/server/actions/items/read";
 
 async function ItemPage({ params }: { params: { id: string } }) {
   const [item, error] = await getItemDetailsAction(Number(params.id));

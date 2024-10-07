@@ -2,7 +2,7 @@ import DescriptionForm from "@/components/common-forms/update-description-form";
 import NameForm from "@/components/common-forms/update-name-form";
 import NotesForm from "@/components/common-forms/update-notes-form";
 import InfoPageWrapper from "@/components/info-page-wrapper";
-import { getItemDetailsAction } from "@/server/actions/items";
+import { getItemDetailsAction } from "@/server/actions/items/read";
 import {
   updateItemDescriptionAction,
   updateItemNameAction,

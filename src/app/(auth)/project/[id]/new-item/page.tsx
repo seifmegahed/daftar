@@ -1,4 +1,4 @@
-import { listAllItemsAction } from "@/server/actions/items";
+import { listAllItemsAction } from "@/server/actions/items/read";
 import { listAllSuppliersAction } from "@/server/actions/suppliers/read";
 import NewItemForm from "./form";
 

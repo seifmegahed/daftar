@@ -4,7 +4,7 @@ import { defaultPageLimit } from "@/data/config";
 import SkeletonList from "@/components/skeletons";
 import ItemsList from "./all-items/items-list";
 import FilterAndSearch from "./all-items/filter-and-search";
-import { getItemsCountAction } from "@/server/actions/items";
+import { getItemsCountAction } from "@/server/actions/items/read";
 
 const pageLimit = defaultPageLimit;
 
