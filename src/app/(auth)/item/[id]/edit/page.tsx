@@ -1,21 +1,24 @@
-import DescriptionForm from "@/components/common-forms/update-description-form";
-import NameForm from "@/components/common-forms/update-name-form";
-import NotesForm from "@/components/common-forms/update-notes-form";
-import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getItemDetailsAction } from "@/server/actions/items/read";
 import {
   updateItemDescriptionAction,
   updateItemNameAction,
   updateItemNotesAction,
 } from "@/server/actions/items/update";
+import { deleteItemAction } from "@/server/actions/items/delete";
 import { getCurrentUserAction } from "@/server/actions/users";
+import { getItemProjectsCountAction } from "@/server/actions/project-items/read";
+
+import InfoPageWrapper from "@/components/info-page-wrapper";
+
+import DescriptionForm from "@/components/common-forms/update-description-form";
+import NameForm from "@/components/common-forms/update-name-form";
+import NotesForm from "@/components/common-forms/update-notes-form";
 import TypeForm from "./type-form";
 import MakeForm from "./make-form";
 import MpnForm from "./mpn-form";
-import { getItemProjectsCountAction } from "@/server/actions/project-items/read";
-import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import DeleteForm from "@/components/common-forms/delete-form";
-import { deleteItemAction } from "@/server/actions/items/delete";
+
+import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 
 async function EditItemPage({ params }: { params: { id: string } }) {
   const itemId = Number(params.id);

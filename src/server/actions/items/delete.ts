@@ -1,3 +1,5 @@
+"use server";
+
 import { deleteItem } from "@/server/db/tables/item/queries";
 import { getCurrentUserAction } from "../users";
 import { getItemProjectsCountAction } from "../project-items/read";

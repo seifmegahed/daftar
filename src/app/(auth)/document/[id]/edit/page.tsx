@@ -7,7 +7,6 @@ import {
   updateDocumentNotesAction,
 } from "@/server/actions/documents/update";
 import { getCurrentUserAction } from "@/server/actions/users";
-import DeleteDocumentForm from "./delete-document-form";
 import { getDocumentRelationsCountAction } from "@/server/actions/document-relations/read";
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteDocumentAction } from "@/server/actions/documents/delete";
@@ -55,14 +54,6 @@ async function EditDocumentPage({ params }: { params: { id: string } }) {
         notes={document.notes ?? ""}
         type="document"
       />
-      {numberOfReferencesError === null && (
-        <DeleteDocumentForm
-          documentId={documentId}
-          name={document.name}
-          access={hasFullAccess}
-          numberOfReferences={numberOfReferences}
-        />
-      )}
       {numberOfReferencesError === null && (
         <DeleteForm
           name={document.name}

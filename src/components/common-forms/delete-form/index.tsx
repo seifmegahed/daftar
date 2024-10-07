@@ -95,7 +95,7 @@ function DeleteForm({
                   className="z-[2] relative"
                   disabled={!access || disabled}
                 />
-                <p className="absolute top-0 left-[12.5] text-sm text-muted-foreground select-none">{name}</p>
+                <p className="absolute top-0 left-[12.5px] text-sm text-muted-foreground select-none">{name}</p>
                 <FormMessage />
                 <FormDescription>{formInfo}</FormDescription>
               </FormItem>
