@@ -1,7 +1,7 @@
 import Users from "./users";
 
 async function AdminPage() {
-  return <Users />;
+  return <></>;
 }
 
 export default AdminPage;

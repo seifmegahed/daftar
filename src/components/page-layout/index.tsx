@@ -1,23 +1,33 @@
-import type { ReactNode } from "react";
-import { SideNav } from "@/components/nav";
+import { Separator } from "@/components/ui/separator";
+import { SidebarNav } from "@/components/nav";
+import type { NavLink } from "../nav/sidebar-nav";
 
 function PageLayout({
   children,
   title,
-  sidenavLinks,
+  description,
+  navLinks,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
   title: string;
-  sidenavLinks: { href: string; label: string }[];
+  description: string;
+  navLinks: NavLink[];
 }) {
-  if (!sidenavLinks[0]) return null;
   return (
-    <div className="grid w-full grid-cols-1 items-start gap-6 md:mx-auto md:grid-cols-[180px_1fr] lg:grid-cols-[250px_1fr]">
-      <div className="flex flex-col gap-4 px-4 sm:px-0">
-        <h1 className="text-3xl font-semibold">{title}</h1>
-        {sidenavLinks.length && <SideNav links={sidenavLinks} />}
+    <div className="-m-10 h-full min-h-[calc(100vh_-_theme(spacing.16))] bg-background">
+      <div className="space-y-6 p-10 pb-16">
+        <div className="space-y-0.5">
+          <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
+          <p className="text-muted-foreground">{description}</p>
+        </div>
+        <Separator className="my-6" />
+        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
+          <aside className="-mx-4 lg:w-1/5">
+            <SidebarNav items={navLinks} />
+          </aside>
+          <div className="flex-1 lg:max-w-2xl">{children}</div>
+        </div>
       </div>
-      <div className="flex w-full flex-col items-center">{children}</div>
     </div>
   );
 }
