@@ -1,18 +1,15 @@
 "use client";
 
 import { FileIcon, UploadCloud } from "lucide-react";
-import { useState } from "react";
 import { toast } from "sonner";
 
-function Dropzone({ onUpload }: { onUpload: (file: File) => void }) {
-  const [file, setFile] = useState<File | undefined | null>(null);
+function Dropzone({ onUpload, file }: { onUpload: (file: File) => void; file: File | undefined | null }) {
   const handleUpload = (file: File | undefined | null) => {
     if (!file) return;
     if (file.size > 1024 * 1024 * 25) {
       toast.error("File size must be less than 25MB");
       return;
     }
-    setFile(file);
     onUpload(file);
   };
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {

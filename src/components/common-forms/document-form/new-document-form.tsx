@@ -21,6 +21,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import type { GeneratedRelationType } from ".";
 import Dropzone from "@/components/inputs/drop-zone";
+import { useRouter } from "next/navigation";
 
 const documentSchema = z.object({
   name: z
@@ -38,6 +39,7 @@ const documentSchema = z.object({
 type FormSchemaType = z.infer<typeof documentSchema>;
 
 function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
+  const navigate = useRouter();
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(documentSchema),
     defaultValues: {
@@ -62,7 +64,9 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
       });
       if (!response.ok) toast.error("Error adding document");
       else {
+        form.reset();
         toast.success("Document added successfully");
+        navigate.replace("documents");
       }
     } else {
       const body = new FormData();
@@ -77,7 +81,9 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
       });
       if (!response.ok) toast.error("Error adding document");
       else {
+        form.reset();
         toast.success("Document added successfully");
+        navigate.push("/documents");
       }
     }
   };
@@ -90,11 +96,17 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
       <Form {...form}>
         <h2 className="text-2xl font-bold">New Document Form</h2>
         <Separator />
-        <FormField name="file" control={form.control} render={({ field }) => (
-          <FormItem>
-            <Dropzone onUpload={(file) => field.onChange(file)} />
-          </FormItem>
-        )}
+        <FormField
+          name="file"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <Dropzone
+                onUpload={(file) => field.onChange(file)}
+                file={field.value}
+              />
+            </FormItem>
+          )}
         />
         <FormField
           name="name"

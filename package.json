@@ -16,9 +16,9 @@
     "db:migrate": "drizzle-kit migrate",
     "db:push": "drizzle-kit push",
     "db:studio": "drizzle-kit studio",
-    "db:start-local": "./local-db.sh start daftar username password",
-    "db:stop-local": "./local-db.sh stop daftar username password",
-    "db:cleanup-local": "./local-db.sh cleanup daftar username password",
+    "db:start": "./local-db.sh start",
+    "db:stop": "./local-db.sh stop",
+    "db:cleanup": "./local-db.sh cleanup",
     "dev": "next dev --turbo",
     "lint": "next lint",
     "start": "next start"
