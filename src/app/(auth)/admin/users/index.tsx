@@ -1,7 +1,6 @@
 import * as Tabs from "@radix-ui/react-tabs";
 
 import { getAllUsersAction } from "@/server/actions/users";
-import NewUserForm from "./new-user-form";
 import UserPage from "./user-page";
 import { Card } from "@/components/ui/card";
 import { AddNewUserTab, UserTab } from "./user-tabs";
@@ -38,9 +37,6 @@ async function Users() {
             </div>
           </div>
           <div className="col-span-6 h-full overflow-y-scroll border-l">
-            <Tabs.Content value="add-user">
-              <NewUserForm />
-            </Tabs.Content>
             {users.map((user) => (
               <Tabs.Content key={user.id} value={user.username}>
                 <UserPage user={user} />

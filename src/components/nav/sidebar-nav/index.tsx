@@ -12,29 +12,29 @@ export type NavLink = {
   amount?: number;
 };
 
-function SidebarNav({ items }: { items: NavLink[] }) {
+function SidebarNav({ links }: { links: NavLink[] }) {
   const pathname = usePathname();
 
   return (
     <nav className="max-w-screen flex h-16 space-x-2 overflow-x-scroll px-4 lg:h-full lg:flex-col lg:space-x-0 lg:space-y-1 lg:px-0">
-      {items.map((item) => (
+      {links.map((link) => (
         <Link
-          key={item.href}
-          href={item.href}
+          key={link.href}
+          href={link.href}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            pathname === item.href
+            pathname === link.href
               ? "bg-muted hover:bg-muted"
               : "group hover:bg-transparent",
           )}
         >
-          {item.amount !== undefined ? (
+          {link.amount !== undefined ? (
             <div className="flex w-full items-center justify-between">
-              <p className="group-hover:underline">{item.title}</p>
-              <p className="hidden text-xs font-thin lg:block">{item.amount}</p>
+              <p className="group-hover:underline">{link.title}</p>
+              <p className="hidden text-xs font-thin lg:block">{link.amount}</p>
             </div>
           ) : (
-            <p className="w-full">{item.title}</p>
+            <p className="w-full">{link.title}</p>
           )}
         </Link>
       ))}
