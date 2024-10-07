@@ -32,7 +32,7 @@ import { redirect } from "next/navigation";
  * @param data - Data to check
  *   - password: Password to check
  *   - verifyPassword: password verification of the password to check against
- * @returns - True if passwords are complex enough and match, false otherwise
+ * @returns True if passwords are complex enough and match, false otherwise
  */
 const refinePasswords = (data: { password: string; verifyPassword: string }) =>
   !checkPasswordComplexity(data.password) ||
@@ -59,7 +59,7 @@ export const listAllUsersAction = async (): Promise<
  * User information returned is a partial user object, which means it only contains some of the columns from the user table.
  * The partial user object is used to avoid sending sensitive information like passwords to the client.
  *
- * @returns - Tuple containing the current user's information or an error message if there is one
+ * @returns Tuple containing either the current user's information or an error message if there is one
  **/
 export const getCurrentUserAction = async (): Promise<
   ReturnTuple<GetPartialUserType>
@@ -77,6 +77,17 @@ export const getCurrentUserAction = async (): Promise<
   return [user, null];
 };
 
+/**
+ * Get Current User Id
+ *
+ * Server Action to get the current user's id
+ * Uses cookies to get the token and verify it.
+ * If the token is invalid or expired, returns an error message.
+ *
+ * If the token is valid, decodes the token and gets the user's ID.
+ *
+ * @returns Tuple containing either the current user's id or an error message if there is one
+ **/
 export const getCurrentUserIdAction = async (): Promise<
   ReturnTuple<number>
 > => {
@@ -97,7 +108,7 @@ export const getCurrentUserIdAction = async (): Promise<
  * Users information returned is an array of partial user objects, which means it only contains some of the columns from the user table.
  * The partial user object is used to avoid sending sensitive information like passwords to the client.
  *
- * @returns - Tuple containing an array of all users or an error message if there is one
+ * @returns Tuple containing either an array of all users or an error message if there is one
  */
 export const getAllUsersAction = async (): Promise<
   ReturnTuple<GetPartialUserType[]>
@@ -117,7 +128,7 @@ export const getAllUsersAction = async (): Promise<
  * Server Action to get a user's information from the database.
  *
  * @param id - ID of the user to get
- * @returns - Tuple containing the user's information or an error message if there is one
+ * @returns Tuple containing either the user's information or an error message if there is one
  */
 export const getUserByIdAction = async (
   id: number,
@@ -135,6 +146,14 @@ export const getUserByIdAction = async (
 /*                                                                            */
 /******************************************************************************/
 
+const updateUserDisplayNameSchema = UserSchema.pick({
+  name: true,
+});
+
+type UpdateUserDisplayNameFormType = z.infer<
+typeof updateUserDisplayNameSchema
+>;
+
 /**
  * Update User Display Name - Same User Only
  *
@@ -142,16 +161,8 @@ export const getUserByIdAction = async (
  *
  * @param data - Data to update the user's name
  *   - name: New name of the user
- * @returns - Tuple containing the updated user's ID or an error message if there is one
+ * @returns Tuple containing either the updated user's ID or an error message if there is one
  */
-const updateUserDisplayNameSchema = UserSchema.pick({
-  name: true,
-});
-
-type UpdateUserDisplayNameFormType = z.infer<
-  typeof updateUserDisplayNameSchema
->;
-
 export const userUpdateUserDisplayNameAction = async (
   data: UpdateUserDisplayNameFormType,
 ): Promise<ReturnTuple<number>> => {
@@ -169,6 +180,24 @@ export const userUpdateUserDisplayNameAction = async (
   return result;
 };
 
+const userUpdateUserPasswordSchema = z
+.object({
+  oldPassword: UserSchemaRaw.password,
+  newPassword: UserSchemaRaw.password,
+  verifyPassword: UserSchemaRaw.verifyPassword,
+})
+.refine(
+  (data) =>
+    !checkPasswordComplexity(data.oldPassword) ||
+  data.oldPassword !== data.newPassword ||
+  !checkPasswordComplexity(data.newPassword) ||
+  data.newPassword === data.verifyPassword,
+);
+
+type UserUpdateUserPasswordFormType = z.infer<
+typeof userUpdateUserPasswordSchema
+>;
+
 /**
  * Update User Password - Same User Only
  *
@@ -184,26 +213,8 @@ export const userUpdateUserDisplayNameAction = async (
  *   - oldPassword: Old password of the user
  *   - newPassword: New password of the user
  *   - verifyPassword: password verification of the new password
- * @returns - Tuple containing the updated user's ID or an error message if there is one
+ * @returns Tuple containing the updated user's ID or an error message if there is one
  */
-const userUpdateUserPasswordSchema = z
-  .object({
-    oldPassword: UserSchemaRaw.password,
-    newPassword: UserSchemaRaw.password,
-    verifyPassword: UserSchemaRaw.verifyPassword,
-  })
-  .refine(
-    (data) =>
-      !checkPasswordComplexity(data.oldPassword) ||
-      data.oldPassword !== data.newPassword ||
-      !checkPasswordComplexity(data.newPassword) ||
-      data.newPassword === data.verifyPassword,
-  );
-
-type UserUpdateUserPasswordFormType = z.infer<
-  typeof userUpdateUserPasswordSchema
->;
-
 export const userUpdateUserPasswordAction = async (
   data: UserUpdateUserPasswordFormType,
 ): Promise<ReturnTuple<number>> => {
@@ -257,6 +268,16 @@ async function checkAdminPermissions(): Promise<ReturnTuple<boolean>> {
   return [true, null];
 }
 
+const addUserSchema = UserSchema.pick({
+  name: true,
+  username: true,
+  password: true,
+  verifyPassword: true,
+  role: true,
+}).refine(refinePasswords);
+
+type CreateUserFormType = z.infer<typeof addUserSchema>;
+
 /**
  * Add User - Admin Only
  *
@@ -272,18 +293,8 @@ async function checkAdminPermissions(): Promise<ReturnTuple<boolean>> {
  *   - password: Password of the user
  *   - verifyPassword: Password verification of the password
  *   - role: Role of the user
- * @returns - Tuple containing the ID of the new user or an error message if there is one
+ * @returns Tuple containing either the ID of the new user or an error message if there is one
  */
-const addUserSchema = UserSchema.pick({
-  name: true,
-  username: true,
-  password: true,
-  verifyPassword: true,
-  role: true,
-}).refine(refinePasswords);
-
-type CreateUserFormType = z.infer<typeof addUserSchema>;
-
 export const adminCreateUserAction = async (
   data: CreateUserFormType,
 ): Promise<ReturnTuple<number>> => {
@@ -307,6 +318,14 @@ export const adminCreateUserAction = async (
   return result;
 };
 
+const updateUserPasswordSchema = UserSchema.pick({
+  id: true,
+  password: true,
+  verifyPassword: true,
+}).refine(refinePasswords);
+
+type UpdateUserPasswordFormType = z.infer<typeof updateUserPasswordSchema>;
+
 /**
  * Update User Password - Admin Only
  *
@@ -321,16 +340,8 @@ export const adminCreateUserAction = async (
  *   - id: ID of the user to update
  *   - password: New password of the user
  *   - verifyPassword: password verification of the new password
- * @returns - Tuple containing the updated user's ID or an error message if there is one
+ * @returns Tuple containing either the updated user's ID or an error message if there is one
  */
-const updateUserPasswordSchema = UserSchema.pick({
-  id: true,
-  password: true,
-  verifyPassword: true,
-}).refine(refinePasswords);
-
-type UpdateUserPasswordFormType = z.infer<typeof updateUserPasswordSchema>;
-
 export const adminUpdateUserPasswordAction = async (
   data: UpdateUserPasswordFormType,
 ): Promise<ReturnTuple<number>> => {
@@ -347,6 +358,13 @@ export const adminUpdateUserPasswordAction = async (
   return result;
 };
 
+const updateUserNameSchema = UserSchema.pick({
+  id: true,
+  name: true,
+});
+
+type UpdateUserNameFormType = z.infer<typeof updateUserNameSchema>;
+
 /**
  * Update User Name - Admin Only
  *
@@ -357,15 +375,8 @@ export const adminUpdateUserPasswordAction = async (
  * @param data - Data to update the user's name
  *   - id: ID of the user to update
  *   - name: New name of the user
- * @returns - Tuple containing the updated user's ID or an error message if there is one
+ * @returns Tuple containing either the updated user's ID or an error message if there is one
  */
-const updateUserNameSchema = UserSchema.pick({
-  id: true,
-  name: true,
-});
-
-type UpdateUserNameFormType = z.infer<typeof updateUserNameSchema>;
-
 export const adminUpdateUserDisplayNameAction = async (
   data: UpdateUserNameFormType,
 ): Promise<ReturnTuple<number>> => {
@@ -380,6 +391,13 @@ export const adminUpdateUserDisplayNameAction = async (
   return result;
 };
 
+const updateUserRoleSchema = UserSchema.pick({
+  id: true,
+  role: true,
+});
+
+type UpdateUserRoleFormType = z.infer<typeof updateUserRoleSchema>;
+
 /**
  * Update User Role - Admin Only
  *
@@ -390,15 +408,8 @@ export const adminUpdateUserDisplayNameAction = async (
  * @param data - Data to update the user's role
  *   - id: ID of the user to update
  *   - role: New role of the user
- * @returns - Tuple containing the updated user's ID or an error message if there is one
+ * @returns Tuple containing either the updated user's ID or an error message if there is one
  */
-const updateUserRoleSchema = UserSchema.pick({
-  id: true,
-  role: true,
-});
-
-type UpdateUserRoleFormType = z.infer<typeof updateUserRoleSchema>;
-
 export const adminUpdateUserRoleAction = async (
   data: UpdateUserRoleFormType,
 ): Promise<ReturnTuple<number>> => {
@@ -413,6 +424,13 @@ export const adminUpdateUserRoleAction = async (
   return result;
 };
 
+const updateUserActiveSchema = UserSchema.pick({
+  id: true,
+  active: true,
+});
+
+type UpdateUserActiveFormType = z.infer<typeof updateUserActiveSchema>;
+
 /**
  * Update User Active State - Admin Only
  *
@@ -425,13 +443,6 @@ export const adminUpdateUserRoleAction = async (
  *   - @boolean active: New active state of the user
  * @returns - Tuple containing the updated user's ID or an error message if there is one
  */
-const updateUserActiveSchema = UserSchema.pick({
-  id: true,
-  active: true,
-});
-
-type UpdateUserActiveFormType = z.infer<typeof updateUserActiveSchema>;
-
 export const adminUpdateUserActiveAction = async (
   data: UpdateUserActiveFormType,
 ): Promise<ReturnTuple<number>> => {
