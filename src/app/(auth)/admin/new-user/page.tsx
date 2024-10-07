@@ -1,10 +1,12 @@
 "use client";
 
+import { toast } from "sonner";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { adminCreateUserAction } from "@/server/actions/users";
 
 import { defaultValues, schema, type NewUserFormType } from "./schema";
-import { Button } from "@/components/ui/button";
+
 import {
   CardContent,
   CardDescription,
@@ -12,10 +14,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
 import {
   SelectContent,
   SelectTrigger,
@@ -23,34 +21,31 @@ import {
   SelectItem,
   Select,
 } from "@/components/ui/select";
-import { adminCreateUserAction } from "@/server/actions/users";
-import { useRouter } from "next/navigation";
+import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import LoadingOverlay from "@/components/loading-overlay";
 
-import { toast } from "sonner";
-import { getErrorMessage } from "@/lib/exceptions";
-
 export default function NewUserForm() {
-  const router = useRouter();
   const form = useForm<NewUserFormType>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues,
   });
 
   const onSubmit = async (data: NewUserFormType) => {
-    await adminCreateUserAction(data)
-      .then((res) => {
-        const [_, error] = res;
-        if (error) {
-          toast.error(error);
-          return;
-        }
-        form.reset();
-        router.refresh();
-      })
-      .catch((error) => {
-        toast.error(getErrorMessage(error));
-      });
+    try {
+      const [_, error] = await adminCreateUserAction(data);
+      if (error !== null) {
+        console.log(error);
+        toast.error("Error creating user");
+        return;
+      }
+      form.reset();
+    } catch (error) {
+      console.log(error);
+      toast.error("Error creating user");
+    }
   };
 
   return (

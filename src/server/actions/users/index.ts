@@ -23,6 +23,7 @@ import { verifyToken } from "@/lib/jwt";
 import { comparePassword, hashPassword } from "@/utils/hashing";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 /**
  * Refine passwords to check if they are complex enough and if they match
@@ -288,6 +289,7 @@ export const adminCreateUserAction = async (
 ): Promise<ReturnTuple<number>> => {
   const [, isAdminError] = await checkAdminPermissions();
   if (isAdminError !== null) return [null, isAdminError];
+
   const isValid = addUserSchema.safeParse(data);
   if (!isValid.success) return [null, userErrors.invalidData];
 
@@ -300,7 +302,8 @@ export const adminCreateUserAction = async (
     password: hashedPassword,
     role: data.role,
   });
-  revalidatePath("/admin");
+  // revalidatePath("/admin");
+  redirect("/admin");
   return result;
 };
 

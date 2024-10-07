@@ -3,7 +3,7 @@ import * as Tabs from "@radix-ui/react-tabs";
 import { getAllUsersAction } from "@/server/actions/users";
 import UserPage from "./user-page";
 import { Card } from "@/components/ui/card";
-import { AddNewUserTab, UserTab } from "./user-tabs";
+import { UserTab } from "./user-tabs";
 import { toast } from "sonner";
 
 async function Users() {
@@ -23,7 +23,6 @@ async function Users() {
             <SectionTitle title="Users" />
             <div className="flex flex-col">
               <Tabs.List>
-                <AddNewUserTab />
                 {users.map((user) => (
                   <UserTab
                     key={user.id}

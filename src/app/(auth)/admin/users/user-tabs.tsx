@@ -5,23 +5,6 @@ import {
 } from "@/components/avatar";
 import { getInitials } from "@/utils/user";
 import * as Tabs from "@radix-ui/react-tabs";
-import { Plus } from "lucide-react";
-
-export function AddNewUserTab() {
-  return (
-    <Tabs.Trigger
-      value="add-user"
-      className="group w-full data-[state=active]:bg-muted"
-    >
-      <UserCardItem>
-        <AvatarContainer>
-          <Plus size={20} />
-        </AvatarContainer>
-        <UserCardItemText>New User</UserCardItemText>
-      </UserCardItem>
-    </Tabs.Trigger>
-  );
-}
 
 export function UserTab({
   name,
