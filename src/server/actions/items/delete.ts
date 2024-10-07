@@ -1,7 +1,9 @@
 import { deleteItem } from "@/server/db/tables/item/queries";
-import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserAction } from "../users";
 import { getItemProjectsCountAction } from "../project-items/read";
+import { redirect } from "next/navigation";
+
+import type { ReturnTuple } from "@/utils/type-utils";
 
 export const deleteItemAction = async (
   id: number,
@@ -25,7 +27,7 @@ export const deleteItemAction = async (
     ];
   }
 
-  const [returnValue, error] = await deleteItem(id);
+  const [, error] = await deleteItem(id);
   if (error !== null) return [null, error];
-  return [returnValue, null];
+  redirect("/items");
 };
