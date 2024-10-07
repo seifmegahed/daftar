@@ -11,7 +11,9 @@ import InfoPageWrapper from "@/components/info-page-wrapper";
 import NotesForm from "@/components/common-forms/update-notes-form";
 import RegistrationNumberForm from "@/components/common-forms/update-registration-form";
 import WebsiteForm from "@/components/common-forms/update-website-form";
-import DeleteClientForm from "./delete-client-form";
+import DeleteForm from "@/components/common-forms/delete-form";
+import { deleteClientAction } from "@/server/actions/clients/delete";
+import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 
 async function EditClientPage({ params }: { params: { id: string } }) {
   const clientId = Number(params.id);
@@ -24,6 +26,15 @@ async function EditClientPage({ params }: { params: { id: string } }) {
   const hasFullAccess = currentUser?.role === "admin";
 
   const [clientProjects] = await getClientProjectsCountAction(clientId);
+
+  const deleteFormInfo =
+    clientProjects !== null && clientProjects > 0 ? (
+      <>
+        {`You cannot delete a client that is linked to ${clientProjects > 1 ? `${clientProjects} projects` : "a project"}.`}
+      </>
+    ) : (
+      <DeleteFormInfo type="client" />
+    );
   return (
     <InfoPageWrapper
       title="Edit Client"
@@ -50,11 +61,14 @@ async function EditClientPage({ params }: { params: { id: string } }) {
         type="client"
       />
       {clientProjects !== null && (
-        <DeleteClientForm
-          clientId={clientId}
+        <DeleteForm
           name={client.name}
           access={hasFullAccess}
-          numberOfProjects={clientProjects}
+          type="client"
+          id={clientId}
+          onDelete={deleteClientAction}
+          disabled={clientProjects > 0}
+          formInfo={deleteFormInfo}
         />
       )}
     </InfoPageWrapper>

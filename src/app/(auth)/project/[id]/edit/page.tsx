@@ -12,12 +12,14 @@ import {
 import StatusForm from "./status-form";
 import OwnerForm from "./owner-form";
 import DatesForm from "./dates-form";
-import DeleteProjectForm from "./delete-project";
 
 import NotesForm from "@/components/common-forms/update-notes-form";
 import NameForm from "@/components/common-forms/update-name-form";
 import DescriptionForm from "@/components/common-forms/update-description-form";
 import InfoPageWrapper from "@/components/info-page-wrapper";
+import DeleteForm from "@/components/common-forms/delete-form";
+import { deleteProjectAction } from "@/server/actions/projects/delete";
+import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 
 export const dynamic = "force-dynamic";
 
@@ -72,11 +74,13 @@ async function EditProjectPage({ params }: { params: { id: number } }) {
         notes={project.notes ?? ""}
         type="project"
       />
-      <DeleteProjectForm
-        projectId={project.id}
+      <DeleteForm
         name={project.name}
         access={hasFullAccess}
-        ownerId={project.ownerId}
+        type="project"
+        id={project.id}
+        onDelete={deleteProjectAction}
+        formInfo={<DeleteFormInfo type="project" />}
       />
     </InfoPageWrapper>
   );

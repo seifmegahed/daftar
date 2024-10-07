@@ -15,24 +15,31 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { emptyToUndefined } from "@/utils/common";
 import { toast } from "sonner";
-import { deleteProjectAction } from "@/server/actions/projects/delete";
+import type { ReturnTuple } from "@/utils/type-utils";
+import type { ReactNode } from "react";
 
-function DeleteProjectForm({
-  projectId,
+function DeleteForm({
+  id,
   name,
   access,
-  ownerId,
+  type,
+  disabled = false,
+  formInfo,
+  onDelete,
 }: {
-  projectId: number;
+  id: number;
   name: string;
   access: boolean;
-  ownerId: number;
+  disabled?: boolean;
+  type: "client" | "project" | "supplier" | "item" | "document";
+  formInfo: ReactNode;
+  onDelete: (id: number) => Promise<ReturnTuple<number>>;
 }) {
   const schema = z
     .object({
       name: z.preprocess(
         emptyToUndefined,
-        z.string({ message: "Project name is required to delete the project" }),
+        z.string({ message: `Name is required to delete the ${type}` }),
       ),
     })
     .superRefine((data, ctx) => {
@@ -54,11 +61,15 @@ function DeleteProjectForm({
   });
 
   const onSubmit = async (_data: FormDataType) => {
+    if (!access || disabled) {
+      toast.error(`You do not have permission to delete this ${type}`);
+      return;
+    }
     try {
-      const [, error] = await deleteProjectAction(projectId, { ownerId });
+      const [, error] = await onDelete(id);
       if (error !== null) {
         console.log(error);
-        toast.error("Error deleting project");
+        toast.error(`Error deleting ${type}`);
       }
     } catch (error) {
       console.log(error);
@@ -67,7 +78,7 @@ function DeleteProjectForm({
 
   return (
     <div className="flex flex-col gap-4 scroll-smooth" id="delete">
-      <h2 className="text-xl font-bold">Delete Project</h2>
+      <h2 className="text-xl font-bold">Delete</h2>
       <Separator />
       <form
         className="flex flex-col gap-4"
@@ -78,24 +89,15 @@ function DeleteProjectForm({
             name="name"
             control={form.control}
             render={({ field }) => (
-              <FormItem>
+              <FormItem className="relative">
                 <Input
                   {...field}
-                  className={`${form.formState.isDirty ? "" : "!text-muted-foreground"}`}
-                  placeholder={name}
-                  disabled={!access}
+                  className="z-[2] relative"
+                  disabled={!access || disabled}
                 />
+                <p className="absolute top-0 left-[12.5] text-sm text-muted-foreground select-none">{name}</p>
                 <FormMessage />
-                <FormDescription>
-                  <strong>
-                    Deleting a project is permanent, you will not be able to
-                    undo this action.
-                  </strong>{" "}
-                  Please type the name of the project to confirm. After typing
-                  the name press the delete button to delete the project. <br />
-                  <strong>Note:</strong> Only the owner or an admin can delete a
-                  project.
-                </FormDescription>
+                <FormDescription>{formInfo}</FormDescription>
               </FormItem>
             )}
           />
@@ -104,7 +106,8 @@ function DeleteProjectForm({
               disabled={
                 form.formState.isSubmitting ||
                 !form.formState.isDirty ||
-                !access
+                !access ||
+                disabled
               }
               loading={form.formState.isSubmitting}
               variant="destructive"
@@ -118,4 +121,4 @@ function DeleteProjectForm({
   );
 }
 
-export default DeleteProjectForm;
+export default DeleteForm;

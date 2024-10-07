@@ -9,6 +9,9 @@ import {
 import { getCurrentUserAction } from "@/server/actions/users";
 import DeleteDocumentForm from "./delete-document-form";
 import { getDocumentRelationsCountAction } from "@/server/actions/document-relations/read";
+import DeleteForm from "@/components/common-forms/delete-form";
+import { deleteDocumentAction } from "@/server/actions/documents/delete";
+import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 
 async function EditDocumentPage({ params }: { params: { id: string } }) {
   const documentId = Number(params.id);
@@ -23,6 +26,17 @@ async function EditDocumentPage({ params }: { params: { id: string } }) {
   const [numberOfReferences, numberOfReferencesError] =
     await getDocumentRelationsCountAction(documentId);
 
+  const deleteFormInfo =
+    numberOfReferences !== null && numberOfReferences > 0 ? (
+      <span>
+        {`You cannot delete a document that is referenced in other
+        database entries. This document is linked to 
+        ${numberOfReferences} 
+        ${numberOfReferences > 1 ? "entries" : "entry"}. If you want to delete this document, you must first unlink it from all its references.`}
+      </span>
+    ) : (
+      <DeleteFormInfo type="document" />
+    );
   return (
     <InfoPageWrapper
       title="Edit Document"
@@ -47,6 +61,17 @@ async function EditDocumentPage({ params }: { params: { id: string } }) {
           name={document.name}
           access={hasFullAccess}
           numberOfReferences={numberOfReferences}
+        />
+      )}
+      {numberOfReferencesError === null && (
+        <DeleteForm
+          name={document.name}
+          access={hasFullAccess}
+          type="document"
+          id={documentId}
+          disabled={numberOfReferences > 0}
+          onDelete={deleteDocumentAction}
+          formInfo={deleteFormInfo}
         />
       )}
     </InfoPageWrapper>

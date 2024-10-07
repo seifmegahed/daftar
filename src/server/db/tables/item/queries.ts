@@ -162,3 +162,17 @@ export const updateItem = async (
     return [null, getErrorMessage(error)];
   }
 };
+
+export const deleteItem = async (id: number): Promise<ReturnTuple<number>> => {
+  try {
+    const [item] = await db
+      .delete(itemsTable)
+      .where(eq(itemsTable.id, id))
+      .returning({ id: itemsTable.id });
+
+    if (!item) return [null, "Error deleting item"];
+    return [item.id, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
