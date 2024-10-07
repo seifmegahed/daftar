@@ -20,7 +20,7 @@ function SidebarNav({ className, items, ...props }: SidebarNavProps) {
   return (
     <nav
       className={cn(
-        "flex space-x-2 lg:flex-col lg:space-x-0 lg:space-y-1",
+        "max-w-screen flex h-16 space-x-2 overflow-x-scroll px-4 lg:h-full lg:flex-col lg:space-x-0 lg:space-y-1 lg:px-0",
         className,
       )}
       {...props}
@@ -33,13 +33,13 @@ function SidebarNav({ className, items, ...props }: SidebarNavProps) {
             buttonVariants({ variant: "ghost" }),
             pathname === item.href
               ? "bg-muted hover:bg-muted"
-              : "hover:bg-transparent group",
+              : "group hover:bg-transparent",
           )}
         >
           {item.amount !== undefined ? (
-            <div className="flex items-center justify-between w-full">
+            <div className="flex w-full items-center justify-between">
               <p className="group-hover:underline">{item.title}</p>
-              <p className="text-xs font-thin">{item.amount}</p>
+              <p className="hidden text-xs font-thin lg:block">{item.amount}</p>
             </div>
           ) : (
             <p className="w-full">{item.title}</p>
