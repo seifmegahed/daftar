@@ -10,8 +10,8 @@ const sidebarNavItems = [
     href: "/settings/edit",
   },
   {
-    title: "Appearance",
-    href: "/settings/appearance",
+    title: "Preferences",
+    href: "/settings/preferences",
   },
 ];
 
