@@ -26,21 +26,21 @@ function UserCard({ user }: { user: GetPartialUserType }) {
         </div>
         {user.role === "admin" ? (
           <div className="flex gap-2 text-sm text-muted-foreground">
-            <div>Role</div>
+            <div>Role:</div>
             <div>Admin</div>
           </div>
         ) : (
           <div className="flex gap-2 text-sm text-muted-foreground">
-            <div>Role</div>
+            <div>Role:</div>
             <div>User</div>
           </div>
         )}
         <div className="flex gap-2 text-sm text-muted-foreground">
-          <div>Active</div>
+          <div>Active:</div>
           <div>{user.active ? "Yes" : "No"}</div>
         </div>
         <div className="flex gap-2 text-sm text-muted-foreground">
-          <div>Last Active</div>
+          <div>Last Login:</div>
           <div>{user.lastActive ? format(user.lastActive, "PPP") : "-"}</div>
         </div>
       </div>

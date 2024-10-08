@@ -13,7 +13,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import SubmitButton from "@/components/buttons/submit-button";
-
 import LabelWrapper from "./label-wrapper";
 
 const roleItems = [
@@ -56,7 +55,7 @@ function ChangeRoleSection({
   };
 
   return (
-    <div className="flex flex-col gap-2 py-4">
+    <div className="flex flex-col gap-2">
       <LabelWrapper htmlFor="role" label="Role" />
       <Select onValueChange={setRole} value={role}>
         <SelectTrigger>

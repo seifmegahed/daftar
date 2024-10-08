@@ -43,7 +43,7 @@ function NameForm({
   access: boolean;
   ownerId?: number;
   id: number;
-  type: "client" | "supplier" | "project" | "item" | "document";
+  type: "client" | "supplier" | "project" | "item" | "document" | "user";
   updateCallbackAction?: (
     id: number,
     data: { name: string },
@@ -111,12 +111,11 @@ function NameForm({
                   {`
                   Update ${type} name, this will change the name of the ${type} 
                   across all references. After typing the updated name press the
-                  update button to persist the change. The ${type} name field is
-                  one of the fields used to search ${type}. Name of the ${type} 
+                  update button to persist the change. Name of the ${type} 
                   must be unique.`}
                   <br />
                   <strong>Note:</strong>
-                  {` Only ${ownerId ?? "the owner or"} an
+                  {` Only ${ownerId ? "the owner or" : ""} an
                   admin can change the ${type} name.`}
                 </FormDescription>
               </FormItem>

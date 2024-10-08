@@ -66,7 +66,7 @@ function ChangePasswordSection({ userId }: { userId: number }) {
   return (
     <form autoComplete="off" onSubmit={form.handleSubmit(onSubmit)}>
       <Form {...form}>
-        <div className="flex flex-col gap-4 py-4">
+        <div className="flex flex-col gap-4">
           <LabelWrapper label="Password" />
           <FormField
             name="password"

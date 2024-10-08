@@ -15,7 +15,7 @@ const changeNameSchema = UserSchema.pick({
 });
 
 function ChangeNameSection({ userId, name }: { userId: number; name: string }) {
-  const [newName, setNewName] = useState("");
+  const [newName, setNewName] = useState(name);
   const [errorMessage, setErrorMessage] = useState("");
   const [change, setChange] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -43,7 +43,7 @@ function ChangeNameSection({ userId, name }: { userId: number; name: string }) {
   };
 
   return (
-    <div className="flex flex-col gap-2 py-4">
+    <div className="flex flex-col gap-2">
       <LabelWrapper htmlFor="new-name" label="Name" />
       <Input
         id="new-name"
@@ -52,6 +52,7 @@ function ChangeNameSection({ userId, name }: { userId: number; name: string }) {
         value={newName}
         autoComplete="none"
         onChange={(event) => setNewName(event.target.value)}
+        className={`${change ? "" : "!text-muted-foreground"}`}
       />
       {errorMessage !== "" ? (
         <p className="text-xs text-red-500">{errorMessage}</p>
