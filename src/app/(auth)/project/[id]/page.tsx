@@ -1,10 +1,9 @@
-import { getCurrencyLabel, getStatusLabel } from "@/data/lut";
+import { getStatusLabel } from "@/data/lut";
 import {
   getProjectByIdAction,
   getProjectLinkedDocumentsAction,
 } from "@/server/actions/projects/read";
 import { type SimpDoc } from "@/server/db/tables/document/queries";
-import { numberWithCommas } from "@/utils/common";
 import { format } from "date-fns";
 import Link from "next/link";
 import DocumentCard from "@/components/common-cards/document";
@@ -12,6 +11,7 @@ import { DownloadIcon } from "lucide-react";
 import Section from "@/components/info-section";
 import ClientSection from "@/components/common-sections/company-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
+import UserInfoSection from "@/components/common-sections/user-info-section";
 
 export const dynamic = "force-dynamic";
 
@@ -58,22 +58,14 @@ async function ProjectPage({ params }: { params: { id: string } }) {
             {project.endDate ? format(new Date(project.endDate), "PP") : "N/A"}
           </p>
         </div>
-        <div className="flex justify-between">
-          <p>Created By</p>
-          <p>{project.creator.name}</p>
-        </div>
-        <div className="flex justify-between">
-          <p>Created At</p>
-          <p>{format(project.createdAt, "PP")}</p>
-        </div>
+      </Section>
+      <Section title="Other Info">
+        <UserInfoSection data={project} />
       </Section>
       <Section title="Notes">
         <div>
           <p>{project.notes}</p>
         </div>
-      </Section>
-      <Section title="Items">
-        <ProjectItems items={project.items} />
       </Section>
       <Section title="Documents">
         {documents === null ? (
@@ -150,66 +142,6 @@ const DocumentsDisplay = ({
         <DocumentCard document={document} key={document.id} />
       ))}
     </div>
-  );
-};
-
-const ProjectItems = ({
-  items,
-}: {
-  items: {
-    id: number;
-    quantity: number;
-    price: string;
-    currency: number;
-    item: { id: number; name: string; make: string | null; mpn: string | null };
-    supplier: { id: number; name: string };
-  }[];
-}) => {
-  return (
-    <table className="w-full text-left text-xs text-muted-foreground">
-      <thead>
-        <tr className="h-12 text-left">
-          <th className="pl-4">Item</th>
-          <th>Supplier</th>
-          <th className="text-right">Quantity</th>
-          <th className="text-right">Price</th>
-          <th className="text-right">Total</th>
-          <th className="pr-4 text-right">Cur</th>
-        </tr>
-      </thead>
-      <tbody>
-        {items.map((item) => (
-          <tr key={item.id} className="h-12 odd:bg-muted">
-            <td className="pl-4">
-              <Link
-                href={`/item/${item.item.id}`}
-                className="text-blue-400 hover:underline"
-              >
-                {item.item.name}
-              </Link>
-            </td>
-            <td>
-              <Link
-                href={`/supplier/${item.supplier.id}`}
-                className="text-blue-400 hover:underline"
-              >
-                {item.supplier.name}
-              </Link>
-            </td>
-            <td className="text-right">{item.quantity}</td>
-            <td className="text-right">
-              {numberWithCommas(Number(item.price))}
-            </td>
-            <td className="text-right">
-              {numberWithCommas(Number(item.price) * item.quantity)}
-            </td>
-            <td className="pr-4 text-right">
-              {getCurrencyLabel(item.currency)}
-            </td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
   );
 };
 
