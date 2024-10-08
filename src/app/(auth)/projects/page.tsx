@@ -11,22 +11,22 @@ const pageLimit = defaultPageLimit;
 
 export const dynamic = "force-dynamic";
 
-async function AllProjects({
-  searchParams,
-}: {
+type Props = {
   searchParams: {
     page?: string;
     query?: string;
     ft?: string;
     fv?: string;
   };
-}) {
+};
+
+async function AllProjects({ searchParams }: Props) {
   const page = Number(searchParams.page) || 1;
   const query = searchParams.query ?? "";
 
-  const filterDefaults = {
+  const filterValues = {
     filterType: (searchParams.ft as FilterTypes) ?? null,
-    filterValue: searchParams.fv ?? null,
+    filterValue: searchParams.fv ?? "",
   };
 
   const [totalCount] = await getProjectsCountAction();
@@ -36,9 +36,9 @@ async function AllProjects({
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-medium">All Projects Page</h3>
-      <FilterAndSearch defaults={filterDefaults} />
+      <FilterAndSearch defaults={filterValues} />
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
-        <ProjectsList page={page} query={query === "" ? undefined : query} />
+        <ProjectsList page={page} query={query === "" ? undefined : query} filter={filterValues} />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
     </div>

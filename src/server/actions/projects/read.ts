@@ -15,6 +15,7 @@ import type {
   GetProjectType,
   BriefProjectType,
   GetProjectLinkedDocumentsType,
+  FilterArgs,
 } from "@/server/db/tables/project/queries";
 import type { SelectProjectType } from "@/server/db/tables/project/schema";
 
@@ -38,9 +39,10 @@ export const getClientProjectsCountAction = async (
 
 export const getProjectsBriefAction = async (
   page: number,
+  filter: FilterArgs,
   search?: string,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {
-  const [projects, error] = await getProjectsBrief(page, search);
+  const [projects, error] = await getProjectsBrief(page, filter, search);
   if (error !== null) return [null, error];
   return [projects, null];
 };

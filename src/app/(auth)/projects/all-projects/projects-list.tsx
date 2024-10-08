@@ -1,14 +1,17 @@
 import { getProjectsBriefAction } from "@/server/actions/projects/read";
 import ProjectCard from "./project-card";
+import type { FilterArgs } from "@/server/db/tables/project/queries";
 
 async function ProjectsList({
   page = 1,
   query,
+  filter,
 }: {
   page?: number;
   query?: string;
+  filter: FilterArgs;
 }) {
-  const [projects, error] = await getProjectsBriefAction(page, query);
+  const [projects, error] = await getProjectsBriefAction(page, filter, query);
 
   if (error !== null) return <div>Error getting projects</div>;
 

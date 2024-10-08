@@ -16,6 +16,7 @@ import type { InsertProjectType, SelectProjectType } from "./schema";
 import type { UserBriefType } from "@/server/db/tables/user/queries";
 import type { SimpDoc } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
+import type { FilterTypes } from "@/app/(auth)/projects/all-projects/filter-and-search";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -87,8 +88,23 @@ const projectSearchQuery = (searchText: string) =>
     ), to_tsquery(${prepareSearchText(searchText)})
   `;
 
+export type FilterArgs = {
+  filterType: FilterTypes;
+  filterValue: string | null;
+}
+
+const projectFilterQuery = (filter: FilterArgs) => {
+  switch (filter.filterType) {
+    case "status":
+      return sql`status = ${filter.filterValue}`;
+    default:
+      return sql`true`;
+  }
+}
+
 export const getProjectsBrief = async (
   page: number,
+  filter: FilterArgs = { filterType: null, filterValue: null },
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {
@@ -111,6 +127,7 @@ export const getProjectsBrief = async (
       .from(projectsTable)
       .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
       .leftJoin(usersTable, eq(projectsTable.ownerId, usersTable.id))
+      .where(projectFilterQuery(filter))
       .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
       .limit(limit)
       .offset((page - 1) * limit);

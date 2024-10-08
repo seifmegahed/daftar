@@ -32,7 +32,7 @@ function StatusFilter({ defaultValue }: { defaultValue?: string }) {
   }, [filterValue, pathname, searchParams, router, defaultValue]);
 
   return (
-    <div className="w-[300px] flex flex-col gap-2">
+    <div className="flex w-[300px] flex-col gap-2">
       <Label>Status</Label>
       <Select onValueChange={setFilterValue} value={filterValue}>
         <SelectTrigger>
