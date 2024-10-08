@@ -6,8 +6,8 @@ const sidebarNavItems = [
     href: "/settings",
   },
   {
-    title: "Account",
-    href: "/settings/account",
+    title: "Edit",
+    href: "/settings/edit",
   },
   {
     title: "Appearance",

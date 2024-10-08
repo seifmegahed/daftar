@@ -40,15 +40,10 @@ const accountFormSchema = z.object({
 
 type AccountFormValues = z.infer<typeof accountFormSchema>;
 
-// This can come from your database or API.
-const defaultValues: Partial<AccountFormValues> = {
-  name: "",
-};
-
-function ChangeNameForm() {
+function ChangeNameForm({ name }: { name: string }) {
   const form = useForm<AccountFormValues>({
     resolver: zodResolver(accountFormSchema),
-    defaultValues,
+    defaultValues: { name },
   });
 
   const onSubmit = async (data: AccountFormValues) => {
@@ -73,7 +68,10 @@ function ChangeNameForm() {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <Input placeholder="Your name" {...field} />
+                <Input
+                  {...field}
+                  className={`${form.formState.isDirty ? "" : "!text-muted-foreground"}`}
+                />
               </FormControl>
               <FormDescription>
                 This is the name that will be displayed in the application and
