@@ -21,10 +21,10 @@ import type { SelectProjectType } from "@/server/db/tables/project/schema";
 
 import type { ReturnTuple } from "@/utils/type-utils";
 
-export const getProjectsCountAction = async (): Promise<
+export const getProjectsCountAction = async (filter?: FilterArgs): Promise<
   ReturnTuple<number>
 > => {
-  const [projectCount, error] = await getProjectsCount();
+  const [projectCount, error] = await getProjectsCount(filter);
   if (error !== null) return [null, error];
   return [projectCount, null];
 };

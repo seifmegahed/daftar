@@ -13,13 +13,13 @@ function FilterBar({
     case "status":
       return <StatusFilter defaultValue={defaultValue} />;
     case "startDate":
-      return <DateFilter defaultValue={defaultValue}/>;
+      return <DateFilter defaultValue={defaultValue} type={type}/>;
     case "endDate":
-      return<DateFilter defaultValue={defaultValue}/>;
+      return<DateFilter defaultValue={defaultValue} type={type}/>;
     case "creationDate":
-      return <DateFilter defaultValue={defaultValue}/>;
+      return <DateFilter defaultValue={defaultValue} type={type}/>;
     case "updateDate":
-      return <DateFilter defaultValue={defaultValue}/>;
+      return <DateFilter defaultValue={defaultValue} type={type}/>;
     default:
       return null;
   }

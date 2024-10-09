@@ -1,3 +1,6 @@
+import { between, gte, lte, sql } from "drizzle-orm";
+import type { PgColumn } from "drizzle-orm/pg-core";
+
 export const emptyToUndefined = (value: unknown) =>
   value === "" ? undefined : value;
 
@@ -27,4 +30,67 @@ export const prepareSearchText = (searchText: string) => {
   const searchTextArray = searchText.split(" ");
   searchTextArray[searchTextArray.length - 1] += ":*";
   return searchTextArray.join(" | ");
+};
+
+export const DATE_SEPARATOR = "XX";
+
+const dateToString = (date?: Date) => {
+  if (!date) return "n";
+  return [date.getMonth() + 1, date.getDate(), date.getFullYear()].join("-");
+};
+
+const dateParser = (value?: string) =>
+  !value || value === "n" ? undefined : new Date(value);
+
+export const parseURLDates = (
+  value?: string,
+): [Date | undefined, Date | undefined] => {
+  if (!value) return [undefined, undefined];
+  const [from, to] = value.split(DATE_SEPARATOR);
+  return [dateParser(from), dateParser(to)];
+};
+
+export const datesToURLString = (
+  from: Date | undefined,
+  to: Date | undefined,
+) => dateToString(from) + DATE_SEPARATOR + dateToString(to);
+
+const dateToStringForQuery = (date?: Date) =>
+  date
+    ? [
+        date.getFullYear(),
+        date.getMonth() + 1 < 10
+          ? "0" + (date.getMonth() + 1)
+          : date.getMonth() + 1,
+        date.getDate() < 10 ? "0" + date.getDate() : date.getDate(),
+      ].join("")
+    : undefined;
+
+const parseURLDatesForQuery = (urlDates?: string) => {
+  const [from, to] = parseURLDates(urlDates);
+  return [dateToStringForQuery(from), dateToStringForQuery(to)];
+};
+
+export const dateQueryGenerator = (
+  column: PgColumn,
+  urlDates: string | null,
+) => {
+  if (!urlDates) return sql`true`;
+  const [from, to] = parseURLDatesForQuery(urlDates);
+  if (!from && !to) return sql`true`;
+  if (!from && to) return lte(column, to);
+  if (from && !to) return gte(column, from);
+  return between(column, from, to);
+};
+
+export const timestampQueryGenerator = (
+  column: PgColumn,
+  urlDates: string | null,
+) => {
+  if (!urlDates) return sql`true`;
+  const [from, to] = parseURLDates(urlDates);
+  if (!from && !to) return sql`true`;
+  if (!from && to) return lte(column, to);
+  if (from && !to) return gte(column, from);
+  return between(column, from, to);
 };

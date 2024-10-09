@@ -37,7 +37,7 @@ async function AllProjects({ searchParams }: Props) {
     filterValue: searchParams.fv ?? "",
   };
 
-  const [totalCount] = await getProjectsCountAction();
+  const [totalCount] = await getProjectsCountAction(filterValues);
 
   const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
 

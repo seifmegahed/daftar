@@ -9,7 +9,7 @@ import { clientsTable } from "@/server/db/tables/client/schema";
 import { usersTable } from "@/server/db/tables/user/schema";
 import { documentRelationsTable } from "@/server/db/tables/document-relation/schema";
 
-import { prepareSearchText } from "@/utils/common";
+import { dateQueryGenerator, prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
 
 import type { InsertProjectType, SelectProjectType } from "./schema";
@@ -26,22 +26,6 @@ export type BriefProjectType = Pick<
   clientName: string;
   ownerId: number;
   ownerName: string;
-};
-
-export const getProjectsCount = async (): Promise<ReturnTuple<number>> => {
-  try {
-    const [projectCount] = await db
-      .select({
-        count: count(),
-      })
-      .from(projectsTable)
-      .limit(1);
-    if (!projectCount) return [null, "Error getting project count"];
-    return [projectCount.count, null];
-  } catch (error) {
-    console.log(error);
-    return [null, "Error getting project count"];
-  }
 };
 
 export const getClientProjectsCount = async (
@@ -91,16 +75,57 @@ const projectSearchQuery = (searchText: string) =>
 export type FilterArgs = {
   filterType: FilterTypes;
   filterValue: string | null;
-}
+};
 
-const projectFilterQuery = (filter: FilterArgs) => {
+const projectFilterQuery= (filter: FilterArgs) => {
   switch (filter.filterType) {
     case "status":
       return sql`status = ${filter.filterValue}`;
+    case "startDate":
+      return dateQueryGenerator(
+        projectsTable.startDate,
+        filter.filterValue,
+      );
+    case "endDate":
+      return dateQueryGenerator(
+        projectsTable.startDate,
+        filter.filterValue,
+      );
+    case "creationDate":
+      return timestampQueryGenerator(
+        projectsTable.createdAt,
+        filter.filterValue,
+      );
+    case "updateDate":
+      return timestampQueryGenerator(
+        projectsTable.updatedAt,
+        filter.filterValue,
+      );
     default:
       return sql`true`;
   }
-}
+};
+
+export const getProjectsCount = async (
+  filter?: FilterArgs,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [projectCount] = await db
+      .select({
+        count: count(),
+      })
+      .from(projectsTable)
+      .where(
+        projectFilterQuery(filter ?? { filterType: null, filterValue: null }),
+      )
+      .limit(1);
+    if (!projectCount) return [null, "Error getting project count"];
+    return [projectCount.count, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting project count"];
+  }
+};
 
 export const getProjectsBrief = async (
   page: number,
