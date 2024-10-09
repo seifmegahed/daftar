@@ -7,7 +7,13 @@ import { FILTER_TYPE, FILTER_VALUE } from ".";
 import type { FilterTypes } from ".";
 import { datesToURLString, parseURLDates } from "@/utils/common";
 
-function DateFilter({ defaultValue, type }: { defaultValue?: string, type: FilterTypes }) {
+function DateFilter({
+  defaultValue,
+  type,
+}: {
+  defaultValue?: string;
+  type: FilterTypes;
+}) {
   const today = new Date();
   const monthInPast = new Date(
     today.getFullYear(),
@@ -26,19 +32,25 @@ function DateFilter({ defaultValue, type }: { defaultValue?: string, type: Filte
   const router = useRouter();
 
   useEffect(() => {
-    const params = new URLSearchParams(searchParams);
-    if (!fromDate && !toDate || !type) {
-      params.delete(FILTER_TYPE);
-      params.delete(FILTER_VALUE);
-    } else {
-      params.set(FILTER_TYPE, type);
-      params.set(FILTER_VALUE, datesToURLString(fromDate, toDate));
-    }
-    if (change) {
-      params.set("page", "1");
-      router.replace(`${pathname}?${params.toString()}`);
-      setChange(false);
-    }
+    const handleFilter = () => {
+      const params = new URLSearchParams(searchParams);
+      if ((!fromDate && !toDate) || !type) {
+        params.delete(FILTER_TYPE);
+        params.delete(FILTER_VALUE);
+      } else {
+        params.set(FILTER_TYPE, type);
+        params.set(FILTER_VALUE, datesToURLString(fromDate, toDate));
+      }
+      if (change) {
+        params.set("page", "1");
+        router.replace(`${pathname}?${params.toString()}`);
+        setChange(false);
+      }
+    };
+    const debounce = setTimeout(handleFilter, 500);
+    return () => {
+      clearTimeout(debounce);
+    };
   }, [fromDate, toDate, pathname, searchParams, router, change, type]);
 
   return (
