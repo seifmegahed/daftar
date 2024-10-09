@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import Pagination from "@/components/pagination";
 import ProjectsList from "./all-projects/projects-list";
 import FilterAndSearch from "@/components/filter-and-search";
-import type { FilterTypes } from "@/components/filter-and-search";
+import type { FilterOptionType, FilterTypes } from "@/components/filter-and-search";
 import SkeletonList from "@/components/skeletons";
 import { getProjectsCountAction } from "@/server/actions/projects/read";
 import { defaultPageLimit } from "@/data/config";
@@ -16,7 +16,7 @@ type Props = {
   searchParams: SearchParamsPropsType;
 };
 
-const projectFilterItems: { label: string; value: FilterTypes }[] = [
+const projectFilterItems: FilterOptionType[] = [
   { label: "By Status", value: "status" },
   { label: "By Start Date", value: "startDate" },
   { label: "By End Date", value: "endDate" },

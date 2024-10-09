@@ -22,7 +22,7 @@ import type { InsertProjectType, SelectProjectType } from "./schema";
 import type { UserBriefType } from "@/server/db/tables/user/queries";
 import type { SimpDoc } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
-import type { FilterArgs } from "@/components/filter-and-search";
+import { filterDefault, type FilterArgs } from "@/components/filter-and-search";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -102,7 +102,7 @@ const projectFilterQuery = (filter: FilterArgs) => {
 };
 
 export const getProjectsCount = async (
-  filter?: FilterArgs,
+  filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
   try {
     const [projectCount] = await db
@@ -124,7 +124,7 @@ export const getProjectsCount = async (
 
 export const getProjectsBrief = async (
   page: number,
-  filter: FilterArgs = { filterType: null, filterValue: null },
+  filter: FilterArgs = filterDefault,
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {

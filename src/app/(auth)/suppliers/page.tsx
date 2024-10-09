@@ -4,9 +4,13 @@ import SuppliersList from "./all-suppliers/suppliers-list";
 import { defaultPageLimit } from "@/data/config";
 import { getSuppliersCountAction } from "@/server/actions/suppliers/read";
 import SkeletonList from "@/components/skeletons";
-import type { SearchParamsPropsType } from "@/utils/type-utils";
-import type { FilterTypes } from "@/components/filter-and-search";
 import FilterAndSearch from "@/components/filter-and-search";
+
+import type { SearchParamsPropsType } from "@/utils/type-utils";
+import type {
+  FilterOptionType,
+  FilterTypes,
+} from "@/components/filter-and-search";
 
 const pageLimit = defaultPageLimit;
 
@@ -16,7 +20,7 @@ type Props = {
   searchParams: SearchParamsPropsType;
 };
 
-const projectFilterItems: { label: string; value: FilterTypes }[] = [
+const projectFilterItems: FilterOptionType[] = [
   { label: "By Creation Date", value: "creationDate" },
   { label: "By Update Date", value: "updateDate" },
 ];

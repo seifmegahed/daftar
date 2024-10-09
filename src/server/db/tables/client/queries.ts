@@ -16,7 +16,7 @@ import type { InsertAddressType } from "../address/schema";
 import type { InsertContactType } from "../contact/schema";
 import type { InsertClientDataType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import type { FilterArgs } from "@/components/filter-and-search";
+import { filterDefault, type FilterArgs } from "@/components/filter-and-search";
 
 /**
  * Getters
@@ -69,7 +69,7 @@ export type BriefClientType = Required<
 
 export const getClientsBrief = async (
   page: number,
-  filter: FilterArgs = { filterType: null, filterValue: null },
+  filter: FilterArgs = filterDefault,
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefClientType[]>> => {
@@ -284,7 +284,7 @@ const clientFilterQuery = (filter: FilterArgs) => {
 };
 
 export const getClientsCount = async (
-  filter: FilterArgs = { filterType: null, filterValue: null },
+  filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
   try {
     const [clients] = await db

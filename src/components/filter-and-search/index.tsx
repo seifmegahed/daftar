@@ -22,12 +22,22 @@ export type FilterArgs = {
   filterValue: string | null;
 };
 
+export const filterDefault: FilterArgs = {
+  filterType: null,
+  filterValue: null,
+};
+
+export type FilterOptionType = {
+  label: string;
+  value: FilterTypes;
+};
+
 function FilterAndSearch({
   defaults,
   filterItems,
 }: {
-  defaults: { filterType: FilterTypes; filterValue: string | null };
-  filterItems: { label: string; value: FilterTypes }[];
+  defaults: FilterArgs;
+  filterItems: FilterOptionType[];
 }) {
   const [filterType, setFilterType] = useState<FilterTypes>(
     defaults.filterType,

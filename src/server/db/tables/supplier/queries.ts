@@ -15,7 +15,7 @@ import type { InsertSupplierType, SelectSupplierType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { InsertAddressType } from "../address/schema";
 import type { InsertContactType } from "../contact/schema";
-import type { FilterArgs } from "@/components/filter-and-search";
+import { filterDefault, type FilterArgs } from "@/components/filter-and-search";
 
 /**
  * Getters
@@ -90,7 +90,7 @@ export type BriefSupplierType = Required<
 
 export const getSuppliersBrief = async (
   page: number,
-  filter: FilterArgs = { filterType: null, filterValue: null },
+  filter: FilterArgs = filterDefault,
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefSupplierType[]>> => {
@@ -283,10 +283,7 @@ export const listAllSuppliers = async (): Promise<
 };
 
 export const getSuppliersCount = async (
-  filter: FilterArgs = {
-    filterType: null,
-    filterValue: null,
-  },
+  filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
   try {
     const [suppliers] = await db

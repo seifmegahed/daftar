@@ -5,7 +5,7 @@ import { defaultPageLimit } from "@/data/config";
 import { getClientsCountAction } from "@/server/actions/clients/read";
 import FilterAndSearch from "@/components/filter-and-search";
 import SkeletonList from "@/components/skeletons";
-import type { FilterTypes } from "@/components/filter-and-search";
+import type { FilterOptionType, FilterTypes } from "@/components/filter-and-search";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 
 const pageLimit = defaultPageLimit;
@@ -16,7 +16,7 @@ type Props = {
   searchParams: SearchParamsPropsType;
 };
 
-const projectFilterItems: { label: string; value: FilterTypes }[] = [
+const projectFilterItems: FilterOptionType[] = [
   { label: "By Creation Date", value: "creationDate" },
   { label: "By Update Date", value: "updateDate" },
 ];
