@@ -16,7 +16,7 @@ type Props = {
   searchParams: SearchParamsPropsType;
 };
 
-const projectFilterItems: FilterOptionType[] = [
+const filterItems: FilterOptionType[] = [
   { label: "By Status", value: "status" },
   { label: "By Start Date", value: "startDate" },
   { label: "By End Date", value: "endDate" },
@@ -42,7 +42,7 @@ async function AllProjects({ searchParams }: Props) {
       <h3 className="text-lg font-medium">All Projects Page</h3>
       <FilterAndSearch
         defaults={filterValues}
-        filterItems={projectFilterItems}
+        filterItems={filterItems}
       />
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
         <ProjectsList

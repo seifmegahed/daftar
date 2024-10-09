@@ -3,8 +3,10 @@ import { itemsTable, type AddItemType, type SelectItemType } from "./schema";
 import { db } from "@/server/db";
 import { getErrorMessage } from "@/lib/exceptions";
 import { asc, count, desc, eq, sql } from "drizzle-orm";
-import { prepareSearchText } from "@/utils/common";
+import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
+import type { FilterArgs } from "@/components/filter-and-search";
+import { filterDefault } from "@/components/filter-and-search";
 
 export const insertItem = async (
   data: AddItemType,
@@ -25,6 +27,17 @@ export const insertItem = async (
   }
 };
 
+const itemFilterQuery = (filter: FilterArgs) => {
+  switch (filter.filterType) {
+    case "creationDate":
+      return timestampQueryGenerator(itemsTable.createdAt, filter.filterValue);
+    case "updateDate":
+      return timestampQueryGenerator(itemsTable.updatedAt, filter.filterValue);
+    default:
+      return sql`true`;
+  }
+};
+
 const itemSearchQuery = (searchText: string) =>
   sql`
     (
@@ -41,6 +54,7 @@ export type BriefItemType = Pick<
 
 export const getAllItemsBrief = async (
   page: number,
+  filter: FilterArgs = filterDefault,
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefItemType[]>> => {
@@ -57,6 +71,7 @@ export const getAllItemsBrief = async (
           : sql`1`,
       })
       .from(itemsTable)
+      .where(itemFilterQuery(filter))
       .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
       .limit(limit)
       .offset((page - 1) * limit);
@@ -131,11 +146,14 @@ export const listAllItems = async (): Promise<ReturnTuple<ItemListType[]>> => {
   }
 };
 
-export const getItemsCount = async (): Promise<ReturnTuple<number>> => {
+export const getItemsCount = async (
+  filter: FilterArgs = filterDefault,
+): Promise<ReturnTuple<number>> => {
   try {
     const [items] = await db
       .select({ count: count() })
       .from(itemsTable)
+      .where(itemFilterQuery(filter))
       .limit(1);
 
     if (!items) return [null, "Error getting items count"];

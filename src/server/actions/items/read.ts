@@ -13,13 +13,20 @@ import type {
   ItemListType,
 } from "@/server/db/tables/item/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 export const getItemsAction = async (
   page: number,
+  filter?: FilterArgs,
   searchText?: string,
   limit?: number,
 ): Promise<ReturnTuple<BriefItemType[]>> => {
-  const [items, itemsError] = await getAllItemsBrief(page, searchText, limit);
+  const [items, itemsError] = await getAllItemsBrief(
+    page,
+    filter,
+    searchText,
+    limit,
+  );
   if (itemsError !== null) return [null, itemsError];
   return [items, null];
 };
@@ -40,8 +47,10 @@ export const listAllItemsAction = async (): Promise<
   return [items, null];
 };
 
-export const getItemsCountAction = async (): Promise<ReturnTuple<number>> => {
-  const [items, itemsError] = await getItemsCount();
+export const getItemsCountAction = async (
+  filter?: FilterArgs,
+): Promise<ReturnTuple<number>> => {
+  const [items, itemsError] = await getItemsCount(filter);
   if (itemsError !== null) return [null, itemsError];
   return [items, null];
 };
