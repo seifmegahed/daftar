@@ -1,9 +1,6 @@
 "use server";
 
 import {
-  type BriefSupplierType,
-  type GetSupplierType,
-  type SupplierListType,
   getSuppliersBrief,
   getSupplierFullById,
   getSuppliersCount,
@@ -11,6 +8,13 @@ import {
   getSupplierPrimaryAddressId,
   getSupplierPrimaryContactId,
 } from "@/server/db/tables/supplier/queries";
+
+import type {
+  BriefSupplierType,
+  GetSupplierType,
+  SupplierListType,
+} from "@/server/db/tables/supplier/queries";
+import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 export const getSupplierPrimaryAddressIdAction = async (
@@ -31,11 +35,13 @@ export const getSupplierPrimaryContactIdAction = async (
 
 export const getSuppliersBriefAction = async (
   page: number,
+  filter?: FilterArgs,
   searchText?: string,
   limit?: number,
 ): Promise<ReturnTuple<BriefSupplierType[]>> => {
   const [suppliers, suppliersError] = await getSuppliersBrief(
     page,
+    filter,
     searchText,
     limit,
   );
@@ -59,10 +65,10 @@ export const listAllSuppliersAction = async (): Promise<
   return [suppliers, null];
 };
 
-export const getSuppliersCountAction = async (): Promise<
-  ReturnTuple<number>
-> => {
-  const [suppliers, suppliersError] = await getSuppliersCount();
+export const getSuppliersCountAction = async (
+  filter?: FilterArgs,
+): Promise<ReturnTuple<number>> => {
+  const [suppliers, suppliersError] = await getSuppliersCount(filter);
   if (suppliersError !== null) return [null, suppliersError];
   return [suppliers, null];
 };

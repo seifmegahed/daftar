@@ -1,14 +1,17 @@
 import SupplierCard from "./supplier-card";
 import { getSuppliersBriefAction } from "@/server/actions/suppliers/read";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 async function SuppliersList({
   page = 1,
   query,
+  filter,
 }: {
   page?: number;
   query?: string;
+  filter?: FilterArgs;
 }) {
-  const [suppliers, error] = await getSuppliersBriefAction(page, query);
+  const [suppliers, error] = await getSuppliersBriefAction(page, filter, query);
 
   if (error !== null) return <div>Error getting suppliers</div>;
 

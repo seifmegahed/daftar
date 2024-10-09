@@ -9,12 +9,13 @@ import {
 } from "@/server/db/schema";
 import { getErrorMessage } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
-import { prepareSearchText } from "@/utils/common";
 
+import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import type { InsertSupplierType, SelectSupplierType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { InsertAddressType } from "../address/schema";
 import type { InsertContactType } from "../contact/schema";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 /**
  * Getters
@@ -55,6 +56,23 @@ export const getSupplierPrimaryContactId = async (
   }
 };
 
+const supplierFilterQuery = (filter: FilterArgs) => {
+  switch (filter.filterType) {
+    case "creationDate":
+      return timestampQueryGenerator(
+        suppliersTable.createdAt,
+        filter.filterValue,
+      );
+    case "updateDate":
+      return timestampQueryGenerator(
+        suppliersTable.updatedAt,
+        filter.filterValue,
+      );
+    default:
+      return sql`true`;
+  }
+};
+
 const supplierSearchQuery = (searchText: string) =>
   sql`
     (
@@ -72,6 +90,7 @@ export type BriefSupplierType = Required<
 
 export const getSuppliersBrief = async (
   page: number,
+  filter: FilterArgs = { filterType: null, filterValue: null },
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefSupplierType[]>> => {
@@ -88,6 +107,7 @@ export const getSuppliersBrief = async (
           : sql`1`,
       })
       .from(suppliersTable)
+      .where(supplierFilterQuery(filter))
       .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
       .limit(limit)
       .offset((page - 1) * limit);
@@ -262,11 +282,17 @@ export const listAllSuppliers = async (): Promise<
   }
 };
 
-export const getSuppliersCount = async (): Promise<ReturnTuple<number>> => {
+export const getSuppliersCount = async (
+  filter: FilterArgs = {
+    filterType: null,
+    filterValue: null,
+  },
+): Promise<ReturnTuple<number>> => {
   try {
     const [suppliers] = await db
       .select({ count: count() })
       .from(suppliersTable)
+      .where(supplierFilterQuery(filter))
       .limit(1);
 
     if (!suppliers) return [null, "Error getting suppliers count"];

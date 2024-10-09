@@ -3,32 +3,50 @@ import Pagination from "@/components/pagination";
 import SuppliersList from "./all-suppliers/suppliers-list";
 import { defaultPageLimit } from "@/data/config";
 import { getSuppliersCountAction } from "@/server/actions/suppliers/read";
-import FilterAndSearch from "./all-suppliers/filter-and-search";
 import SkeletonList from "@/components/skeletons";
-
+import type { SearchParamsPropsType } from "@/utils/type-utils";
+import type { FilterTypes } from "@/components/filter-and-search";
+import FilterAndSearch from "@/components/filter-and-search";
 
 const pageLimit = defaultPageLimit;
 
 export const dynamic = "force-dynamic";
 
-async function SuppliersPage({
-  searchParams,
-}: {
-  searchParams: { page?: string; query?: string };
-}) {
+type Props = {
+  searchParams: SearchParamsPropsType;
+};
+
+const projectFilterItems: { label: string; value: FilterTypes }[] = [
+  { label: "By Creation Date", value: "creationDate" },
+  { label: "By Update Date", value: "updateDate" },
+];
+
+async function SuppliersPage({ searchParams }: Props) {
   const page = Number(searchParams.page) || 1;
   const query = searchParams.query ?? "";
 
-  const [totalCount] = await getSuppliersCountAction();
+  const filterValues = {
+    filterType: (searchParams.ft as FilterTypes) ?? null,
+    filterValue: searchParams.fv ?? "",
+  };
+
+  const [totalCount] = await getSuppliersCountAction(filterValues);
 
   const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
 
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-medium">All Suppliers Page</h3>
-      <FilterAndSearch />
+      <FilterAndSearch
+        filterItems={projectFilterItems}
+        defaults={filterValues}
+      />
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
-        <SuppliersList page={page} query={query === "" ? undefined : query} />
+        <SuppliersList
+          page={page}
+          query={query === "" ? undefined : query}
+          filter={filterValues}
+        />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
     </div>
