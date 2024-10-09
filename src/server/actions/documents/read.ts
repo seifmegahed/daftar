@@ -6,19 +6,23 @@ import {
   getDocuments,
   getDocumentsCount,
 } from "@/server/db/tables/document/queries";
+
 import type {
   BriefDocumentType,
   DocumentType,
 } from "@/server/db/tables/document/queries";
+import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 export const getDocumentsAction = async (
   page: number,
+  filter?: FilterArgs,
   searchText?: string,
   limit?: number,
 ): Promise<ReturnTuple<BriefDocumentType[]>> => {
   const [documents, documentsError] = await getDocuments(
     page,
+    filter,
     searchText,
     limit,
   );
@@ -34,10 +38,10 @@ export const getDocumentByIdAction = async (
   return [document, null];
 };
 
-export const getDocumentsCountAction = async (): Promise<
-  ReturnTuple<number>
-> => {
-  const [documents, documentsError] = await getDocumentsCount();
+export const getDocumentsCountAction = async (
+  filter?: FilterArgs,
+): Promise<ReturnTuple<number>> => {
+  const [documents, documentsError] = await getDocumentsCount(filter);
   if (documentsError !== null) return [null, documentsError];
   return [documents, null];
 };

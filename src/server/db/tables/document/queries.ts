@@ -1,13 +1,16 @@
 import { db } from "@/server/db";
 import { count, eq, desc, sql } from "drizzle-orm";
 
-import { documentsTable, type DocumentDataType } from "./schema";
+import { documentsTable } from "./schema";
+import type { DocumentDataType } from "./schema";
 
 import { getErrorMessage } from "@/lib/exceptions";
-import { prepareSearchText } from "@/utils/common";
+import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
+import { filterDefault } from "@/components/filter-and-search";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 export type SimpDoc = {
   id: number;
@@ -35,6 +38,18 @@ export const insertDocument = async (
   }
 };
 
+const documentFilterQuery = (filter: FilterArgs) => {
+  switch (filter.filterType) {
+    case "creationDate":
+      return timestampQueryGenerator(
+        documentsTable.createdAt,
+        filter.filterValue,
+      );
+    default:
+      return sql`true`;
+  }
+};
+
 const documentSearchQuery = (searchText: string) =>
   sql`
     (
@@ -49,6 +64,7 @@ export type BriefDocumentType = Required<
 
 export const getDocuments = async (
   page: number,
+  filter: FilterArgs = filterDefault,
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefDocumentType[]>> => {
@@ -64,6 +80,7 @@ export const getDocuments = async (
           : sql`1`,
       })
       .from(documentsTable)
+      .where(documentFilterQuery(filter))
       .orderBy((table) =>
         searchText ? desc(table.rank) : desc(documentsTable.id),
       )
@@ -133,11 +150,14 @@ export const getDocumentPath = async (
   }
 };
 
-export const getDocumentsCount = async (): Promise<ReturnTuple<number>> => {
+export const getDocumentsCount = async (
+  filter: FilterArgs = filterDefault,
+): Promise<ReturnTuple<number>> => {
   try {
     const [documents] = await db
       .select({ count: count() })
       .from(documentsTable)
+      .where(documentFilterQuery(filter))
       .limit(1);
 
     if (!documents) return [null, "Error getting documents count"];

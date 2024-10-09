@@ -1,14 +1,17 @@
 import { getDocumentsAction } from "@/server/actions/documents/read";
 import DocumentCard from "./document-card";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 async function DocumentsList({
   page = 1,
   query,
+  filter,
 }: {
   page?: number;
   query?: string;
+  filter?: FilterArgs;
 }) {
-  const [documents, error] = await getDocumentsAction(page, query);
+  const [documents, error] = await getDocumentsAction(page, filter, query);
 
   if (error !== null) return <div>Error getting documents</div>;
 
