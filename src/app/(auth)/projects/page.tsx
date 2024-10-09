@@ -6,18 +6,14 @@ import type { FilterTypes } from "@/components/filter-and-search";
 import SkeletonList from "@/components/skeletons";
 import { getProjectsCountAction } from "@/server/actions/projects/read";
 import { defaultPageLimit } from "@/data/config";
+import type { SearchParamsPropsType } from "@/utils/type-utils";
 
 const pageLimit = defaultPageLimit;
 
 export const dynamic = "force-dynamic";
 
 type Props = {
-  searchParams: {
-    page?: string;
-    query?: string;
-    ft?: string;
-    fv?: string;
-  };
+  searchParams: SearchParamsPropsType;
 };
 
 const projectFilterItems: { label: string; value: FilterTypes }[] = [

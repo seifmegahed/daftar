@@ -6,18 +6,14 @@ import { getClientsCountAction } from "@/server/actions/clients/read";
 import FilterAndSearch from "@/components/filter-and-search";
 import SkeletonList from "@/components/skeletons";
 import type { FilterTypes } from "@/components/filter-and-search";
+import type { SearchParamsPropsType } from "@/utils/type-utils";
 
 const pageLimit = defaultPageLimit;
 
 export const dynamic = "force-dynamic";
 
 type Props = {
-  searchParams: {
-    page?: string;
-    query?: string;
-    ft?: string;
-    fv?: string;
-  };
+  searchParams: SearchParamsPropsType;
 };
 
 const projectFilterItems: { label: string; value: FilterTypes }[] = [
@@ -46,7 +42,11 @@ async function ClientsPage({ searchParams }: Props) {
         filterItems={projectFilterItems}
       />
       <Suspense key={page + query} fallback={<SkeletonList type="A" />}>
-        <ClientsList page={page} query={query === "" ? undefined : query} filter={filterValues} />
+        <ClientsList
+          page={page}
+          query={query === "" ? undefined : query}
+          filter={filterValues}
+        />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
     </div>

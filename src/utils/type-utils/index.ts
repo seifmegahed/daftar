@@ -3,4 +3,11 @@ export type AtLeastOne<T, U = { [K in keyof T]: Pick<T, K> }> = Partial<T> &
 
 export type ReturnTuple<T> = readonly [T, null] | readonly [null, string];
 
-export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
+export type PartialBy<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+export type SearchParamsPropsType = {
+  page?: string;
+  query?: string;
+  ft?: string;
+  fv?: string;
+};
