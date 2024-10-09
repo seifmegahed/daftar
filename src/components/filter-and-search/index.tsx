@@ -17,6 +17,11 @@ export type FilterTypes =
   | "updateDate"
   | null;
 
+export type FilterArgs = {
+  filterType: FilterTypes;
+  filterValue: string | null;
+};
+
 function FilterAndSearch({
   defaults,
   filterItems,

@@ -1,13 +1,22 @@
 import { db } from "@/server/db";
-import { type InsertClientDataType, clientsTable } from "./schema";
-import type { ReturnTuple } from "@/utils/type-utils";
-import { asc, count, eq, sql, desc } from "drizzle-orm";
+import { asc, count, eq, sql, desc, and } from "drizzle-orm";
+
+import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import { getErrorMessage } from "@/lib/exceptions";
-import { addressesTable, type InsertAddressType } from "../address/schema";
-import { contactsTable, type InsertContactType } from "../contact/schema";
-import { prepareSearchText } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
-import { documentRelationsTable } from "@/server/db/schema";
+
+import { clientsTable } from "./schema";
+import {
+  addressesTable,
+  contactsTable,
+  documentRelationsTable,
+} from "@/server/db/schema";
+
+import type { InsertAddressType } from "../address/schema";
+import type { InsertContactType } from "../contact/schema";
+import type { InsertClientDataType } from "./schema";
+import type { ReturnTuple } from "@/utils/type-utils";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 /**
  * Getters
@@ -60,6 +69,7 @@ export type BriefClientType = Required<
 
 export const getClientsBrief = async (
   page: number,
+  filter: FilterArgs = { filterType: null, filterValue: null },
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefClientType[]>> => {
@@ -75,7 +85,7 @@ export const getClientsBrief = async (
           : sql`1`,
       })
       .from(clientsTable)
-      .where(eq(clientsTable.isActive, true))
+      .where(and(eq(clientsTable.isActive, true), clientFilterQuery(filter)))
       .orderBy((table) =>
         searchText ? desc(table.rank) : desc(clientsTable.id),
       )
@@ -256,11 +266,31 @@ export const listAllClients = async (): Promise<
   }
 };
 
-export const getClientsCount = async (): Promise<ReturnTuple<number>> => {
+const clientFilterQuery = (filter: FilterArgs) => {
+  switch (filter.filterType) {
+    case "creationDate":
+      return timestampQueryGenerator(
+        clientsTable.createdAt,
+        filter.filterValue,
+      );
+    case "updateDate":
+      return timestampQueryGenerator(
+        clientsTable.updatedAt,
+        filter.filterValue,
+      );
+    default:
+      return sql`true`;
+  }
+};
+
+export const getClientsCount = async (
+  filter: FilterArgs = { filterType: null, filterValue: null },
+): Promise<ReturnTuple<number>> => {
   try {
     const [clients] = await db
       .select({ count: count() })
       .from(clientsTable)
+      .where(clientFilterQuery(filter))
       .limit(1);
 
     if (!clients) return [null, "Error getting clients count"];

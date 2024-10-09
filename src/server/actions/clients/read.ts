@@ -1,5 +1,6 @@
 "use server";
 
+import type { FilterArgs } from "@/components/filter-and-search";
 import type {
   BriefClientType,
   ClientListType,
@@ -13,6 +14,7 @@ import {
   getClientPrimaryAddressId,
   getClientPrimaryContactId,
 } from "@/server/db/tables/client/queries";
+
 import type { ReturnTuple } from "@/utils/type-utils";
 
 export const getClientPrimaryAddressIdAction = async (
@@ -33,10 +35,16 @@ export const getClientPrimaryContactIdAction = async (
 
 export const getClientsBriefAction = async (
   page: number,
+  filter?: FilterArgs,
   query?: string,
   limit?: number,
 ): Promise<ReturnTuple<BriefClientType[]>> => {
-  const [clients, clientsError] = await getClientsBrief(page, query, limit);
+  const [clients, clientsError] = await getClientsBrief(
+    page,
+    filter,
+    query,
+    limit,
+  );
   if (clientsError !== null) return [null, clientsError];
   return [clients, null];
 };
@@ -57,8 +65,10 @@ export const listAllClientsAction = async (): Promise<
   return [clients, null];
 };
 
-export const getClientsCountAction = async (): Promise<ReturnTuple<number>> => {
-  const [clients, clientsError] = await getClientsCount();
+export const getClientsCountAction = async (
+  filter?: FilterArgs,
+): Promise<ReturnTuple<number>> => {
+  const [clients, clientsError] = await getClientsCount(filter);
   if (clientsError !== null) return [null, clientsError];
   return [clients, null];
 };

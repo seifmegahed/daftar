@@ -1,14 +1,17 @@
+import type { FilterArgs } from "@/components/filter-and-search";
 import Client from "./client-card";
 import { getClientsBriefAction } from "@/server/actions/clients/read";
 
 async function ClientsList({
   page = 1,
   query,
+  filter,
 }: {
   page?: number;
   query?: string;
+  filter?: FilterArgs;
 }) {
-  const [clients, error] = await getClientsBriefAction(page, query);
+  const [clients, error] = await getClientsBriefAction(page, filter, query);
 
   if (error !== null) return <div>Error getting clients</div>;
 

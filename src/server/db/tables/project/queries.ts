@@ -4,19 +4,25 @@ import { count, desc, eq, sql } from "drizzle-orm";
 import { db } from "@/server/db";
 import { projectsTable } from "./schema";
 
-import { projectItemsTable } from "@/server/db/tables/project-item/schema";
-import { clientsTable } from "@/server/db/tables/client/schema";
-import { usersTable } from "@/server/db/tables/user/schema";
-import { documentRelationsTable } from "@/server/db/tables/document-relation/schema";
+import {
+  projectItemsTable,
+  clientsTable,
+  usersTable,
+  documentRelationsTable,
+} from "@/server/db/schema";
 
-import { dateQueryGenerator, prepareSearchText, timestampQueryGenerator } from "@/utils/common";
+import {
+  dateQueryGenerator,
+  prepareSearchText,
+  timestampQueryGenerator,
+} from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
 
 import type { InsertProjectType, SelectProjectType } from "./schema";
 import type { UserBriefType } from "@/server/db/tables/user/queries";
 import type { SimpDoc } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
-import type { FilterTypes } from "@/components/filter-and-search";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -72,25 +78,14 @@ const projectSearchQuery = (searchText: string) =>
     ), to_tsquery(${prepareSearchText(searchText)})
   `;
 
-export type FilterArgs = {
-  filterType: FilterTypes;
-  filterValue: string | null;
-};
-
-const projectFilterQuery= (filter: FilterArgs) => {
+const projectFilterQuery = (filter: FilterArgs) => {
   switch (filter.filterType) {
     case "status":
       return sql`status = ${filter.filterValue}`;
     case "startDate":
-      return dateQueryGenerator(
-        projectsTable.startDate,
-        filter.filterValue,
-      );
+      return dateQueryGenerator(projectsTable.startDate, filter.filterValue);
     case "endDate":
-      return dateQueryGenerator(
-        projectsTable.startDate,
-        filter.filterValue,
-      );
+      return dateQueryGenerator(projectsTable.startDate, filter.filterValue);
     case "creationDate":
       return timestampQueryGenerator(
         projectsTable.createdAt,
