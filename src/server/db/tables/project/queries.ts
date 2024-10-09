@@ -16,7 +16,7 @@ import type { InsertProjectType, SelectProjectType } from "./schema";
 import type { UserBriefType } from "@/server/db/tables/user/queries";
 import type { SimpDoc } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
-import type { FilterTypes } from "@/app/(auth)/projects/all-projects/filter-and-search";
+import type { FilterTypes } from "@/components/filter-and-search";
 
 export type BriefProjectType = Pick<
   SelectProjectType,

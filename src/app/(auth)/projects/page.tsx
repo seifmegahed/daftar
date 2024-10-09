@@ -1,8 +1,8 @@
 import { Suspense } from "react";
 import Pagination from "@/components/pagination";
 import ProjectsList from "./all-projects/projects-list";
-import FilterAndSearch from "./all-projects/filter-and-search";
-import type { FilterTypes } from "./all-projects/filter-and-search";
+import FilterAndSearch from "@/components/filter-and-search";
+import type { FilterTypes } from "@/components/filter-and-search";
 import SkeletonList from "@/components/skeletons";
 import { getProjectsCountAction } from "@/server/actions/projects/read";
 import { defaultPageLimit } from "@/data/config";
