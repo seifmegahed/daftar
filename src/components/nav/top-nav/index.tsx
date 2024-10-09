@@ -20,6 +20,7 @@ async function TopNav() {
       <MobileNav admin={currentUser.role === "admin"} />
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         {/* <SearchBar /> */}
+        <div className="w-full"></div>
         <UserButton user={currentUser} />
       </div>
     </header>
