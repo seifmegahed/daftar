@@ -2,7 +2,7 @@
 
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
-import { SearchBar } from "@/components/inputs";
+// import { SearchBar } from "@/components/inputs";
 import { UserButton } from "@/components/buttons";
 import { getCurrentUserAction } from "@/server/actions/users";
 import { redirect } from "next/navigation";
@@ -19,7 +19,7 @@ async function TopNav() {
       <DesktopNav admin={currentUser.role === "admin"} />
       <MobileNav admin={currentUser.role === "admin"} />
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-        <SearchBar />
+        {/* <SearchBar /> */}
         <UserButton user={currentUser} />
       </div>
     </header>

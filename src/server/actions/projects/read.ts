@@ -15,9 +15,9 @@ import type {
   GetProjectType,
   BriefProjectType,
   GetProjectLinkedDocumentsType,
-  FilterArgs,
 } from "@/server/db/tables/project/queries";
 import type { SelectProjectType } from "@/server/db/tables/project/schema";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 import type { ReturnTuple } from "@/utils/type-utils";
 
