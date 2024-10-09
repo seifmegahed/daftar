@@ -20,6 +20,14 @@ type Props = {
   };
 };
 
+const projectFilterItems: { label: string; value: FilterTypes }[] = [
+  { label: "By Status", value: "status" },
+  { label: "By Start Date", value: "startDate" },
+  { label: "By End Date", value: "endDate" },
+  { label: "By Creation Date", value: "creationDate" },
+  { label: "By Update Date", value: "updateDate" },
+];
+
 async function AllProjects({ searchParams }: Props) {
   const page = Number(searchParams.page) || 1;
   const query = searchParams.query ?? "";
@@ -36,9 +44,16 @@ async function AllProjects({ searchParams }: Props) {
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-medium">All Projects Page</h3>
-      <FilterAndSearch defaults={filterValues} />
+      <FilterAndSearch
+        defaults={filterValues}
+        filterItems={projectFilterItems}
+      />
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
-        <ProjectsList page={page} query={query === "" ? undefined : query} filter={filterValues} />
+        <ProjectsList
+          page={page}
+          query={query === "" ? undefined : query}
+          filter={filterValues}
+        />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
     </div>

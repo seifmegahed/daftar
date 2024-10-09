@@ -1,4 +1,5 @@
 import type { FilterTypes } from ".";
+import DateFilter from "./date-filter";
 import StatusFilter from "./status-filter";
 
 function FilterBar({
@@ -12,13 +13,13 @@ function FilterBar({
     case "status":
       return <StatusFilter defaultValue={defaultValue} />;
     case "startDate":
-      return <div>startDate</div>;
+      return <DateFilter defaultValue={defaultValue}/>;
     case "endDate":
-      return <div>endDate</div>;
+      return<DateFilter defaultValue={defaultValue}/>;
     case "creationDate":
-      return <div>creationData</div>;
+      return <DateFilter defaultValue={defaultValue}/>;
     case "updateDate":
-      return <div>updateDate</div>;
+      return <DateFilter defaultValue={defaultValue}/>;
     default:
       return null;
   }

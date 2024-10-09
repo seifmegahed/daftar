@@ -1,6 +1,10 @@
 "use client";
 
+import { useEffect } from "react";
 import { Check, Filter } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+
+import { FILTER_TYPE, FILTER_VALUE } from ".";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -9,24 +13,17 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { FILTER_TYPE, FILTER_VALUE, type FilterTypes } from ".";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
-import { useEffect } from "react";
 
-const filterItems: { label: string; value: FilterTypes }[] = [
-  { label: "By Status", value: "status" },
-  { label: "By Start Date", value: "startDate" },
-  { label: "By End Date", value: "endDate" },
-  { label: "By Creation Date", value: "creationDate" },
-  { label: "By Update Date", value: "updateDate" },
-];
+import type { FilterTypes } from ".";
 
 function FilterContextMenu({
   value,
   onChange,
+  filterItems,
 }: {
   value: FilterTypes;
   onChange: (value: FilterTypes) => void;
+  filterItems: { label: string; value: FilterTypes }[];
 }) {
   const searchParams = useSearchParams();
   const pathname = usePathname();
@@ -38,7 +35,6 @@ function FilterContextMenu({
       params.delete(FILTER_TYPE);
       params.delete(FILTER_VALUE);
       router.replace(`${pathname}?${params.toString()}`);
-      console.log(value)
     }
   });
 
