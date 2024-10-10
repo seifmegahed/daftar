@@ -91,7 +91,7 @@ function NewAddressForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Title</FormLabel>
-              <Input {...field} />
+              <Input {...field} data-testid="title" />
               <FormDescription>
                 Title of the address, e.g. Main Office, Warehouse, etc.
               </FormDescription>
@@ -104,7 +104,7 @@ function NewAddressForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Address Line</FormLabel>
-              <Input {...field} />
+              <Input {...field} data-testid="address-line" />
               <FormMessage />
             </FormItem>
           )}
@@ -145,7 +145,12 @@ function NewAddressForm({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Notes</FormLabel>
-              <Textarea {...field} rows={3} className="resize-none" />
+              <Textarea
+                {...field}
+                rows={3}
+                className="resize-none"
+                data-testid="notes-field"
+              />
               <FormMessage />
             </FormItem>
           )}
@@ -155,6 +160,7 @@ function NewAddressForm({
             loading={form.formState.isSubmitting}
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
             type="submit"
+            data-testid="submit-button"
           >
             Add Address
           </SubmitButton>

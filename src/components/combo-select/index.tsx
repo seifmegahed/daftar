@@ -21,7 +21,9 @@ import {
 
 function ComboSelect({
   value,
-  onChange = () => {return},
+  onChange = () => {
+    return;
+  },
   className,
   options,
   selectMessage = "Select",
@@ -45,7 +47,11 @@ function ComboSelect({
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className={cn("w-[300px] justify-between", className, value ? "" : "text-muted-foreground")}
+          className={cn(
+            "w-[300px] justify-between",
+            className,
+            value ? "" : "text-muted-foreground",
+          )}
         >
           {value ? value : selectMessage}
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
