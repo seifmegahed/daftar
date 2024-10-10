@@ -13,7 +13,7 @@ import {
   FormItem,
   FormDescription,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/inputs/password";
 import SubmitButton from "@/components/buttons/submit-button";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import { userUpdateUserPasswordAction } from "@/server/actions/users";
@@ -99,10 +99,9 @@ function ChangePasswordForm() {
             <FormItem>
               <FormLabel>Old Password</FormLabel>
               <FormControl>
-                <Input
+                <PasswordInput
                   placeholder="Old Password"
                   autoComplete="old-password"
-                  type="password"
                   {...field}
                 />
               </FormControl>
@@ -120,10 +119,9 @@ function ChangePasswordForm() {
             <FormItem>
               <FormLabel>New Password</FormLabel>
               <FormControl>
-                <Input
+                <PasswordInput
                   placeholder="New Password"
                   autoComplete="new-password"
-                  type="password"
                   {...field}
                 />
               </FormControl>
@@ -143,10 +141,9 @@ function ChangePasswordForm() {
             <FormItem>
               <FormLabel>Verify Password</FormLabel>
               <FormControl>
-                <Input
+                <PasswordInput
                   placeholder="Verify Password"
                   autoComplete="confirm-new-password"
-                  type="password"
                   {...field}
                 />
               </FormControl>

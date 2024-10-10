@@ -10,7 +10,7 @@ import { adminUpdateUserPasswordAction } from "@/server/actions/users";
 import { UserSchema } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 
-import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/inputs/password";
 import { Label } from "@/components/ui/label";
 import { Form, FormField, FormMessage } from "@/components/ui/form";
 import SubmitButton from "@/components/buttons/submit-button";
@@ -73,9 +73,8 @@ function ChangePasswordSection({ userId }: { userId: number }) {
             render={({ field }) => (
               <div className="flex flex-col gap-4">
                 <Label htmlFor="new">New Password</Label>
-                <Input
+                <PasswordInput
                   id="new"
-                  type="password"
                   autoComplete="new-password"
                   {...field}
                 />
@@ -88,9 +87,8 @@ function ChangePasswordSection({ userId }: { userId: number }) {
             render={({ field }) => (
               <div className="flex flex-col gap-4">
                 <Label htmlFor="verify">Verify Password</Label>
-                <Input
+                <PasswordInput
                   id="verify"
-                  type="password"
                   autoComplete="new-password"
                   {...field}
                 />

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/card";
 import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { PasswordInput } from "@/components/inputs/password";
 import { Label } from "@/components/ui/label";
 import { useRouter } from "next/navigation";
 import { loginAction } from "@/server/actions/auth/login";
@@ -72,7 +73,7 @@ export default function LoginForm() {
                 render={({ field }) => (
                   <FormItem>
                     <Label htmlFor="password">Password</Label>
-                    <Input id="password" type="password" {...field} />
+                    <PasswordInput id="password" {...field} />
                     <FormMessage />
                   </FormItem>
                 )}
