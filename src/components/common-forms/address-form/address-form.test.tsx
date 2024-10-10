@@ -48,17 +48,17 @@ describe("Address Form", () => {
     (addNewAddressAction as Mock).mockResolvedValue([1, null]);
 
     const submitButton = screen.getByTestId("submit-button");
-    if (!submitButton) throw new Error("submit button not found");
+    expect(submitButton).toBeDefined();
 
     const titleField: HTMLInputElement = screen.getByTestId("title");
-    if (!titleField) throw new Error("title field not found");
+    expect(titleField).toBeDefined();
 
     const addressLineField: HTMLInputElement =
       screen.getByTestId("address-line");
-    if (!addressLineField) throw new Error("address line field not found");
+    expect(addressLineField).toBeDefined();
 
     const countryField = screen.getByRole("combobox");
-    if (!countryField) throw new Error("country field not found");
+    expect(countryField).toBeDefined();
 
     fireEvent.change(titleField, { target: { value: "Test" } });
     await waitFor(() => {
@@ -73,7 +73,7 @@ describe("Address Form", () => {
     fireEvent.click(countryField);
 
     const countryDiv = screen.getByText("Angola");
-    if (!countryDiv) throw new Error("Country Element not found");
+    expect(countryDiv).toBeDefined();
 
     fireEvent.click(countryDiv);
     await waitFor(() => {
@@ -83,11 +83,11 @@ describe("Address Form", () => {
     fireEvent.click(submitButton);
     await waitFor(() => {
       expect(addNewAddressAction).toHaveBeenCalledWith({
-        addressLine: "Test",
-        city: "",
         clientId: 1,
-        country: "Angola",
         name: "Test",
+        addressLine: "Test",
+        country: "Angola",
+        city: "",
         notes: "",
       });
     });
