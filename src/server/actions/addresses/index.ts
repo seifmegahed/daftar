@@ -14,7 +14,7 @@ import {
   type SelectAddressType,
 } from "@/server/db/tables/address/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { getCurrentUserIdAction } from "../users";
+import { getCurrentUserIdAction } from "@/server/actions/users";
 import type { z } from "zod";
 
 const addAddressSchema = insertAddressSchemaRaw
