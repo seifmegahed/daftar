@@ -20,12 +20,12 @@ function SaleItemCard({
       <div className="flex w-full items-center justify-between">
         <div className="flex w-full flex-shrink items-center justify-between">
           <div>
-            <Link href={`/item/${saleItem.id}`}>
+            <Link href={`/item/${saleItem.itemId}`}>
               <p className="line-clamp-1 cursor-pointer text-foreground hover:underline">
                 {saleItem.name}
               </p>
             </Link>
-            <Link href={`/item/${saleItem.id}`}>
+            <Link href={`/item/${saleItem.itemId}`}>
               <p className="cursor-pointer text-xs text-muted-foreground hover:underline">
                 {saleItem.make}
               </p>

@@ -454,18 +454,48 @@ export const getProjectLinkedDocuments = async (
             },
           },
         },
+        saleItems: {
+          columns: {},
+          with: {
+            item: {
+              columns: { id: true },
+              with: {
+                documents: {
+                  columns: {},
+                  with: {
+                    document: {
+                      columns: {
+                        id: true,
+                        name: true,
+                        extension: true,
+                        path: includePath,
+                        private: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
     });
 
     if (!project) return [null, "Error getting project"];
 
     const uniqueSuppliers = new Map<number, (typeof project.items)[0]>();
-    const uniqueItems = new Map<number, (typeof project.items)[0]>();
+    const uniqueItems = new Map<number, (typeof project.saleItems)[0]>();
 
     project.items.forEach((item) => {
       if (!uniqueSuppliers.has(item.supplier.id)) {
         uniqueSuppliers.set(item.supplier.id, item);
       }
+      if (!uniqueItems.has(item.item.id)) {
+        uniqueItems.set(item.item.id, item);
+      }
+    });
+
+    project.saleItems.forEach((item) => {
       if (!uniqueItems.has(item.item.id)) {
         uniqueItems.set(item.item.id, item);
       }
