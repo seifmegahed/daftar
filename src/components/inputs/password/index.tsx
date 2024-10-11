@@ -18,6 +18,7 @@ const PasswordInput = forwardRef<HTMLInputElement, InputProps>(
         <button
           className="absolute end-2 text-muted-foreground"
           onClick={() => setIsVisible((prev) => !prev)}
+          type="button"
         >
           {isVisible ? <EyeOff /> : <Eye />}
         </button>
