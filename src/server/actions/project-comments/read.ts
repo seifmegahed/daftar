@@ -12,8 +12,10 @@ import type { ReturnTuple } from "@/utils/type-utils";
 
 export const getProjectCommentsAction = async (
   projectId: number,
+  page: number,
+  limit?: number,
 ): Promise<ReturnTuple<ProjectCommentType[]>> => {
-  const [comments, error] = await getProjectComments(projectId);
+  const [comments, error] = await getProjectComments(projectId, page, limit);
   if (error !== null) return [null, error];
   return [comments, null];
 };

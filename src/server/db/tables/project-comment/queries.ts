@@ -35,6 +35,8 @@ export type ProjectCommentType = z.infer<typeof projectCommentSchema>;
 
 export const getProjectComments = async (
   projectId: number,
+  page: number,
+  limit = 15,
 ): Promise<ReturnTuple<ProjectCommentType[]>> => {
   try {
     const comments = await db
@@ -48,7 +50,9 @@ export const getProjectComments = async (
       .from(projectCommentsTable)
       .leftJoin(usersTable, eq(projectCommentsTable.createdBy, usersTable.id))
       .where(eq(projectCommentsTable.projectId, projectId))
-      .orderBy(desc(projectCommentsTable.id));
+      .orderBy(desc(projectCommentsTable.createdAt))
+      .offset((page - 1) * limit)
+      .limit(limit);
 
     if (!comments) return [null, "Error getting project comments"];
     const parseResult = z.array(projectCommentSchema).safeParse(comments);
