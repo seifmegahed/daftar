@@ -9,3 +9,4 @@ export { projectItemsTable, projectItemsRelations } from "./tables/project-item/
 export { documentsTable, documentRelations } from "./tables/document/schema";
 export { documentRelationsTable, documentRelationsRelations } from "./tables/document-relation/schema";
 export { commercialOfferItemsTable, commercialOfferItemsRelations } from "./tables/commercial-offer-item/schema";
+export { projectCommentsTable, projectCommentsRelations } from "./tables/project-comment/schema";
