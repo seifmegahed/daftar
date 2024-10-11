@@ -7,7 +7,7 @@ export const env = createEnv({
    * isn't built with invalid env vars.
    */
   server: {
-    DATABASE_URL: z.string().url(),
+    POSTGRES_URL: z.string(),
     JWT_SECRET: z.string().min(32).max(256),
     NODE_ENV: z
       .enum(["development", "test", "production"])
@@ -21,6 +21,7 @@ export const env = createEnv({
    */
   client: {
     NEXT_PUBLIC_CONTACT_EMAIL: z.string(),
+    NEXT_PUBLIC_VERCEL: z.boolean().optional(),
   },
 
   /**
@@ -28,9 +29,13 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
-    DATABASE_URL: `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`,
+    POSTGRES_URL:
+      process.env.NEXT_PUBLIC_VERCEL !== "true"
+        ? `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`
+        : process.env.POSTGRES_URL,
     JWT_SECRET: process.env.JWT_SECRET,
     NODE_ENV: process.env.NODE_ENV,
+    NEXT_PUBLIC_VERCEL: process.env.NEXT_PUBLIC_VERCEL === "true",
     NEXT_PUBLIC_CONTACT_EMAIL: process.env.NEXT_PUBLIC_CONTACT_EMAIL,
   },
   /**
