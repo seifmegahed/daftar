@@ -27,6 +27,7 @@ const requestSchema = z.object({
   document: documentSchema.pick({
     name: true,
     notes: true,
+    private: true,
   }),
   relation: documentRelationsSchema,
   file: z.instanceof(File),
@@ -83,6 +84,7 @@ export async function POST(request: NextRequest) {
       {
         name: validatedDocument.name,
         notes: validatedDocument.notes,
+        private: validatedDocument.private,
         path,
         extension,
         createdBy: userId,

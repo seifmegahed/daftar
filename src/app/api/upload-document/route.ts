@@ -18,6 +18,7 @@ const requestSchema = z.object({
   document: documentSchema.pick({
     name: true,
     notes: true,
+    private: true,
   }),
   file: z.instanceof(File),
 });
@@ -64,6 +65,7 @@ export async function POST(request: NextRequest) {
     const [documentId, documentInsertError] = await insertDocument({
       name: validatedDocument.name,
       notes: validatedDocument.notes,
+      private: validatedDocument.private,
       path,
       extension,
       createdBy: userId,
