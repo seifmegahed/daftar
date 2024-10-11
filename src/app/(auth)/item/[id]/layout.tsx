@@ -30,6 +30,10 @@ export default async function SettingsLayout({
       href: basePath(id),
     },
     {
+      title: "Edit",
+      href: basePath(id) + "/edit"
+    },
+    {
       title: "Projects",
       href: basePath(id) + "/projects",
       amount: projectsCount ?? 0,
