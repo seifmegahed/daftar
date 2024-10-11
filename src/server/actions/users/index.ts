@@ -46,6 +46,14 @@ export const listAllUsersAction = async (): Promise<
   return [users, null];
 };
 
+export const isCurrentUserAdminAction = async (): Promise<
+  ReturnTuple<boolean>
+> => {
+  const [user, error] = await getCurrentUserAction();
+  if (error !== null) return [null, error];
+  return [user.role === "admin", null];
+};
+
 /**
  * Get Current User
  *
@@ -151,7 +159,7 @@ const updateUserDisplayNameSchema = UserSchema.pick({
 });
 
 type UpdateUserDisplayNameFormType = z.infer<
-typeof updateUserDisplayNameSchema
+  typeof updateUserDisplayNameSchema
 >;
 
 /**
@@ -181,21 +189,21 @@ export const userUpdateUserDisplayNameAction = async (
 };
 
 const userUpdateUserPasswordSchema = z
-.object({
-  oldPassword: UserSchemaRaw.password,
-  newPassword: UserSchemaRaw.password,
-  verifyPassword: UserSchemaRaw.verifyPassword,
-})
-.refine(
-  (data) =>
-    !checkPasswordComplexity(data.oldPassword) ||
-  data.oldPassword !== data.newPassword ||
-  !checkPasswordComplexity(data.newPassword) ||
-  data.newPassword === data.verifyPassword,
-);
+  .object({
+    oldPassword: UserSchemaRaw.password,
+    newPassword: UserSchemaRaw.password,
+    verifyPassword: UserSchemaRaw.verifyPassword,
+  })
+  .refine(
+    (data) =>
+      !checkPasswordComplexity(data.oldPassword) ||
+      data.oldPassword !== data.newPassword ||
+      !checkPasswordComplexity(data.newPassword) ||
+      data.newPassword === data.verifyPassword,
+  );
 
 type UserUpdateUserPasswordFormType = z.infer<
-typeof userUpdateUserPasswordSchema
+  typeof userUpdateUserPasswordSchema
 >;
 
 /**

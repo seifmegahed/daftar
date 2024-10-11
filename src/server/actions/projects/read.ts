@@ -20,10 +20,11 @@ import type { SelectProjectType } from "@/server/db/tables/project/schema";
 import type { FilterArgs } from "@/components/filter-and-search";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { isCurrentUserAdminAction } from "../users";
 
-export const getProjectsCountAction = async (filter?: FilterArgs): Promise<
-  ReturnTuple<number>
-> => {
+export const getProjectsCountAction = async (
+  filter?: FilterArgs,
+): Promise<ReturnTuple<number>> => {
   const [projectCount, error] = await getProjectsCount(filter);
   if (error !== null) return [null, error];
   return [projectCount, null];
@@ -74,7 +75,12 @@ export const getProjectByIdAction = async (
 export const getProjectLinkedDocumentsAction = async (
   projectId: number,
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
-  const [project, projectError] = await getProjectLinkedDocuments(projectId);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, accessError];
+  const [project, projectError] = await getProjectLinkedDocuments(
+    projectId,
+    access,
+  );
   if (projectError !== null) return [null, projectError];
   return [project, null];
 };

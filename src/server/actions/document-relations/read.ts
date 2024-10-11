@@ -29,11 +29,14 @@ import type {
 
 import type { SimpDoc } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { isCurrentUserAdminAction } from "../users";
 
 export const getClientDocumentsAction = async (
   clientId: number,
 ): Promise<ReturnTuple<SimpDoc[]>> => {
-  const [documents, documentsError] = await getClientDocuments(clientId);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, "An error occurred requesting access"];
+  const [documents, documentsError] = await getClientDocuments(clientId, access);
   if (documentsError !== null) return [null, documentsError];
   return [documents, null];
 };
@@ -41,7 +44,9 @@ export const getClientDocumentsAction = async (
 export const getClientDocumentsCountAction = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
-  const [count, countError] = await getClientDocumentsCount(clientId);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, "An error occurred requesting access"];
+  const [count, countError] = await getClientDocumentsCount(clientId, access);
   if (countError !== null) return [null, countError];
   return [count, null];
 };
@@ -49,7 +54,9 @@ export const getClientDocumentsCountAction = async (
 export const getSupplierDocumentsAction = async (
   supplierId: number,
 ): Promise<ReturnTuple<SimpDoc[]>> => {
-  const [documents, documentsError] = await getSupplierDocuments(supplierId);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, "An error occurred requesting access"];
+  const [documents, documentsError] = await getSupplierDocuments(supplierId, access);
   if (documentsError !== null) return [null, documentsError];
   return [documents, null];
 };
@@ -57,7 +64,9 @@ export const getSupplierDocumentsAction = async (
 export const getSupplierDocumentsCountAction = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
-  const [count, countError] = await getSupplierDocumentsCount(supplierId);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, "An error occurred requesting access"];
+  const [count, countError] = await getSupplierDocumentsCount(supplierId, access);
   if (countError !== null) return [null, countError];
   return [count, null];
 };
@@ -65,7 +74,9 @@ export const getSupplierDocumentsCountAction = async (
 export const getItemDocumentsAction = async (
   itemId: number,
 ): Promise<ReturnTuple<SimpDoc[]>> => {
-  const [documents, documentsError] = await getItemDocuments(itemId);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, "An error occurred requesting access"];
+  const [documents, documentsError] = await getItemDocuments(itemId, access);
   if (documentsError !== null) return [null, documentsError];
   return [documents, null];
 };
@@ -73,7 +84,9 @@ export const getItemDocumentsAction = async (
 export const getItemDocumentsCountAction = async (
   itemId: number,
 ): Promise<ReturnTuple<number>> => {
-  const [count, countError] = await getItemDocumentsCount(itemId);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, "An error occurred requesting access"];
+  const [count, countError] = await getItemDocumentsCount(itemId, access);
   if (countError !== null) return [null, countError];
   return [count, null];
 };
@@ -81,7 +94,9 @@ export const getItemDocumentsCountAction = async (
 export const getProjectDocumentsAction = async (
   projectId: number,
 ): Promise<ReturnTuple<SimpDoc[]>> => {
-  const [documents, documentsError] = await getProjectDocuments(projectId);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, "An error occurred requesting access"];
+  const [documents, documentsError] = await getProjectDocuments(projectId, access);
   if (documentsError !== null) return [null, documentsError];
   return [documents, null];
 };
@@ -89,7 +104,9 @@ export const getProjectDocumentsAction = async (
 export const getProjectDocumentsCountAction = async (
   projectId: number,
 ): Promise<ReturnTuple<number>> => {
-  const [count, countError] = await getProjectDocumentsCount(projectId);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, "An error occurred requesting access"];
+  const [count, countError] = await getProjectDocumentsCount(projectId, access);
   if (countError !== null) return [null, countError];
   return [count, null];
 };

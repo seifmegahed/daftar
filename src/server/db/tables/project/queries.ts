@@ -370,8 +370,8 @@ export type GetProjectLinkedDocumentsType = {
 
 export const getProjectLinkedDocuments = async (
   projectId: number,
-  includePath = false,
   accessToPrivate = false,
+  includePath = false,
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
   try {
     const project = await db.query.projectsTable.findFirst({

@@ -333,18 +333,12 @@ export const deleteDocumentRelation = async (
 
 export const getDocumentRelationsCount = async (
   id: number,
-  accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   try {
     const [result] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
-      .where(
-        and(
-          eq(documentRelationsTable.documentId, id),
-          privateFilterQuery(accessToPrivate),
-        ),
-      )
+      .where(eq(documentRelationsTable.documentId, id))
       .limit(1);
     if (!result) return [null, "Error getting document relations count"];
     return [result.count, null];

@@ -13,6 +13,7 @@ import type {
 } from "@/server/db/tables/document/queries";
 import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { isCurrentUserAdminAction } from "../users";
 
 export const getDocumentsAction = async (
   page: number,
@@ -20,11 +21,13 @@ export const getDocumentsAction = async (
   searchText?: string,
   limit?: number,
 ): Promise<ReturnTuple<BriefDocumentType[]>> => {
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, accessError];
   const [documents, documentsError] = await getDocuments(
     page,
     filter,
     searchText,
-    false,
+    access,
     limit,
   );
   if (documentsError !== null) return [null, documentsError];
@@ -34,7 +37,9 @@ export const getDocumentsAction = async (
 export const getDocumentByIdAction = async (
   id: number,
 ): Promise<ReturnTuple<Required<DocumentType>>> => {
-  const [document, documentError] = await getDocumentById(id);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, accessError];
+  const [document, documentError] = await getDocumentById(id, access);
   if (documentError !== null) return [null, documentError];
   return [document, null];
 };
@@ -42,7 +47,9 @@ export const getDocumentByIdAction = async (
 export const getDocumentsCountAction = async (
   filter?: FilterArgs,
 ): Promise<ReturnTuple<number>> => {
-  const [documents, documentsError] = await getDocumentsCount(filter);
+  const [access, accessError] = await isCurrentUserAdminAction();
+  if (accessError !== null) return [null, accessError];
+  const [documents, documentsError] = await getDocumentsCount(filter, access);
   if (documentsError !== null) return [null, documentsError];
   return [documents, null];
 };
