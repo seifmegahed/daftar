@@ -46,6 +46,7 @@ export const getProjectComments = async (
         userName: usersTable.name,
       })
       .from(projectCommentsTable)
+      .leftJoin(usersTable, eq(projectCommentsTable.createdBy, usersTable.id))
       .where(eq(projectCommentsTable.projectId, projectId))
       .orderBy(desc(projectCommentsTable.id));
 
