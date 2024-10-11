@@ -3,12 +3,16 @@ import fs, { existsSync } from "fs";
 import { getProjectLinkedDocuments } from "@/server/db/tables/project/queries";
 import AdmZip from "adm-zip";
 import { isCurrentUserAdminAction } from "@/server/actions/users";
+import { env } from "@/env";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
+    if(env.NEXT_PUBLIC_VERCEL) {
+      return new Response("Document downloading is not available in Demo mode", { status: 400 });
+    }
     const { id } = params;
     const projectId = Number(id);
     if (isNaN(projectId)) {

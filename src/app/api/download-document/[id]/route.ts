@@ -2,12 +2,16 @@ import { getDocumentPath } from "@/server/db/tables/document/queries";
 import { NextResponse, type NextRequest } from "next/server";
 import fs from "fs";
 import { isCurrentUserAdminAction } from "@/server/actions/users";
+import { env } from "@/env";
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
+    if(env.NEXT_PUBLIC_VERCEL) {
+      return new Response("Document downloading is not available in Demo mode", { status: 400 });
+    }
     const { id } = params;
     const documentId = Number(id);
     if (isNaN(documentId)) {
@@ -27,7 +31,6 @@ export async function GET(
         status: 500,
       });
     }
-
     const file = fs.readFileSync(document.path);
     return new NextResponse(file, {
       status: 200,

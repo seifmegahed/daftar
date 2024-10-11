@@ -7,7 +7,7 @@
  * - DATABASE_HOST
  * - DATABASE_PORT
  * - DATABASE_NAME
- * 
+ *
  * - ADMIN_USERNAME
  * - ADMIN_PASSWORD
  *
@@ -33,7 +33,10 @@ dotenv.config();
 
 const saltRounds = 10;
 
-const connectionString = `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`;
+const connectionString =
+  process.env.NEXT_PUBLIC_VERCEL === "true"
+    ? process.env.POSTGRES_URL
+    : `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`;
 
 const pool = new pg.Pool({
   connectionString,

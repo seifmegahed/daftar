@@ -24,6 +24,7 @@ import LoadingOverlay from "@/components/loading-overlay";
 
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/exceptions";
+import { env } from "process";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -50,7 +51,9 @@ export default function LoginForm() {
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardHeader>
-              <CardTitle className="text-2xl">Sign In</CardTitle>
+              <CardTitle className="text-2xl">
+                Sign In {env.NEXT_PUBLIC_VERCEL ? "Vercel" : "Local"}
+              </CardTitle>
               <CardDescription>
                 Enter your username and password below to sign in.
               </CardDescription>
