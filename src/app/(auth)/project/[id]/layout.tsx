@@ -3,6 +3,7 @@ import { getProjectItemsCountAction } from "@/server/actions/project-items/read"
 import PageLayout from "@/components/page-layout";
 import { isCurrentUserAdminAction } from "@/server/actions/users";
 import { getProjectCommercialOfferItemsCountAction } from "@/server/actions/commercial-offer-items/read";
+import { getProjectCommentsCountAction } from "@/server/actions/project-comments/read";
 
 const basePath = (id: number) => "/project/" + id;
 
@@ -23,6 +24,7 @@ export default async function SettingsLayout({
   const [numberOfItems] = await getProjectItemsCountAction(projectId);
   const [numberOfSaleItems] =
     await getProjectCommercialOfferItemsCountAction(projectId);
+  const [numberOfComments] = await getProjectCommentsCountAction(projectId);
   const [userAccess] = await isCurrentUserAdminAction();
 
   const sidebarNavItemsGenerator = (id: number) => [
@@ -62,6 +64,11 @@ export default async function SettingsLayout({
     {
       title: "New Document",
       href: basePath(id) + "/new-document",
+    },
+    {
+      title: "Comments",
+      href: basePath(id) + "/comments",
+      amount: numberOfComments ?? 0,
     },
   ];
 
