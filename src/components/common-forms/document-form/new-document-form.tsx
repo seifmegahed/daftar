@@ -22,6 +22,7 @@ import { z } from "zod";
 import type { GeneratedRelationType } from ".";
 import Dropzone from "@/components/inputs/drop-zone";
 import { useRouter } from "next/navigation";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const documentSchema = z.object({
   name: z
@@ -30,6 +31,7 @@ const documentSchema = z.object({
     })
     .min(4, { message: "Name must be at least 4 characters" })
     .max(64, { message: "Name must not be longer than 64 characters" }),
+  private: z.boolean(),
   notes: z.string().max(notesMaxLength, {
     message: `Notes must not be longer than ${notesMaxLength} characters`,
   }),
@@ -44,6 +46,7 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
     resolver: zodResolver(documentSchema),
     defaultValues: {
       name: "",
+      private: false,
       notes: "",
       file: undefined,
     },
@@ -55,7 +58,7 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
       body.append("file", data.file);
       body.append(
         "document",
-        JSON.stringify({ name: data.name, notes: data.notes }),
+        JSON.stringify({ name: data.name, notes: data.notes, private: data.private }),
       );
       body.append("relation", JSON.stringify(relation));
       const response = await fetch("/api/upload-relational-document", {
@@ -117,6 +120,24 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
               <FormDescription>
                 Enter the name of the document. This is the name you will be
                 using to search and refer to the document.
+              </FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          name="private"
+          control={form.control}
+          render={({ field }) => (
+            <FormItem>
+              <div className="flex items-center justify-between">
+                <FormLabel>Private</FormLabel>
+                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+              </div>
+              <FormDescription>
+                Check this box if you want to make the document private. Only
+                users with the appropriate permissions will be able to access
+                the document.
               </FormDescription>
               <FormMessage />
             </FormItem>
