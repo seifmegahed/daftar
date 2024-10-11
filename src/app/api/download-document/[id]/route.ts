@@ -1,6 +1,7 @@
 import { getDocumentPath } from "@/server/db/tables/document/queries";
 import { NextResponse, type NextRequest } from "next/server";
 import fs from "fs";
+import { isCurrentUserAdminAction } from "@/server/actions/users";
 
 export async function GET(
   request: NextRequest,
@@ -13,7 +14,14 @@ export async function GET(
       return new Response("Invalid ID", { status: 400 });
     }
 
-    const [document, documentError] = await getDocumentPath(documentId);
+    const [access, accessError] = await isCurrentUserAdminAction();
+    if (accessError !== null) {
+      return new Response("Error checking access", {
+        status: 500,
+      });
+    }
+
+    const [document, documentError] = await getDocumentPath(documentId, access);
     if (documentError !== null) {
       return new Response("Error getting document path", {
         status: 500,

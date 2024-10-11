@@ -2,6 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import fs, { existsSync } from "fs";
 import { getProjectLinkedDocuments } from "@/server/db/tables/project/queries";
 import AdmZip from "adm-zip";
+import { isCurrentUserAdminAction } from "@/server/actions/users";
 
 export async function GET(
   request: NextRequest,
@@ -14,8 +15,13 @@ export async function GET(
       return new Response("Invalid ID", { status: 400 });
     }
 
+    const [access, accessError] = await isCurrentUserAdminAction();
+    if (accessError !== null) {
+      return new Response("Error checking access", { status: 500 });
+    }
+
     const [projectDocuments, projectDocumentsError] =
-      await getProjectLinkedDocuments(projectId, true);
+      await getProjectLinkedDocuments(projectId, access, true);
     if (projectDocumentsError !== null) {
       return new Response("Error getting project", { status: 500 });
     }
