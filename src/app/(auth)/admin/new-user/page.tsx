@@ -38,13 +38,12 @@ export default function NewUserForm() {
       const [_, error] = await adminCreateUserAction(data);
       if (error !== null) {
         console.log(error);
-        toast.error("Error creating user");
+        toast.error("Error creating user 1");
         return;
       }
       form.reset();
     } catch (error) {
       console.log(error);
-      toast.error("Error creating user");
     }
   };
 
@@ -74,6 +73,7 @@ export default function NewUserForm() {
                   type="username"
                   autoComplete="new-username"
                   {...field}
+                  onChange={(event) => field.onChange(event.target.value.toLowerCase().trim().replaceAll(" ", ""))}
                 />
                 <FormMessage />
               </FormItem>

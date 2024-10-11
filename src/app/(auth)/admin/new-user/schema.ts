@@ -1,5 +1,6 @@
 import { UserSchema } from "@/server/db/tables/user/schema";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
+import { checkUsername } from "@/utils/user-name-check";
 import { z } from "zod";
 
 export const schema = UserSchema.pick({
@@ -24,6 +25,13 @@ export const schema = UserSchema.pick({
         message:
           "Password must contain at least one uppercase letter, one lowercase letter, and one number",
         path: ["password"],
+      });
+    }
+    if (!checkUsername(data.username)) {
+      context.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Username must not contain spaces or Uppercase letters",
+        path: ["username"],
       });
     }
   });

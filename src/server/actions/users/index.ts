@@ -24,6 +24,7 @@ import { comparePassword, hashPassword } from "@/utils/hashing";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { checkUsername } from "@/utils/user-name-check";
 
 /**
  * Refine passwords to check if they are complex enough and if they match
@@ -282,7 +283,9 @@ const addUserSchema = UserSchema.pick({
   password: true,
   verifyPassword: true,
   role: true,
-}).refine(refinePasswords);
+})
+  .refine(refinePasswords)
+  .refine((data) => checkUsername(data.username));
 
 type CreateUserFormType = z.infer<typeof addUserSchema>;
 
@@ -312,18 +315,18 @@ export const adminCreateUserAction = async (
   const isValid = addUserSchema.safeParse(data);
   if (!isValid.success) return [null, userErrors.invalidData];
 
-  const [hashedPassword, error] = await hashPassword(data.password);
-  if (error !== null) return [null, userErrors.hashFailed];
+  const [hashedPassword, hashError] = await hashPassword(data.password);
+  if (hashError !== null) return [null, userErrors.hashFailed];
 
-  const result = await insertNewUser({
+  const [, error] = await insertNewUser({
     name: data.name,
     username: data.username,
     password: hashedPassword,
     role: data.role,
   });
-  // revalidatePath("/admin");
+  if (error !== null) return [null, error];
+  revalidatePath("/admin");
   redirect("/admin");
-  return result;
 };
 
 const updateUserPasswordSchema = UserSchema.pick({
