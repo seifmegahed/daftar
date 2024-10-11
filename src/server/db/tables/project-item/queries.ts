@@ -43,7 +43,7 @@ export const insertProjectItem = async (
     const [project] = await db
       .insert(projectItemsTable)
       .values(data)
-      .returning({ id: projectItemsTable.id });
+      .returning();
 
     if (!project) return [null, "Error inserting project item"];
     return [project.id, null];
@@ -102,7 +102,7 @@ export const deleteProjectItem = async (
     const [projectItem] = await db
       .delete(projectItemsTable)
       .where(eq(projectItemsTable.id, projectItemId))
-      .returning({ id: projectItemsTable.id });
+      .returning();
 
     if (!projectItem) return [null, "Error deleting project item"];
     return [projectItem.id, null];

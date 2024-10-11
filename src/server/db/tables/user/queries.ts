@@ -47,7 +47,7 @@ export const updateUserRole = async (
       .update(usersTable)
       .set({ role })
       .where(eq(usersTable.id, id))
-      .returning({ id: usersTable.id });
+      .returning();
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
@@ -65,7 +65,7 @@ export const updateUserPassword = async (
       .update(usersTable)
       .set({ password })
       .where(eq(usersTable.id, id))
-      .returning({ id: usersTable.id });
+      .returning();
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
@@ -81,7 +81,7 @@ export const insertNewUser = async (
     const [user] = await db
       .insert(usersTable)
       .values(userData)
-      .returning({ id: usersTable.id });
+      .returning();
 
     if (!user) throw new Error("Error inserting new user");
     return [user.id, null];
@@ -126,7 +126,7 @@ export const changeUserActiveState = async (
       .update(usersTable)
       .set({ active })
       .where(eq(usersTable.id, id))
-      .returning({ id: usersTable.id });
+      .returning();
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
@@ -143,7 +143,7 @@ export const updateUserLastActive = async (
       .update(usersTable)
       .set({ lastActive: new Date() })
       .where(eq(usersTable.id, id))
-      .returning({ id: usersTable.id });
+      .returning();
 
     if (!user) throw new Error("User not found");
     return [user.id, null];
@@ -244,7 +244,7 @@ export const updateUserName = async (
       .update(usersTable)
       .set({ name })
       .where(eq(usersTable.id, id))
-      .returning({ id: usersTable.id });
+      .returning();
 
     if (!user) throw new Error("User not found");
     return [user.id, null];

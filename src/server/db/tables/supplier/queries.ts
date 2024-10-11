@@ -204,7 +204,7 @@ export const insertNewSupplier = async (
       const [supplier] = await tx
         .insert(suppliersTable)
         .values(supplierData)
-        .returning({ id: suppliersTable.id });
+        .returning();
 
       if (!supplier) {
         tx.rollback();
@@ -214,7 +214,7 @@ export const insertNewSupplier = async (
       const [address] = await tx
         .insert(addressesTable)
         .values({ ...addressData, supplierId: supplier.id })
-        .returning({ id: addressesTable.id });
+        .returning();
 
       if (!address) {
         tx.rollback();
@@ -224,7 +224,7 @@ export const insertNewSupplier = async (
       const [contact] = await tx
         .insert(contactsTable)
         .values({ ...contactData, supplierId: supplier.id })
-        .returning({ id: contactsTable.id });
+        .returning();
 
       if (!contact) {
         tx.rollback();
@@ -238,7 +238,7 @@ export const insertNewSupplier = async (
           primaryContactId: contact.id,
         })
         .where(eq(suppliersTable.id, supplier.id))
-        .returning({ id: suppliersTable.id });
+        .returning();
 
       if (!updatedSupplier) {
         tx.rollback();
@@ -308,7 +308,7 @@ export const updateSupplier = async (
       .update(suppliersTable)
       .set(data)
       .where(eq(suppliersTable.id, supplierId))
-      .returning({ id: suppliersTable.id });
+      .returning();
 
     if (!returnValue) return [null, "Error updating supplier primary address"];
     return [returnValue.id, null];
@@ -325,22 +325,22 @@ export const deleteSupplier = async (
       await tx
         .delete(addressesTable)
         .where(eq(addressesTable.supplierId, supplierId))
-        .returning({ id: addressesTable.id });
+        .returning();
 
       await tx
         .delete(contactsTable)
         .where(eq(contactsTable.supplierId, supplierId))
-        .returning({ id: contactsTable.id });
+        .returning();
 
       await tx
         .delete(documentRelationsTable)
         .where(eq(documentRelationsTable.supplierId, supplierId))
-        .returning({ id: documentRelationsTable.id });
+        .returning();
 
       const [supplier] = await tx
         .delete(suppliersTable)
         .where(eq(suppliersTable.id, supplierId))
-        .returning({ id: suppliersTable.id });
+        .returning();
 
       return supplier;
     });

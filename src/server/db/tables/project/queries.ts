@@ -209,7 +209,7 @@ export const insertProject = async (
     const [project] = await db
       .insert(projectsTable)
       .values(data)
-      .returning({ id: projectsTable.id });
+      .returning();
 
     if (!project) return [null, "Error inserting new project"];
     return [project.id, null];
@@ -536,7 +536,7 @@ export const updateProject = async (
       .update(projectsTable)
       .set(data)
       .where(eq(projectsTable.id, id))
-      .returning({ id: projectsTable.id });
+      .returning();
 
     if (!project) return [null, "Error updating project"];
     return [project.id, null];
@@ -554,17 +554,17 @@ export const deleteProject = async (
       await tx
         .delete(projectItemsTable)
         .where(eq(projectItemsTable.projectId, id))
-        .returning({ id: projectItemsTable.id });
+        .returning();
 
       await tx
         .delete(documentRelationsTable)
         .where(eq(documentRelationsTable.projectId, id))
-        .returning({ id: documentRelationsTable.id });
+        .returning();
 
       const [project] = await tx
         .delete(projectsTable)
         .where(eq(projectsTable.id, id))
-        .returning({ id: projectsTable.id });
+        .returning();
 
       return project;
     });

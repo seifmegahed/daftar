@@ -18,7 +18,7 @@ export const insertItem = async (
     const [item] = await db
       .insert(itemsTable)
       .values(data)
-      .returning({ id: itemsTable.id });
+      .returning();
 
     if (!item) throw new Error("Error inserting new item");
     return [item.id, null];
@@ -175,7 +175,7 @@ export const updateItem = async (
       .update(itemsTable)
       .set(data)
       .where(eq(itemsTable.id, id))
-      .returning({ id: itemsTable.id });
+      .returning();
 
     if (!item) return [null, "Error updating item"];
     return [item.id, null];
@@ -189,7 +189,7 @@ export const deleteItem = async (id: number): Promise<ReturnTuple<number>> => {
     const [item] = await db
       .delete(itemsTable)
       .where(eq(itemsTable.id, id))
-      .returning({ id: itemsTable.id });
+      .returning();
 
     if (!item) return [null, "Error deleting item"];
     return [item.id, null];

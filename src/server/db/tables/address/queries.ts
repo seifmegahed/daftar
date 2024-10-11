@@ -15,7 +15,7 @@ export const insertNewAddress = async (
     const [address] = await db
       .insert(addressesTable)
       .values(data)
-      .returning({ id: addressesTable.id });
+      .returning();
 
     if (!address) return [null, "Error inserting new address"];
     return [address.id, null];
@@ -99,7 +99,7 @@ export const deleteAddress = async (
     const [address] = await db
       .delete(addressesTable)
       .where(eq(addressesTable.id, addressId))
-      .returning({ id: addressesTable.id });
+      .returning();
 
     if (!address) return [null, "Error deleting address"];
     return [address.id, null];

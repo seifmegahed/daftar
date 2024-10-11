@@ -13,7 +13,7 @@ export const insertCommercialOfferItem = async (
     const [result] = await db
       .insert(commercialOfferItemsTable)
       .values(data)
-      .returning({ id: commercialOfferItemsTable.id });
+      .returning();
 
     if (!result) return [null, "Error: Cannot insert commercial offer item"];
     return [result.id, null];
@@ -91,7 +91,7 @@ export const deleteCommercialOfferItem = async (
     const [result] = await db
       .delete(commercialOfferItemsTable)
       .where(eq(commercialOfferItemsTable.id, id))
-      .returning({ id: commercialOfferItemsTable.id });
+      .returning();
 
     if (!result) return [null, "Error: Cannot delete commercial offer item"];
     return [result.id, null];

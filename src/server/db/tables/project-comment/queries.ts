@@ -13,7 +13,7 @@ export const insertProjectComment = async (
     const [comment] = await db
       .insert(projectCommentsTable)
       .values(data)
-      .returning({ id: projectCommentsTable.id });
+      .returning();
 
     if (!comment) return [null, "Error inserting new project comment"];
     return [comment.id, null];
@@ -106,7 +106,7 @@ export const deleteProjectComment = async (
     const [comment] = await db
       .delete(projectCommentsTable)
       .where(eq(projectCommentsTable.id, id))
-      .returning({ id: projectCommentsTable.id });
+      .returning();
 
     if (!comment) return [null, "Error deleting project comment"];
     return [comment.id, null];

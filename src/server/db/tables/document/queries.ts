@@ -29,7 +29,7 @@ export const insertDocument = async (
     const [document] = await db
       .insert(documentsTable)
       .values(data)
-      .returning({ id: documentsTable.id });
+      .returning();
 
     if (!document) return [null, "Error inserting new document"];
     return [document.id, null];
@@ -197,7 +197,7 @@ export const updateDocument = async (
       .where(
         and(eq(documentsTable.id, id), privateFilterQuery(accessToPrivate)),
       )
-      .returning({ id: documentsTable.id });
+      .returning();
 
     if (!document) return [null, "Error updating document"];
     return [document.id, null];
@@ -216,7 +216,7 @@ export const deleteDocument = async (
       .where(
         and(eq(documentsTable.id, id), privateFilterQuery(accessToPrivate)),
       )
-      .returning({ id: documentsTable.id });
+      .returning();
 
     if (!document) return [null, "Error deleting document"];
     return [document.id, null];

@@ -23,7 +23,7 @@ export const insertDocumentRelation = async (
     const [result] = await db
       .insert(documentRelationsTable)
       .values(relation)
-      .returning({ id: documentRelationsTable.id });
+      .returning();
 
     if (!result) return [null, "Error inserting document relation"];
     return [result.id, null];
@@ -42,12 +42,12 @@ export const insertDocumentWithRelation = async (
       const [documentResult] = await tx
         .insert(documentsTable)
         .values(document)
-        .returning({ id: documentsTable.id });
+        .returning();
       if (!documentResult) return undefined;
       await tx
         .insert(documentRelationsTable)
         .values({ ...relation, documentId: documentResult.id })
-        .returning({ id: documentRelationsTable.id });
+        .returning();
 
       return documentResult.id;
     });
@@ -326,7 +326,7 @@ export const deleteDocumentRelation = async (
     const [result] = await db
       .delete(documentRelationsTable)
       .where(eq(documentRelationsTable.id, relationId))
-      .returning({ id: documentRelationsTable.id });
+      .returning();
     if (!result) return [null, "Error deleting document relation"];
     return [result.id, null];
   } catch (error) {

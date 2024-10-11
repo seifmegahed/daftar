@@ -193,7 +193,7 @@ export const insertNewClient = async (
         .values({
           ...clientData,
         })
-        .returning({ id: clientsTable.id });
+        .returning();
 
       if (!client) {
         tx.rollback();
@@ -202,7 +202,7 @@ export const insertNewClient = async (
       const [address] = await tx
         .insert(addressesTable)
         .values({ ...addressData, clientId: client.id })
-        .returning({ id: addressesTable.id });
+        .returning();
 
       if (!address) {
         tx.rollback();
@@ -212,7 +212,7 @@ export const insertNewClient = async (
       const [contact] = await tx
         .insert(contactsTable)
         .values({ ...contactData, clientId: client.id })
-        .returning({ id: contactsTable.id });
+        .returning();
 
       if (!contact) {
         tx.rollback();
@@ -226,7 +226,7 @@ export const insertNewClient = async (
           primaryContactId: contact.id,
         })
         .where(eq(clientsTable.id, client.id))
-        .returning({ id: clientsTable.id });
+        .returning();
 
       return updatedClient;
     });
@@ -310,7 +310,7 @@ export const updateClient = async (
       .update(clientsTable)
       .set(data)
       .where(eq(clientsTable.id, id))
-      .returning({ id: clientsTable.id });
+      .returning();
 
     if (!client) return [null, "Error updating client"];
     return [client.id, null];
@@ -338,7 +338,7 @@ export const deleteClient = async (
       const [client] = await tx
         .delete(clientsTable)
         .where(eq(clientsTable.id, id))
-        .returning({ id: clientsTable.id });
+        .returning();
 
       return client;
     });
