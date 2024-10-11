@@ -82,11 +82,13 @@ export const getClientDocuments = async (
         extension: documentsTable.extension,
       })
       .from(documentRelationsTable)
-      .where(eq(documentRelationsTable.clientId, clientId))
       .leftJoin(
         documentsTable,
+        eq(documentRelationsTable.documentId, documentsTable.id),
+      )
+      .where(
         and(
-          eq(documentRelationsTable.documentId, documentsTable.id),
+          eq(documentRelationsTable.clientId, clientId),
           privateFilterQuery(accessToPrivate),
         ),
       );
@@ -113,11 +115,13 @@ export const getSupplierDocuments = async (
         extension: documentsTable.extension,
       })
       .from(documentRelationsTable)
-      .where(eq(documentRelationsTable.supplierId, supplierId))
       .leftJoin(
         documentsTable,
+        eq(documentRelationsTable.documentId, documentsTable.id),
+      )
+      .where(
         and(
-          eq(documentRelationsTable.documentId, documentsTable.id),
+          eq(documentRelationsTable.supplierId, supplierId),
           privateFilterQuery(accessToPrivate),
         ),
       );
@@ -144,11 +148,16 @@ export const getItemDocuments = async (
         extension: documentsTable.extension,
       })
       .from(documentRelationsTable)
-      .where(eq(documentRelationsTable.itemId, itemId))
       .leftJoin(
         documentsTable,
         and(
           eq(documentRelationsTable.documentId, documentsTable.id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      )
+      .where(
+        and(
+          eq(documentRelationsTable.itemId, itemId),
           privateFilterQuery(accessToPrivate),
         ),
       );
@@ -173,19 +182,24 @@ export const getProjectDocuments = async (
         id: documentsTable.id,
         name: documentsTable.name,
         extension: documentsTable.extension,
+        private: documentsTable.private,
       })
       .from(documentRelationsTable)
-      .where(eq(documentRelationsTable.projectId, projectId))
       .leftJoin(
         documentsTable,
+        eq(documentRelationsTable.documentId, documentsTable.id),
+      )
+      .where(
         and(
-          eq(documentRelationsTable.documentId, documentsTable.id),
+          eq(documentRelationsTable.projectId, projectId),
           privateFilterQuery(accessToPrivate),
         ),
       );
+
     if (!documents) return [null, "Error getting project documents"];
     const result = z.array(simpDocWithRelationSchema).safeParse(documents);
     if (result.error) return [null, "Error getting project documents"];
+
     return [result.data, null];
   } catch (error) {
     console.log(error);
@@ -201,11 +215,13 @@ export const getClientDocumentsCount = async (
     const [documents] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
-      .where(eq(documentRelationsTable.clientId, clientId))
       .leftJoin(
         documentsTable,
+        eq(documentRelationsTable.documentId, documentsTable.id),
+      )
+      .where(
         and(
-          eq(documentRelationsTable.documentId, documentsTable.id),
+          eq(documentRelationsTable.clientId, clientId),
           privateFilterQuery(accessToPrivate),
         ),
       )
@@ -226,11 +242,13 @@ export const getSupplierDocumentsCount = async (
     const [documents] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
-      .where(eq(documentRelationsTable.supplierId, supplierId))
       .leftJoin(
         documentsTable,
+        eq(documentRelationsTable.documentId, documentsTable.id),
+      )
+      .where(
         and(
-          eq(documentRelationsTable.documentId, documentsTable.id),
+          eq(documentRelationsTable.supplierId, supplierId),
           privateFilterQuery(accessToPrivate),
         ),
       )
@@ -251,11 +269,13 @@ export const getItemDocumentsCount = async (
     const [documents] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
-      .where(eq(documentRelationsTable.itemId, itemId))
       .leftJoin(
         documentsTable,
+        eq(documentRelationsTable.documentId, documentsTable.id),
+      )
+      .where(
         and(
-          eq(documentRelationsTable.documentId, documentsTable.id),
+          eq(documentRelationsTable.itemId, itemId),
           privateFilterQuery(accessToPrivate),
         ),
       )
@@ -276,11 +296,13 @@ export const getProjectDocumentsCount = async (
     const [documents] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
-      .where(eq(documentRelationsTable.projectId, projectId))
       .leftJoin(
         documentsTable,
+        eq(documentRelationsTable.documentId, documentsTable.id),
+      )
+      .where(
         and(
-          eq(documentRelationsTable.documentId, documentsTable.id),
+          eq(documentRelationsTable.projectId, projectId),
           privateFilterQuery(accessToPrivate),
         ),
       )

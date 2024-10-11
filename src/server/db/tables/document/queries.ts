@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { count, eq, desc, sql, and, or, isNull } from "drizzle-orm";
+import { count, eq, desc, sql, and, not } from "drizzle-orm";
 
 import { documentsTable } from "./schema";
 import type { DocumentDataType } from "./schema";
@@ -61,7 +61,7 @@ const documentSearchQuery = (searchText: string) =>
 
 export const privateFilterQuery = (accessToPrivate: boolean) =>
   !accessToPrivate
-    ? or(eq(documentsTable.private, false), isNull(documentsTable.private))
+    ? not(eq(documentsTable.private, true))
     : sql`true`;
 
 export type BriefDocumentType = Required<
