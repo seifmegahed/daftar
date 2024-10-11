@@ -1,14 +1,15 @@
+"use server";
 import {
   getProjectCommercialOfferItems,
   getProjectCommercialOfferItemsCount,
+  type SaleItemType,
 } from "@/server/db/tables/commercial-offer-item/queries";
 import { isCurrentUserAdminAction } from "../users";
-import type { SelectCommercialOfferItemType } from "@/server/db/tables/commercial-offer-item/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 export const getProjectCommercialOfferItemsAction = async (
   projectId: number,
-): Promise<ReturnTuple<SelectCommercialOfferItemType[]>> => {
+): Promise<ReturnTuple<SaleItemType[]>> => {
   const [access] = await isCurrentUserAdminAction();
   if (!access) return [null, "Access denied"];
   const [items, itemsError] = await getProjectCommercialOfferItems(projectId);

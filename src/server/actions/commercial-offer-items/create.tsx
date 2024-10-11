@@ -1,3 +1,5 @@
+"use server";
+
 import { insertCommercialOfferItem } from "@/server/db/tables/commercial-offer-item/queries";
 import { insertCommercialOfferItemSchema } from "@/server/db/tables/commercial-offer-item/schema";
 import type { InsertCommercialOfferItemType } from "@/server/db/tables/commercial-offer-item/schema";

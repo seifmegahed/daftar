@@ -21,7 +21,7 @@ export default async function SettingsLayout({
   if (isNaN(projectId)) return <div>Error: Project ID is invalid</div>;
   const [numberOfDocuments] = await getProjectDocumentsCountAction(projectId);
   const [numberOfItems] = await getProjectItemsCountAction(projectId);
-  const [numberOfCommercialOfferItems] =
+  const [numberOfSaleItems] =
     await getProjectCommercialOfferItemsCountAction(projectId);
   const [userAccess] = await isCurrentUserAdminAction();
 
@@ -35,15 +35,15 @@ export default async function SettingsLayout({
       href: basePath(id) + "/edit",
     },
     {
-      title: "Purchased Items",
-      href: basePath(id) + "/items",
-      amount: numberOfItems ?? 0,
+      title: "Sale Items",
+      href: basePath(id) + "/sale-items",
+      amount: numberOfSaleItems ?? 0,
+      hidden: !userAccess,
     },
     {
-      title: "Commercial Offer",
-      href: basePath(id) + "/commercial-offer",
-      amount: numberOfCommercialOfferItems ?? 0,
-      hidden: !userAccess,
+      title: "Purchased Items",
+      href: basePath(id) + "/purchased-items",
+      amount: numberOfItems ?? 0,
     },
     {
       title: "Documents",

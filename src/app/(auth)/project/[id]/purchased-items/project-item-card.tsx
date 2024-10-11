@@ -17,11 +17,11 @@ function ProjectItemCard({
           {index + 1}
         </p>
       </div>
-      <div className="flex justify-between items-center w-full">
-        <div className="flex w-full items-center justify-between flex-shrink">
+      <div className="flex w-full items-center justify-between">
+        <div className="flex w-full flex-shrink items-center justify-between">
           <div>
             <Link href={`/item/${projectItem.item.id}`}>
-              <p className="cursor-pointer text-foreground hover:underline line-clamp-1">
+              <p className="line-clamp-1 cursor-pointer text-foreground hover:underline">
                 {projectItem.item.name}
               </p>
             </Link>
@@ -32,23 +32,23 @@ function ProjectItemCard({
             </Link>
           </div>
         </div>
-        <div className="w-full text-right flex-grow">
+        <div className="w-full flex-grow text-right">
           <Link href={`/supplier/${projectItem.supplier.id}`}>
             <p className="line-clamp-1 cursor-pointer hover:underline">
               {projectItem.supplier.name}
             </p>
-            <div className="flex justify-end gap-3">
-              <p className="cursor-pointer text-xs text-muted-foreground">
-                {"PPU: (" +
-                  getCurrencyLabel(projectItem.currency) +
-                  ") " +
-                  projectItem.price}
-              </p>
-              <p className="cursor-pointer text-xs text-muted-foreground">
-                Quantity: {projectItem.quantity}
-              </p>
-            </div>
           </Link>
+          <div className="flex justify-end gap-3">
+            <p className="cursor-pointer text-xs text-muted-foreground">
+              {"PPU: (" +
+                getCurrencyLabel(projectItem.currency) +
+                ") " +
+                projectItem.price}
+            </p>
+            <p className="cursor-pointer text-xs text-muted-foreground">
+              Quantity: {projectItem.quantity}
+            </p>
+          </div>
         </div>
       </div>
       <ProjectItemCardContextMenu

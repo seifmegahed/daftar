@@ -1,3 +1,5 @@
+"use server";
+
 import { deleteCommercialOfferItem } from "@/server/db/tables/commercial-offer-item/queries";
 import { isCurrentUserAdminAction } from "@/server/actions/users";
 

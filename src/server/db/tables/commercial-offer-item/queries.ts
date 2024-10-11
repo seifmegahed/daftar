@@ -1,11 +1,10 @@
 import { db } from "@/server/db";
 import { commercialOfferItemsTable } from "./schema";
-import type {
-  InsertCommercialOfferItemType,
-  SelectCommercialOfferItemType,
-} from "./schema";
+import type { InsertCommercialOfferItemType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { count, eq } from "drizzle-orm";
+import { itemsTable } from "../item/schema";
+import { z } from "zod";
 
 export const insertCommercialOfferItem = async (
   data: InsertCommercialOfferItemType,
@@ -24,18 +23,44 @@ export const insertCommercialOfferItem = async (
   }
 };
 
+const saleItemSchema = z.object({
+  id: z.number(),
+  itemId: z.number(),
+  name: z.string(),
+  make: z.string().nullable(),
+  price: z.string(),
+  currency: z.number(),
+  quantity: z.number(),
+});
+
+export type SaleItemType = z.infer<typeof saleItemSchema>;
+
 export const getProjectCommercialOfferItems = async (
   projectId: number,
-): Promise<ReturnTuple<SelectCommercialOfferItemType[]>> => {
+): Promise<ReturnTuple<SaleItemType[]>> => {
   try {
-    const result = await db
-      .select()
+    const data = await db
+      .select({
+        id: commercialOfferItemsTable.id,
+        itemId: commercialOfferItemsTable.itemId,
+        name: itemsTable.name,
+        make: itemsTable.make,
+        price: commercialOfferItemsTable.price,
+        currency: commercialOfferItemsTable.currency,
+        quantity: commercialOfferItemsTable.quantity,
+      })
       .from(commercialOfferItemsTable)
+      .leftJoin(itemsTable, eq(commercialOfferItemsTable.itemId, itemsTable.id))
       .where(eq(commercialOfferItemsTable.projectId, projectId))
       .orderBy(commercialOfferItemsTable.id);
 
-    if (!result) return [null, "Error: Cannot get commercial offer items"];
-    return [result, null];
+    if (!data) return [null, "Error: Cannot get commercial offer items"];
+    const parseResult = z.array(saleItemSchema).safeParse(data);
+    if (parseResult.error !== undefined) {
+      console.log(parseResult.error);
+      return [null, "Error: Cannot get commercial offer items"];
+    }
+    return [parseResult.data, null];
   } catch (error) {
     console.log(error);
     return [null, "Error: Cannot get commercial offer items"];

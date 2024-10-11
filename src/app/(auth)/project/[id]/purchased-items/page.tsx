@@ -9,8 +9,8 @@ async function ProjectItemsPage({ params }: { params: { id: string } }) {
   if (error !== null) return <div>Error getting project items</div>;
   return (
     <InfoPageWrapper
-      title="Project's Items"
-      subtitle="This is the project items page for the project."
+      title="Project's Purchased Items"
+      subtitle="This is the purchased items page for this project." 
     >
       <div className="flex flex-col gap-5">
         {projectItems.map((projectItem, index) => (
