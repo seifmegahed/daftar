@@ -65,7 +65,7 @@ export const privateFilterQuery = (accessToPrivate: boolean) =>
     : sql`true`;
 
 export type BriefDocumentType = Required<
-  Pick<SimpDoc, "id" | "name" | "extension" | "createdAt">
+  Pick<SimpDoc, "id" | "name" | "extension" | "createdAt" | "private">
 >;
 
 export const getDocuments = async (
@@ -82,6 +82,7 @@ export const getDocuments = async (
         name: documentsTable.name,
         extension: documentsTable.extension,
         createdAt: documentsTable.createdAt,
+        private: documentsTable.private,
         rank: searchText
           ? sql`ts_rank(${documentSearchQuery(searchText)})`
           : sql`1`,

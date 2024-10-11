@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Lock } from "lucide-react";
 import { format } from "date-fns";
 import { type BriefDocumentType } from "@/server/db/tables/document/queries";
 import DocumentCardContextMenu from "./card-menu";
@@ -20,7 +21,12 @@ const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
           </p>
         </Link>
         <div className="w-60 text-right">
-          <p className="line-clamp-1 text-foreground">{document.extension}</p>
+          <div className="flex items-center gap-4 justify-end">
+            {document.private && (
+              <Lock className="h-4 w-4 text-muted-foreground" />
+            )}
+            <p className="line-clamp-1 text-foreground">{document.extension}</p>
+          </div>
           <p className="text-xs text-muted-foreground">
             {format(document.createdAt, "PP")}
           </p>
