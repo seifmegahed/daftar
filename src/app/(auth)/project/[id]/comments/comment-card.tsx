@@ -41,7 +41,7 @@ function ProjectCommentCard({
         <div className="flex items-start justify-between">
           <p className="flex-shrink text-foreground">{comment.text}</p>
           {sameUser && (
-            <div>
+            <div className="-mt-2 -me-2">
               <button
                 className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-muted-foreground/20"
                 onClick={handleDelete}

@@ -45,7 +45,7 @@ function ProjectCommentForm({ projectId }: { projectId: number }) {
   return (
     <form onSubmit={handleSubmit} className="relative w-full">
       <textarea
-        className="w-full resize-none rounded-lg border px-4 py-2 outline-none ring-0"
+        className="w-full resize-none rounded-lg border px-4 py-2 outline-none ring-0 bg-background"
         placeholder="Add a comment..."
         value={text}
         rows={3}
@@ -54,7 +54,7 @@ function ProjectCommentForm({ projectId }: { projectId: number }) {
         ref={inputRef}
       />
       <button type="submit">
-        <SendHorizontal className="absolute right-2 top-2 h-6 w-6 text-muted-foreground" />
+        <SendHorizontal className="absolute right-2 top-2 h-6 w-6 text-muted-foreground/70" />
       </button>
     </form>
   );
