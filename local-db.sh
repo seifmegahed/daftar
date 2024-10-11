@@ -19,7 +19,7 @@ PG_DATA=$POSTGRES_PATH
 
 start_db() {
   echo "Starting PostgreSQL..."
-  brew services start postgresql@15
+  brew services start $POSTGRES_COMMAND
   sleep 10
 
   echo "Creating database and user..."
@@ -36,7 +36,7 @@ start_db() {
 
 stop_db() {
   echo "Stopping PostgreSQL..."
-  brew services stop postgresql@15
+  brew services stop $POSTGRES_COMMAND
 }
 
 cleanup_db() {
