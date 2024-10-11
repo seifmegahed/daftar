@@ -14,6 +14,10 @@ import {
   getDocumentItems,
   getDocumentProjects,
   getDocumentSuppliers,
+  getClientDocumentsCount,
+  getSupplierDocumentsCount,
+  getItemDocumentsCount,
+  getProjectDocumentsCount,
 } from "@/server/db/tables/document-relation/queries";
 
 import type {
@@ -37,9 +41,9 @@ export const getClientDocumentsAction = async (
 export const getClientDocumentsCountAction = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
-  const [documents, countError] = await getClientDocuments(clientId);
+  const [count, countError] = await getClientDocumentsCount(clientId);
   if (countError !== null) return [null, countError];
-  return [documents.length, null];
+  return [count, null];
 };
 
 export const getSupplierDocumentsAction = async (
@@ -53,9 +57,9 @@ export const getSupplierDocumentsAction = async (
 export const getSupplierDocumentsCountAction = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
-  const [documents, countError] = await getSupplierDocuments(supplierId);
+  const [count, countError] = await getSupplierDocumentsCount(supplierId);
   if (countError !== null) return [null, countError];
-  return [documents.length, null];
+  return [count, null];
 };
 
 export const getItemDocumentsAction = async (
@@ -69,9 +73,9 @@ export const getItemDocumentsAction = async (
 export const getItemDocumentsCountAction = async (
   itemId: number,
 ): Promise<ReturnTuple<number>> => {
-  const [documents, countError] = await getItemDocuments(itemId);
+  const [count, countError] = await getItemDocumentsCount(itemId);
   if (countError !== null) return [null, countError];
-  return [documents.length, null];
+  return [count, null];
 };
 
 export const getProjectDocumentsAction = async (
@@ -85,9 +89,9 @@ export const getProjectDocumentsAction = async (
 export const getProjectDocumentsCountAction = async (
   projectId: number,
 ): Promise<ReturnTuple<number>> => {
-  const [documents, countError] = await getProjectDocuments(projectId);
+  const [count, countError] = await getProjectDocumentsCount(projectId);
   if (countError !== null) return [null, countError];
-  return [documents.length, null];
+  return [count, null];
 };
 
 export const getDocumentRelationsCountAction = async (

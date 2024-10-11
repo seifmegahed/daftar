@@ -1,4 +1,5 @@
 import {
+  boolean,
   index,
   integer,
   pgTable,
@@ -22,6 +23,7 @@ export const documentsTable = pgTable(
     // path: varchar("path", { length: 256 }).notNull().unique(), // For production
     notes: varchar("notes", { length: notesMaxLength }),
     extension: varchar("extension", { length: 8 }).notNull(),
+    private: boolean("private").default(false),
 
     // Interaction fields
     createdAt: timestamp("created_at").defaultNow().notNull(),

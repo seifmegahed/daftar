@@ -24,6 +24,7 @@ export const getDocumentsAction = async (
     page,
     filter,
     searchText,
+    false,
     limit,
   );
   if (documentsError !== null) return [null, documentsError];

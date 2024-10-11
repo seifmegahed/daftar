@@ -358,6 +358,9 @@ export const getProjectById = async (
   }
 };
 
+const documentPrivateFilter = (access: boolean) => (document: SimpDoc) =>
+  access ? true : !document.private;
+
 export type GetProjectLinkedDocumentsType = {
   projectDocuments: SimpDoc[];
   clientDocuments: SimpDoc[];
@@ -368,6 +371,7 @@ export type GetProjectLinkedDocumentsType = {
 export const getProjectLinkedDocuments = async (
   projectId: number,
   includePath = false,
+  accessToPrivate = false,
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
   try {
     const project = await db.query.projectsTable.findFirst({
@@ -386,6 +390,7 @@ export const getProjectLinkedDocuments = async (
                     name: true,
                     extension: true,
                     path: includePath,
+                    private: true,
                   },
                 },
               },
@@ -407,6 +412,7 @@ export const getProjectLinkedDocuments = async (
                         name: true,
                         extension: true,
                         path: includePath,
+                        private: true,
                       },
                     },
                   },
@@ -425,6 +431,7 @@ export const getProjectLinkedDocuments = async (
                         name: true,
                         extension: true,
                         path: includePath,
+                        private: true,
                       },
                     },
                   },
@@ -442,6 +449,7 @@ export const getProjectLinkedDocuments = async (
                 name: true,
                 extension: true,
                 path: includePath,
+                private: true,
               },
             },
           },
@@ -463,17 +471,21 @@ export const getProjectLinkedDocuments = async (
       }
     });
 
-    const suppliersDocuments = Array.from(uniqueSuppliers.values()).flatMap(
-      (item) => item.supplier.documents.map((doc) => doc.document),
-    );
-    const itemsDocuments = Array.from(uniqueItems.values()).flatMap((item) =>
-      item.item.documents.map((doc) => doc.document),
-    );
+    const suppliersDocuments = Array.from(uniqueSuppliers.values())
+      .flatMap((item) => item.supplier.documents.map((doc) => doc.document))
+      .filter(documentPrivateFilter(accessToPrivate));
+    const itemsDocuments = Array.from(uniqueItems.values())
+      .flatMap((item) => item.item.documents.map((doc) => doc.document))
+      .filter(documentPrivateFilter(accessToPrivate));
 
     return [
       {
-        projectDocuments: project.documents.map((x) => x.document),
-        clientDocuments: project.client.documents.map((x) => x.document),
+        projectDocuments: project.documents
+          .map((x) => x.document)
+          .filter(documentPrivateFilter(accessToPrivate)),
+        clientDocuments: project.client.documents
+          .map((x) => x.document)
+          .filter(documentPrivateFilter(accessToPrivate)),
         itemsDocuments,
         suppliersDocuments,
       },

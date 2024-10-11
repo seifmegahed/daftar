@@ -12,7 +12,7 @@ import {
 
 import type { DocumentRelationsType } from "./schema";
 import type { DocumentDataType } from "@/server/db/tables/document/schema";
-import type { SimpDoc } from "@/server/db/tables/document/queries";
+import { privateFilterQuery } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { z } from "zod";
 
@@ -60,27 +60,40 @@ export const insertDocumentWithRelation = async (
   }
 };
 
+const simpDocWithRelationSchema = z.object({
+  relationId: z.number(),
+  id: z.number(),
+  name: z.string(),
+  extension: z.string(),
+});
+
+export type SimpDocWithRelation = z.infer<typeof simpDocWithRelationSchema>;
+
 export const getClientDocuments = async (
   clientId: number,
-): Promise<ReturnTuple<SimpDoc[]>> => {
+  accessToPrivate = false,
+): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
   try {
-    const documents = await db.query.documentRelationsTable.findMany({
-      where: (documentRelation, { eq }) =>
-        eq(documentRelation.clientId, clientId),
-      columns: { id: true },
-      with: {
-        document: {
-          columns: {
-            id: true,
-            name: true,
-            extension: true,
-          },
-        },
-      },
-    });
+    const documents = await db
+      .select({
+        relationId: documentRelationsTable.id,
+        id: documentsTable.id,
+        name: documentsTable.name,
+        extension: documentsTable.extension,
+      })
+      .from(documentRelationsTable)
+      .where(eq(documentRelationsTable.clientId, clientId))
+      .leftJoin(
+        documentsTable,
+        and(
+          eq(documentRelationsTable.documentId, documentsTable.id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      );
     if (!documents) return [null, "Error getting client documents"];
-
-    return [documents.map((x) => ({ ...x.document, relationId: x.id })), null];
+    const result = z.array(simpDocWithRelationSchema).safeParse(documents);
+    if (result.error) return [null, "Error getting client documents"];
+    return [result.data, null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting client documents"];
@@ -89,25 +102,29 @@ export const getClientDocuments = async (
 
 export const getSupplierDocuments = async (
   supplierId: number,
-): Promise<ReturnTuple<SimpDoc[]>> => {
+  accessToPrivate = false,
+): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
   try {
-    const documents = await db.query.documentRelationsTable.findMany({
-      where: (documentRelation, { eq }) =>
-        eq(documentRelation.supplierId, supplierId),
-      columns: { id: true },
-      with: {
-        document: {
-          columns: {
-            id: true,
-            name: true,
-            extension: true,
-          },
-        },
-      },
-    });
+    const documents = await db
+      .select({
+        relationId: documentRelationsTable.id,
+        id: documentsTable.id,
+        name: documentsTable.name,
+        extension: documentsTable.extension,
+      })
+      .from(documentRelationsTable)
+      .where(eq(documentRelationsTable.supplierId, supplierId))
+      .leftJoin(
+        documentsTable,
+        and(
+          eq(documentRelationsTable.documentId, documentsTable.id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      );
     if (!documents) return [null, "Error getting supplier documents"];
-
-    return [documents.map((x) => ({ ...x.document, relationId: x.id })), null];
+    const result = z.array(simpDocWithRelationSchema).safeParse(documents);
+    if (result.error) return [null, "Error getting supplier documents"];
+    return [result.data, null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting supplier documents"];
@@ -116,24 +133,29 @@ export const getSupplierDocuments = async (
 
 export const getItemDocuments = async (
   itemId: number,
-): Promise<ReturnTuple<SimpDoc[]>> => {
+  accessToPrivate = false,
+): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
   try {
-    const documents = await db.query.documentRelationsTable.findMany({
-      where: (documentRelation, { eq }) => eq(documentRelation.itemId, itemId),
-      columns: { id: true },
-      with: {
-        document: {
-          columns: {
-            id: true,
-            name: true,
-            extension: true,
-          },
-        },
-      },
-    });
+    const documents = await db
+      .select({
+        relationId: documentRelationsTable.id,
+        id: documentsTable.id,
+        name: documentsTable.name,
+        extension: documentsTable.extension,
+      })
+      .from(documentRelationsTable)
+      .where(eq(documentRelationsTable.itemId, itemId))
+      .leftJoin(
+        documentsTable,
+        and(
+          eq(documentRelationsTable.documentId, documentsTable.id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      );
     if (!documents) return [null, "Error getting item documents"];
-
-    return [documents.map((x) => ({ ...x.document, relationId: x.id })), null];
+    const result = z.array(simpDocWithRelationSchema).safeParse(documents);
+    if (result.error) return [null, "Error getting item documents"];
+    return [result.data, null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting item documents"];
@@ -142,27 +164,132 @@ export const getItemDocuments = async (
 
 export const getProjectDocuments = async (
   projectId: number,
-): Promise<ReturnTuple<SimpDoc[]>> => {
+  accessToPrivate = false,
+): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
   try {
-    const documents = await db.query.documentRelationsTable.findMany({
-      where: (documentRelation, { eq }) =>
-        eq(documentRelation.projectId, projectId),
-      columns: { id: true },
-      with: {
-        document: {
-          columns: {
-            id: true,
-            name: true,
-            extension: true,
-          },
-        },
-      },
-    });
+    const documents = await db
+      .select({
+        relationId: documentRelationsTable.id,
+        id: documentsTable.id,
+        name: documentsTable.name,
+        extension: documentsTable.extension,
+      })
+      .from(documentRelationsTable)
+      .where(eq(documentRelationsTable.projectId, projectId))
+      .leftJoin(
+        documentsTable,
+        and(
+          eq(documentRelationsTable.documentId, documentsTable.id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      );
     if (!documents) return [null, "Error getting project documents"];
-    return [documents.map((x) => ({ ...x.document, relationId: x.id })), null];
+    const result = z.array(simpDocWithRelationSchema).safeParse(documents);
+    if (result.error) return [null, "Error getting project documents"];
+    return [result.data, null];
   } catch (error) {
     console.log(error);
     return [null, "Error getting project documents"];
+  }
+};
+
+export const getClientDocumentsCount = async (
+  clientId: number,
+  accessToPrivate = false,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [documents] = await db
+      .select({ count: count() })
+      .from(documentRelationsTable)
+      .where(eq(documentRelationsTable.clientId, clientId))
+      .leftJoin(
+        documentsTable,
+        and(
+          eq(documentRelationsTable.documentId, documentsTable.id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      )
+      .limit(1);
+    if (!documents) return [null, "Error getting client documents count"];
+    return [documents.count, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting client documents count"];
+  }
+};
+
+export const getSupplierDocumentsCount = async (
+  supplierId: number,
+  accessToPrivate = false,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [documents] = await db
+      .select({ count: count() })
+      .from(documentRelationsTable)
+      .where(eq(documentRelationsTable.supplierId, supplierId))
+      .leftJoin(
+        documentsTable,
+        and(
+          eq(documentRelationsTable.documentId, documentsTable.id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      )
+      .limit(1);
+    if (!documents) return [null, "Error getting supplier documents count"];
+    return [documents.count, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting supplier documents count"];
+  }
+};
+
+export const getItemDocumentsCount = async (
+  itemId: number,
+  accessToPrivate = false,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [documents] = await db
+      .select({ count: count() })
+      .from(documentRelationsTable)
+      .where(eq(documentRelationsTable.itemId, itemId))
+      .leftJoin(
+        documentsTable,
+        and(
+          eq(documentRelationsTable.documentId, documentsTable.id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      )
+      .limit(1);
+    if (!documents) return [null, "Error getting item documents count"];
+    return [documents.count, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting item documents count"];
+  }
+};
+
+export const getProjectDocumentsCount = async (
+  projectId: number,
+  accessToPrivate = false,
+): Promise<ReturnTuple<number>> => {
+  try {
+    const [documents] = await db
+      .select({ count: count() })
+      .from(documentRelationsTable)
+      .where(eq(documentRelationsTable.projectId, projectId))
+      .leftJoin(
+        documentsTable,
+        and(
+          eq(documentRelationsTable.documentId, documentsTable.id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      )
+      .limit(1);
+    if (!documents) return [null, "Error getting project documents count"];
+    return [documents.count, null];
+  } catch (error) {
+    console.log(error);
+    return [null, "Error getting project documents count"];
   }
 };
 
@@ -184,12 +311,18 @@ export const deleteDocumentRelation = async (
 
 export const getDocumentRelationsCount = async (
   id: number,
+  accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   try {
     const [result] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
-      .where(eq(documentRelationsTable.documentId, id))
+      .where(
+        and(
+          eq(documentRelationsTable.documentId, id),
+          privateFilterQuery(accessToPrivate),
+        ),
+      )
       .limit(1);
     if (!result) return [null, "Error getting document relations count"];
     return [result.count, null];

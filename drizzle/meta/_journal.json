@@ -113,6 +113,13 @@
       "when": 1727950221977,
       "tag": "0015_flat_dark_beast",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1728629072505,
+      "tag": "0016_loose_the_hand",
+      "breakpoints": true
     }
   ]
 }

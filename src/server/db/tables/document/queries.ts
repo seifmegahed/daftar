@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { count, eq, desc, sql } from "drizzle-orm";
+import { count, eq, desc, sql, and, or, isNull } from "drizzle-orm";
 
 import { documentsTable } from "./schema";
 import type { DocumentDataType } from "./schema";
@@ -16,6 +16,7 @@ export type SimpDoc = {
   id: number;
   name: string;
   extension: string;
+  private?: boolean | null;
   path?: string;
   relationId?: number;
   createdAt?: Date;
@@ -58,6 +59,11 @@ const documentSearchQuery = (searchText: string) =>
     ), to_tsquery(${prepareSearchText(searchText)})
   `;
 
+export const privateFilterQuery = (accessToPrivate: boolean) =>
+  !accessToPrivate
+    ? or(eq(documentsTable.private, false), isNull(documentsTable.private))
+    : sql`true`;
+
 export type BriefDocumentType = Required<
   Pick<SimpDoc, "id" | "name" | "extension" | "createdAt">
 >;
@@ -66,6 +72,7 @@ export const getDocuments = async (
   page: number,
   filter: FilterArgs = filterDefault,
   searchText?: string,
+  accessToPrivate = false,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefDocumentType[]>> => {
   try {
@@ -80,7 +87,9 @@ export const getDocuments = async (
           : sql`1`,
       })
       .from(documentsTable)
-      .where(documentFilterQuery(filter))
+      .where(
+        and(documentFilterQuery(filter), privateFilterQuery(accessToPrivate)),
+      )
       .orderBy((table) =>
         searchText ? desc(table.rank) : desc(documentsTable.id),
       )
@@ -107,10 +116,12 @@ export type DocumentType = DocumentDataType & {
 
 export const getDocumentById = async (
   id: number,
+  accessToPrivate = false,
 ): Promise<ReturnTuple<Required<DocumentType>>> => {
   try {
     const document = await db.query.documentsTable.findFirst({
-      where: (document, { eq }) => eq(document.id, id),
+      where: (document, { eq, and }) =>
+        and(eq(document.id, id), privateFilterQuery(accessToPrivate)),
       with: {
         creator: {
           columns: {
@@ -130,6 +141,7 @@ export const getDocumentById = async (
 
 export const getDocumentPath = async (
   id: number,
+  accessToPrivate = false,
 ): Promise<ReturnTuple<{ name: string; path: string; extension: string }>> => {
   try {
     const [path] = await db
@@ -139,7 +151,9 @@ export const getDocumentPath = async (
         extension: documentsTable.extension,
       })
       .from(documentsTable)
-      .where(eq(documentsTable.id, id))
+      .where(
+        and(eq(documentsTable.id, id), privateFilterQuery(accessToPrivate)),
+      )
       .limit(1);
 
     if (!path) return [null, "Error getting document path"];
@@ -152,12 +166,15 @@ export const getDocumentPath = async (
 
 export const getDocumentsCount = async (
   filter: FilterArgs = filterDefault,
+  accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   try {
     const [documents] = await db
       .select({ count: count() })
       .from(documentsTable)
-      .where(documentFilterQuery(filter))
+      .where(
+        and(documentFilterQuery(filter), privateFilterQuery(accessToPrivate)),
+      )
       .limit(1);
 
     if (!documents) return [null, "Error getting documents count"];
@@ -170,12 +187,15 @@ export const getDocumentsCount = async (
 export const updateDocument = async (
   id: number,
   data: Partial<DocumentDataType>,
+  accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   try {
     const [document] = await db
       .update(documentsTable)
       .set(data)
-      .where(eq(documentsTable.id, id))
+      .where(
+        and(eq(documentsTable.id, id), privateFilterQuery(accessToPrivate)),
+      )
       .returning({ id: documentsTable.id });
 
     if (!document) return [null, "Error updating document"];
@@ -187,11 +207,14 @@ export const updateDocument = async (
 
 export const deleteDocument = async (
   id: number,
+  accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   try {
     const [document] = await db
       .delete(documentsTable)
-      .where(eq(documentsTable.id, id))
+      .where(
+        and(eq(documentsTable.id, id), privateFilterQuery(accessToPrivate)),
+      )
       .returning({ id: documentsTable.id });
 
     if (!document) return [null, "Error deleting document"];
@@ -201,9 +224,9 @@ export const deleteDocument = async (
   }
 };
 
-export const getDocumentOptions = async (): Promise<
-  ReturnTuple<Pick<SimpDoc, "id" | "name" | "extension">[]>
-> => {
+export const getDocumentOptions = async (
+  accessToPrivate = false,
+): Promise<ReturnTuple<Pick<SimpDoc, "id" | "name" | "extension">[]>> => {
   try {
     const documents = await db
       .select({
@@ -212,6 +235,7 @@ export const getDocumentOptions = async (): Promise<
         extension: documentsTable.extension,
       })
       .from(documentsTable)
+      .where(privateFilterQuery(accessToPrivate))
       .orderBy(desc(documentsTable.name));
 
     if (!documents) return [null, "Error getting documents"];
