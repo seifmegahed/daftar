@@ -65,6 +65,7 @@ const simpDocWithRelationSchema = z.object({
   id: z.number(),
   name: z.string(),
   extension: z.string(),
+  private: z.boolean(),
 });
 
 export type SimpDocWithRelation = z.infer<typeof simpDocWithRelationSchema>;
@@ -80,6 +81,7 @@ export const getClientDocuments = async (
         id: documentsTable.id,
         name: documentsTable.name,
         extension: documentsTable.extension,
+        private: documentsTable.private,
       })
       .from(documentRelationsTable)
       .leftJoin(
@@ -113,6 +115,7 @@ export const getSupplierDocuments = async (
         id: documentsTable.id,
         name: documentsTable.name,
         extension: documentsTable.extension,
+        private: documentsTable.private,
       })
       .from(documentRelationsTable)
       .leftJoin(
@@ -146,6 +149,7 @@ export const getItemDocuments = async (
         id: documentsTable.id,
         name: documentsTable.name,
         extension: documentsTable.extension,
+        private: documentsTable.private,
       })
       .from(documentRelationsTable)
       .leftJoin(
