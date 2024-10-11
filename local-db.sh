@@ -15,7 +15,7 @@ fi
 
 ACTION=$1
 
-PG_DATA="/usr/local/var/postgresql@15" # Adjust this path if necessary
+PG_DATA=$POSTGRES_PATH
 
 start_db() {
   echo "Starting PostgreSQL..."
