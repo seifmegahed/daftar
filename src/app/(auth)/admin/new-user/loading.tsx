@@ -1,7 +1,7 @@
 import FormSkeleton from "@/components/skeletons/form-skeleton";
 
-function NewUserLoadingPage() {
+function FormLoadingPage() {
   return <FormSkeleton />;
 }
 
-export default NewUserLoadingPage;
+export default FormLoadingPage;
