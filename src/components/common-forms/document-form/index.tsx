@@ -82,7 +82,7 @@ async function DocumentForm({
   if (documentsError !== null) return <NewDocumentForm />;
 
   return (
-    <Tabs defaultValue="existing">
+    <Tabs defaultValue="existing" dir="ltr">
       <TabsList className="h-12">
         <TabsTrigger value="existing" className="h-10 w-48">
           Existing Document

@@ -26,7 +26,7 @@ const SupplierCard = ({ supplier }: { supplier: BriefSupplierType }) => {
             {supplier.field}
           </p>
         </div>
-        <div className="w-56 text-right">
+        <div className="w-56 text-end">
           <p className="line-clamp-1 text-foreground">
             {supplier.registrationNumber}
           </p>

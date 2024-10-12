@@ -31,7 +31,7 @@ const SupplierItemCard = ({ item }: { item: SupplierItemType }) => {
     <div className="flex items-center gap-5 rounded-xl border p-4">
       <Link href={`/item/${item.itemId}`}>
         <div className="flex cursor-pointer items-center justify-center">
-          <p className="w-10 text-right text-2xl font-bold text-foreground">
+          <p className="w-10 text-center text-2xl font-bold text-foreground">
             {item.itemId}
           </p>
         </div>
@@ -47,7 +47,7 @@ const SupplierItemCard = ({ item }: { item: SupplierItemType }) => {
             {item.itemMake}
           </p>
         </div>
-        <div className="w-72 text-right">
+        <div className="w-72 text-end">
           <Link href={`/project/${item.projectId}`}>
             <p className="line-clamp-1 text-foreground hover:underline">
               {item.projectName}

@@ -54,7 +54,7 @@ function ProjectCommentForm({ projectId }: { projectId: number }) {
         ref={inputRef}
       />
       <button type="submit">
-        <SendHorizontal className="absolute right-2 top-2 h-6 w-6 text-muted-foreground/70" />
+        <SendHorizontal className="absolute end-2 top-2 h-6 w-6 text-muted-foreground/70" />
       </button>
     </form>
   );

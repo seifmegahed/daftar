@@ -39,7 +39,7 @@ const ProjectCard = ({
             </p>
           </Link>
         </div>
-        <div className="w-36 text-right">
+        <div className="w-36 text-end">
           <p className="text-foreground">{getStatusLabel(project.status)}</p>
           <p className="text-xs text-muted-foreground">
             {format(project.createdAt, "PP")}

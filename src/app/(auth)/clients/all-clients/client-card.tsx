@@ -8,7 +8,7 @@ const ClientCard = ({ client }: { client: BriefClientType }) => {
     <div className="flex items-center gap-5 rounded-xl border p-4">
       <Link href={`/client/${client.id}`}>
         <div className="flex cursor-pointer items-center justify-center">
-          <p className="w-10 text-right text-2xl font-bold text-foreground">
+          <p className="w-10 text-end text-2xl font-bold text-foreground">
             {client.id}
           </p>
         </div>
@@ -19,7 +19,7 @@ const ClientCard = ({ client }: { client: BriefClientType }) => {
             {client.name}
           </p>
         </Link>
-        <div className="w-60 text-right">
+        <div className="w-60 text-end">
           <p className="text-foreground line-clamp-1">{client.registrationNumber}</p>
           <p className="text-xs text-muted-foreground">
             {format(client.createdAt, "PP")}

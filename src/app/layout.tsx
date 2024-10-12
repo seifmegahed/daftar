@@ -15,7 +15,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="ar" className={`${GeistSans.variable}`} dir="ltr">
+    <html lang="en" className={`${GeistSans.variable}`} dir="ltr">
       <head />
       <body>
         <ThemeProvider

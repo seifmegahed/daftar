@@ -54,7 +54,7 @@ function ComboSelect({
           )}
         >
           {value ? value : selectMessage}
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="ms-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-[300px] p-0">
@@ -75,7 +75,7 @@ function ComboSelect({
                 >
                   <Check
                     className={cn(
-                      "mr-2 h-4 w-4",
+                      "me-2 h-4 w-4",
                       value === option ? "opacity-100" : "opacity-0",
                     )}
                   />

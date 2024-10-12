@@ -35,7 +35,7 @@ function SidebarNav({ links }: { links: NavLink[] }) {
               <p className="hidden text-xs font-thin lg:block">{link.amount}</p>
             </div>
           ) : (
-            <p className="w-full">{link.title}</p>
+            <p className="w-full group-hover:underline">{link.title}</p>
           )}
         </Link>
       ))}

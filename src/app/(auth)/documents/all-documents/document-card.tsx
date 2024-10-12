@@ -20,7 +20,7 @@ const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
             {document.name}
           </p>
         </Link>
-        <div className="w-60 text-right">
+        <div className="w-60 text-end">
           <div className="flex items-center gap-4 justify-end">
             {document.private && (
               <Lock className="h-4 w-4 text-muted-foreground" />

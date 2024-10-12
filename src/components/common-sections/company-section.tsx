@@ -68,7 +68,7 @@ const CompanySection = ({
         </div>
       ) : null}
       {primaryAddress ? (
-        <div className="flex justify-between text-right">
+        <div className="flex justify-between text-end">
           <p>Address</p>
           <div>
             <p>{primaryAddress.addressLine}</p>
@@ -80,7 +80,7 @@ const CompanySection = ({
         </div>
       ) : null}
       {primaryContact ? (
-        <div className="flex justify-between text-right">
+        <div className="flex justify-between text-end">
           <p>Contact</p>
           <div>
             <p>{primaryContact.name}</p>

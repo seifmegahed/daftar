@@ -107,7 +107,7 @@ export default function NewUserForm() {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-2">
               <Label htmlFor="role">Role</Label>
-              <Select onValueChange={field.onChange} value={field.value}>
+              <Select onValueChange={field.onChange} value={field.value} dir="ltr">
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>

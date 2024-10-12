@@ -16,13 +16,13 @@ function TriggerButton({
       <Button
         variant={"outline"}
         className={cn(
-          "w-[240px] pl-3 text-left font-normal",
+          "w-[240px] pl-3 text-start font-normal",
           className,
           !date && "text-muted-foreground",
         )}
       >
         {date ? format(date, "PPP") : "Select date"}
-        <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+        <CalendarIcon className="ms-auto h-4 w-4 text-muted-foreground" />
       </Button>
     </PopoverTrigger>
   );

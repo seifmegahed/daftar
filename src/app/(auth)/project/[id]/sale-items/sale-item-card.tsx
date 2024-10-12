@@ -32,7 +32,7 @@ function SaleItemCard({
             </Link>
           </div>
         </div>
-        <div className="w-full flex-grow text-right">
+        <div className="w-full flex-grow text-end">
           <p className="cursor-pointer text-xs text-muted-foreground">
             {"PPU: (" +
               getCurrencyLabel(saleItem.currency) +
