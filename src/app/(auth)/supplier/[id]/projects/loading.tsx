@@ -1,7 +1,7 @@
-import AltProjectsListSkeleton from "@/components/skeletons/alt-projects-list-skeleton";
+import { CardBAltListSkeleton } from "@/components/skeletons/alt-list-skeletons";
 
-function AltProjectsLoadingPage() {
-  return <AltProjectsListSkeleton />;
+function CardBAltListLoadingPage() {
+  return <CardBAltListSkeleton />;
 }
 
-export default AltProjectsLoadingPage;
+export default CardBAltListLoadingPage;
