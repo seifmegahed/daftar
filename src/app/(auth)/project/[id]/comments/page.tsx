@@ -6,8 +6,10 @@ import {
   getProjectCommentsAction,
   getProjectCommentsCountAction,
 } from "@/server/actions/project-comments/read";
-import ProjectCommentCard from "./comment-card";
 import Pagination from "@/components/pagination";
+import { Suspense } from "react";
+import { CommentsListSkeleton } from "@/components/skeletons/comment-skeletons";
+import CommentsList from "./comments-list";
 
 async function ProjectCommentsPage({
   params,
@@ -45,14 +47,13 @@ async function ProjectCommentsPage({
         <ProjectCommentForm projectId={projectId} />
       </div>
       <div className="flex flex-grow flex-col gap-4">
-        {projectComments.map((comment) => (
-          <ProjectCommentCard
-            key={comment.id}
-            comment={comment}
-            userId={currentUser.id}
+        <Suspense fallback={<CommentsListSkeleton />}>
+          <CommentsList
+            comments={projectComments}
+            currentUserId={currentUser.id}
             projectId={projectId}
           />
-        ))}
+        </Suspense>
         <Pagination totalPages={numberOfPages} />
       </div>
     </div>
