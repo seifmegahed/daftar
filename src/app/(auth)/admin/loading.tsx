@@ -3,11 +3,19 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 function AdminLoadingPage() {
   return (
-    <div className="flex flex-col gap-4"> 
-      {Array.from({ length: 5 }).map((_, i) => (
+    <div className="flex flex-col gap-4">
+      <UsersListSkeleton />
+      <PaginationSkeleton />
+    </div>
+  );
+}
+
+export function UsersListSkeleton({ count = 5 }) {
+  return (
+    <div className="flex flex-col gap-4">
+      {Array.from({ length: count }).map((_, i) => (
         <UserCardSkeleton key={i} />
       ))}
-      <PaginationSkeleton />
     </div>
   );
 }
