@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
-import { type SelectAddressType } from "@/server/db/tables/address/schema";
 import { format } from "date-fns";
 import AddressActionButtons from "./action-buttons";
+import type { AddressType } from "@/server/db/tables/address/queries";
 
 const AddressCard = ({
   address,
@@ -9,7 +9,7 @@ const AddressCard = ({
   referenceId,
   referenceType,
 }: {
-  address: SelectAddressType;
+  address: AddressType;
   isPrimary: boolean;
   referenceId: number;
   referenceType: "client" | "supplier";

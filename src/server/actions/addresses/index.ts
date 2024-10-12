@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  type AddressType,
   deleteAddress,
   getClientAddresses,
   getClientAddressesCount,
@@ -11,7 +12,6 @@ import {
 import {
   insertAddressSchemaRaw,
   insertAddressSchemaRefineCallback,
-  type SelectAddressType,
 } from "@/server/db/tables/address/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "@/server/actions/users";
@@ -60,7 +60,7 @@ export const getClientAddressesCountAction = async (
 
 export const getClientAddressesAction = async (
   clientId: number,
-): Promise<ReturnTuple<SelectAddressType[]>> => {
+): Promise<ReturnTuple<AddressType[]>> => {
   const [addresses, error] = await getClientAddresses(clientId);
   if (error !== null) return [null, error];
   return [addresses, null];
@@ -76,7 +76,7 @@ export const getSupplierAddressesCountAction = async (
 
 export const getSupplierAddressesAction = async (
   supplierId: number,
-): Promise<ReturnTuple<SelectAddressType[]>> => {
+): Promise<ReturnTuple<AddressType[]>> => {
   const [addresses, error] = await getSupplierAddresses(supplierId);
   if (error !== null) return [null, error];
   return [addresses, null];

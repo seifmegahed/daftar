@@ -1,21 +1,16 @@
 import type { ReturnTuple } from "@/utils/type-utils";
-import {
-  addressesTable,
-  type SelectAddressType,
-  type InsertAddressType,
-} from "./schema";
+import { addressesTable, type InsertAddressType } from "./schema";
 import { db } from "@/server/db";
 import { getErrorMessage } from "@/lib/exceptions";
 import { count, eq } from "drizzle-orm";
+import { z } from "zod";
+import { usersTable } from "../user/schema";
 
 export const insertNewAddress = async (
   data: InsertAddressType,
 ): Promise<ReturnTuple<number>> => {
   try {
-    const [address] = await db
-      .insert(addressesTable)
-      .values(data)
-      .returning();
+    const [address] = await db.insert(addressesTable).values(data).returning();
 
     if (!address) return [null, "Error inserting new address"];
     return [address.id, null];
@@ -41,18 +36,48 @@ export const getClientAddressesCount = async (
   }
 };
 
+const getAddressSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  addressLine: z.string(),
+  country: z.string(),
+  city: z.string().nullable(),
+  notes: z.string().nullable(),
+  createdAt: z.date(),
+  updatedAt: z.date().nullable(),
+  createdBy: z.string(),
+  updatedBy: z.string().nullable(),
+});
+
+export type AddressType = z.infer<typeof getAddressSchema>;
+
 export const getClientAddresses = async (
   clientId: number,
-): Promise<ReturnTuple<SelectAddressType[]>> => {
+): Promise<ReturnTuple<AddressType[]>> => {
   try {
     const addresses = await db
-      .select()
+      .select({
+        id: addressesTable.id,
+        name: addressesTable.name,
+        addressLine: addressesTable.addressLine,
+        country: addressesTable.country,
+        city: addressesTable.city,
+        notes: addressesTable.notes,
+        createdAt: addressesTable.createdAt,
+        updatedAt: addressesTable.updatedAt,
+        createdBy: usersTable.name,
+        updatedBy: usersTable.name,
+      })
       .from(addressesTable)
+      .leftJoin(usersTable, eq(addressesTable.createdBy, usersTable.id))
       .where(eq(addressesTable.clientId, clientId))
       .orderBy(addressesTable.id);
 
     if (!addresses) return [null, "Error getting client addresses"];
-    return [addresses, null];
+    const parsedAddresses = z.array(getAddressSchema).safeParse(addresses);
+
+    if (!parsedAddresses.success) return [null, "Error parsing addresses"];
+    return [parsedAddresses.data, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
@@ -77,16 +102,32 @@ export const getSupplierAddressesCount = async (
 
 export const getSupplierAddresses = async (
   supplierId: number,
-): Promise<ReturnTuple<SelectAddressType[]>> => {
+): Promise<ReturnTuple<AddressType[]>> => {
   try {
     const addresses = await db
-      .select()
+      .select({
+        id: addressesTable.id,
+        name: addressesTable.name,
+        addressLine: addressesTable.addressLine,
+        country: addressesTable.country,
+        city: addressesTable.city,
+        notes: addressesTable.notes,
+        createdAt: addressesTable.createdAt,
+        updatedAt: addressesTable.updatedAt,
+        createdBy: usersTable.name,
+        updatedBy: usersTable.name,
+      })
       .from(addressesTable)
+      .leftJoin(usersTable, eq(addressesTable.createdBy, usersTable.id))
       .where(eq(addressesTable.supplierId, supplierId))
       .orderBy(addressesTable.id);
 
     if (!addresses) return [null, "Error getting supplier addresses"];
-    return [addresses, null];
+    const parsedAddresses = z.array(getAddressSchema).safeParse(addresses);
+
+    if (!parsedAddresses.success) return [null, "Error parsing addresses"];
+
+    return [parsedAddresses.data, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }

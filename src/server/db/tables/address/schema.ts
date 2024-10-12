@@ -62,6 +62,14 @@ export const addressRelations = relations(addressesTable, ({ one }) => ({
     fields: [addressesTable.clientId],
     references: [clientsTable.id],
   }),
+  creator: one(usersTable, {
+    fields: [addressesTable.createdBy],
+    references: [usersTable.id],
+  }),
+  updater: one(usersTable, {
+    fields: [addressesTable.updatedBy],
+    references: [usersTable.id],
+  }),
 }));
 
 export const insertAddressSchemaRaw = createInsertSchema(addressesTable);
