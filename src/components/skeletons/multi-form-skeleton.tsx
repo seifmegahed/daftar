@@ -12,6 +12,16 @@ function OneInputFormSkeleton() {
     </div>
   );
 }
+function TextareaFormSkeleton() {
+  return (
+    <div className="flex flex-col gap-2">
+      <Skeleton className="h-[1.2rem] w-[10rem]" />
+      <Skeleton className="h-[5rem] w-full" />
+      <Skeleton className="h-[0.8rem] w-3/4" />
+      <SubmitButtonSkeleton />
+    </div>
+  );
+}
 
 function MultipleInputFormSkeleton() {
   return (
@@ -19,6 +29,7 @@ function MultipleInputFormSkeleton() {
       <OneInputFormSkeleton />
       <OneInputFormSkeleton />
       <OneInputFormSkeleton />
+      <TextareaFormSkeleton />
     </InfoPageSkeletonWrapper>
   );
 }

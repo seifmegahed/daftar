@@ -13,6 +13,16 @@ function FormFieldSkeleton() {
   );
 }
 
+function FormFieldTextareaSkeleton() {
+  return (
+    <div className="flex flex-col gap-2">
+      <Skeleton className="h-[1.2rem] w-[10rem]" />
+      <Skeleton className="h-[5rem] w-full" />
+      <Skeleton className="h-[0.8rem] w-3/4" />
+    </div>
+  );
+}
+
 function FormWrapperSkeleton({ children }: { children: ReactNode }) {
   return (
     <div className="flex flex-col gap-4">
@@ -30,6 +40,7 @@ function FormSkeleton({ count = 5 }) {
       {Array.from({ length: count }).map((_, i) => (
         <FormFieldSkeleton key={i} />
       ))}
+      <FormFieldTextareaSkeleton />
       <SubmitButtonSkeleton />
     </FormWrapperSkeleton>
   );
