@@ -28,35 +28,37 @@ async function AdminPage({ searchParams }: { searchParams: { page: string } }) {
 
 function UserCard({ user }: { user: GetPartialUserType }) {
   return (
-    <div className="flex gap-4 rounded-md border p-5">
-      <div className="flex w-full flex-col gap-2">
+    <div className="flex gap-6 rounded-md border p-5">
+      <div className="flex w-full justify-between">
         <div>
           <div className="text-lg font-bold">{user.name}</div>
           <div className="text-sm text-muted-foreground">{user.username}</div>
         </div>
-        {user.role === "admin" ? (
-          <div className="flex gap-2 text-sm text-muted-foreground">
-            <div>Role:</div>
-            <div>Admin</div>
+        <div className="flex min-w-48 flex-col gap-1">
+          {user.role === "admin" ? (
+            <div className="flex justify-between gap-2 text-sm text-muted-foreground">
+              <div>Role:</div>
+              <div>Admin</div>
+            </div>
+          ) : (
+            <div className="flex justify-between gap-6 text-sm text-muted-foreground">
+              <div>Role:</div>
+              <div>User</div>
+            </div>
+          )}
+          <div className="flex justify-between gap-6 text-sm text-muted-foreground">
+            <div>Active:</div>
+            <div>{user.active ? "Yes" : "No"}</div>
           </div>
-        ) : (
-          <div className="flex gap-2 text-sm text-muted-foreground">
-            <div>Role:</div>
-            <div>User</div>
+          <div className="flex justify-between gap-6 text-sm text-muted-foreground">
+            <div>Last Login:</div>
+            <div>{user.lastActive ? format(user.lastActive, "PP") : "-"}</div>
           </div>
-        )}
-        <div className="flex gap-2 text-sm text-muted-foreground">
-          <div>Active:</div>
-          <div>{user.active ? "Yes" : "No"}</div>
-        </div>
-        <div className="flex gap-2 text-sm text-muted-foreground">
-          <div>Last Login:</div>
-          <div>{user.lastActive ? format(user.lastActive, "PPP") : "-"}</div>
         </div>
       </div>
       <div>
         <Link href={`/admin/edit-user/${user.id}`}>
-          <div className="cursor-pointer rounded-full p-3 text-muted-foreground hover:bg-muted">
+          <div className="-me-4 -mt-4 cursor-pointer rounded-full p-3 text-muted-foreground hover:bg-muted">
             <Edit className="h-6 w-6" />
           </div>
         </Link>
