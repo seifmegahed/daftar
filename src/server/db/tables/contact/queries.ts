@@ -75,13 +75,13 @@ export const deleteContact = async (
 const getContactSchema = z.object({
   id: z.number(),
   name: z.string(),
-  phoneNumber: z.string(),
-  email: z.string(),
-  notes: z.string(),
+  phoneNumber: z.string().nullable(),
+  email: z.string().nullable(),
+  notes: z.string().nullable(),
   createdAt: z.date(),
-  updatedAt: z.date(),
+  updatedAt: z.date().nullable(),
   createdBy: z.string(),
-  updatedBy: z.string(),
+  updatedBy: z.string().nullable(),
 });
 
 export type ContactType = z.infer<typeof getContactSchema>;
