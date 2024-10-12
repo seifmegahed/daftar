@@ -1,7 +1,7 @@
 import AddressesSkeleton from "@/components/skeletons/addresses-skeleton";
 
-function SupplierAddressesLoadingPage() {
+function AddressesLoadingPage() {
   return <AddressesSkeleton />;
 }
 
-export default SupplierAddressesLoadingPage;
+export default AddressesLoadingPage;

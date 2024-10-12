@@ -2,7 +2,7 @@ import InfoPageSkeletonWrapper from "@/components/skeletons/info-page-wrapper-sk
 import { Skeleton } from "@/components/ui/skeleton";
 import ContactAddressCardSkeletonWrapper from "./contact-address-card-skeleton-wrapper";
 
-function AddressCardSkeleton() {
+function ContactCardSkeleton() {
   return (
     <ContactAddressCardSkeletonWrapper>
       <div className="flex flex-col gap-2">
@@ -13,10 +13,6 @@ function AddressCardSkeleton() {
         <div className="flex justify-between">
           <Skeleton className="h-[0.8rem] w-[100px]" />
           <Skeleton className="h-[0.8rem] w-[80px]" />
-        </div>
-        <div className="flex justify-between">
-          <Skeleton className="h-[0.8rem] w-[80px]" />
-          <Skeleton className="h-[0.8rem] w-[100px]" />
         </div>
       </div>
       <div className="flex flex-col gap-2">
@@ -41,14 +37,14 @@ function AddressCardSkeleton() {
   );
 }
 
-function AddressesSkeleton() {
+function ContactsSkeleton() {
   return (
     <InfoPageSkeletonWrapper>
-      <AddressCardSkeleton />
-      <AddressCardSkeleton />
-      <AddressCardSkeleton />
+      <ContactCardSkeleton />
+      <ContactCardSkeleton />
+      <ContactCardSkeleton />
     </InfoPageSkeletonWrapper>
   );
 }
 
-export default AddressesSkeleton;
+export default ContactsSkeleton;
