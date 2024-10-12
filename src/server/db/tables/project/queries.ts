@@ -9,6 +9,7 @@ import {
   clientsTable,
   usersTable,
   documentRelationsTable,
+  commercialOfferItemsTable,
 } from "@/server/db/schema";
 
 import {
@@ -206,10 +207,7 @@ export const insertProject = async (
   data: InsertProjectType,
 ): Promise<ReturnTuple<number>> => {
   try {
-    const [project] = await db
-      .insert(projectsTable)
-      .values(data)
-      .returning();
+    const [project] = await db.insert(projectsTable).values(data).returning();
 
     if (!project) return [null, "Error inserting new project"];
     return [project.id, null];
@@ -554,12 +552,14 @@ export const deleteProject = async (
       await tx
         .delete(projectItemsTable)
         .where(eq(projectItemsTable.projectId, id))
-        .returning();
+
+      await tx
+        .delete(commercialOfferItemsTable)
+        .where(eq(commercialOfferItemsTable.projectId, id))
 
       await tx
         .delete(documentRelationsTable)
         .where(eq(documentRelationsTable.projectId, id))
-        .returning();
 
       const [project] = await tx
         .delete(projectsTable)
