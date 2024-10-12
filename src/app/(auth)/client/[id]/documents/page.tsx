@@ -10,9 +10,7 @@ async function ClientDocumentsPage({ params }: { params: { id: string } }) {
       title="Client's Documents"
       subtitle="This is a list of the documents linked to the client."
     >
-      <div>
-        <DocumentsList documents={documents} />
-      </div>
+      <DocumentsList documents={documents} />
     </InfoPageWrapper>
   );
 }
