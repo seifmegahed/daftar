@@ -41,7 +41,7 @@ function ProjectCommentCard({
         <div className="flex items-start justify-between">
           <p className="flex-shrink text-foreground">{comment.text}</p>
           {sameUser && (
-            <div className="-mt-2 -me-2">
+            <div className="-me-2 -mt-2">
               <button
                 className="flex h-7 w-7 items-center justify-center rounded-full hover:bg-muted-foreground/20"
                 onClick={handleDelete}
@@ -53,7 +53,7 @@ function ProjectCommentCard({
         </div>
         <div className="flex justify-end">
           <p className="text-xs text-muted-foreground">
-            {formatDistanceToNow(comment.createdAt)}
+            {formatDistanceToNow(comment.createdAt) + " ago"}
           </p>
         </div>
       </div>

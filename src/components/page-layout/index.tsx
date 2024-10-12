@@ -21,8 +21,8 @@ function PageLayout({
           <p className="text-muted-foreground">{description}</p>
         </div>
         <Separator className="my-6" />
-        <div className="flex flex-col space-y-8 lg:flex-row lg:space-x-12 lg:space-y-0">
-          <aside className="-mx-4 lg:w-1/5">
+        <div className="flex flex-col space-y-8 lg:flex-row lg:gap-x-12 lg:space-y-0">
+          <aside className="-ms-4 lg:w-1/5">
             <SidebarNav links={navLinks} />
           </aside>
           <div className="flex-1 lg:max-w-2xl">{children}</div>

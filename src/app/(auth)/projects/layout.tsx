@@ -1,34 +1,38 @@
-import { getProjectsCount } from "@/server/db/tables/project/queries"
-import PageLayout from "@/components/page-layout"
+import { getProjectsCount } from "@/server/db/tables/project/queries";
+import PageLayout from "@/components/page-layout";
 
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 interface SettingsLayoutProps {
-  children: React.ReactNode
-} 
+  children: React.ReactNode;
+}
 
-export default async function SettingsLayout({ children }: SettingsLayoutProps) {
-  const [numberOfProjects, error] = await getProjectsCount()
-  if (error !== null) return <div>Something went wrong. Please try again later.</div>
-  
+export default async function SettingsLayout({
+  children,
+}: SettingsLayoutProps) {
+  const [numberOfProjects, error] = await getProjectsCount();
+  if (error !== null)
+    return <div>Something went wrong. Please try again later.</div>;
+
   const sidebarNavItems = [
     {
       title: "All Projects",
       href: "/projects",
-      amount: numberOfProjects
+      amount: numberOfProjects,
     },
     {
       title: "New Project",
       href: "/projects/new-project",
     },
-  ]
+  ];
 
   return (
-    
-            <PageLayout title="Projects" description="Manage your projects." navLinks={sidebarNavItems}>
-
-            {children}
-            </PageLayout>
-
-  )
+    <PageLayout
+      title="Projects"
+      description="Manage your projects."
+      navLinks={sidebarNavItems}
+    >
+      {children}
+    </PageLayout>
+  );
 }
