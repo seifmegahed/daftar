@@ -31,7 +31,7 @@ async function ItemPage({ params }: { params: { id: string } }) {
           </Link>
         </div>
       </Section>
-      <Section title="Other Documents">
+      <Section title="Other Info">
         <UserInfoSection data={document} />
       </Section>
       <Section title="Notes">
