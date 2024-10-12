@@ -61,6 +61,14 @@ export const contactRelations = relations(contactsTable, ({ one }) => ({
     fields: [contactsTable.clientId],
     references: [clientsTable.id],
   }),
+  creator: one(usersTable, {
+    fields: [contactsTable.createdBy],
+    references: [usersTable.id],
+  }),
+  updater: one(usersTable, {
+    fields: [contactsTable.updatedBy],
+    references: [usersTable.id],
+  }),
 }));
 
 export const insertContactSchemaRaw = createInsertSchema(contactsTable);

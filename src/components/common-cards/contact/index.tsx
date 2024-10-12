@@ -1,7 +1,7 @@
 import { Separator } from "@/components/ui/separator";
-import { type SelectContactType } from "@/server/db/tables/contact/schema";
 import { format } from "date-fns";
 import ContactActionButtons from "../contact/action-buttons";
+import type { ContactType } from "@/server/db/tables/contact/queries";
 
 const ContactCard = ({
   contact,
@@ -9,7 +9,7 @@ const ContactCard = ({
   referenceId,
   referenceType,
 }: {
-  contact: SelectContactType;
+  contact: ContactType;
   isPrimary: boolean;
   referenceId: number;
   referenceType: "client" | "supplier";

@@ -1,6 +1,7 @@
 "use server";
 
 import {
+  type ContactType,
   deleteContact,
   getClientContacts,
   getClientContactsCount,
@@ -11,7 +12,6 @@ import {
 import {
   insertContactSchemaRaw,
   insertContactSchemaRefineCallback,
-  type SelectContactType,
 } from "@/server/db/tables/contact/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "../users";
@@ -59,7 +59,7 @@ export const getClientContactsCountAction = async (
 
 export const getClientContactsAction = async (
   clientId: number,
-): Promise<ReturnTuple<SelectContactType[]>> => {
+): Promise<ReturnTuple<ContactType[]>> => {
   const [contacts, error] = await getClientContacts(clientId);
   if (error !== null) return [null, error];
   return [contacts, null];
@@ -75,7 +75,7 @@ export const getSupplierContactsCountAction = async (
 
 export const getSupplierContactsAction = async (
   supplierId: number,
-): Promise<ReturnTuple<SelectContactType[]>> => {
+): Promise<ReturnTuple<ContactType[]>> => {
   const [contacts, error] = await getSupplierContacts(supplierId);
   if (error !== null) return [null, error];
   return [contacts, null];
