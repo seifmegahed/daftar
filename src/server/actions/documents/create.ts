@@ -41,7 +41,7 @@ export const saveDocumentFile = async (
       return [null, "File already exists"];
     }
 
-    fs.writeFileSync(path, buffer);
+    await fs.promises.writeFile(path, buffer);
     return [path, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
