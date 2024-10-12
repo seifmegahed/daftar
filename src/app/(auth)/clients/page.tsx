@@ -5,7 +5,10 @@ import { defaultPageLimit } from "@/data/config";
 import { getClientsCountAction } from "@/server/actions/clients/read";
 import FilterAndSearch from "@/components/filter-and-search";
 import SkeletonList from "@/components/skeletons";
-import type { FilterOptionType, FilterTypes } from "@/components/filter-and-search";
+import type {
+  FilterOptionType,
+  FilterTypes,
+} from "@/components/filter-and-search";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 
 const pageLimit = defaultPageLimit;
@@ -37,10 +40,7 @@ async function ClientsPage({ searchParams }: Props) {
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-medium">All Clients Page</h3>
-      <FilterAndSearch
-        defaults={filterValues}
-        filterItems={filterItems}
-      />
+      <FilterAndSearch defaults={filterValues} filterItems={filterItems} />
       <Suspense key={page + query} fallback={<SkeletonList type="A" />}>
         <ClientsList
           page={page}
