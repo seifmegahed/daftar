@@ -5,18 +5,40 @@ import AdmZip from "adm-zip";
 import { isCurrentUserAdminAction } from "@/server/actions/users";
 import { env } from "@/env";
 
+const demoFileUrl = "https://utfs.io/f/8hxXWP1VU3rzUvadaSH46kcDhfaw2WnsM1RXd9iLZKbrONl7";
+
+async function demoDownload(fileName: string) {
+  const file = await fetch(demoFileUrl);
+
+  if (!file.ok) {
+    new Response("Error downloading demo file", { status: 500 });
+  }
+
+  return new NextResponse(file.body, {
+    status: 200,
+    headers: {
+      "Content-Type": "application/octet-stream",
+      "Content-Disposition": `attachment; filename=${fileName}.zip`,
+    },
+  });
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } },
 ) {
   try {
-    if(env.NEXT_PUBLIC_VERCEL) {
-      return new Response("Document downloading is not available in Demo mode", { status: 400 });
-    }
     const { id } = params;
     const projectId = Number(id);
     if (isNaN(projectId)) {
       return new Response("Invalid ID", { status: 400 });
+    }
+
+    const folderName = `daftar-pr${id}-docs-${Date.now()}`;
+    const tempFolderPath = `./tmp/${folderName}`;
+
+    if (env.NEXT_PUBLIC_VERCEL) {
+      return await demoDownload(folderName);
     }
 
     const [access, accessError] = await isCurrentUserAdminAction();
@@ -33,14 +55,11 @@ export async function GET(
     if (!existsSync(`tmp`)) {
       fs.mkdirSync(`tmp`);
     }
-
-    const folderName = `daftar-pr${id}-docs-${Date.now()}`;
-    const tempFolderPath = `./tmp/${folderName}`;
     fs.mkdirSync(tempFolderPath);
 
     for (const projectDoc of projectDocuments.projectDocuments) {
       if (!projectDoc.path) continue;
-      fs.copyFileSync(
+      await fs.promises.copyFile(
         projectDoc.path,
         `${tempFolderPath}/${projectDoc.name}.${projectDoc.extension}`,
       );
@@ -48,7 +67,7 @@ export async function GET(
 
     for (const clientDoc of projectDocuments.clientDocuments) {
       if (!clientDoc.path) continue;
-      fs.copyFileSync(
+      await fs.promises.copyFile(
         clientDoc.path,
         `${tempFolderPath}/${clientDoc.name}.${clientDoc.extension}`,
       );
@@ -56,7 +75,7 @@ export async function GET(
 
     for (const itemDoc of projectDocuments.itemsDocuments) {
       if (!itemDoc.path) continue;
-      fs.copyFileSync(
+      await fs.promises.copyFile(
         itemDoc.path,
         `${tempFolderPath}/${itemDoc.name}.${itemDoc.extension}`,
       );
@@ -64,7 +83,7 @@ export async function GET(
 
     for (const supplierDoc of projectDocuments.suppliersDocuments) {
       if (!supplierDoc.path) continue;
-      fs.copyFileSync(
+      await fs.promises.copyFile(
         supplierDoc.path,
         `${tempFolderPath}/${supplierDoc.name}.${supplierDoc.extension}`,
       );
@@ -75,7 +94,7 @@ export async function GET(
     const zipFilePath = `/tmp/${folderName}.zip`;
     zip.writeZip(zipFilePath);
 
-    const zipFile = fs.readFileSync(zipFilePath);
+    const zipFile = await fs.promises.readFile(zipFilePath);
     const response = new NextResponse(new Blob([zipFile]), {
       status: 200,
       headers: {
@@ -84,8 +103,8 @@ export async function GET(
       },
     });
 
-    fs.rmSync(tempFolderPath, { recursive: true, force: true });
-    fs.rmSync(zipFilePath, { force: true });
+    await fs.promises.rm(tempFolderPath, { recursive: true, force: true });
+    await fs.promises.rm(zipFilePath, { force: true });
 
     return response;
   } catch (error) {
