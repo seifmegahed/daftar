@@ -1,17 +1,27 @@
-import { getAllUsersAction } from "@/server/actions/users";
+import Pagination from "@/components/pagination";
+import { defaultPageLimit } from "@/data/config";
+import { getAllUsersAction, getUsersCountAction } from "@/server/actions/users";
 import type { GetPartialUserType } from "@/server/db/tables/user/queries";
 import { format } from "date-fns";
 import { Edit } from "lucide-react";
 import Link from "next/link";
 
-async function AdminPage() {
-  const [users, error] = await getAllUsersAction();
-  if (error !== null) return <p>Error: {error}</p>;
+export const dynamic = "force-dynamic";
+
+async function AdminPage({ searchParams }: { searchParams: { page: string } }) {
+  const page = isNaN(Number(searchParams.page)) ? 1 : Number(searchParams.page);
+
+  const [users, error] = await getAllUsersAction(page, defaultPageLimit);
+  const [count, countError] = await getUsersCountAction();
+
+  if (error !== null || countError !== null)
+    return <p>Error: Could not load users</p>;
   return (
     <div className="flex flex-col gap-4">
       {users.map((user) => (
         <UserCard key={user.id} user={user} />
       ))}
+      <Pagination totalPages={Math.ceil(count / defaultPageLimit)} />
     </div>
   );
 }

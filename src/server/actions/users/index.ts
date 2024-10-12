@@ -5,6 +5,7 @@ import {
   changeUserActiveState,
   getAllUsers,
   getUserById,
+  getUsersCount,
   insertNewUser,
   listAllUsers,
   sensitiveGetUserPasswordById,
@@ -110,7 +111,7 @@ export const getCurrentUserIdAction = async (): Promise<
 };
 
 /**
- * Get All Users
+ * Get All Users Server Action
  *
  * Server Action to get all users from the database.
  *
@@ -119,16 +120,31 @@ export const getCurrentUserIdAction = async (): Promise<
  *
  * @returns Tuple containing either an array of all users or an error message if there is one
  */
-export const getAllUsersAction = async (): Promise<
-  ReturnTuple<GetPartialUserType[]>
-> => {
+export const getAllUsersAction = async (
+  page?: number,
+  limit?: number,
+): Promise<ReturnTuple<GetPartialUserType[]>> => {
   try {
-    const [allUsers, error] = await getAllUsers();
+    const [allUsers, error] = await getAllUsers(page, limit);
     if (error !== null) return [null, error];
     return [allUsers, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
+};
+
+
+/**
+ * Get Users Count Server Action
+ * 
+ * @returns number of users in the database
+ */
+export const getUsersCountAction = async (): Promise<
+  ReturnTuple<number>
+> => {
+  const [usersCount, error] = await getUsersCount();
+  if (error !== null) return [null, error];
+  return [usersCount, null];
 };
 
 /**

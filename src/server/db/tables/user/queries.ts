@@ -1,9 +1,10 @@
 import { db } from "@/server/db";
 import { type UserDataType, usersTable } from "./schema";
-import { asc, eq, and } from "drizzle-orm";
+import { asc, eq, and, count } from "drizzle-orm";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
 import { userErrors } from "@/server/actions/users/errors";
+import { defaultPageLimit } from "@/data/config";
 
 export type GetPartialUserType = Omit<
   UserDataType,
@@ -14,7 +15,7 @@ export type SetPartialUser = Pick<
   "name" | "username" | "role" | "password"
 >;
 
-export const getAllUsers = async (): Promise<
+export const getAllUsers = async (page = 1, limit = defaultPageLimit): Promise<
   ReturnTuple<GetPartialUserType[]>
 > => {
   try {
@@ -30,9 +31,25 @@ export const getAllUsers = async (): Promise<
         updatedAt: usersTable.updatedAt,
       })
       .from(usersTable)
-      .orderBy(asc(usersTable.id));
+      .orderBy(asc(usersTable.id))
+      .limit(limit)
+      .offset((page - 1) * limit);
 
     return [allUsers, null];
+  } catch (error) {
+    return [null, getErrorMessage(error)];
+  }
+};
+
+export const getUsersCount = async (): Promise<ReturnTuple<number>> => {
+  try {
+    const [usersCount] = await db
+      .select({ count: count() })
+      .from(usersTable)
+      .limit(1);
+
+    if (!usersCount) return [null, "Error getting users count"];
+    return [usersCount.count, null];
   } catch (error) {
     return [null, getErrorMessage(error)];
   }
