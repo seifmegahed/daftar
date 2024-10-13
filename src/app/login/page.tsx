@@ -3,6 +3,9 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import { loginAction } from "@/server/actions/auth/login";
+import { toast } from "sonner";
+import { env } from "@/env";
 import { defaultValues, schema, type LoginFormType } from "./schema";
 
 import { Button } from "@/components/ui/button";
@@ -10,7 +13,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -18,16 +20,9 @@ import { Form, FormField, FormItem, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/inputs/password";
 import { Label } from "@/components/ui/label";
-import { useRouter } from "next/navigation";
-import { loginAction } from "@/server/actions/auth/login";
-import LoadingOverlay from "@/components/loading-overlay";
-
-import { toast } from "sonner";
-import { getErrorMessage } from "@/lib/exceptions";
-import { env } from "process";
+import Loading from "@/components/loading";
 
 export default function LoginForm() {
-  const router = useRouter();
   const form = useForm<LoginFormType>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues,
@@ -35,36 +30,35 @@ export default function LoginForm() {
 
   const onSubmit = async (data: LoginFormType) => {
     try {
-      const [result, error] = await loginAction(data);
+      const response = await loginAction(data);
+      if (!response) return;
+      const [, error] = response;
       if (error !== null) return toast.error(error);
-      else if (result) router.push("/");
     } catch (error) {
-      console.error("Error logging in:", error);
-      toast.error(getErrorMessage(error));
+      console.error(error);
     }
   };
 
   return (
     <div className="flex h-screen w-screen items-center justify-center">
       <Card className="relative w-full max-w-md overflow-hidden py-8">
-        <LoadingOverlay state={form.formState.isSubmitting} />
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <CardHeader>
               <CardTitle className="text-2xl">
-                Sign In {env.NEXT_PUBLIC_VERCEL ? "Vercel" : "Local"}
+                Sign In to {env.NEXT_PUBLIC_VERCEL ? "Daftar Demo" : "Daftar"}
               </CardTitle>
               <CardDescription>
                 Enter your username and password below to sign in.
               </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="flex flex-col gap-4">
               <FormField
                 control={form.control}
                 name="username"
                 render={({ field }) => (
                   <FormItem>
-                    <Label htmlFor="username">User Name</Label>
+                    <Label htmlFor="username">Username</Label>
                     <Input id="username" type="username" {...field} />
                     <FormMessage />
                   </FormItem>
@@ -81,12 +75,18 @@ export default function LoginForm() {
                   </FormItem>
                 )}
               />
-            </CardContent>
-            <CardFooter>
-              <Button className="w-full" type="submit">
-                Sign in
+              <Button
+                className="w-full mt-5"
+                type="submit"
+                disabled={form.formState.isSubmitting}
+              >
+                {form.formState.isSubmitting ? (
+                  <Loading className="h-5 w-5" />
+                ) : (
+                  "Sign in"
+                )}
               </Button>
-            </CardFooter>
+            </CardContent>
           </form>
         </Form>
       </Card>

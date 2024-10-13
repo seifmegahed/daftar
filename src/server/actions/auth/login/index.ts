@@ -13,6 +13,8 @@ import { comparePassword } from "@/utils/hashing";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { loginErrors } from "./errors";
+import { redirect } from "next/navigation";
+import { env } from "@/env";
 
 const loginSchema = UserSchema.pick({
   username: true,
@@ -23,11 +25,10 @@ type LoginFormType = z.infer<typeof loginSchema>;
 
 export const loginAction = async (
   data: LoginFormType,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const isValid = loginSchema.safeParse(data);
 
-  if (!isValid.success)
-    return [null, loginErrors.invalidData];
+  if (!isValid.success) return [null, loginErrors.invalidData];
 
   const [user, error] = await sensitiveGetUserByUsername(data.username);
 
@@ -50,9 +51,13 @@ export const loginAction = async (
 
   cookies().set("token", token, {
     httpOnly: true,
-    secure: false,
+    /**
+     * Secure cookies are only sent to HTTPS endpoints, this should be true in production
+     * Perhaps instead of using the vercel env variable, we should use an SSL environment variable
+     */
+    secure: env.NEXT_PUBLIC_VERCEL ? true : false,
     sameSite: "strict",
   });
 
-  return [user.id, null];
+  redirect("/");
 };
