@@ -20,7 +20,6 @@ import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/buttons/submit-button";
 import { Textarea } from "@/components/ui/textarea";
 
-import { getErrorMessage } from "@/lib/exceptions";
 import { notesMaxLength } from "@/data/config";
 import { Separator } from "@/components/ui/separator";
 
@@ -65,13 +64,17 @@ function NewItemForm() {
 
   const onSubmit = async (data: ItemFormSchemaType) => {
     try {
-      const [, error] = await addItemAction(data);
-      if (error !== null) return toast.error(error);
-      toast.success("Item added successfully");
-      form.reset();
+      const response = await addItemAction(data);
+      if(!response) return;
+      const [, error] = response;
+      if (error !== null) {
+        console.error("Error adding item:", error);
+        toast.error("An error occurred while adding the item");
+        return;
+      };
     } catch (error) {
       console.error("Error adding item:", error);
-      toast.error(getErrorMessage(error));
+      toast.error("An error occurred while adding the item");
     }
   };
 
