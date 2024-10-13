@@ -6,10 +6,11 @@ import { getCurrentUserAction } from "../users";
 import { redirect } from "next/navigation";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidatePath } from "next/cache";
 
 export const deleteSupplierAction = async (
   supplierId: number,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const [supplierProjects, supplierProjectsError] =
     await getSupplierProjectsCountAction(supplierId);
   if (supplierProjectsError !== null) return [null, supplierProjectsError];
@@ -26,5 +27,6 @@ export const deleteSupplierAction = async (
 
   const [, error] = await deleteSupplier(supplierId);
   if (error !== null) return [null, error];
+  revalidatePath("/suppliers");
   redirect("/suppliers");
 };

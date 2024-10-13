@@ -3,6 +3,7 @@
 import { getCurrentUserAction } from "../users";
 import { updateSupplier } from "@/server/db/tables/supplier/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidatePath } from "next/cache";
 
 export const updateSupplierPrimaryAddressAction = async (
   supplierId: number,
@@ -12,6 +13,7 @@ export const updateSupplierPrimaryAddressAction = async (
     primaryAddressId: addressId,
   });
   if (error !== null) return [null, error];
+  revalidatePath("/supplier");
   return [returnValue, null];
 };
 
@@ -23,6 +25,7 @@ export const updateSupplierPrimaryContactAction = async (
     primaryContactId: contactId,
   });
   if (error !== null) return [null, error];
+  revalidatePath("/supplier");
   return [returnValue, null];
 };
 
@@ -39,6 +42,7 @@ export const updateSupplierFieldAction = async (
   });
 
   if (supplierError !== null) return [null, supplierError];
+  revalidatePath("/supplier");
   return [supplier, null];
 };
 
@@ -55,6 +59,7 @@ export const updateSupplierRegistrationNumberAction = async (
   });
 
   if (supplierError !== null) return [null, supplierError];
+  revalidatePath("/supplier");
   return [supplier, null];
 };
 
@@ -71,6 +76,7 @@ export const updateSupplierWebsiteAction = async (
   });
 
   if (supplierError !== null) return [null, supplierError];
+  revalidatePath("/supplier");
   return [supplier, null];
 };
 
@@ -87,5 +93,6 @@ export const updateSupplierNotesAction = async (
   });
 
   if (supplierError !== null) return [null, supplierError];
+  revalidatePath("/supplier");
   return [supplier, null];
 };

@@ -7,6 +7,8 @@ import { insertNewSupplier } from "@/server/db/tables/supplier/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { insertContactSchemaRaw } from "@/server/db/tables/contact/schema";
 import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 const addSupplierSchema = insertSupplierSchema.omit({
   createdBy: true,
@@ -36,7 +38,7 @@ export const addSupplierAction = async (
   clientData: AddSupplierFormType,
   addressData: AddSupplierAddressType,
   contactData: AddSupplierContactType,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const isSupplierValid = addSupplierSchema.safeParse(clientData);
   if (!isSupplierValid.success) return [null, "Invalid data"];
 
@@ -49,7 +51,7 @@ export const addSupplierAction = async (
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];
 
-  const [supplierId, supplierInsertError] = await insertNewSupplier(
+  const [, supplierInsertError] = await insertNewSupplier(
     {
       name: clientData.name,
       field: clientData.field,
@@ -76,5 +78,6 @@ export const addSupplierAction = async (
   );
   if (supplierInsertError !== null) return [null, supplierInsertError];
 
-  return [supplierId, null];
+  revalidatePath("/suppliers");
+  redirect("/suppliers");
 };

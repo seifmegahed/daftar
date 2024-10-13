@@ -47,11 +47,7 @@ export const addNewContactAction = async (
     clientId: isValid.data.supplierId ? null : isValid.data.clientId,
   });
   if (contactInsertError !== null) return [null, contactInsertError];
-  redirect(
-    type === "supplier"
-      ? `/supplier/${isValid.data.supplierId}/contacts`
-      : `/client/${isValid.data.clientId}/contacts`,
-  );
+  redirect(`/${type}`);
 };
 
 export const getClientContactsCountAction = async (

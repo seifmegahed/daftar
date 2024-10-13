@@ -12,6 +12,8 @@ import type {
 } from "@/components/filter-and-search";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 
+export const dynamic = "force-dynamic";
+
 const pageLimit = defaultPageLimit;
 
 type Props = {

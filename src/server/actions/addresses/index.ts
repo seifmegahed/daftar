@@ -48,11 +48,7 @@ export const addNewAddressAction = async (
     clientId: isValid.data.supplierId ? null : isValid.data.clientId,
   });
   if (addressInsertError !== null) return [null, addressInsertError];
-  redirect(
-    type === "supplier"
-      ? `/supplier/${isValid.data.supplierId}/addresses`
-      : `/client/${isValid.data.clientId}/addresses`,
-  );
+  redirect(`/${type}`);
 };
 
 export const getClientAddressesCountAction = async (

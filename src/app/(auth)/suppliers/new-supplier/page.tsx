@@ -19,7 +19,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { toast } from "sonner";
 import { addSupplierAction } from "@/server/actions/suppliers/create";
-import { getErrorMessage } from "@/lib/exceptions";
 import { notesMaxLength } from "@/data/config";
 import { emptyToUndefined } from "@/utils/common";
 import { countries } from "@/lib/countries";
@@ -113,7 +112,7 @@ function NewSupplierForm() {
 
   const onSubmit = async (data: SupplierFormSchemaType) => {
     try {
-      const [, error] = await addSupplierAction(
+      const response = await addSupplierAction(
         {
           name: data.name,
           field: data.field,
@@ -135,12 +134,16 @@ function NewSupplierForm() {
           notes: data.contactNotes,
         },
       );
-      if (error !== null) return toast.error(error);
-      toast.success("Supplier added successfully");
-      form.reset();
+      if (!response) return;
+      const [, error] = response;
+      if (error !== null) {
+        console.error("Error adding supplier:", error);
+        toast.error("An error occurred while adding the supplier");
+        return;
+      };
     } catch (error) {
       console.error("Error adding supplier:", error);
-      toast.error(getErrorMessage(error));
+      toast.error("An error occurred while adding the supplier");
     }
   };
 
