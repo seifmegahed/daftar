@@ -21,8 +21,8 @@ import { toast } from "sonner";
 import { z } from "zod";
 import type { GeneratedRelationType } from ".";
 import Dropzone from "@/components/inputs/drop-zone";
-import { useRouter } from "next/navigation";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useRouter } from "next/navigation";
 
 const documentSchema = z.object({
   name: z
@@ -40,7 +40,11 @@ const documentSchema = z.object({
 
 type FormSchemaType = z.infer<typeof documentSchema>;
 
-function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
+function NewDocumentForm({
+  generatedRelation,
+}: {
+  generatedRelation?: GeneratedRelationType;
+}) {
   const navigate = useRouter();
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(documentSchema),
@@ -53,16 +57,21 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
   });
 
   const onSubmit = async (data: FormSchemaType) => {
-    if (relation) {
+    if (generatedRelation) {
       const body = new FormData();
       body.append("file", data.file);
       body.append(
         "document",
-        JSON.stringify({ name: data.name, notes: data.notes, private: data.private }),
+        JSON.stringify({
+          name: data.name,
+          notes: data.notes,
+          private: data.private,
+        }),
       );
-      body.append("relation", JSON.stringify(relation));
+      body.append("relation", JSON.stringify(generatedRelation));
       const response = await fetch("/api/upload-relational-document", {
         method: "POST",
+        redirect: "follow",
         body,
       });
       if (!response.ok) toast.error("Error adding document");
@@ -80,6 +89,7 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
       body.append("file", data.file);
       const response = await fetch("/api/upload-document", {
         method: "POST",
+        redirect: "follow",
         body,
       });
       if (!response.ok) toast.error("Error adding document");
@@ -132,7 +142,10 @@ function NewDocumentForm({ relation }: { relation?: GeneratedRelationType }) {
             <FormItem>
               <div className="flex items-center justify-between">
                 <FormLabel>Private</FormLabel>
-                <Checkbox checked={field.value} onCheckedChange={field.onChange} />
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={field.onChange}
+                />
               </div>
               <FormDescription>
                 Check this box if you want to make the document private. Only

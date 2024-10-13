@@ -3,7 +3,7 @@ import NewDocumentForm from "./new-document-form";
 import ExistingDocumentForm from "./existing-document-form";
 import { getDocumentOptionsAction } from "@/server/actions/documents/read";
 
-type RelationDataType = {
+export type RelationDataType = {
   relationTo: "client" | "supplier" | "project" | "item";
   relationId: number;
 };
@@ -93,10 +93,14 @@ async function DocumentForm({
       </TabsList>
       <div className="p-2">
         <TabsContent value="new">
-          <NewDocumentForm relation={relation} />
+          <NewDocumentForm generatedRelation={relation} />
         </TabsContent>
         <TabsContent value="existing">
-          <ExistingDocumentForm documents={documents} relation={relation} />
+          <ExistingDocumentForm
+            documents={documents}
+            generatedRelation={relation}
+            relationData={relationData}
+          />
         </TabsContent>
       </div>
     </Tabs>

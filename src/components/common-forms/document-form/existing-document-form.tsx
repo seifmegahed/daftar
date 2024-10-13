@@ -2,7 +2,7 @@
 
 import type { SimpDoc } from "@/server/db/tables/document/queries";
 import { z } from "zod";
-import type { GeneratedRelationType } from ".";
+import type { GeneratedRelationType, RelationDataType } from ".";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -16,7 +16,6 @@ import SubmitButton from "@/components/buttons/submit-button";
 import { Separator } from "@/components/ui/separator";
 import { addDocumentRelationAction } from "@/server/actions/document-relations/create";
 import { toast } from "sonner";
-import { useRouter } from "next/navigation";
 
 const schema = z.object({
   id: z.number(),
@@ -26,13 +25,13 @@ type FormSchemaType = z.infer<typeof schema>;
 
 function ExistingDocumentForm({
   documents,
-  relation,
+  generatedRelation,
+  relationData,
 }: {
   documents: Pick<SimpDoc, "id" | "name" | "extension">[];
-  relation: GeneratedRelationType;
+  generatedRelation: GeneratedRelationType;
+  relationData: RelationDataType;
 }) {
-  const navigate = useRouter();
-
   const documentOptions = documents.map((document) => ({
     label: document.name + ` (.${document.extension})`,
     value: document.id,
@@ -44,16 +43,23 @@ function ExistingDocumentForm({
   });
 
   const onSubmit = async (data: FormSchemaType) => {
-    const [, error] = await addDocumentRelationAction({
-      ...relation,
-      documentId: data.id,
-    });
-    if (error !== null) {
+    try {
+      const response = await addDocumentRelationAction(
+        {
+          ...generatedRelation,
+          documentId: data.id,
+        },
+        relationData,
+      );
+      if (!response) return;
+      const [, error] = response;
+      if (error !== null) {
+        console.log(error);
+        toast.error("Error adding document");
+      }
+    } catch (error) {
       console.log(error);
-      toast.error("Error adding document relation");
-    } else {
-      toast.success("Document relation added successfully");
-      navigate.replace("documents");
+      toast.error("Error adding document");
     }
   };
 

@@ -29,15 +29,21 @@ export const deleteDocumentAction = async (
   const [document, documentError] = await getDocumentByIdAction(id);
   if (documentError !== null) return [null, documentError];
 
-  try {
-    fs.unlinkSync(document.path);
-  } catch (error) {
-    console.log(error);
-    return [null, "Error deleting document"];
-  }
+  const deleteResult = await deleteFileAction(document.path);
+  if (!deleteResult) return [null, "Error deleting document"];
 
   const [, documentIdError] = await deleteDocument(id);
   if (documentIdError !== null) return [null, documentIdError];
 
   redirect("/documents");
+};
+
+export const deleteFileAction = async (filePath: string): Promise<boolean> => {
+  try {
+    await fs.promises.unlink(filePath);
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };

@@ -24,59 +24,54 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
-  try {
-    const formData = await request.formData();
+  const formData = await request.formData();
 
-    const documentJson = formData.get("document") as string;
-    const file = formData.get("file");
+  const documentJson = formData.get("document") as string;
+  const file = formData.get("file");
 
-    if (!documentJson || !file || !(file instanceof File)) {
-      return new Response("Invalid form data", { status: 400 });
-    }
-
-    // Safely parse the stringified JSON fields
-    let document, relation;
-    try {
-      document = JSON.parse(documentJson) as z.infer<
-        typeof requestSchema.shape.document
-      >;
-    } catch (parseError) {
-      console.log(parseError);
-      return new Response("Invalid JSON format", { status: 400 });
-    }
-
-    const result = requestSchema.safeParse({ document, relation, file });
-    if (!result.success) {
-      return new Response(result.error.message, { status: 400 });
-    }
-
-    const { document: validatedDocument, file: validatedFile } = result.data;
-
-    const [userId, userIdError] = await getCurrentUserIdAction();
-    if (userIdError !== null) return new Response(userIdError, { status: 500 });
-
-    const [path, saveError] = await saveDocumentFile(validatedFile);
-    if (saveError !== null) return new Response(saveError, { status: 500 });
-
-    const extension = validatedFile.name.split(".").pop();
-    if (!extension)
-      return new Response("Invalid file extension", { status: 400 });
-
-    const [documentId, documentInsertError] = await insertDocument({
-      name: validatedDocument.name,
-      notes: validatedDocument.notes,
-      private: validatedDocument.private,
-      path,
-      extension,
-      createdBy: userId,
-    });
-
-    if (documentInsertError !== null)
-      return new Response(documentInsertError, { status: 500 });
-
-    return new Response(JSON.stringify({ documentId }), { status: 201 });
-  } catch (error) {
-    console.log(error);
-    return new Response("Server Error", { status: 500 });
+  if (!documentJson || !file || !(file instanceof File)) {
+    return new Response("Invalid form data", { status: 400 });
   }
+
+  // Safely parse the stringified JSON fields
+  let document, relation;
+  try {
+    document = JSON.parse(documentJson) as z.infer<
+      typeof requestSchema.shape.document
+    >;
+  } catch (parseError) {
+    console.log(parseError);
+    return new Response("Invalid JSON format", { status: 400 });
+  }
+
+  const result = requestSchema.safeParse({ document, relation, file });
+  if (!result.success) {
+    return new Response(result.error.message, { status: 400 });
+  }
+
+  const { document: validatedDocument, file: validatedFile } = result.data;
+
+  const [userId, userIdError] = await getCurrentUserIdAction();
+  if (userIdError !== null) return new Response(userIdError, { status: 500 });
+
+  const [path, saveError] = await saveDocumentFile(validatedFile);
+  if (saveError !== null) return new Response(saveError, { status: 500 });
+
+  const extension = validatedFile.name.split(".").pop();
+  if (!extension)
+    return new Response("Invalid file extension", { status: 400 });
+
+  const [, documentInsertError] = await insertDocument({
+    name: validatedDocument.name,
+    notes: validatedDocument.notes,
+    private: validatedDocument.private,
+    path,
+    extension,
+    createdBy: userId,
+  });
+
+  if (documentInsertError !== null)
+    return new Response(documentInsertError, { status: 500 });
+
+  return new Response("Document added successfully", { status: 200 });
 }
