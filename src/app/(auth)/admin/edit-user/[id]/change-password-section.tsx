@@ -53,18 +53,24 @@ function ChangePasswordSection({ userId }: { userId: number }) {
   });
 
   const onSubmit = async (data: FormSchemaType) => {
-    const [result, error] = await adminUpdateUserPasswordAction({
-      id: userId,
-      password: data.password,
-      verifyPassword: data.verifyPassword,
-    });
-    if (error !== null) {
+    try {
+      const [, error] = await adminUpdateUserPasswordAction({
+        id: userId,
+        password: data.password,
+        verifyPassword: data.verifyPassword,
+      });
+      if (error !== null) {
+        console.error(error);
+        toast.error("An error occurred while updating the password");
+        return;
+      }
+      toast.success("Password updated successfully");
+      form.reset();
+    } catch (error) {
       console.error(error);
       toast.error("An error occurred while updating the password");
       return;
     }
-    toast.success("Password updated successfully");
-    form.reset();
   };
 
   return (

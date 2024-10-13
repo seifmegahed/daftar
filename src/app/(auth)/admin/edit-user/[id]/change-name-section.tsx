@@ -32,17 +32,22 @@ function ChangeNameSection({ userId, name }: { userId: number; name: string }) {
       setLoading(false);
       return;
     } else setErrorMessage("");
-    const [response, error] = await adminUpdateUserDisplayNameAction({
-      id: userId,
-      name: newName,
-    });
-    setLoading(false);
-    if (error !== null) {
+    try {
+      const [response, error] = await adminUpdateUserDisplayNameAction({
+        id: userId,
+        name: newName,
+      });
+      setLoading(false);
+      if (error !== null) {
+        console.error(error);
+        toast.error("An error occurred while updating the name");
+        return;
+      }
+      toast.success("User name updated");
+    } catch (error) {
       console.error(error);
       toast.error("An error occurred while updating the name");
-      return;
-    };
-    toast.success("User name updated");
+    }
   };
 
   return (

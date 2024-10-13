@@ -44,18 +44,24 @@ function ChangeRoleSection({
   }, [userRole, role]);
 
   const handleSubmit = async () => {
-    setLoading(true);
-    const [response, error] = await adminUpdateUserRoleAction({
-      id: userId,
-      role: role,
-    });
-    setLoading(false);
-    if (error !== null) {
+    try {
+      setLoading(true);
+      const [, error] = await adminUpdateUserRoleAction({
+        id: userId,
+        role: role,
+      });
+      if (error !== null) {
+        console.error(error);
+        toast.error("An error occurred while updating the role");
+        return;
+      }
+      toast.success("User role updated!");
+    } catch (error) {
       console.error(error);
       toast.error("An error occurred while updating the role");
-      return;
+    } finally {
+      setLoading(false);
     }
-    toast.success("User role updated!");
   };
 
   return (

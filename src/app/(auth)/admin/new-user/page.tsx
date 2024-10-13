@@ -36,8 +36,8 @@ export default function NewUserForm() {
     try {
       const [_, error] = await adminCreateUserAction(data);
       if (error !== null) {
-        console.log(error);
-        toast.error("Error creating user 1");
+        console.error(error);
+        toast.error("Error creating user");
         return;
       }
       form.reset();

@@ -11,18 +11,24 @@ import LabelWrapper from "./label-wrapper";
 function DeactivateUserSection({ userId }: { userId: number }) {
   const [loading, setLoading] = useState(false);
   const onsubmit = async () => {
-    setLoading(true);
-    const [, error] = await adminUpdateUserActiveAction({
-      id: userId,
-      active: false,
-    });
-    setLoading(false);
-    if (error !== null) {
+    try {
+      setLoading(true);
+      const [, error] = await adminUpdateUserActiveAction({
+        id: userId,
+        active: false,
+      });
+      if (error !== null) {
+        console.error(error);
+        toast.error("An error occurred while deactivating the user");
+        return;
+      }
+      toast.success("User deactivated");
+    } catch (error) {
       console.error(error);
       toast.error("An error occurred while deactivating the user");
-      return;
+    } finally {
+      setLoading(false);
     }
-    toast.success("User deactivated"); 
   };
   return (
     <div className="flex flex-col gap-2">
@@ -63,7 +69,7 @@ function ActivateUserSection({ userId }: { userId: number }) {
       console.error(error);
       toast.error("An error occurred while activating the user");
       return;
-    };
+    }
     toast.success("User activated");
   };
   return (
