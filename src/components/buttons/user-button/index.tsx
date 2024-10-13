@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { logoutAction } from "@/server/actions/auth/logout";
 import { useRouter } from "next/navigation";
-import LoadingOverlay from "@/components/loading-overlay";
 import { useState } from "react";
 import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/exceptions";
@@ -20,6 +19,7 @@ import { getInitials } from "@/utils/user";
 import type { UserDataType } from "@/server/db/tables/user/schema";
 import Link from "next/link";
 import { AvatarContainer } from "@/components/avatar";
+import Loading from "@/components/loading";
 
 function UserButton({
   user,
@@ -48,41 +48,41 @@ function UserButton({
       });
   };
   return (
-    <>
-      <LoadingOverlay state={loading} />
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="secondary" size="icon" className="rounded-full">
-            <AvatarContainer>
-              {initials}
-            </AvatarContainer>
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem
-            className="dark:hidden"
-            onClick={() => {
-              setTheme("dark");
-            }}
-          >
-            Dark Mode
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            className="hidden dark:block"
-            onClick={() => {
-              setTheme("light");
-            }}
-          >
-            Light Mode
-          </DropdownMenuItem>
-          <Link href="/settings">
-            <DropdownMenuItem>Settings</DropdownMenuItem>
-          </Link>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    </>
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant="secondary"
+          size="icon"
+          className="rounded-full"
+          disabled={loading}
+        >
+          <AvatarContainer>{loading ? <Loading className="h-7 w-7" /> : initials}</AvatarContainer>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem
+          className="dark:hidden"
+          onClick={() => {
+            setTheme("dark");
+          }}
+        >
+          Dark Mode
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="hidden dark:block"
+          onClick={() => {
+            setTheme("light");
+          }}
+        >
+          Light Mode
+        </DropdownMenuItem>
+        <Link href="/settings">
+          <DropdownMenuItem>Settings</DropdownMenuItem>
+        </Link>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }
 
