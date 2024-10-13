@@ -17,7 +17,6 @@ import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/buttons/submit-button";
 import { userUpdateUserDisplayNameAction } from "@/server/actions/users";
 import { toast } from "sonner";
-import { getErrorMessage } from "@/lib/exceptions";
 
 const accountFormSchema = z.object({
   name: z
@@ -49,12 +48,16 @@ function ChangeNameForm({ name }: { name: string }) {
   const onSubmit = async (data: AccountFormValues) => {
     try {
       const [, error] = await userUpdateUserDisplayNameAction(data);
-      if (error !== null) return toast.error(error);
+      if (error !== null) {
+        console.error("Error updating user name:", error);
+        toast.error("Error updating user name");
+        return;
+      };
       toast.success(`Display name updated`);
-      form.reset();
+      form.reset(data);
     } catch (error) {
       console.error("Error updating user name:", error);
-      toast.error(getErrorMessage(error));
+      toast.error("Error updating user name");
     }
   };
 

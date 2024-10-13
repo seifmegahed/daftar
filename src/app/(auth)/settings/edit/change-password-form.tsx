@@ -18,7 +18,6 @@ import SubmitButton from "@/components/buttons/submit-button";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import { userUpdateUserPasswordAction } from "@/server/actions/users";
 import { toast } from "sonner";
-import { getErrorMessage } from "@/lib/exceptions";
 
 const schema = z
   .object({
@@ -76,12 +75,16 @@ function ChangePasswordForm() {
   const onSubmit = async (data: ChangePasswordFormType) => {
     try {
       const [, error] = await userUpdateUserPasswordAction(data);
-      if (error !== null) return toast.error(error);
+      if (error !== null) {
+        console.error("Error updating user password:", error);
+        toast.error("An error occurred while updating the password");
+        return;
+      };
       toast.success(`Password updated successfully`);
       form.reset();
     } catch (error) {
       console.error("Error updating user password:", error);
-      toast.error(getErrorMessage(error));
+      toast.error("An error occurred while updating the password");
     }
   };
 

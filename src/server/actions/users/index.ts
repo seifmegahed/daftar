@@ -199,7 +199,7 @@ export const userUpdateUserDisplayNameAction = async (
 
   const [result, error] = await updateUserName(userId, data.name);
   if (error !== null) return [null, error];
-  revalidatePath("/settings/account");
+  revalidatePath("/settings");
   return [result, null];
 };
 
@@ -257,6 +257,7 @@ export const userUpdateUserPasswordAction = async (
   if (error !== null) return [null, userErrors.hashFailed];
 
   const result = await updateUserPassword(userId, hashedPassword);
+  revalidatePath("/settings");
   return result;
 };
 
