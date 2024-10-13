@@ -34,7 +34,9 @@ export default function NewUserForm() {
 
   const onSubmit = async (data: NewUserFormType) => {
     try {
-      const [_, error] = await adminCreateUserAction(data);
+      const response = await adminCreateUserAction(data);
+      if (!response) return;
+      const [, error] = response;
       if (error !== null) {
         console.error(error);
         toast.error("Error creating user");
@@ -43,6 +45,7 @@ export default function NewUserForm() {
       form.reset();
     } catch (error) {
       console.log(error);
+      toast.error("Error creating user");
     }
   };
 
@@ -107,7 +110,11 @@ export default function NewUserForm() {
           render={({ field }) => (
             <FormItem className="flex flex-col gap-2">
               <Label htmlFor="role">Role</Label>
-              <Select onValueChange={field.onChange} value={field.value} dir="ltr">
+              <Select
+                onValueChange={field.onChange}
+                value={field.value}
+                dir="ltr"
+              >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
@@ -164,14 +171,15 @@ export default function NewUserForm() {
             </FormItem>
           )}
         />
-        <SubmitButton
-          className="w-60"
-          type="submit"
-          disabled={form.formState.isSubmitting || !form.formState.isDirty}
-          loading={form.formState.isSubmitting}
-        >
-          Add User
-        </SubmitButton>
+        <div className="flex justify-end py-4">
+          <SubmitButton
+            type="submit"
+            disabled={form.formState.isSubmitting || !form.formState.isDirty}
+            loading={form.formState.isSubmitting}
+          >
+            Add User
+          </SubmitButton>
+        </div>
       </Form>
     </form>
   );

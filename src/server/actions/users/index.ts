@@ -322,7 +322,7 @@ type CreateUserFormType = z.infer<typeof addUserSchema>;
  */
 export const adminCreateUserAction = async (
   data: CreateUserFormType,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const [, isAdminError] = await checkAdminPermissions();
   if (isAdminError !== null) return [null, isAdminError];
 
