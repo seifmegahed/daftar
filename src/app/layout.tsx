@@ -2,6 +2,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { env } from "@/env";
+import { Provider as BalancerProvider } from "react-wrap-balancer";
 import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
@@ -17,7 +18,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable}`} dir="ltr">
+    <html lang="en" className={`${GeistSans.variable} scroll-smooth focus:scroll-auto`} dir="ltr">
       <head />
       <body>
         {env.NEXT_PUBLIC_VERCEL && <Analytics />}
@@ -28,9 +29,11 @@ export default function RootLayout({
           disableTransitionOnChange
           storageKey="theme"
         >
-          <div className="h-full min-h-screen bg-secondary text-foreground">
-            {children}
-          </div>
+          <BalancerProvider>
+            <div className="h-full min-h-screen bg-secondary text-foreground">
+              {children}
+            </div>
+          </BalancerProvider>
           <Toaster />
         </ThemeProvider>
       </body>

@@ -9,7 +9,7 @@ type AvatarProps = {
 export const AvatarContainer = ({ children, className }: AvatarProps) => (
   <div
     className={cn(
-      "text-md flex size-10 shrink-0 items-center justify-center rounded-full bg-muted text-muted-foreground transition-all duration-1000 ease-in-out group-hover:bg-white group-data-[state=active]:bg-white",
+      "text-md flex size-10 shrink-0 select-none items-center justify-center rounded-full bg-muted text-muted-foreground",
       className,
     )}
   >
@@ -17,30 +17,30 @@ export const AvatarContainer = ({ children, className }: AvatarProps) => (
   </div>
 );
 
-export const AdminUserAvatarContainer = ({
-  children,
-  className,
-}: AvatarProps) => (
-  <div
-    className={cn(
-      "text-md flex size-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-muted-foreground",
-      className,
-    )}
-  >
-    <div>{children}</div>
-  </div>
-);
+// export const AdminUserAvatarContainer = ({
+//   children,
+//   className,
+// }: AvatarProps) => (
+//   <div
+//     className={cn(
+//       "text-md flex size-10 shrink-0 items-center justify-center rounded-full bg-sky-100 text-muted-foreground",
+//       className,
+//     )}
+//   >
+//     <div>{children}</div>
+//   </div>
+// );
 
-export const DeactivatedUserAvatarContainer = ({
-  children,
-  className,
-}: AvatarProps) => (
-  <div
-    className={cn(
-      "text-md flex size-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-muted-foreground",
-      className,
-    )}
-  >
-    <div>{children}</div>
-  </div>
-);
+// export const DeactivatedUserAvatarContainer = ({
+//   children,
+//   className,
+// }: AvatarProps) => (
+//   <div
+//     className={cn(
+//       "text-md flex size-10 shrink-0 items-center justify-center rounded-full bg-red-100 text-muted-foreground",
+//       className,
+//     )}
+//   >
+//     <div>{children}</div>
+//   </div>
+// );
