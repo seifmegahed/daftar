@@ -5,6 +5,7 @@ import { deleteClient } from "@/server/db/tables/client/queries";
 import { redirect } from "next/navigation";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidatePath } from "next/cache";
 
 export const deleteClientAction = async (
   clientId: number,
@@ -16,5 +17,6 @@ export const deleteClientAction = async (
 
   const [, error] = await deleteClient(clientId);
   if (error !== null) return [null, error];
+  revalidatePath("clients")
   redirect("/clients");
 };

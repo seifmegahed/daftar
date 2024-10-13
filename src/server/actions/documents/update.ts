@@ -5,6 +5,7 @@ import { getCurrentUserAction } from "@/server/actions/users";
 import { documentSchema } from "@/server/db/tables/document/schema";
 import { updateDocument } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidatePath } from "next/cache";
 
 const updateNameSchema = documentSchema.pick({ name: true });
 
@@ -26,7 +27,8 @@ export const updateDocumentNameAction = async (
     name: isValid.data.name,
   });
   if (documentIdError !== null) return [null, documentIdError];
-
+  revalidatePath("/documents")
+  revalidatePath("/document")
   return [documentId, null];
 };
 
@@ -45,6 +47,6 @@ export const updateDocumentNotesAction = async (
     notes: isValid.data.notes,
   });
   if (documentIdError !== null) return [null, documentIdError];
-
+  revalidatePath("/document")
   return [documentId, null];
 };

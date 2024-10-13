@@ -14,8 +14,6 @@ import type { SearchParamsPropsType } from "@/utils/type-utils";
 
 const pageLimit = defaultPageLimit;
 
-export const dynamic = "force-dynamic";
-
 type Props = {
   searchParams: SearchParamsPropsType;
 };

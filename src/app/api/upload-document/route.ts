@@ -13,6 +13,7 @@ import { documentSchema } from "@/server/db/tables/document/schema";
 import { saveDocumentFile } from "@/server/actions/documents/create";
 import { insertDocument } from "@/server/db/tables/document/queries";
 import { getCurrentUserIdAction } from "@/server/actions/users";
+import { revalidatePath } from "next/cache";
 
 const requestSchema = z.object({
   document: documentSchema.pick({
@@ -72,6 +73,6 @@ export async function POST(request: NextRequest) {
 
   if (documentInsertError !== null)
     return new Response(documentInsertError, { status: 500 });
-
+  revalidatePath("/documents");
   return new Response("Document added successfully", { status: 200 });
 }

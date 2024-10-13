@@ -7,10 +7,11 @@ import { getDocumentRelationsCountAction } from "../document-relations/read";
 import { getDocumentByIdAction } from "./read";
 import { redirect } from "next/navigation";
 import fs from "fs";
+import { revalidatePath } from "next/cache";
 
 export const deleteDocumentAction = async (
   id: number,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];
 
@@ -34,7 +35,8 @@ export const deleteDocumentAction = async (
 
   const [, documentIdError] = await deleteDocument(id);
   if (documentIdError !== null) return [null, documentIdError];
-
+  
+  revalidatePath("/documents");
   redirect("/documents");
 };
 

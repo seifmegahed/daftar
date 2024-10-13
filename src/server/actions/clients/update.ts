@@ -15,7 +15,7 @@ export const updateClientPrimaryAddressAction = async (
     primaryAddressId: addressId,
   });
   if (addressError !== null) return [null, addressError];
-  revalidatePath(`/client/${clientId}`);
+  revalidatePath(`/client`);
   return [returnValue, null];
 };
 
@@ -27,7 +27,7 @@ export const updateClientPrimaryContactAction = async (
     primaryContactId: contactId,
   });
   if (contactError !== null) return [null, contactError];
-  revalidatePath(`/client/${clientId}`);
+  revalidatePath(`/client`);
   return [returnValue, null];
 };
 
@@ -52,7 +52,7 @@ export const updateClientWebsiteAction = async (
     website: isValid.data.website,
   });
   if (error !== null) return [null, error];
-  revalidatePath(`/client/${clientId}`);
+  revalidatePath(`/client`);
   return [returnValue, null];
 };
 
@@ -79,7 +79,7 @@ export const updateClientRegistrationNumberAction = async (
     registrationNumber: isValid.data.registrationNumber,
   });
   if (error !== null) return [null, error];
-  revalidatePath(`/client/${clientId}`);
+  revalidatePath(`/client`);
   return [returnValue, null];
 };
 
@@ -104,6 +104,6 @@ export const updateClientNotesAction = async (
     notes: isValid.data.notes,
   });
   if (error !== null) return [null, error];
-  revalidatePath(`/client/${clientId}`);
+  revalidatePath(`/client`);
   return [returnValue, null];
 };

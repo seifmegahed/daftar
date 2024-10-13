@@ -23,6 +23,7 @@ import { getCurrentUserIdAction } from "@/server/actions/users";
 import type { NextRequest } from "next/server";
 import type { DocumentRelationsType } from "@/server/db/tables/document-relation/schema";
 import { deleteFileAction } from "@/server/actions/documents/delete";
+import { revalidatePath } from "next/cache";
 
 const requestSchema = z.object({
   document: documentSchema.pick({
@@ -96,5 +97,6 @@ export async function POST(request: NextRequest) {
     await deleteFileAction(path);
     return new Response(documentInsertError, { status: 500 });
   }
+  revalidatePath("/documents")
   return new Response("Document added successfully", { status: 200 });
 }
