@@ -60,7 +60,7 @@ function NewItemForm({
   });
 
   const onSubmit = async (data: FormSchemaType) => {
-    const [, error] = await addProjectItemAction({
+    const response = await addProjectItemAction({
       projectId,
       itemId: data.itemId,
       supplierId: data.supplierId,
@@ -68,13 +68,13 @@ function NewItemForm({
       currency: data.currency,
       quantity: data.quantity,
     });
+    if (!response) return;
+    const [, error] = response;
     if (error !== null) {
       console.error("Error adding item:", error);
       toast.error("Error adding item");
       return;
     }
-    toast.success("Item added successfully");
-    form.reset();
   };
 
   return (

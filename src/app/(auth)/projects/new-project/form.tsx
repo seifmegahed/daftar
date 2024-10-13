@@ -33,7 +33,6 @@ import { addProjectAction } from "@/server/actions/projects/create";
 import { statusCodes } from "@/data/lut";
 import { notesMaxLength } from "@/data/config";
 import { Separator } from "@/components/ui/separator";
-import { useRouter } from "next/navigation";
 
 const schema = z.object({
   name: z
@@ -69,8 +68,6 @@ type NewProjectFormProps = {
 };
 
 function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
-  const navigate = useRouter();
-
   const form = useForm<ProjectFormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues,
@@ -78,11 +75,10 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
 
   const onSubmit = async (data: ProjectFormSchemaType) => {
     try {
-      const [id, error] = await addProjectAction(data);
+      const response = await addProjectAction(data);
+      if (!response) return;
+      const [, error] = response;
       if (error !== null) return toast.error(error);
-      console.log(data);
-      toast.success("Project added successfully");
-      navigate.push(`/project/${id}`);
     } catch (error) {
       console.error("Error adding project:", error);
       toast.error(getErrorMessage(error));

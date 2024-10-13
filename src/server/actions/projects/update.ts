@@ -11,6 +11,7 @@ import {
 } from "@/server/actions/users";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidatePath } from "next/cache";
 
 const updateProjectStatusSchema = insertProjectSchema.pick({
   status: true,
@@ -33,7 +34,7 @@ export const updateProjectStatusAction = async (
     status: isValid.data.status,
   });
   if (error !== null) return [null, error];
-
+  revalidatePath("projects");
   return [projectId, null];
 };
 
@@ -62,7 +63,7 @@ export const updateProjectNameAction = async (
     name: isValid.data.name,
   });
   if (error !== null) return [null, error];
-
+  revalidatePath("projects");
   return [projectId, null];
 };
 
@@ -89,7 +90,7 @@ export const updateProjectDescriptionAction = async (
     description: isValid.data.description,
   });
   if (error !== null) return [null, error];
-
+  revalidatePath("projects");
   return [projectId, null];
 };
 
@@ -114,7 +115,7 @@ export const updateProjectNotesAction = async (
     notes: isValid.data.notes ?? null,
   });
   if (error !== null) return [null, error];
-
+  revalidatePath("projects");
   return [projectId, null];
 };
 
@@ -141,7 +142,7 @@ export const updateProjectDatesAction = async (
     endDate: isValid.data.endDate,
   });
   if (error !== null) return [null, error];
-
+  revalidatePath("projects");
   return [projectId, null];
 };
 
@@ -169,6 +170,6 @@ export const updateProjectOwnerAction = async (
     ownerId: isValid.data.ownerId,
   });
   if (error !== null) return [null, error];
-
+  revalidatePath("projects");
   return [projectId, null];
 };

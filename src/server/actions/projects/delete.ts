@@ -6,10 +6,11 @@ import { getCurrentUserAction } from "@/server/actions/users";
 import { redirect } from "next/navigation";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidatePath } from "next/cache";
 
 export const deleteProjectAction = async (
   id: number,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const [projectData, projectDataError] = await getProjectBriefById(id);
   if (projectDataError !== null) return [null, projectDataError];
 
@@ -22,5 +23,6 @@ export const deleteProjectAction = async (
   const [, error] = await deleteProject(id);
   if (error !== null) return [null, error];
 
+  revalidatePath("/projects");
   redirect("/projects");
 };

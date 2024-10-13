@@ -57,20 +57,20 @@ function NewSaleItemForm({
   });
 
   const onSubmit = async (data: FormSchemaType) => {
-    const [, error] = await createCommercialOfferItemAction({
+    const response = await createCommercialOfferItemAction({
       projectId,
       itemId: data.itemId,
       price: String(data.price),
       currency: data.currency,
       quantity: data.quantity,
     });
+    if (!response) return;
+    const [, error] = response;
     if (error !== null) {
       console.error("Error adding item:", error);
       toast.error("Error adding item");
       return;
     }
-    toast.success("Item added successfully");
-    form.reset();
   };
 
   return (
@@ -79,7 +79,9 @@ function NewSaleItemForm({
       className="space-y-8"
       autoComplete="off"
     >
-      <h1 className="text-2xl font-bold tracking-tight">Project Sale Item Form</h1>
+      <h1 className="text-2xl font-bold tracking-tight">
+        Project Sale Item Form
+      </h1>
       <Form {...form}>
         <FormField
           control={form.control}
@@ -99,8 +101,9 @@ function NewSaleItemForm({
                 notFoundMessage="Item not found."
               />
               <FormDescription>
-                Select an item to add to the project&apos;s commercial offer. If the item does not
-                exist, you have to create it from the Items tab first.
+                Select an item to add to the project&apos;s commercial offer. If
+                the item does not exist, you have to create it from the Items
+                tab first.
               </FormDescription>
               <FormMessage />
             </FormItem>

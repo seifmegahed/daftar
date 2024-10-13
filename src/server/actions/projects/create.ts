@@ -8,6 +8,8 @@ import { insertProject } from "@/server/db/tables/project/queries";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 const addProjectSchema = insertProjectSchema.omit({
   createdBy: true,
@@ -17,14 +19,14 @@ type AddProjectFormType = z.infer<typeof addProjectSchema>;
 
 export const addProjectAction = async (
   data: AddProjectFormType,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const isValid = addProjectSchema.safeParse(data);
   if (!isValid.success) return [null, "Invalid data"];
 
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];
 
-  const [projectId, projectInsertError] = await insertProject({
+  const [, projectInsertError] = await insertProject({
     name: isValid.data.name,
     status: isValid.data.status,
     description: isValid.data.description,
@@ -35,5 +37,6 @@ export const addProjectAction = async (
   });
   if (projectInsertError !== null) return [null, projectInsertError];
 
-  return [projectId, null];
+  revalidatePath("/projects");
+  redirect("/projects");
 };
