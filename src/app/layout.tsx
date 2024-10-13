@@ -1,5 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { Analytics } from "@vercel/analytics/react";
+import { env } from "@/env";
 import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
@@ -18,6 +20,7 @@ export default function RootLayout({
     <html lang="en" className={`${GeistSans.variable}`} dir="ltr">
       <head />
       <body>
+        {env.NEXT_PUBLIC_VERCEL && <Analytics />}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
