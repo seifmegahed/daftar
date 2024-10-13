@@ -7,6 +7,8 @@ import { insertNewClient } from "@/server/db/tables/client/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
 import { insertContactSchemaRaw } from "@/server/db/tables/contact/schema";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 const addClientSchema = insertClientSchema.pick({
   name: true,
@@ -39,7 +41,7 @@ export const addClientAction = async (
   clientData: AddClientFormType,
   addressData: AddClientAddressType,
   contactData: AddClientContactType,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const isClientValid = addClientSchema.safeParse(clientData);
   if (!isClientValid.success) return [null, "Invalid Client data"];
 
@@ -52,7 +54,7 @@ export const addClientAction = async (
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];
 
-  const [clientId, clientInsertError] = await insertNewClient(
+  const [, clientInsertError] = await insertNewClient(
     {
       name: clientData.name,
       registrationNumber: clientData.registrationNumber ?? null,
@@ -77,6 +79,6 @@ export const addClientAction = async (
     },
   );
   if (clientInsertError !== null) return [null, clientInsertError];
-
-  return [clientId, null];
+  revalidatePath("/clients");
+  redirect("/clients");
 };

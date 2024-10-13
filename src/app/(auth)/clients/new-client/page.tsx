@@ -19,7 +19,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { toast } from "sonner";
 import { addClientAction } from "@/server/actions/clients/create";
-import { getErrorMessage } from "@/lib/exceptions";
 import { countries } from "@/lib/countries";
 import { Separator } from "@/components/ui/separator";
 import ComboSelect from "@/components/combo-select";
@@ -101,7 +100,7 @@ function NewClientPage() {
 
   const onSubmit = async (data: ClientFormSchemaType) => {
     try {
-      const [result, error] = await addClientAction(
+      const response = await addClientAction(
         {
           name: data.name,
           registrationNumber: data.registrationNumber,
@@ -122,12 +121,16 @@ function NewClientPage() {
           notes: data.contactNotes,
         },
       );
-      if (error !== null) return toast.error(error);
-      toast.success(`Client ID: ${result}`);
-      form.reset();
+      if (!response) return;
+      const [, error] = response;
+      if (error !== null) {
+        console.error("Error adding client:", error);
+        toast.error("An error occurred while adding the client");
+        return;
+      }
     } catch (error) {
       console.error("Error adding client:", error);
-      toast.error(getErrorMessage(error));
+      toast.error("An error occurred while adding the client");
     }
   };
 
