@@ -66,15 +66,23 @@ function NewAddressForm({
 
   const onSubmit = async (data: FormSchemaType) => {
     const ref = type === "supplier" ? { supplierId: id } : { clientId: id };
-    const [, addressInsertError] = await addNewAddressAction({
-      ...data,
-      ...ref,
-    });
-    if (addressInsertError !== null) {
+    try {
+      const response = await addNewAddressAction(
+        {
+          ...data,
+          ...ref,
+        },
+        type,
+      );
+      if (!response) return;
+      const [, error] = response;
+      if (error !== null) {
+        console.error(error);
+        toast.error("An error occurred while adding the address");
+      }
+    } catch (error) {
+      console.error(error);
       toast.error("An error occurred while adding the address");
-    } else {
-      toast.success("Address added successfully");
-      form.reset();
     }
   };
 

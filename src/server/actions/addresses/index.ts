@@ -16,6 +16,7 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 import type { z } from "zod";
+import { redirect } from "next/navigation";
 
 const addAddressSchema = insertAddressSchemaRaw
   .omit({
@@ -28,14 +29,15 @@ type AddAddressType = z.infer<typeof addAddressSchema>;
 
 export const addNewAddressAction = async (
   data: AddAddressType,
-): Promise<ReturnTuple<number>> => {
+  type: "client" | "supplier",
+): Promise<ReturnTuple<number> | undefined> => {
   const isValid = addAddressSchema.safeParse(data);
   if (!isValid.success) return [null, "Invalid data"];
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
 
-  const [addressId, addressInsertError] = await insertNewAddress({
+  const [, addressInsertError] = await insertNewAddress({
     name: isValid.data.name,
     addressLine: isValid.data.addressLine,
     country: isValid.data.country,
@@ -46,8 +48,11 @@ export const addNewAddressAction = async (
     clientId: isValid.data.supplierId ? null : isValid.data.clientId,
   });
   if (addressInsertError !== null) return [null, addressInsertError];
-
-  return [addressId, null];
+  redirect(
+    type === "supplier"
+      ? `/supplier/${isValid.data.supplierId}/addresses`
+      : `/client/${isValid.data.clientId}/addresses`,
+  );
 };
 
 export const getClientAddressesCountAction = async (
