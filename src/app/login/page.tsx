@@ -47,7 +47,7 @@ export default function LoginForm() {
   };
 
   return (
-    <div className="grid h-screen w-screen lg:grid-cols-2 scroll-smooth">
+    <div className="grid h-screen w-screen scroll-smooth lg:grid-cols-2">
       <LoginInfoSection />
       <div className="flex h-screen w-full items-center justify-center bg-background lg:h-full">
         <div className="relative w-full max-w-md overflow-hidden py-8">
@@ -107,45 +107,47 @@ export default function LoginForm() {
 function LoginInfoSection() {
   return (
     <div className="flex h-screen w-full items-center justify-center lg:h-full">
-      <div className="flex w-full max-w-screen-md flex-col items-center justify-center gap-4 text-center text-sm text-muted-foreground">
-        <BookmarkIcon className="h-16 w-16 stroke-secondary-foreground dark:fill-secondary-foreground dark:stroke-none" />
-        <DaftarArabicIcon className="stroke-secondary-foreground" />
-        <h1 className="mb-4 text-center text-4xl font-bold text-secondary-foreground">
-          {`Welcome to Daftar ${env.NEXT_PUBLIC_VERCEL ? "Demo" : ""}`}
-        </h1>
-        <p>
-          <Balancer>
-            Daftar is an application that allows you to manage your contracting
-            company&apos;s data in one place. The word Daftar in arabic means{" "}
-            <i>a folder of records</i>
-          </Balancer>
-        </p>
-        <p className="hidden lg:block">Sign in to your account to continue</p>
-        <p className="block lg:hidden">
-          Sign in to your account below to continue
-        </p>
-        {env.NEXT_PUBLIC_VERCEL ? (
+      <div className="flex w-full lg:h-screen h-full max-w-screen-md flex-col items-center gap-4 text-center text-sm text-muted-foreground justify-between lg:justify-center">
+        <div className="flex flex-col items-center justify-center gap-4 w-full h-full flex-grow">
+          <BookmarkIcon className="h-16 w-16 stroke-secondary-foreground dark:fill-secondary-foreground dark:stroke-none" />
+          <DaftarArabicIcon className="stroke-secondary-foreground" />
+          <h1 className="mb-4 text-center text-4xl font-bold text-secondary-foreground">
+            {`Welcome to Daftar ${env.NEXT_PUBLIC_VERCEL ? "Demo" : ""}`}
+          </h1>
           <p>
             <Balancer>
-              If you don&apos;t have an account, you can ask for a demo account
-              by sending and email to seifmegahed at me dot com
+              Daftar is an application that allows you to manage your
+              contracting company&apos;s data in one place. The word Daftar in
+              arabic means <i>a folder of records</i>
             </Balancer>
           </p>
-        ) : (
-          <>
+          <p className="hidden lg:block">Sign in to your account to continue</p>
+          <p className="block lg:hidden">
+            Sign in to your account below to continue
+          </p>
+          {env.NEXT_PUBLIC_VERCEL ? (
             <p>
               <Balancer>
-                If you don&apos;t have an account, you should ask an admin to
-                create one for you. If you forgot your password, you have to ask
-                an admin to reset your password
+                If you don&apos;t have an account, you can ask for a demo
+                account by sending and email to seifmegahed at me dot com
               </Balancer>
             </p>
-          </>
-        )}
-        <div className="flex flex-grow animate-pulse justify-center pt-10 lg:hidden">
+          ) : (
+            <>
+              <p>
+                <Balancer>
+                  If you don&apos;t have an account, you should ask an admin to
+                  create one for you. If you forgot your password, you have to
+                  ask an admin to reset your password
+                </Balancer>
+              </p>
+            </>
+          )}
+        </div>
+        <div className="flex items-end pb-16 lg:hidden">
           <div
             onClick={() => window.scrollTo(0, window.innerHeight)}
-            className="cursor-pointer"
+            className="animate-pulse cursor-pointer"
           >
             <ChevronDown className="h-24 w-24" />
           </div>
