@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
 import { type UserDataType, usersTable } from "./schema";
-import { asc, eq, and, count } from "drizzle-orm";
+import { asc, eq, and, count, desc } from "drizzle-orm";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getErrorMessage } from "@/lib/exceptions";
 import { userErrors } from "@/server/actions/users/errors";
@@ -31,7 +31,7 @@ export const getAllUsers = async (page = 1, limit = defaultPageLimit): Promise<
         updatedAt: usersTable.updatedAt,
       })
       .from(usersTable)
-      .orderBy(asc(usersTable.id))
+      .orderBy(desc(usersTable.id))
       .limit(limit)
       .offset((page - 1) * limit);
 
@@ -284,7 +284,7 @@ export const listAllUsers = async (): Promise<ReturnTuple<UserBriefType[]>> => {
         name: usersTable.name,
       })
       .from(usersTable)
-      .orderBy(asc(usersTable.id));
+      .orderBy(asc(usersTable.name));
 
     if (!users) return [null, "Error getting users"];
     return [users, null];
