@@ -5,6 +5,7 @@ import { getCurrentUserIdAction } from "@/server/actions/users";
 import { insertClientSchema } from "@/server/db/tables/client/schema";
 import { updateClient } from "@/server/db/tables/client/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidatePath } from "next/cache";
 
 export const updateClientPrimaryAddressAction = async (
   clientId: number,
@@ -14,6 +15,7 @@ export const updateClientPrimaryAddressAction = async (
     primaryAddressId: addressId,
   });
   if (addressError !== null) return [null, addressError];
+  revalidatePath(`/client/${clientId}`);
   return [returnValue, null];
 };
 
@@ -25,6 +27,7 @@ export const updateClientPrimaryContactAction = async (
     primaryContactId: contactId,
   });
   if (contactError !== null) return [null, contactError];
+  revalidatePath(`/client/${clientId}`);
   return [returnValue, null];
 };
 
@@ -49,7 +52,7 @@ export const updateClientWebsiteAction = async (
     website: isValid.data.website,
   });
   if (error !== null) return [null, error];
-
+  revalidatePath(`/client/${clientId}`);
   return [returnValue, null];
 };
 
@@ -76,7 +79,7 @@ export const updateClientRegistrationNumberAction = async (
     registrationNumber: isValid.data.registrationNumber,
   });
   if (error !== null) return [null, error];
-
+  revalidatePath(`/client/${clientId}`);
   return [returnValue, null];
 };
 
@@ -101,6 +104,6 @@ export const updateClientNotesAction = async (
     notes: isValid.data.notes,
   });
   if (error !== null) return [null, error];
-
+  revalidatePath(`/client/${clientId}`);
   return [returnValue, null];
 };

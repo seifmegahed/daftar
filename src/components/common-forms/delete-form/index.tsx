@@ -33,7 +33,7 @@ function DeleteForm({
   disabled?: boolean;
   type: "client" | "project" | "supplier" | "item" | "document";
   formInfo: ReactNode;
-  onDelete: (id: number) => Promise<ReturnTuple<number>>;
+  onDelete: (id: number) => Promise<ReturnTuple<number> | undefined>;
 }) {
   const schema = z
     .object({
@@ -66,13 +66,16 @@ function DeleteForm({
       return;
     }
     try {
-      const [, error] = await onDelete(id);
+      const response = await onDelete(id);
+      if (!response) return;
+      const [, error] = response;
       if (error !== null) {
         console.log(error);
         toast.error(`Error deleting ${type}`);
       }
     } catch (error) {
       console.log(error);
+      toast.error(`Error deleting ${type}`);
     }
   };
 
@@ -92,10 +95,12 @@ function DeleteForm({
               <FormItem className="relative">
                 <Input
                   {...field}
-                  className="z-[2] relative"
+                  className="relative z-[2]"
                   disabled={!access || disabled}
                 />
-                <p className="absolute top-0 left-[12.5px] text-sm text-muted-foreground select-none">{name}</p>
+                <p className="absolute left-[12.5px] top-0 select-none text-sm text-muted-foreground">
+                  {name}
+                </p>
                 <FormMessage />
                 <FormDescription>{formInfo}</FormDescription>
               </FormItem>

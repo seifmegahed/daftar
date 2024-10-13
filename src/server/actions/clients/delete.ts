@@ -8,7 +8,7 @@ import type { ReturnTuple } from "@/utils/type-utils";
 
 export const deleteClientAction = async (
   clientId: number,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, "Unauthorized"];
 
