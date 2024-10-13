@@ -64,15 +64,18 @@ function NewContactForm({
   const onSubmit = async (data: FormSchemaType) => {
     const ref = type === "supplier" ? { supplierId: id } : { clientId: id };
     try {
-      const [, contactInsertError] = await addNewContactAction({
-        ...data,
-        ...ref,
-      });
-      if (contactInsertError !== null) {
+      const response = await addNewContactAction(
+        {
+          ...data,
+          ...ref,
+        },
+        type,
+      );
+      if (!response) return;
+      const [, error] = response;
+      if (error !== null) {
+        console.error("Error adding contact:", error);
         toast.error("An error occurred while adding the contact");
-      } else {
-        toast.success("Contact added successfully");
-        form.reset();
       }
     } catch (error) {
       console.error("Error adding contact:", error);

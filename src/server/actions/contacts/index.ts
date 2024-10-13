@@ -16,6 +16,7 @@ import {
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "../users";
 import type { z } from "zod";
+import { redirect } from "next/navigation";
 
 const addContactSchema = insertContactSchemaRaw
   .omit({
@@ -28,14 +29,15 @@ type AddContactType = z.infer<typeof addContactSchema>;
 
 export const addNewContactAction = async (
   data: AddContactType,
-): Promise<ReturnTuple<number>> => {
+  type: "client" | "supplier",
+): Promise<ReturnTuple<number> | undefined> => {
   const isValid = addContactSchema.safeParse(data);
   if (!isValid.success) return [null, "Invalid data"];
 
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];
 
-  const [contactId, contactInsertError] = await insertNewContact({
+  const [, contactInsertError] = await insertNewContact({
     name: isValid.data.name,
     phoneNumber: isValid.data.phoneNumber,
     email: isValid.data.email,
@@ -45,8 +47,11 @@ export const addNewContactAction = async (
     clientId: isValid.data.supplierId ? null : isValid.data.clientId,
   });
   if (contactInsertError !== null) return [null, contactInsertError];
-
-  return [contactId, null];
+  redirect(
+    type === "supplier"
+      ? `/supplier/${isValid.data.supplierId}/contacts`
+      : `/client/${isValid.data.clientId}/contacts`,
+  );
 };
 
 export const getClientContactsCountAction = async (
