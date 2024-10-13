@@ -12,13 +12,17 @@ function DeactivateUserSection({ userId }: { userId: number }) {
   const [loading, setLoading] = useState(false);
   const onsubmit = async () => {
     setLoading(true);
-    const [response, error] = await adminUpdateUserActiveAction({
+    const [, error] = await adminUpdateUserActiveAction({
       id: userId,
       active: false,
     });
     setLoading(false);
-    if (error !== null) return toast.error(error);
-    toast.success(`User ID: ${response} deactivated`);
+    if (error !== null) {
+      console.error(error);
+      toast.error("An error occurred while deactivating the user");
+      return;
+    }
+    toast.success("User deactivated"); 
   };
   return (
     <div className="flex flex-col gap-2">
@@ -50,26 +54,24 @@ function ActivateUserSection({ userId }: { userId: number }) {
   const [loading, setLoading] = useState(false);
   const onsubmit = async () => {
     setLoading(true);
-    const [response, error] = await adminUpdateUserActiveAction({
+    const [, error] = await adminUpdateUserActiveAction({
       id: userId,
       active: true,
     });
     setLoading(false);
-    if (error !== null) return toast.error(error);
-    toast.success(`User ID: ${response} activated`);
+    if (error !== null) {
+      console.error(error);
+      toast.error("An error occurred while activating the user");
+      return;
+    };
+    toast.success("User activated");
   };
   return (
     <div className="flex flex-col gap-2 py-4">
-      <LabelWrapper label="Activate User" />
-      <p className="text-xs text-muted-foreground">
-        This user is currently deactivated, this means that they are unable to
-        access the application using their credentials. Activating the user will
-        re-allow the user to login using their credentials and access the
-        application.
-      </p>
-      <div className="flex justify-end py-4">
+      <div className="flex justify-between py-4">
+        <LabelWrapper label="Activate User" />
         <SubmitButton
-          variant="destructive"
+          variant="outline"
           loading={loading}
           onClick={onsubmit}
           disabled={loading}
@@ -77,6 +79,12 @@ function ActivateUserSection({ userId }: { userId: number }) {
           Activate
         </SubmitButton>
       </div>
+      <p className="text-xs text-muted-foreground">
+        This user is currently deactivated, this means that they are unable to
+        access the application using their credentials. Activating the user will
+        re-allow the user to login using their credentials and access the
+        application.
+      </p>
     </div>
   );
 }

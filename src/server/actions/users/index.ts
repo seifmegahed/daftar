@@ -133,15 +133,12 @@ export const getAllUsersAction = async (
   }
 };
 
-
 /**
  * Get Users Count Server Action
- * 
+ *
  * @returns number of users in the database
  */
-export const getUsersCountAction = async (): Promise<
-  ReturnTuple<number>
-> => {
+export const getUsersCountAction = async (): Promise<ReturnTuple<number>> => {
   const [usersCount, error] = await getUsersCount();
   if (error !== null) return [null, error];
   return [usersCount, null];
@@ -191,8 +188,8 @@ type UpdateUserDisplayNameFormType = z.infer<
 export const userUpdateUserDisplayNameAction = async (
   data: UpdateUserDisplayNameFormType,
 ): Promise<ReturnTuple<number>> => {
-  const [userId, error] = await getCurrentUserIdAction();
-  if (error !== null) return [null, error];
+  const [userId, userError] = await getCurrentUserIdAction();
+  if (userError !== null) return [null, userError];
 
   const [, isAdminError] = await checkAdminPermissions();
   if (isAdminError !== null) return [null, isAdminError];
@@ -200,9 +197,10 @@ export const userUpdateUserDisplayNameAction = async (
   const isValid = updateUserDisplayNameSchema.safeParse(data);
   if (!isValid.success) return [null, userErrors.invalidData];
 
-  const result = await updateUserName(userId, data.name);
+  const [result, error] = await updateUserName(userId, data.name);
+  if (error !== null) return [null, error];
   revalidatePath("/settings/account");
-  return result;
+  return [result, null];
 };
 
 const userUpdateUserPasswordSchema = z
@@ -413,9 +411,11 @@ export const adminUpdateUserDisplayNameAction = async (
   const isValid = updateUserNameSchema.safeParse(data);
   if (!isValid.success) return [null, userErrors.invalidData];
 
-  const result = await updateUserName(data.id, data.name);
-  revalidatePath("/admin");
-  return result;
+  const [result, error] = await updateUserName(data.id, data.name);
+  if (error !== null) return [null, error];
+  revalidatePath("/admin/");
+  revalidatePath(`/admin/edit-user/${data.id}`);
+  return [result, null];
 };
 
 const updateUserRoleSchema = UserSchema.pick({
@@ -446,9 +446,11 @@ export const adminUpdateUserRoleAction = async (
   const isValid = updateUserRoleSchema.safeParse(data);
   if (!isValid.success) return [null, userErrors.invalidData];
 
-  const result = await updateUserRole(data.id, data.role);
-  revalidatePath("/admin");
-  return result;
+  const [result, error] = await updateUserRole(data.id, data.role);
+  if (error !== null) return [null, error];
+  revalidatePath("/admin/");
+  revalidatePath(`/admin/edit-user/${data.id}`);
+  return [result, null];
 };
 
 const updateUserActiveSchema = UserSchema.pick({
@@ -479,7 +481,9 @@ export const adminUpdateUserActiveAction = async (
   const isValid = updateUserActiveSchema.safeParse(data);
   if (!isValid.success) return [null, userErrors.invalidData];
 
-  const result = await changeUserActiveState(data.id, data.active);
-  revalidatePath("/admin");
-  return result;
+  const [result, error] = await changeUserActiveState(data.id, data.active);
+  if (error !== null) return [null, error];
+  revalidatePath("/admin/");
+  revalidatePath(`/admin/edit-user/${data.id}`);
+  return [result, null];
 };

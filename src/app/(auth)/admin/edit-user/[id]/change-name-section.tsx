@@ -37,9 +37,12 @@ function ChangeNameSection({ userId, name }: { userId: number; name: string }) {
       name: newName,
     });
     setLoading(false);
-    if (error !== null) return toast.error(error);
-    setNewName("");
-    toast.success(`User ID: ${response} name updated`);
+    if (error !== null) {
+      console.error(error);
+      toast.error("An error occurred while updating the name");
+      return;
+    };
+    toast.success("User name updated");
   };
 
   return (
