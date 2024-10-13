@@ -6,10 +6,11 @@ import { getItemProjectsCountAction } from "../project-items/read";
 import { redirect } from "next/navigation";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidatePath } from "next/cache";
 
 export const deleteItemAction = async (
   id: number,
-): Promise<ReturnTuple<number>> => {
+): Promise<ReturnTuple<number> | undefined> => {
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];
 
@@ -31,5 +32,6 @@ export const deleteItemAction = async (
 
   const [, error] = await deleteItem(id);
   if (error !== null) return [null, error];
+  revalidatePath("/items");
   redirect("/items");
 };

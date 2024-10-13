@@ -5,6 +5,7 @@ import { updateItem } from "@/server/db/tables/item/queries";
 import { insertItemSchema } from "@/server/db/tables/item/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "@/server/actions/users";
+import { revalidatePath } from "next/cache";
 
 const updateItemNameSchema = insertItemSchema.pick({ name: true });
 
@@ -25,6 +26,7 @@ export const updateItemNameAction = async (
     updatedBy: currentUserId,
   });
   if (error !== null) return [null, error];
+  revalidatePath("/item");
   return [returnValue, null];
 };
 
@@ -47,6 +49,7 @@ export const updateItemTypeAction = async (
     updatedBy: currentUserId,
   });
   if (error !== null) return [null, error];
+  revalidatePath("/item");
   return [returnValue, null];
 };
 
@@ -71,6 +74,7 @@ export const updateItemDescriptionAction = async (
     updatedBy: currentUserId,
   });
   if (error !== null) return [null, error];
+  revalidatePath("/item");
   return [returnValue, null];
 };
 
@@ -93,6 +97,7 @@ export const updateItemMpnAction = async (
     updatedBy: currentUserId,
   });
   if (error !== null) return [null, error];
+  revalidatePath("/item");
   return [returnValue, null];
 };
 
@@ -115,6 +120,7 @@ export const updateItemMakeAction = async (
     updatedBy: currentUserId,
   });
   if (error !== null) return [null, error];
+  revalidatePath("/item");
   return [returnValue, null];
 };
 
@@ -137,5 +143,6 @@ export const updateItemNotesAction = async (
     updatedBy: currentUserId,
   });
   if (error !== null) return [null, error];
+  revalidatePath("/item");
   return [returnValue, null];
 };
