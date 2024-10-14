@@ -1,11 +1,10 @@
 import { AvatarContainer } from "@/components/avatar";
 import DataDisplayTable from "@/components/data-display-table";
-import { Separator } from "@/components/ui/separator";
+import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getCurrentUserAction } from "@/server/actions/users";
 import { getInitials } from "@/utils/user";
 import { format } from "date-fns";
 import { toast } from "sonner";
-// import { ProfileForm } from "./profile-form"
 
 async function SettingsProfilePage() {
   const [user, error] = await getCurrentUserAction();
@@ -14,13 +13,12 @@ async function SettingsProfilePage() {
     return <div>Error getting user</div>;
   }
   return (
-    <div className="space-y-6">
-      <h3 className="text-lg font-medium">Profile</h3>
-      <Separator />
-      {/* <ProfileForm /> */}
+    <InfoPageWrapper title="Profile" subtitle="">
       <div className="flex items-center gap-2">
-        <AvatarContainer className="size-16 text-2xl">{getInitials(user.name)}</AvatarContainer>
-        <h1 className="text-muted-foreground text-3xl">{user.name}</h1>
+        <AvatarContainer className="size-16 text-2xl">
+          {getInitials(user.name)}
+        </AvatarContainer>
+        <h1 className="text-3xl text-muted-foreground">{user.name}</h1>
       </div>
       <div className="flex items-center gap-2 text-muted-foreground">
         <DataDisplayTable
@@ -53,7 +51,7 @@ async function SettingsProfilePage() {
         Your user role can only be changed by an administrator. If you think
         your role is incorrect, please contact an administrator.
       </p>
-    </div>
+    </InfoPageWrapper>
   );
 }
 

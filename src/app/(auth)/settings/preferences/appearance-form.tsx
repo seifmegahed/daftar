@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTheme } from "next-themes";
 
-import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
@@ -16,6 +15,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import SubmitButton from "@/components/buttons/submit-button";
 
 const appearanceFormSchema = z.object({
   theme: z.enum(["light", "dark"], {
@@ -36,6 +36,7 @@ export function AppearanceForm() {
 
   const onSubmit = async (data: AppearanceFormValues) => {
     theme.setTheme(data.theme === "dark" ? "dark" : "light");
+    form.reset(data);
   };
 
   return (
@@ -54,7 +55,7 @@ export function AppearanceForm() {
               <RadioGroup
                 onValueChange={field.onChange}
                 defaultValue={field.value}
-                className="grid max-w-md grid-cols-2 gap-8 pt-2"
+                className="grid max-w-[200px] pt-2 sm:max-w-md sm:grid-cols-2 sm:gap-8"
               >
                 <FormItem>
                   <FormLabel className="[&:has([data-state=checked])>div]:border-primary">
@@ -112,7 +113,12 @@ export function AppearanceForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Update preferences</Button>
+        <SubmitButton
+          loading={form.formState.isSubmitting}
+          disabled={form.formState.isSubmitting || !form.formState.isDirty}
+        >
+          Update preferences
+        </SubmitButton>
       </form>
     </Form>
   );
