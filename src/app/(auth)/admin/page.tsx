@@ -4,6 +4,7 @@ import { getAllUsersAction, getUsersCountAction } from "@/server/actions/users";
 import AllUsersList from "./all-users";
 import { Suspense } from "react";
 import { UsersListSkeleton } from "./loading";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -16,12 +17,12 @@ async function AdminPage({ searchParams }: { searchParams: { page: string } }) {
   if (error !== null || countError !== null)
     return <p>Error: Could not load users</p>;
   return (
-    <div className="flex flex-col gap-4">
+    <ListPageWrapper title="Users">
       <Suspense fallback={<UsersListSkeleton count={defaultPageLimit} />}>
         <AllUsersList users={users} />
       </Suspense>
       <Pagination totalPages={Math.ceil(count / defaultPageLimit)} />
-    </div>
+    </ListPageWrapper>
   );
 }
 

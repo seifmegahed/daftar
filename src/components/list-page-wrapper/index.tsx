@@ -30,7 +30,7 @@ function ListPageWrapper({
           />
         )}
       </div>
-      {children}
+      <div className="space-y-0 sm:space-y-6">{children}</div>
     </div>
   );
 }

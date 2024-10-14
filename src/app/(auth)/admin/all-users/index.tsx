@@ -1,3 +1,4 @@
+import CardWrapper from "@/components/card-wrapper";
 import type { GetPartialUserType } from "@/server/db/tables/user/queries";
 import { format } from "date-fns";
 import { Edit } from "lucide-react";
@@ -15,8 +16,8 @@ function AllUsersList({ users }: { users: GetPartialUserType[] }) {
 
 function UserCard({ user }: { user: GetPartialUserType }) {
   return (
-    <div className="flex gap-5 sm:rounded-md sm:border border-t p-4 last:border-b">
-      <div className="flex w-full sm:justify-between flex-col sm:flex-row sm:gap-0 gap-3">
+    <CardWrapper>
+      <div className="flex w-full flex-col gap-3 sm:flex-row sm:justify-between sm:gap-0">
         <div>
           <div className="text-lg font-bold">{user.name}</div>
           <div className="text-sm text-muted-foreground">{user.username}</div>
@@ -50,7 +51,7 @@ function UserCard({ user }: { user: GetPartialUserType }) {
           </div>
         </Link>
       </div>
-    </div>
+    </CardWrapper>
   );
 }
 

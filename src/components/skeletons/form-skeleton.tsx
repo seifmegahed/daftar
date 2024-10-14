@@ -25,19 +25,19 @@ function FormFieldTextareaSkeleton() {
 
 function FormWrapperSkeleton({ children }: { children: ReactNode }) {
   return (
-    <div className="flex flex-col gap-4">
-      <Skeleton className="h-[2rem] w-40" />
-      <Skeleton className="h-[1.2rem] w-[30rem]" />
+    <div className="flex flex-col gap-4 px-2 sm:px-0">
+      <Skeleton className="h-[2rem] w-1/3" />
+      <Skeleton className="h-[1.2rem] w-2/3" />
       <Separator />
       {children}
     </div>
   );
 }
 
-function FormSkeleton({ count = 5 }) {
+function FormSkeleton({ count = 3 }) {
   return (
     <FormWrapperSkeleton>
-      {Array.from({ length: count }).map((_, i) => (
+      {Array.from({ length: count -1 }).map((_, i) => (
         <FormFieldSkeleton key={i} />
       ))}
       <FormFieldTextareaSkeleton />
