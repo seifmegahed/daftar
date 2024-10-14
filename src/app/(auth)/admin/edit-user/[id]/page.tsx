@@ -7,7 +7,6 @@ import {
   getCurrentUserAction,
   getUserByIdAction,
 } from "@/server/actions/users";
-import EditUserLoadingPage from "../loading";
 
 async function EditUserPage({ params }: { params: { id: string } }) {
   const id = Number(params.id);

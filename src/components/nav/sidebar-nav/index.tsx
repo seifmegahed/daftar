@@ -17,7 +17,7 @@ function SidebarNav({ links }: { links: NavLink[] }) {
   const pathname = usePathname();
 
   return (
-    <nav className="max-w-screen flex h-16 space-x-2 overflow-x-scroll px-4 lg:h-full lg:flex-col lg:space-x-0 lg:space-y-1 lg:px-0">
+    <nav className="max-w-screen flex h-16 space-x-2 overflow-x-scroll md:px-4 lg:h-full lg:flex-col lg:space-x-0 lg:space-y-1">
       {links.map((link) => link.hidden ? null : (
         <Link
           key={link.href}
