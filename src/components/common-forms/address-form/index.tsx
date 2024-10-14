@@ -18,11 +18,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import SubmitButton from "@/components/buttons/submit-button";
 
 import { countries } from "@/lib/countries";
 import { notesMaxLength } from "@/data/config";
-import { Separator } from "@/components/ui/separator";
+import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 
 const formSchema = z.object({
   name: z
@@ -92,87 +91,83 @@ function NewAddressForm({
       className="flex flex-col gap-4"
     >
       <Form {...form}>
-        <h2 className="text-2xl font-bold">Address Form</h2>
-        <Separator />
-        <FormField
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Title</FormLabel>
-              <Input {...field} data-testid="title" />
-              <FormDescription>
-                Title of the address, e.g. Main Office, Warehouse, etc.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="addressLine"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Address Line</FormLabel>
-              <Input {...field} data-testid="address-line" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="country"
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center justify-between py-2">
-                <FormLabel>Country</FormLabel>
-                <ComboSelect
-                  value={field.value as string}
-                  onChange={field.onChange}
-                  options={countries}
-                  selectMessage="Select a country"
-                  searchMessage="Search for a country"
-                  notFoundMessage="Country not found"
-                />
-              </div>
-              <div className="flex justify-end">
+        <FormWrapperWithSubmit
+          title="Add Address"
+          description="Enter the details of the address you want to add."
+          buttonText="Add Address"
+          dirty={form.formState.isDirty}
+          submitting={form.formState.isSubmitting}
+        >
+          <FormField
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Title</FormLabel>
+                <Input {...field} data-testid="title" />
+                <FormDescription>
+                  Title of the address, e.g. Main Office, Warehouse, etc.
+                </FormDescription>
                 <FormMessage />
-              </div>
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="city"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>City</FormLabel>
-              <Input {...field} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <Textarea
-                {...field}
-                rows={3}
-                className="resize-none"
-                data-testid="notes-field"
-              />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end">
-          <SubmitButton
-            loading={form.formState.isSubmitting}
-            disabled={form.formState.isSubmitting || !form.formState.isDirty}
-            type="submit"
-            data-testid="submit-button"
-          >
-            Add Address
-          </SubmitButton>
-        </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="addressLine"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Address Line</FormLabel>
+                <Input {...field} data-testid="address-line" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="country"
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center justify-between py-2">
+                  <FormLabel>Country</FormLabel>
+                  <ComboSelect
+                    value={field.value as string}
+                    onChange={field.onChange}
+                    options={countries}
+                    selectMessage="Select a country"
+                    searchMessage="Search for a country"
+                    notFoundMessage="Country not found"
+                  />
+                </div>
+                <div className="flex justify-end">
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="city"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>City</FormLabel>
+                <Input {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Notes</FormLabel>
+                <Textarea
+                  {...field}
+                  rows={3}
+                  className="resize-none"
+                  data-testid="notes-field"
+                />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </FormWrapperWithSubmit>
       </Form>
     </form>
   );

@@ -1,7 +1,7 @@
-import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getClientAddressesAction } from "@/server/actions/addresses";
 import { getClientPrimaryAddressIdAction } from "@/server/actions/clients/read";
 import AddressCard from "@/components/common-cards/address";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 async function ClientAddressesPage({ params }: { params: { id: string } }) {
   const clientId = Number(params.id);
@@ -18,22 +18,20 @@ async function ClientAddressesPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <InfoPageWrapper
+    <ListPageWrapper
       title="Client's Addresses"
       subtitle="This is a list of the client's addresses."
     >
-      <div className="flex flex-col gap-4">
-        {addresses.map((address) => (
-          <AddressCard
-            key={address.id}
-            address={address}
-            referenceId={clientId}
-            referenceType="client"
-            isPrimary={address.id === primaryAddressId}
-          />
-        ))}
-      </div>
-    </InfoPageWrapper>
+      {addresses.map((address) => (
+        <AddressCard
+          key={address.id}
+          address={address}
+          referenceId={clientId}
+          referenceType="client"
+          isPrimary={address.id === primaryAddressId}
+        />
+      ))}
+    </ListPageWrapper>
   );
 }
 

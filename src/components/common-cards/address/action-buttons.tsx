@@ -73,13 +73,13 @@ const AddressActionButtons = ({
   return (
     <div className="flex gap-2">
       {isPrimary ? (
-        <div className="flex w-32 select-none items-center justify-center rounded-full bg-green-200 px-3 py-1 text-xs dark:bg-green-600">
+        <div className="flex sm:w-32 w-24 h-8 select-none items-center justify-center rounded-full bg-green-200 px-3 py-1 text-xs dark:bg-green-600">
           <p>Primary</p>
         </div>
       ) : (
         <Button
           variant="outline"
-          className="h-[32px] w-32 rounded-full px-3 py-1 text-xs font-normal"
+          className="h-8 sm:w-32 w-24 rounded-full px-3 py-1 text-xs font-normal"
           disabled={primaryLoading}
           onClick={handleClick}
         >
@@ -92,7 +92,7 @@ const AddressActionButtons = ({
       )}
       <Button
         variant="outline"
-        className="h-[32px] w-32 rounded-full px-3 py-1 text-xs font-normal text-destructive"
+        className="h-8 sm:w-32 w-24 rounded-full px-3 py-1 text-xs font-normal text-destructive"
         disabled={isPrimary || deleteLoading}
         onClick={handleDelete}
       >

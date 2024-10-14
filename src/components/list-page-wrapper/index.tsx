@@ -8,16 +8,21 @@ import type { ReactNode } from "react";
 function ListPageWrapper({
   children,
   title,
+  subtitle,
   filter,
 }: {
   children: ReactNode;
   title: string;
+  subtitle: string;
   filter?: { filterValues: FilterArgs; filterItems: FilterOptionType[] };
 }) {
   return (
     <div className="space-y-6">
       <div className="space-y-6 px-3 sm:px-0">
-        <h3 className="text-lg font-medium">{title}</h3>
+        <div className="">
+          <h3 className="font-xl text-2xl font-bold">{title}</h3>
+          {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
+        </div>
         {filter && (
           <FilterAndSearch
             defaults={filter.filterValues}

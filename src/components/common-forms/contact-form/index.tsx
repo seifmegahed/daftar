@@ -15,11 +15,10 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Separator } from "@/components/ui/separator";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import SubmitButton from "@/components/buttons/submit-button";
 import { notesMaxLength } from "@/data/config";
+import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 
 const formSchema = z.object({
   name: z
@@ -89,57 +88,54 @@ function NewContactForm({
       className="flex flex-col gap-4"
     >
       <Form {...form}>
-        <h2 className="text-2xl font-bold">Contact Form</h2>
-        <Separator />
-        <FormField
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <Input {...field} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="phoneNumber"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Phone Number</FormLabel>
-              <Input {...field} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <Input {...field} />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <Textarea {...field} rows={3} className="resize-none" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end">
-          <SubmitButton
-            loading={form.formState.isSubmitting}
-            disabled={form.formState.isSubmitting || !form.formState.isDirty}
-            type="submit"
-          >
-            Add Contact
-          </SubmitButton>
-        </div>
+        <FormWrapperWithSubmit
+          title="Add Contact"
+          description="Enter the details of the contact you want to add."
+          buttonText="Add Contact"
+          dirty={form.formState.isDirty}
+          submitting={form.formState.isSubmitting}
+        >
+          <FormField
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name</FormLabel>
+                <Input {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Phone Number</FormLabel>
+                <Input {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <Input {...field} />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Notes</FormLabel>
+                <Textarea {...field} rows={3} className="resize-none" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </FormWrapperWithSubmit>
       </Form>
     </form>
   );
