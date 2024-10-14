@@ -13,7 +13,7 @@ function ListPageWrapper({
 }: {
   children: ReactNode;
   title: string;
-  subtitle: string;
+  subtitle?: string;
   filter?: { filterValues: FilterArgs; filterItems: FilterOptionType[] };
 }) {
   return (

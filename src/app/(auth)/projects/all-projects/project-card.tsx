@@ -30,7 +30,7 @@ const ProjectCard = ({
       <div className="flex w-full sm:items-center flex-col sm:flex-row justify-between gap-2 sm:gap-0">
         <div>
           <Link href={`/project/${project.id}`}>
-            <p className="cursor-pointer text-foreground hover:underline font-bold">
+            <p className="cursor-pointer text-foreground hover:underline font-bold text-lg">
               {project.name}
             </p>
           </Link>
@@ -40,7 +40,7 @@ const ProjectCard = ({
             </p>
           </Link>
         </div>
-        <div className="w-36 sm:text-end">
+        <div className="sm:w-36 sm:text-end">
           <p className="text-foreground">{getStatusLabel(project.status)}</p>
           <p className="text-xs text-muted-foreground">
             {format(project.createdAt, "PP")}

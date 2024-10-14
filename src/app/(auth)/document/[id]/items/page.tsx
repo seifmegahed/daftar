@@ -1,5 +1,5 @@
 import { getDocumentItemsAction } from "@/server/actions/document-relations/read";
-import InfoPageWrapper from "@/components/info-page-wrapper";
+import ListPageWrapper from "@/components/list-page-wrapper";
 import ItemCard from "../../../items/all-items/item-card";
 
 async function DocumentItemsPage({ params }: { params: { id: string } }) {
@@ -9,16 +9,14 @@ async function DocumentItemsPage({ params }: { params: { id: string } }) {
   const [items, error] = await getDocumentItemsAction(documentId);
   if (error !== null) return <p>Error: {error}</p>;
   return (
-    <InfoPageWrapper
+    <ListPageWrapper
       title="Document's Items"
       subtitle="This is a list of the items that reference this document."
     >
-      <div className="flex flex-col gap-4">
         {items.map((client) => (
           <ItemCard key={client.id} item={client} />
         ))}
-      </div>
-    </InfoPageWrapper>
+    </ListPageWrapper>
   );
 }
 

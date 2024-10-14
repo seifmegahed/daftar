@@ -14,9 +14,9 @@ const ClientCard = ({ client }: { client: BriefClientType }) => {
           </p>
         </div>
       </Link>
-      <div className="flex w-full flex-col sm:items-center sm:flex-row sm:justify-between gap-2 sm:gap-0">
+      <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
         <Link href={`/client/${client.id}`}>
-          <p className="line-clamp-1 cursor-pointer text-xl text-foreground hover:underline">
+          <p className="line-clamp-1 cursor-pointer text-lg font-bold text-foreground hover:underline">
             {client.name}
           </p>
         </Link>

@@ -1,6 +1,6 @@
 import { getDocumentSuppliersAction } from "@/server/actions/document-relations/read";
-import InfoPageWrapper from "@/components/info-page-wrapper";
 import SupplierCard from "../../../suppliers/all-suppliers/supplier-card";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 async function DocumentSuppliersPage({ params }: { params: { id: string } }) {
   const documentId = Number(params.id);
@@ -9,16 +9,14 @@ async function DocumentSuppliersPage({ params }: { params: { id: string } }) {
   const [suppliers, error] = await getDocumentSuppliersAction(documentId);
   if (error !== null) return <p>Error: {error}</p>;
   return (
-    <InfoPageWrapper
+    <ListPageWrapper
       title="Document's Suppliers"
       subtitle="This is a list of the suppliers that reference this document."
     >
-      <div className="flex flex-col gap-4">
-        {suppliers.map((supplier) => (
-          <SupplierCard key={supplier.id} supplier={supplier} />
-        ))}
-      </div>
-    </InfoPageWrapper>
+      {suppliers.map((supplier) => (
+        <SupplierCard key={supplier.id} supplier={supplier} />
+      ))}
+    </ListPageWrapper>
   );
 }
 

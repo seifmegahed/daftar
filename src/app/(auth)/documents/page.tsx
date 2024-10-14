@@ -3,7 +3,6 @@ import Pagination from "@/components/pagination";
 
 import { defaultPageLimit } from "@/data/config";
 import { getClientsCountAction } from "@/server/actions/clients/read";
-import FilterAndSearch from "@/components/filter-and-search";
 import DocumentsList from "./all-documents/documents-list";
 import SkeletonList from "@/components/skeletons";
 import type {
@@ -11,6 +10,7 @@ import type {
   FilterTypes,
 } from "@/components/filter-and-search";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 export const dynamic = "force-dynamic";
 
@@ -38,9 +38,10 @@ async function DocumentsPage({ searchParams }: Props) {
   const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-lg font-medium">All Documents Page</h3>
-      <FilterAndSearch defaults={filterValues} filterItems={filterItems} />
+    <ListPageWrapper
+      title="All Documents Page"
+      filter={{ filterValues, filterItems }}
+    >
       <Suspense key={page + query} fallback={<SkeletonList type="A" />}>
         <DocumentsList
           page={page}
@@ -49,7 +50,7 @@ async function DocumentsPage({ searchParams }: Props) {
         />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
-    </div>
+    </ListPageWrapper>
   );
 }
 
