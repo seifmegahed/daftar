@@ -1,6 +1,7 @@
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { env } from "@/env";
 import { Provider as BalancerProvider } from "react-wrap-balancer";
 import "@/styles/globals.css";
@@ -26,7 +27,6 @@ export default function RootLayout({
     >
       <head />
       <body>
-        {env.NEXT_PUBLIC_VERCEL && <Analytics />}
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
@@ -41,6 +41,8 @@ export default function RootLayout({
           </BalancerProvider>
           <Toaster />
         </ThemeProvider>
+        {env.NEXT_PUBLIC_VERCEL && <Analytics />}
+        {env.NEXT_PUBLIC_VERCEL && <SpeedInsights />}
       </body>
     </html>
   );
