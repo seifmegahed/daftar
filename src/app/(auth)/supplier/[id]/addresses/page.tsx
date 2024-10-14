@@ -1,7 +1,7 @@
-import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getSupplierAddressesAction } from "@/server/actions/addresses";
 import AddressCard from "@/components/common-cards/address";
 import { getSupplierPrimaryAddressIdAction } from "@/server/actions/suppliers/read";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 async function SuppliersAddressesPage({ params }: { params: { id: string } }) {
   const supplierId = Number(params.id);
@@ -18,22 +18,20 @@ async function SuppliersAddressesPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <InfoPageWrapper
+    <ListPageWrapper
       title="Supplier's Addresses"
       subtitle="This is a list of the supplier's addresses."
     >
-      <div className="flex flex-col gap-4">
-        {addresses.map((address) => (
-          <AddressCard
-            key={address.id}
-            address={address}
-            referenceId={supplierId}
-            referenceType="supplier"
-            isPrimary={address.id === primaryAddressId}
-          />
-        ))}
-      </div>
-    </InfoPageWrapper>
+      {addresses.map((address) => (
+        <AddressCard
+          key={address.id}
+          address={address}
+          referenceId={supplierId}
+          referenceType="supplier"
+          isPrimary={address.id === primaryAddressId}
+        />
+      ))}
+    </ListPageWrapper>
   );
 }
 

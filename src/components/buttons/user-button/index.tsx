@@ -56,10 +56,12 @@ function UserButton({
           className="rounded-full"
           disabled={loading}
         >
-          <AvatarContainer>{loading ? <Loading className="h-7 w-7" /> : initials}</AvatarContainer>
+          <AvatarContainer>
+            {loading ? <Loading className="h-7 w-7" /> : initials}
+          </AvatarContainer>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuItem
           className="dark:hidden"
           onClick={() => {

@@ -4,13 +4,13 @@ import SuppliersList from "./all-suppliers/suppliers-list";
 import { defaultPageLimit } from "@/data/config";
 import { getSuppliersCountAction } from "@/server/actions/suppliers/read";
 import SkeletonList from "@/components/skeletons";
-import FilterAndSearch from "@/components/filter-and-search";
 
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 import type {
   FilterOptionType,
   FilterTypes,
 } from "@/components/filter-and-search";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 const pageLimit = defaultPageLimit;
 
@@ -39,12 +39,10 @@ async function SuppliersPage({ searchParams }: Props) {
   const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-lg font-medium">All Suppliers Page</h3>
-      <FilterAndSearch
-        filterItems={filterItems}
-        defaults={filterValues}
-      />
+    <ListPageWrapper
+      title="All Suppliers Page"
+      filter={{ filterItems, filterValues }}
+    >
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
         <SuppliersList
           page={page}
@@ -53,7 +51,7 @@ async function SuppliersPage({ searchParams }: Props) {
         />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
-    </div>
+    </ListPageWrapper>
   );
 }
 

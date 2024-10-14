@@ -1,5 +1,5 @@
 import ContactCard from "@/components/common-cards/contact";
-import InfoPageWrapper from "@/components/info-page-wrapper";
+import ListPageWrapper from "@/components/list-page-wrapper";
 import { getSupplierContactsAction } from "@/server/actions/contacts";
 import { getSupplierPrimaryContactIdAction } from "@/server/actions/suppliers/read";
 
@@ -17,22 +17,20 @@ async function SupplierContactsPage({ params }: { params: { id: string } }) {
     console.log(primaryContactError);
   }
   return (
-    <InfoPageWrapper
+    <ListPageWrapper
       title="Supplier's Contacts"
       subtitle="This is a list of the supplier's contacts."
     >
-      <div className="flex flex-col gap-4">
-        {contacts.map((contact) => (
-          <ContactCard
-            key={contact.id}
-            contact={contact}
-            referenceId={supplierId}
-            referenceType="supplier"
-            isPrimary={contact.id === primaryContactId}
-          />
-        ))}
-      </div>
-    </InfoPageWrapper>
+      {contacts.map((contact) => (
+        <ContactCard
+          key={contact.id}
+          contact={contact}
+          referenceId={supplierId}
+          referenceType="supplier"
+          isPrimary={contact.id === primaryContactId}
+        />
+      ))}
+    </ListPageWrapper>
   );
 }
 

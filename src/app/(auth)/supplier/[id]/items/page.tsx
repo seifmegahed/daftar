@@ -1,8 +1,9 @@
 import { getSupplierItemsAction } from "@/server/actions/project-items/read";
 import type { SupplierItemType } from "@/server/db/tables/project-item/queries";
-import InfoPageWrapper from "@/components/info-page-wrapper";
 import { numberWithCommas } from "@/utils/common";
 import Link from "next/link";
+import ListPageWrapper from "@/components/list-page-wrapper";
+import CardWrapper from "@/components/card-wrapper";
 
 async function SuppliersItemsPage({ params }: { params: { id: string } }) {
   const supplierId = Number(params.id);
@@ -13,33 +14,31 @@ async function SuppliersItemsPage({ params }: { params: { id: string } }) {
   if (error !== null) return <p>Error: {error}</p>;
 
   return (
-    <InfoPageWrapper
+    <ListPageWrapper
       title="Supplier's Items"
       subtitle="This is a list of the supplier's items."
     >
-      <div className="flex flex-col gap-4">
-        {items.map((item) => (
-          <SupplierItemCard key={item.itemId} item={item} />
-        ))}
-      </div>
-    </InfoPageWrapper>
+      {items.map((item) => (
+        <SupplierItemCard key={item.itemId} item={item} />
+      ))}
+    </ListPageWrapper>
   );
 }
 
 const SupplierItemCard = ({ item }: { item: SupplierItemType }) => {
   return (
-    <div className="flex items-center gap-5 rounded-xl border p-4">
-      <Link href={`/item/${item.itemId}`}>
+    <CardWrapper>
+      <Link href={`/item/${item.itemId}`} className="hidden sm:block">
         <div className="flex cursor-pointer items-center justify-center">
           <p className="w-10 text-center text-2xl font-bold text-foreground">
             {item.itemId}
           </p>
         </div>
       </Link>
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full flex-col justify-between gap-2 sm:flex-row sm:items-center sm:gap-0">
         <div>
           <Link href={`/item/${item.itemId}`}>
-            <p className="cursor-pointer text-foreground hover:underline">
+            <p className="cursor-pointer text-lg font-bold text-foreground hover:underline">
               {item.itemName}
             </p>
           </Link>
@@ -47,23 +46,23 @@ const SupplierItemCard = ({ item }: { item: SupplierItemType }) => {
             {item.itemMake}
           </p>
         </div>
-        <div className="w-72 text-end">
+        <div className="sm:w-72 sm:text-end">
           <Link href={`/project/${item.projectId}`}>
             <p className="line-clamp-1 text-foreground hover:underline">
               {item.projectName}
             </p>
           </Link>
-          <div className="flex justify-end gap-4">
+          <div className="flex gap-4 sm:justify-end">
             <p className="text-xs text-muted-foreground">
               {"Quantity: " + item.quantity}
             </p>
-            <p className="text-xs text-muted-foreground min-w-24">
+            <p className="min-w-24 text-xs text-muted-foreground">
               {"Price: " + numberWithCommas(Number(item.price))}
             </p>
           </div>
         </div>
       </div>
-    </div>
+    </CardWrapper>
   );
 };
 
