@@ -3,13 +3,13 @@ import Pagination from "@/components/pagination";
 import ClientsList from "./all-clients/clients-list";
 import { defaultPageLimit } from "@/data/config";
 import { getClientsCountAction } from "@/server/actions/clients/read";
-import FilterAndSearch from "@/components/filter-and-search";
 import SkeletonList from "@/components/skeletons";
 import type {
   FilterOptionType,
   FilterTypes,
 } from "@/components/filter-and-search";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 const pageLimit = defaultPageLimit;
 
@@ -38,9 +38,10 @@ async function ClientsPage({ searchParams }: Props) {
   const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-lg font-medium">All Clients Page</h3>
-      <FilterAndSearch defaults={filterValues} filterItems={filterItems} />
+    <ListPageWrapper
+      filter={{ filterItems, filterValues }}
+      title="All Clients Page"
+    >
       <Suspense key={page + query} fallback={<SkeletonList type="A" />}>
         <ClientsList
           page={page}
@@ -49,7 +50,7 @@ async function ClientsPage({ searchParams }: Props) {
         />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
-    </div>
+    </ListPageWrapper>
   );
 }
 

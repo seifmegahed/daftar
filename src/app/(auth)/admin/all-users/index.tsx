@@ -15,7 +15,7 @@ function AllUsersList({ users }: { users: GetPartialUserType[] }) {
 
 function UserCard({ user }: { user: GetPartialUserType }) {
   return (
-    <div className="flex gap-6 sm:rounded-md sm:border border-t p-5 last:border-b">
+    <div className="flex gap-5 sm:rounded-md sm:border border-t p-4 last:border-b">
       <div className="flex w-full sm:justify-between flex-col sm:flex-row sm:gap-0 gap-3">
         <div>
           <div className="text-lg font-bold">{user.name}</div>

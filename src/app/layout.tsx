@@ -18,7 +18,12 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${GeistSans.variable} scroll-smooth`} dir="ltr">
+    <html
+      lang="en"
+      className={`${GeistSans.variable} scroll-smooth`}
+      dir="ltr"
+      content="initial-scale=1.0 maximum-scale=1.0"
+    >
       <head />
       <body>
         {env.NEXT_PUBLIC_VERCEL && <Analytics />}

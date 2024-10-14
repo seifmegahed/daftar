@@ -2,32 +2,35 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { type BriefClientType } from "@/server/db/tables/client/queries";
 import ClientCardContextMenu from "./card-menu";
+import CardWrapper from "@/components/card-wrapper";
 
 const ClientCard = ({ client }: { client: BriefClientType }) => {
   return (
-    <div className="flex items-center gap-5 rounded-xl border p-4">
-      <Link href={`/client/${client.id}`}>
+    <CardWrapper>
+      <Link href={`/client/${client.id}`} className="hidden sm:block">
         <div className="flex cursor-pointer items-center justify-center">
           <p className="w-10 text-end text-2xl font-bold text-foreground">
             {client.id}
           </p>
         </div>
       </Link>
-      <div className="flex w-full items-center justify-between">
+      <div className="flex w-full flex-col sm:items-center sm:flex-row sm:justify-between gap-2 sm:gap-0">
         <Link href={`/client/${client.id}`}>
-          <p className="cursor-pointer text-foreground hover:underline text-xl line-clamp-1">
+          <p className="line-clamp-1 cursor-pointer text-xl text-foreground hover:underline">
             {client.name}
           </p>
         </Link>
-        <div className="w-60 text-end">
-          <p className="text-foreground line-clamp-1">{client.registrationNumber}</p>
+        <div className="sm:w-60 sm:text-end">
+          <p className="line-clamp-1 text-foreground">
+            {client.registrationNumber}
+          </p>
           <p className="text-xs text-muted-foreground">
             {format(client.createdAt, "PP")}
           </p>
         </div>
       </div>
       <ClientCardContextMenu clientId={client.id} />
-    </div>
+    </CardWrapper>
   );
 };
 
