@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 
 const DocumentCard = ({ document }: { document: SimpDoc }) => {
   return (
-    <div className="flex justify-between sm:pl-5 sm:px-0 px-3">
+    <div className="flex justify-between sm:ps-5 sm:px-0 px-3">
       <div className="flex items-center gap-x-2">
         <div className="relative cursor-pointer">
           <FileIcon className="h-8 w-8" />

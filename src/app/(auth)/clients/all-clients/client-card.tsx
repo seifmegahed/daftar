@@ -29,7 +29,9 @@ const ClientCard = ({ client }: { client: BriefClientType }) => {
           </p>
         </div>
       </div>
-      <ClientCardContextMenu clientId={client.id} />
+      <div>
+        <ClientCardContextMenu clientId={client.id} />
+      </div>
     </CardWrapper>
   );
 };

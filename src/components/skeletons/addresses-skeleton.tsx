@@ -1,40 +1,40 @@
-import InfoPageSkeletonWrapper from "@/components/skeletons/info-page-wrapper-skeleton";
 import { Skeleton } from "@/components/ui/skeleton";
 import ContactAddressCardSkeletonWrapper from "./contact-address-card-skeleton-wrapper";
+import ListPageWrapperSkeleton from "./list-page-wrapper-skeleton";
 
-function AddressCardSkeleton() {
+export function AddressCardSkeleton() {
   return (
     <ContactAddressCardSkeletonWrapper>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between">
-          <Skeleton className="h-[0.8rem] w-[100px]" />
-          <Skeleton className="h-[0.8rem] w-[150px]" />
+          <Skeleton className="h-[0.8rem] w-1/4" />
+          <Skeleton className="h-[0.8rem] w-1/3" />
         </div>
         <div className="flex justify-between">
-          <Skeleton className="h-[0.8rem] w-[100px]" />
-          <Skeleton className="h-[0.8rem] w-[80px]" />
+          <Skeleton className="h-[0.8rem] w-1/4" />
+          <Skeleton className="h-[0.8rem] w-1/4" />
         </div>
         <div className="flex justify-between">
-          <Skeleton className="h-[0.8rem] w-[80px]" />
-          <Skeleton className="h-[0.8rem] w-[100px]" />
+          <Skeleton className="h-[0.8rem] w-1/3" />
+          <Skeleton className="h-[0.8rem] w-1/4" />
         </div>
       </div>
       <div className="flex flex-col gap-2">
         <div className="flex justify-between">
-          <Skeleton className="h-[0.8rem] w-[100px]" />
-          <Skeleton className="h-[0.8rem] w-[150px]" />
+          <Skeleton className="h-[0.8rem] w-1/4" />
+          <Skeleton className="h-[0.8rem] w-1/3" />
         </div>
         <div className="flex justify-between">
-          <Skeleton className="h-[0.8rem] w-[100px]" />
-          <Skeleton className="h-[0.8rem] w-[80px]" />
+          <Skeleton className="h-[0.8rem] w-1/4" />
+          <Skeleton className="h-[0.8rem] w-1/4" />
         </div>
         <div className="flex justify-between">
-          <Skeleton className="h-[0.8rem] w-[80px]" />
-          <Skeleton className="h-[0.8rem] w-[100px]" />
+          <Skeleton className="h-[0.8rem] w-1/3" />
+          <Skeleton className="h-[0.8rem] w-1/4" />
         </div>
         <div className="flex justify-between">
-          <Skeleton className="h-[0.8rem] w-[100px]" />
-          <Skeleton className="h-[0.8rem] w-[150px]" />
+          <Skeleton className="h-[0.8rem] w-1/3" />
+          <Skeleton className="h-[0.8rem] w-1/3" />
         </div>
       </div>
     </ContactAddressCardSkeletonWrapper>
@@ -43,11 +43,11 @@ function AddressCardSkeleton() {
 
 function AddressesSkeleton() {
   return (
-    <InfoPageSkeletonWrapper>
+    <ListPageWrapperSkeleton subtitle>
       <AddressCardSkeleton />
       <AddressCardSkeleton />
       <AddressCardSkeleton />
-    </InfoPageSkeletonWrapper>
+    </ListPageWrapperSkeleton>
   );
 }
 

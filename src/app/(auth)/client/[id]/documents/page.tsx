@@ -5,6 +5,7 @@ import ListPageWrapper from "@/components/list-page-wrapper";
 async function ClientDocumentsPage({ params }: { params: { id: string } }) {
   const [documents, error] = await getClientDocumentsAction(Number(params.id));
   if (error !== null) return <p>Error: {error}</p>;
+
   return (
     <ListPageWrapper
       title="Client's Documents"

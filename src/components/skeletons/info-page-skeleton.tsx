@@ -15,11 +15,11 @@ function SectionSkeleton({ children }: { children: ReactNode }) {
   );
 }
 
-function TextInfoSkeleton({ labelWidth = "120", valueWidth = "100" }) {
+function TextInfoSkeleton({ labelWidth = "1/4", valueWidth = "1/4" }) {
   return (
     <div className="flex justify-between">
-      <Skeleton className={`h-[0.8rem] w-[${labelWidth}px]`} />
-      <Skeleton className={`h-[0.8rem] w-[${valueWidth}px]`} />
+      <Skeleton className={`h-[0.8rem] w-${labelWidth}`} />
+      <Skeleton className={`h-[0.8rem] w-${valueWidth}`} />
     </div>
   );
 }
@@ -29,9 +29,9 @@ function MultiTextInfoSkeleton() {
     <div className="flex justify-between pt-4">
       <Skeleton className="h-[0.8rem] w-[200px]" />
       <div className="flex flex-col items-end gap-y-2">
-        <Skeleton className="h-[0.8rem] w-[150px]" />
-        <Skeleton className="h-[0.8rem] w-[300px]" />
-        <Skeleton className="h-[0.8rem] w-[100px]" />
+        <Skeleton className="h-[0.8rem] w-1/3" />
+        <Skeleton className="h-[0.8rem] w-2/3" />
+        <Skeleton className="h-[0.8rem] w-1/4" />
       </div>
     </div>
   );
@@ -40,10 +40,10 @@ function MultiTextInfoSkeleton() {
 function GeneralInfoSkeleton() {
   return (
     <SectionSkeleton>
-      <TextInfoSkeleton labelWidth="150" valueWidth="100" />
-      <TextInfoSkeleton labelWidth="300" valueWidth="150" />
-      <TextInfoSkeleton labelWidth="100" valueWidth="80" />
-      <TextInfoSkeleton labelWidth="150" valueWidth="150" />
+      <TextInfoSkeleton labelWidth="1/4" valueWidth="1/4" />
+      <TextInfoSkeleton labelWidth="2/3" valueWidth="1/4" />
+      <TextInfoSkeleton labelWidth="1/4" valueWidth="1/2" />
+      <TextInfoSkeleton labelWidth="1/3" valueWidth="1/3" />
       <MultiTextInfoSkeleton />
       <MultiTextInfoSkeleton />
     </SectionSkeleton>
@@ -53,10 +53,10 @@ function GeneralInfoSkeleton() {
 function OtherInfoSkeleton() {
   return (
     <SectionSkeleton>
-      <TextInfoSkeleton labelWidth="100" valueWidth="150" />
-      <TextInfoSkeleton labelWidth="150" valueWidth="300" />
-      <TextInfoSkeleton labelWidth="100" valueWidth="150" />
-      <TextInfoSkeleton labelWidth="150" valueWidth="100" />
+      <TextInfoSkeleton labelWidth="1/4" valueWidth="1/3" />
+      <TextInfoSkeleton labelWidth="1/4" valueWidth="2/3" />
+      <TextInfoSkeleton labelWidth="1/3" valueWidth="1/3" />
+      <TextInfoSkeleton labelWidth="1/3" valueWidth="1/4" />
     </SectionSkeleton>
   );
 }
