@@ -1,16 +1,17 @@
 import DocumentsList from "@/components/documents-list";
+import ListPageWrapper from "@/components/list-page-wrapper";
 import { getItemDocumentsAction } from "@/server/actions/document-relations/read";
 
 async function ClientDocumentsPage({ params }: { params: { id: string } }) {
   const [documents, error] = await getItemDocumentsAction(Number(params.id));
   if (error !== null) return <p>Error: {error}</p>;
   return (
-    <div className="flex flex-col gap-10">
-      <h1 className="text-3xl">Item&apos;s Documents</h1>
-      <div>
-        <DocumentsList documents={documents} />
-      </div>
-    </div>
+    <ListPageWrapper
+      title="Item's Documents"
+      subtitle="This is a list of the documents linked to the item."
+    >
+      <DocumentsList documents={documents} />
+    </ListPageWrapper>
   );
 }
 

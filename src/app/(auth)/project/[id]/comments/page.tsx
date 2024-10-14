@@ -41,7 +41,7 @@ async function ProjectCommentsPage({
   if (error !== null) return <div>Error getting project comments</div>;
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 sm:px-0 px-2">
       <div className="flex gap-4">
         <AvatarContainer>{getInitials(currentUser.name)}</AvatarContainer>
         <ProjectCommentForm projectId={projectId} />

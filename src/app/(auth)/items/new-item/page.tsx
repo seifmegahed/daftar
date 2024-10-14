@@ -17,11 +17,10 @@ import {
   FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import SubmitButton from "@/components/buttons/submit-button";
 import { Textarea } from "@/components/ui/textarea";
 
 import { notesMaxLength } from "@/data/config";
-import { Separator } from "@/components/ui/separator";
+import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 
 const schema = z.object({
   name: z
@@ -65,13 +64,13 @@ function NewItemForm() {
   const onSubmit = async (data: ItemFormSchemaType) => {
     try {
       const response = await addItemAction(data);
-      if(!response) return;
+      if (!response) return;
       const [, error] = response;
       if (error !== null) {
         console.error("Error adding item:", error);
         toast.error("An error occurred while adding the item");
         return;
-      };
+      }
     } catch (error) {
       console.error("Error adding item:", error);
       toast.error("An error occurred while adding the item");
@@ -85,114 +84,113 @@ function NewItemForm() {
       autoComplete="off"
     >
       <Form {...form}>
-        <h2 className="text-2xl font-bold">Item Form</h2>
-        <Separator />
-        <FormField
-          control={form.control}
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Item Name</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter the name of the item. This is the name you will be using
-                to search and refer to the item. It will appear in your
-                projects.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="type"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Type</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter the type of the item. This will be used to categorize the
-                item and make it easier to search for them.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="description"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Description</FormLabel>
-              <FormControl>
-                <Textarea {...field} className="resize-none" rows={2} />
-              </FormControl>
-              <FormDescription>
-                Enter a description of the item.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="make"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Make</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter the manufacturer of the item.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="mpn"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>MPN</FormLabel>
-              <FormControl>
-                <Input {...field} />
-              </FormControl>
-              <FormDescription>
-                Enter the manufacturer&apos;s part number of the item.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <FormControl>
-                <Textarea {...field} className="resize-none" rows={4} />
-              </FormControl>
-              <FormDescription>Enter any notes about the item.</FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end">
-          <SubmitButton
-            type="submit"
-            disabled={form.formState.isSubmitting || !form.formState.isDirty}
-            loading={form.formState.isSubmitting}
-          >
-            Save
-          </SubmitButton>
-        </div>
+        <FormWrapperWithSubmit
+          title="Add Item"
+          description="Enter the details of the item you want to add."
+          buttonText="Add Item"
+          submitting={form.formState.isSubmitting}
+          dirty={form.formState.isDirty}
+        >
+          <FormField
+            control={form.control}
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Item Name</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>
+                  Enter the name of the item. This is the name you will be using
+                  to search and refer to the item. It will appear in your
+                  projects.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Type</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>
+                  Enter the type of the item. This will be used to categorize
+                  the item and make it easier to search for them.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="description"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Description</FormLabel>
+                <FormControl>
+                  <Textarea {...field} className="resize-none" rows={2} />
+                </FormControl>
+                <FormDescription>
+                  Enter a description of the item.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="make"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Make</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>
+                  Enter the manufacturer of the item.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="mpn"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>MPN</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>
+                  Enter the manufacturer&apos;s part number of the item.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Notes</FormLabel>
+                <FormControl>
+                  <Textarea {...field} className="resize-none" rows={4} />
+                </FormControl>
+                <FormDescription>
+                  Enter any notes about the item.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </FormWrapperWithSubmit>
       </Form>
     </form>
   );

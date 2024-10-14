@@ -9,7 +9,7 @@ import type {
   FilterOptionType,
   FilterTypes,
 } from "@/components/filter-and-search";
-import FilterAndSearch from "@/components/filter-and-search";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 const pageLimit = defaultPageLimit;
 
@@ -36,14 +36,19 @@ async function ItemsPage({ searchParams }: Props) {
   const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-lg font-medium">All Items Page</h3>
-      <FilterAndSearch filterItems={filterItems} defaults={filterValues} />
+    <ListPageWrapper
+      title="All Items Page"
+      filter={{ filterItems, filterValues }}
+    >
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
-        <ItemsList page={page} query={query === "" ? undefined : query} filter={filterValues} />
+        <ItemsList
+          page={page}
+          query={query === "" ? undefined : query}
+          filter={filterValues}
+        />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
-    </div>
+    </ListPageWrapper>
   );
 }
 

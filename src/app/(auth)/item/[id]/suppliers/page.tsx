@@ -1,6 +1,6 @@
-import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getItemSuppliersAction } from "@/server/actions/project-items/read";
 import SupplierCard from "@/app/(auth)/suppliers/all-suppliers/supplier-card";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 async function ItemSuppliersPage({ params }: { params: { id: string } }) {
   const itemId = Number(params.id);
@@ -9,16 +9,14 @@ async function ItemSuppliersPage({ params }: { params: { id: string } }) {
   const [suppliers, error] = await getItemSuppliersAction(itemId);
   if (error !== null) return <p>Error: {error}</p>;
   return (
-    <InfoPageWrapper
+    <ListPageWrapper
       title="Item's Suppliers"
       subtitle="This is a list of the suppliers that supplied this item."
     >
-      <div className="flex flex-col gap-4">
-        {suppliers.map((supplier) => (
-          <SupplierCard key={supplier.id} supplier={supplier} />
-        ))}
-      </div>
-    </InfoPageWrapper>
+      {suppliers.map((supplier) => (
+        <SupplierCard key={supplier.id} supplier={supplier} />
+      ))}
+    </ListPageWrapper>
   );
 }
 

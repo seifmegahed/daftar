@@ -1,12 +1,15 @@
 import { Suspense } from "react";
 import Pagination from "@/components/pagination";
 import ProjectsList from "./all-projects/projects-list";
-import FilterAndSearch from "@/components/filter-and-search";
-import type { FilterOptionType, FilterTypes } from "@/components/filter-and-search";
+import type {
+  FilterOptionType,
+  FilterTypes,
+} from "@/components/filter-and-search";
 import SkeletonList from "@/components/skeletons";
 import { getProjectsCountAction } from "@/server/actions/projects/read";
 import { defaultPageLimit } from "@/data/config";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
+import ListPageWrapper from "@/components/list-page-wrapper";
 
 const pageLimit = defaultPageLimit;
 
@@ -38,12 +41,10 @@ async function AllProjects({ searchParams }: Props) {
   const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
 
   return (
-    <div className="space-y-6">
-      <h3 className="text-lg font-medium">All Projects Page</h3>
-      <FilterAndSearch
-        defaults={filterValues}
-        filterItems={filterItems}
-      />
+    <ListPageWrapper
+      title="All Project Page"
+      filter={{ filterItems, filterValues }}
+    >
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
         <ProjectsList
           page={page}
@@ -52,7 +53,7 @@ async function AllProjects({ searchParams }: Props) {
         />
       </Suspense>
       <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
-    </div>
+    </ListPageWrapper>
   );
 }
 
