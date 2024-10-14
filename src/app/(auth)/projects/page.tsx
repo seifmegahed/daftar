@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import Pagination from "@/components/pagination";
 import ProjectsList from "./all-projects/projects-list";
 import type {
   FilterOptionType,
@@ -44,6 +43,7 @@ async function AllProjects({ searchParams }: Props) {
     <ListPageWrapper
       title="All Project Page"
       filter={{ filterItems, filterValues }}
+      pagination={{ totalPages }}
     >
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
         <ProjectsList
@@ -52,7 +52,6 @@ async function AllProjects({ searchParams }: Props) {
           filter={filterValues}
         />
       </Suspense>
-      <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
     </ListPageWrapper>
   );
 }

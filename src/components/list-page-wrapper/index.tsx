@@ -4,17 +4,20 @@ import type {
   FilterOptionType,
 } from "@/components/filter-and-search";
 import type { ReactNode } from "react";
+import Pagination from "../pagination";
 
 function ListPageWrapper({
   children,
   title,
   subtitle,
   filter,
+  pagination,
 }: {
   children: ReactNode;
   title: string;
   subtitle?: string;
   filter?: { filterValues: FilterArgs; filterItems: FilterOptionType[] };
+  pagination?: { totalPages: number };
 }) {
   return (
     <div className="space-y-6">
@@ -31,6 +34,11 @@ function ListPageWrapper({
         )}
       </div>
       <div className="space-y-0 sm:space-y-6">{children}</div>
+      {pagination && (
+        <div>
+          <Pagination totalPages={pagination.totalPages} />
+        </div>
+      )}
     </div>
   );
 }

@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import Pagination from "@/components/pagination";
 import ClientsList from "./all-clients/clients-list";
 import { defaultPageLimit } from "@/data/config";
 import { getClientsCountAction } from "@/server/actions/clients/read";
@@ -41,6 +40,7 @@ async function ClientsPage({ searchParams }: Props) {
     <ListPageWrapper
       filter={{ filterItems, filterValues }}
       title="All Clients Page"
+      pagination={{ totalPages }}
     >
       <Suspense key={page + query} fallback={<SkeletonList type="A" />}>
         <ClientsList
@@ -49,7 +49,6 @@ async function ClientsPage({ searchParams }: Props) {
           filter={filterValues}
         />
       </Suspense>
-      <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
     </ListPageWrapper>
   );
 }

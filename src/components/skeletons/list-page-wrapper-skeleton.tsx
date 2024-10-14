@@ -1,14 +1,17 @@
 import type { ReactNode } from "react";
 import { Skeleton } from "../ui/skeleton";
+import PaginationSkeleton from "./pagination-skeleton";
 
 function ListPageWrapperSkeleton({
   children,
   subtitle,
   filter,
+  pagination,
 }: {
   children: ReactNode;
   subtitle?: boolean;
   filter?: boolean;
+  pagination?: boolean;
 }) {
   return (
     <div className="space-y-6">
@@ -25,6 +28,7 @@ function ListPageWrapperSkeleton({
         )}
       </div>
       <div className="flex flex-col sm:gap-6">{children}</div>
+      <div>{pagination && <PaginationSkeleton />}</div>
     </div>
   );
 }

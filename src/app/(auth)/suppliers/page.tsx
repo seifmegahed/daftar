@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import Pagination from "@/components/pagination";
 import SuppliersList from "./all-suppliers/suppliers-list";
 import { defaultPageLimit } from "@/data/config";
 import { getSuppliersCountAction } from "@/server/actions/suppliers/read";
@@ -42,6 +41,7 @@ async function SuppliersPage({ searchParams }: Props) {
     <ListPageWrapper
       title="All Suppliers Page"
       filter={{ filterItems, filterValues }}
+      pagination={{ totalPages }}
     >
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
         <SuppliersList
@@ -50,7 +50,6 @@ async function SuppliersPage({ searchParams }: Props) {
           filter={filterValues}
         />
       </Suspense>
-      <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
     </ListPageWrapper>
   );
 }

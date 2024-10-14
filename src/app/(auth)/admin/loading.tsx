@@ -5,9 +5,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 function AdminLoadingPage() {
   return (
-    <ListPageWrapperSkeleton>
+    <ListPageWrapperSkeleton pagination>
       <UsersListSkeleton />
-      <PaginationSkeleton />
     </ListPageWrapperSkeleton>
   );
 }

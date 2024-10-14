@@ -12,16 +12,15 @@ async function AdminPage({ searchParams }: { searchParams: { page: string } }) {
   const page = isNaN(Number(searchParams.page)) ? 1 : Number(searchParams.page);
 
   const [users, error] = await getAllUsersAction(page, defaultPageLimit);
-  const [count, countError] = await getUsersCountAction();
+  const [totalPages, countError] = await getUsersCountAction();
 
   if (error !== null || countError !== null)
     return <p>Error: Could not load users</p>;
   return (
-    <ListPageWrapper title="Users">
+    <ListPageWrapper title="Users" pagination={{ totalPages }}>
       <Suspense fallback={<UsersListSkeleton count={defaultPageLimit} />}>
         <AllUsersList users={users} />
       </Suspense>
-      <Pagination totalPages={Math.ceil(count / defaultPageLimit)} />
     </ListPageWrapper>
   );
 }

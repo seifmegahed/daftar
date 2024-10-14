@@ -1,5 +1,4 @@
 import { Suspense } from "react";
-import Pagination from "@/components/pagination";
 import { defaultPageLimit } from "@/data/config";
 import SkeletonList from "@/components/skeletons";
 import ItemsList from "./all-items/items-list";
@@ -39,6 +38,7 @@ async function ItemsPage({ searchParams }: Props) {
     <ListPageWrapper
       title="All Items Page"
       filter={{ filterItems, filterValues }}
+      pagination={{ totalPages }}
     >
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
         <ItemsList
@@ -47,7 +47,6 @@ async function ItemsPage({ searchParams }: Props) {
           filter={filterValues}
         />
       </Suspense>
-      <Pagination totalPages={totalPages === 0 ? 1 : totalPages} />
     </ListPageWrapper>
   );
 }
