@@ -22,7 +22,7 @@ const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
           </p>
         </Link>
         <div className="sm:w-60 sm:text-end">
-          <div className="flex items-center sm:justify-end gap-4">
+          <div className="flex items-center gap-4 sm:justify-end">
             {document.private && (
               <Lock className="h-4 w-4 text-muted-foreground" />
             )}
@@ -33,7 +33,9 @@ const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
           </p>
         </div>
       </div>
-      <DocumentCardContextMenu documentId={document.id} />
+      <div>
+        <DocumentCardContextMenu documentId={document.id} />
+      </div>
     </CardWrapper>
   );
 };

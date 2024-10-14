@@ -7,7 +7,6 @@ async function ClientProjectsPage({ params }: { params: { id: string } }) {
 
   if (error !== null) return <p>Error getting client&apos;s projects</p>;
 
-  await new Promise((r) => setTimeout(r, 5000));
   return (
     <ListPageWrapper
       title="Client's Projects"

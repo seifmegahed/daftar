@@ -27,10 +27,10 @@ const ProjectCard = ({
           </p>
         </div>
       </Link>
-      <div className="flex w-full sm:items-center flex-col sm:flex-row justify-between gap-2 sm:gap-0">
+      <div className="flex w-full flex-col justify-between gap-2 sm:flex-row sm:items-center sm:gap-0">
         <div>
           <Link href={`/project/${project.id}`}>
-            <p className="cursor-pointer text-foreground hover:underline font-bold text-lg">
+            <p className="cursor-pointer text-lg font-bold text-foreground hover:underline">
               {project.name}
             </p>
           </Link>
@@ -47,7 +47,9 @@ const ProjectCard = ({
           </p>
         </div>
       </div>
-      <ProjectCardContextMenu projectId={project.id} />
+      <div>
+        <ProjectCardContextMenu projectId={project.id} />
+      </div>
     </CardWrapper>
   );
 };

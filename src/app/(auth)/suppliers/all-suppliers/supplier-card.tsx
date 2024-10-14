@@ -9,7 +9,6 @@ import CardWrapper from "@/components/card-wrapper";
 const SupplierCard = ({ supplier }: { supplier: BriefSupplierType }) => {
   return (
     <CardWrapper>
-      {/* <div className="flex items-center gap-5 rounded-xl border p-4"> */}
       <Link href={`/supplier/${supplier.id}`} className="hidden sm:block">
         <div className="flex cursor-pointer items-center justify-center">
           <p className="w-10 text-right text-2xl font-bold text-foreground">
@@ -20,7 +19,7 @@ const SupplierCard = ({ supplier }: { supplier: BriefSupplierType }) => {
       <div className="flex w-full flex-col justify-between gap-2 sm:flex-row sm:items-center sm:gap-0">
         <div>
           <Link href={`/supplier/${supplier.id}`}>
-            <p className="line-clamp-1 cursor-pointer text-foreground hover:underline font-bold text-lg">
+            <p className="line-clamp-1 cursor-pointer text-lg font-bold text-foreground hover:underline">
               {supplier.name}
             </p>
           </Link>
@@ -37,8 +36,9 @@ const SupplierCard = ({ supplier }: { supplier: BriefSupplierType }) => {
           </p>
         </div>
       </div>
-      <SupplierCardContextMenu supplierId={supplier.id} />
-      {/* </div> */}
+      <div>
+        <SupplierCardContextMenu supplierId={supplier.id} />
+      </div>
     </CardWrapper>
   );
 };

@@ -11,7 +11,7 @@ function CommentCardSkeleton() {
 
 export function CommentsListSkeleton({ count = 5 }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 px-2 sm:px-0">
       {Array.from({ length: count }).map((_, i) => (
         <CommentCardSkeleton key={i} />
       ))}

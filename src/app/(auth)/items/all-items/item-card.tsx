@@ -19,7 +19,7 @@ const ItemCard = ({ item }: { item: BriefItemType }) => {
       <div className="flex w-full flex-col justify-between gap-2 sm:flex-row sm:items-center sm:gap-0">
         <div>
           <Link href={`/item/${item.id}`}>
-            <p className="line-clamp-1 cursor-pointer text-foreground hover:underline font-bold text-lg">
+            <p className="line-clamp-1 cursor-pointer text-lg font-bold text-foreground hover:underline">
               {item.name}
             </p>
           </Link>
@@ -34,7 +34,9 @@ const ItemCard = ({ item }: { item: BriefItemType }) => {
           </p>
         </div>
       </div>
-      <ItemCardContextMenu itemId={item.id} />
+      <div>
+        <ItemCardContextMenu itemId={item.id} />
+      </div>
     </CardWrapper>
   );
 };

@@ -44,9 +44,9 @@ function UserCard({ user }: { user: GetPartialUserType }) {
           </div>
         </div>
       </div>
-      <div>
+      <div className="h-full sm:pb-10">
         <Link href={`/admin/edit-user/${user.id}`}>
-          <div className="-me-4 -mt-4 cursor-pointer rounded-full p-3 text-muted-foreground hover:bg-muted">
+          <div className="cursor-pointer text-muted-foreground">
             <Edit className="h-6 w-6" />
           </div>
         </Link>
