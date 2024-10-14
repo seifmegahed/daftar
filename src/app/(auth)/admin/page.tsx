@@ -8,14 +8,19 @@ import ListPageWrapper from "@/components/list-page-wrapper";
 
 export const dynamic = "force-dynamic";
 
+const pageLimit = 10;
+
 async function AdminPage({ searchParams }: { searchParams: { page: string } }) {
   const page = isNaN(Number(searchParams.page)) ? 1 : Number(searchParams.page);
 
   const [users, error] = await getAllUsersAction(page, defaultPageLimit);
-  const [totalPages, countError] = await getUsersCountAction();
+  const [totalCount, countError] = await getUsersCountAction();
 
   if (error !== null || countError !== null)
     return <p>Error: Could not load users</p>;
+  
+  const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
+
   return (
     <ListPageWrapper title="Users" pagination={{ totalPages }}>
       <Suspense fallback={<UsersListSkeleton count={defaultPageLimit} />}>
