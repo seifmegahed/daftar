@@ -5,7 +5,7 @@ import Link from "next/link";
 
 function AllUsersList({ users }: { users: GetPartialUserType[] }) {
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col sm:gap-4">
       {users.map((user) => (
         <UserCard key={user.id} user={user} />
       ))}
@@ -15,8 +15,8 @@ function AllUsersList({ users }: { users: GetPartialUserType[] }) {
 
 function UserCard({ user }: { user: GetPartialUserType }) {
   return (
-    <div className="flex gap-6 rounded-md border p-5">
-      <div className="flex w-full justify-between">
+    <div className="flex gap-6 sm:rounded-md sm:border border-t p-5 last:border-b">
+      <div className="flex w-full sm:justify-between flex-col sm:flex-row sm:gap-0 gap-3">
         <div>
           <div className="text-lg font-bold">{user.name}</div>
           <div className="text-sm text-muted-foreground">{user.username}</div>
