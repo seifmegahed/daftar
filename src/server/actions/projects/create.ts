@@ -10,6 +10,9 @@ import { getCurrentUserIdAction } from "@/server/actions/users";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { errorLogger } from "@/lib/exceptions";
+
+const projectsErrorLog = errorLogger("Project Create Action Error:");
 
 const addProjectSchema = insertProjectSchema.omit({
   createdBy: true,
@@ -21,7 +24,10 @@ export const addProjectAction = async (
   data: AddProjectFormType,
 ): Promise<ReturnTuple<number> | undefined> => {
   const isValid = addProjectSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
+  if (isValid.error) {
+    projectsErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];

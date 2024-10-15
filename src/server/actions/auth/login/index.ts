@@ -15,6 +15,7 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { loginErrors } from "./errors";
 import { redirect } from "next/navigation";
 import { env } from "@/env";
+import { errorLogger } from "@/lib/exceptions";
 
 const loginSchema = UserSchema.pick({
   username: true,
@@ -23,31 +24,37 @@ const loginSchema = UserSchema.pick({
 
 type LoginFormType = z.infer<typeof loginSchema>;
 
+const loginErrorLog = errorLogger("Login Action Error:");
+
 export const loginAction = async (
   data: LoginFormType,
 ): Promise<ReturnTuple<number> | undefined> => {
   const isValid = loginSchema.safeParse(data);
-
-  if (!isValid.success) return [null, loginErrors.invalidData];
+  if (isValid.error) {
+    loginErrorLog(isValid.error);
+    return [null, loginErrors.invalidData];
+  }
 
   const [user, error] = await sensitiveGetUserByUsername(data.username);
-
   if (error !== null) return [null, error];
 
-  if (!(await comparePassword(data.password, user.password)))
-    return [null, loginErrors.incorrectPassword];
+  const [, passwordCheckError] = await comparePassword(
+    data.password,
+    user.password,
+  );
+  if (passwordCheckError !== null) return [null, passwordCheckError];
 
   if (!user.active) return [null, loginErrors.userNotActive];
 
-  await updateUserLastActive(user.id);
+  const [, updateActiveError] = await updateUserLastActive(user.id);
+  if (updateActiveError !== null) loginErrorLog(updateActiveError);
 
-  const token = await createToken({
+  const [token, tokenError] = await createToken({
     id: user.id,
     username: user.username,
     role: user.role,
   });
-
-  if (!token) return [null, loginErrors.tokenGenerationError];
+  if (tokenError !== null) return [null, tokenError];
 
   cookies().set("token", token, {
     httpOnly: true,

@@ -12,12 +12,12 @@ export const deleteProjectCommentAction = async (
   id: number,
   projectId: number,
 ): Promise<ReturnTuple<number>> => {
-  const [currentUser, currentUserError] = await getCurrentUserIdAction();
-  if (currentUserError !== null) return [null, currentUserError];
+  const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
+  if (currentUserIdError !== null) return [null, currentUserIdError];
 
   const [comment, commentError] = await getProjectCommentByIdAction(id);
   if (commentError !== null) return [null, commentError];
-  if (comment.createdBy !== currentUser) return [null, "Not authorized"];
+  if (comment.createdBy !== currentUserId) return [null, "Not authorized"];
 
   const [deleted, deleteError] = await deleteProjectComment(id);
   if (deleteError !== null) return [null, deleteError];

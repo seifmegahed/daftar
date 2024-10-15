@@ -1,4 +1,4 @@
-"use server"
+"use server";
 
 import { revalidatePath } from "next/cache";
 
@@ -8,6 +8,9 @@ import { getCurrentUserIdAction } from "@/server/actions/users";
 
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { z } from "zod";
+import { errorLogger } from "@/lib/exceptions";
+
+const commentsErrorLog = errorLogger("Comments Create Action Error:");
 
 const createProjectCommentSchema = insertProjectCommentSchema.omit({
   createdBy: true,
@@ -20,8 +23,13 @@ export const createProjectCommentAction = async (
 ): Promise<ReturnTuple<number>> => {
   const [currentUser, currentUserError] = await getCurrentUserIdAction();
   if (currentUserError !== null) return [null, currentUserError];
+
   const isValid = createProjectCommentSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
+  if (isValid.error) {
+    commentsErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
+
   const [result, error] = await insertProjectComment({
     ...isValid.data,
     createdBy: currentUser,

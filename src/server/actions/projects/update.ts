@@ -12,6 +12,9 @@ import {
 
 import type { ReturnTuple } from "@/utils/type-utils";
 import { revalidatePath } from "next/cache";
+import { errorLogger } from "@/lib/exceptions";
+
+const projectsErrorLog = errorLogger("Project Update Action Error:");
 
 const updateProjectStatusSchema = insertProjectSchema.pick({
   status: true,
@@ -24,7 +27,10 @@ export const updateProjectStatusAction = async (
   data: UpdateProjectStatusFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateProjectStatusSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid form data"];
+  if (isValid.error) {
+    projectsErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -50,7 +56,10 @@ export const updateProjectNameAction = async (
   data: UpdateProjectNameFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateProjectNameSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid form data"];
+  if (isValid.error) {
+    projectsErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];
@@ -80,7 +89,10 @@ export const updateProjectDescriptionAction = async (
   data: UpdateProjectDescriptionFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateProjectDescriptionSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid form data"];
+  if (isValid.error) {
+    projectsErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -105,7 +117,10 @@ export const updateProjectNotesAction = async (
   data: UpdateProjectNotesFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateProjectNotesSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid form data"];
+  if (isValid.error) {
+    projectsErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -131,7 +146,10 @@ export const updateProjectDatesAction = async (
   data: UpdateProjectDatesFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateProjectDatesSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid form data"];
+  if (isValid.error) {
+    projectsErrorLog(isValid.error);
+    return [null, "Invalid form data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -157,7 +175,10 @@ export const updateProjectOwnerAction = async (
   data: UpdateProjectOwnerFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateProjectOwnerSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid form data"];
+  if (isValid.error) {
+    projectsErrorLog(isValid.error);
+    return [null, "Invalid form data"];
+  }
 
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];

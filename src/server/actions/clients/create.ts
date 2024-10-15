@@ -9,6 +9,9 @@ import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
 import { insertContactSchemaRaw } from "@/server/db/tables/contact/schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { errorLogger } from "@/lib/exceptions";
+
+const clientActionErrorLog = errorLogger("Client Create Action Error:");
 
 const addClientSchema = insertClientSchema.pick({
   name: true,
@@ -43,13 +46,22 @@ export const addClientAction = async (
   contactData: AddClientContactType,
 ): Promise<ReturnTuple<number> | undefined> => {
   const isClientValid = addClientSchema.safeParse(clientData);
-  if (!isClientValid.success) return [null, "Invalid Client data"];
+  if (isClientValid.error) {
+    clientActionErrorLog(isClientValid.error);
+    return [null, "Invalid Client data"];
+  }
 
   const isAddressValid = addClientAddressSchema.safeParse(addressData);
-  if (!isAddressValid.success) return [null, "Invalid Address data"];
+  if (isAddressValid.error) {
+    clientActionErrorLog(isAddressValid.error);
+    return [null, "Invalid Address data"];
+  }
 
   const isContactValid = addClientContactSchema.safeParse(contactData);
-  if (!isContactValid.success) return [null, "Invalid Contact data"];
+  if (isContactValid.error) {
+    clientActionErrorLog(isContactValid.error);
+    return [null, "Invalid Contact data"];
+  }
 
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];

@@ -22,6 +22,7 @@ const errorMessages = {
   getPath: "An error occurred while getting document path",
   count: "An error occurred while counting documents",
   dataCorrupted: "It seems that some data is corrupted",
+  notFound: "Document not found",
 };
 
 const logError = errorLogger(errorMessages.mainTitle);
@@ -145,7 +146,7 @@ export const getDocumentById = async (
       },
     });
 
-    if (!document) return [null, errorMessage];
+    if (!document) return [null, errorMessages.notFound];
     return [document, null];
   } catch (error) {
     logError(error);

@@ -17,6 +17,9 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "../users";
 import type { z } from "zod";
 import { redirect } from "next/navigation";
+import { errorLogger } from "@/lib/exceptions";
+
+const addressErrorLog = errorLogger("Address Action Error:");
 
 const addContactSchema = insertContactSchemaRaw
   .omit({
@@ -32,7 +35,10 @@ export const addNewContactAction = async (
   type: "client" | "supplier",
 ): Promise<ReturnTuple<number> | undefined> => {
   const isValid = addContactSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
+  if (isValid.error) {
+    addressErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];

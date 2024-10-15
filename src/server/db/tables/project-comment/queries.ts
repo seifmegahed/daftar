@@ -13,6 +13,7 @@ const errorMessages = {
   update: "An error occurred while updating comment",
   delete: "An error occurred while deleting comment",
   getComments: "An error occurred while getting comments",
+  getComment: "An error occurred while getting comment",
   count: "An error occurred while counting comments",
   dataCorrupted: "It seems that some data is corrupted",
 };
@@ -112,6 +113,25 @@ export const deleteProjectComment = async (
 
     if (!comment) return [null, errorMessage];
     return [comment.id, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
+export const getProjectCommentById = async (
+  id: number,
+): Promise<ReturnTuple<InsertProjectCommentType>> => {
+  const errorMessage = errorMessages.getComment;
+  try {
+    const [comment] = await db
+      .select()
+      .from(projectCommentsTable)
+      .where(eq(projectCommentsTable.id, id))
+      .limit(1);
+
+    if (!comment) return [null, errorMessage];
+    return [comment, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];

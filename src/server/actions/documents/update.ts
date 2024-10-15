@@ -6,6 +6,9 @@ import { documentSchema } from "@/server/db/tables/document/schema";
 import { updateDocument } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { revalidatePath } from "next/cache";
+import { errorLogger } from "@/lib/exceptions";
+
+const documentsErrorLog = errorLogger("Documents Update Action Error:");
 
 const updateNameSchema = documentSchema.pick({ name: true });
 
@@ -16,7 +19,10 @@ export const updateDocumentNameAction = async (
   data: UpdateDocumentNameFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateNameSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
+  if (isValid.error) {
+    documentsErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];
@@ -27,8 +33,8 @@ export const updateDocumentNameAction = async (
     name: isValid.data.name,
   });
   if (documentIdError !== null) return [null, documentIdError];
-  revalidatePath("/documents")
-  revalidatePath("/document")
+  revalidatePath("/documents");
+  revalidatePath("/document");
   return [documentId, null];
 };
 
@@ -41,12 +47,15 @@ export const updateDocumentNotesAction = async (
   data: UpdateDocumentNotesFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateNotesSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
+  if (isValid.error) {
+    documentsErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [documentId, documentIdError] = await updateDocument(id, {
     notes: isValid.data.notes,
   });
   if (documentIdError !== null) return [null, documentIdError];
-  revalidatePath("/document")
+  revalidatePath("/document");
   return [documentId, null];
 };

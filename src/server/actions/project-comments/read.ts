@@ -1,7 +1,7 @@
 "use server";
 
 import {
-  getCommentById,
+  getProjectCommentById,
   getProjectComments,
   getProjectCommentsCount,
 } from "@/server/db/tables/project-comment/queries";
@@ -26,4 +26,12 @@ export const getProjectCommentsCountAction = async (
   const [count, error] = await getProjectCommentsCount(projectId);
   if (error !== null) return [null, error];
   return [count, null];
+};
+
+export const getProjectCommentByIdAction = async (
+  id: number,
+): Promise<ReturnTuple<InsertProjectCommentType>> => {
+  const [comment, error] = await getProjectCommentById(id);
+  if (error !== null) return [null, error];
+  return [comment, null];
 };

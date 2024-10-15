@@ -14,7 +14,7 @@ export const deleteItemAction = async (
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null) return [null, currentUserError];
 
-  if (currentUser?.role !== "admin") {
+  if (currentUser.role !== "admin") {
     return [null, "You do not have permission to delete this item"];
   }
 

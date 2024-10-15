@@ -1,6 +1,6 @@
 "use server";
 
-import { getErrorMessage } from "@/lib/exceptions";
+import { errorLogger } from "@/lib/exceptions";
 import {
   changeUserActiveState,
   getAllUsers,
@@ -26,6 +26,8 @@ import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { checkUsername } from "@/utils/user-name-check";
+
+const userErrorsLog = errorLogger("User Action Error:");
 
 /**
  * Refine passwords to check if they are complex enough and if they match
@@ -124,13 +126,9 @@ export const getAllUsersAction = async (
   page?: number,
   limit?: number,
 ): Promise<ReturnTuple<GetPartialUserType[]>> => {
-  try {
-    const [allUsers, error] = await getAllUsers(page, limit);
-    if (error !== null) return [null, error];
-    return [allUsers, null];
-  } catch (error) {
-    return [null, getErrorMessage(error)];
-  }
+  const [allUsers, error] = await getAllUsers(page, limit);
+  if (error !== null) return [null, error];
+  return [allUsers, null];
 };
 
 /**
@@ -195,7 +193,10 @@ export const userUpdateUserDisplayNameAction = async (
   if (isAdminError !== null) return [null, isAdminError];
 
   const isValid = updateUserDisplayNameSchema.safeParse(data);
-  if (!isValid.success) return [null, userErrors.invalidData];
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
 
   const [result, error] = await updateUserName(userId, data.name);
   if (error !== null) return [null, error];
@@ -245,7 +246,10 @@ export const userUpdateUserPasswordAction = async (
   if (currentUserError !== null) return [null, currentUserError];
 
   const isValid = userUpdateUserPasswordSchema.safeParse(data);
-  if (!isValid.success) return [null, userErrors.invalidData];
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
 
   const [password, getUserError] = await sensitiveGetUserPasswordById(userId);
   if (getUserError !== null) return [null, getUserError];
@@ -328,7 +332,10 @@ export const adminCreateUserAction = async (
   if (isAdminError !== null) return [null, isAdminError];
 
   const isValid = addUserSchema.safeParse(data);
-  if (!isValid.success) return [null, userErrors.invalidData];
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
 
   const [hashedPassword, hashError] = await hashPassword(data.password);
   if (hashError !== null) return [null, userErrors.hashFailed];
@@ -375,7 +382,10 @@ export const adminUpdateUserPasswordAction = async (
   if (isAdminError !== null) return [null, isAdminError];
 
   const isValid = updateUserPasswordSchema.safeParse(data);
-  if (!isValid.success) return [null, userErrors.invalidData];
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
 
   const [hashedPassword, error] = await hashPassword(data.password);
   if (error !== null) return [null, userErrors.hashFailed];
@@ -410,7 +420,10 @@ export const adminUpdateUserDisplayNameAction = async (
   if (isAdminError !== null) return [null, isAdminError];
 
   const isValid = updateUserNameSchema.safeParse(data);
-  if (!isValid.success) return [null, userErrors.invalidData];
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
 
   const [result, error] = await updateUserName(data.id, data.name);
   if (error !== null) return [null, error];
@@ -445,7 +458,10 @@ export const adminUpdateUserRoleAction = async (
   if (isAdminError !== null) return [null, isAdminError];
 
   const isValid = updateUserRoleSchema.safeParse(data);
-  if (!isValid.success) return [null, userErrors.invalidData];
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
 
   const [result, error] = await updateUserRole(data.id, data.role);
   if (error !== null) return [null, error];
@@ -480,7 +496,10 @@ export const adminUpdateUserActiveAction = async (
   if (isAdminError !== null) return [null, isAdminError];
 
   const isValid = updateUserActiveSchema.safeParse(data);
-  if (!isValid.success) return [null, userErrors.invalidData];
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
 
   const [result, error] = await changeUserActiveState(data.id, data.active);
   if (error !== null) return [null, error];

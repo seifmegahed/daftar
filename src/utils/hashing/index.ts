@@ -1,4 +1,4 @@
-import { getErrorMessage } from "@/lib/exceptions";
+import { errorLogger, getErrorMessage } from "@/lib/exceptions";
 import * as bcrypt from "bcrypt";
 import type { ReturnTuple } from "../type-utils";
 const saltRounds = 10;
@@ -14,11 +14,17 @@ export async function hashPassword(
     return [null, getErrorMessage(error)];
   }
 }
-
-export async function comparePassword(password: string, hash: string) {
+const compareErrorLog = errorLogger("Compare Password Error:");
+export async function comparePassword(
+  password: string,
+  hash: string,
+): Promise<ReturnTuple<boolean>> {
   try {
-    return await bcrypt.compare(password, hash);
+    const result = await bcrypt.compare(password, hash);
+    if (!result) return [null, "Incorrect Password"];
+    return [true, null];
   } catch (error) {
-    console.error("Error comparing password:", error);
+    compareErrorLog(error);
+    return [null, "An error occurred while checking password"];
   }
 }

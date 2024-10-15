@@ -2,12 +2,7 @@ import { db } from "@/server/db";
 import { type UserDataType, usersTable } from "./schema";
 import { asc, eq, and, count, desc } from "drizzle-orm";
 import type { ReturnTuple } from "@/utils/type-utils";
-import {
-  checkUniqueConstraintError,
-  errorLogger,
-  getErrorMessage,
-} from "@/lib/exceptions";
-import { userErrors } from "@/server/actions/users/errors";
+import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
 
 const errorMessages = {

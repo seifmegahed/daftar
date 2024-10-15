@@ -9,6 +9,9 @@ import { insertContactSchemaRaw } from "@/server/db/tables/contact/schema";
 import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { errorLogger } from "@/lib/exceptions";
+
+const suppliersErrorLog = errorLogger("Supplier Create Action Error:");
 
 const addSupplierSchema = insertSupplierSchema.omit({
   createdBy: true,
@@ -40,13 +43,22 @@ export const addSupplierAction = async (
   contactData: AddSupplierContactType,
 ): Promise<ReturnTuple<number> | undefined> => {
   const isSupplierValid = addSupplierSchema.safeParse(clientData);
-  if (!isSupplierValid.success) return [null, "Invalid data"];
+  if (isSupplierValid.error) {
+    suppliersErrorLog(isSupplierValid.error);
+    return [null, "Invalid data"];
+  }
 
   const isAddressValid = addClientAddressSchema.safeParse(addressData);
-  if (!isAddressValid.success) return [null, "Invalid data"];
+  if (isAddressValid.error) {
+    suppliersErrorLog(isAddressValid.error);
+    return [null, "Invalid data"];
+  }
 
   const isContactValid = addClientContactSchema.safeParse(contactData);
-  if (!isContactValid.success) return [null, "Invalid data"];
+  if (isContactValid.error) {
+    suppliersErrorLog(isContactValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];

@@ -4,11 +4,7 @@ import { itemsTable } from "./schema";
 
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
-import {
-  checkUniqueConstraintError,
-  errorLogger,
-  getErrorMessage,
-} from "@/lib/exceptions";
+import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
 import { filterDefault } from "@/components/filter-and-search";
 
 import type { AddItemType, SelectItemType } from "./schema";
@@ -205,7 +201,7 @@ export const updateItem = async (
       .returning();
 
     if (!item) return [null, errorMessage];
-    
+
     return [item.id, null];
   } catch (error) {
     logError(error);

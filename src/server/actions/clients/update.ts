@@ -6,6 +6,9 @@ import { insertClientSchema } from "@/server/db/tables/client/schema";
 import { updateClient } from "@/server/db/tables/client/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { revalidatePath } from "next/cache";
+import { errorLogger } from "@/lib/exceptions";
+
+const clientActionErrorLog = errorLogger("Client Update Action Error:");
 
 export const updateClientPrimaryAddressAction = async (
   clientId: number,
@@ -42,7 +45,10 @@ export const updateClientWebsiteAction = async (
   data: UpdateClientWebsiteFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateClientWebsiteSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
+  if (isValid.error) {
+    clientActionErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -69,7 +75,10 @@ export const updateClientRegistrationNumberAction = async (
   data: UpdateClientRegistrationNumberFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateClientRegistrationNumberSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
+  if (isValid.error) {
+    clientActionErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -94,7 +103,10 @@ export const updateClientNotesAction = async (
   data: UpdateClientNotesFormType,
 ): Promise<ReturnTuple<number>> => {
   const isValid = updateClientNotesSchema.safeParse(data);
-  if (!isValid.success) return [null, "Invalid data"];
+  if (isValid.error) {
+    clientActionErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];

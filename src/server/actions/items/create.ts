@@ -8,6 +8,9 @@ import type { z } from "zod";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+import { errorLogger } from "@/lib/exceptions";
+
+const itemErrorLog = errorLogger("Item Create Action Error:");
 
 const addItemSchema = insertItemSchema.omit({
   createdBy: true,
@@ -19,7 +22,10 @@ export const addItemAction = async (
   itemData: AddItemFormType,
 ): Promise<ReturnTuple<number> | undefined> => {
   const isValid = addItemSchema.safeParse(itemData);
-  if (!isValid.success) return [null, "Invalid data"];
+  if (isValid.error) {
+    itemErrorLog(isValid.error);
+    return [null, "Invalid data"];
+  }
 
   const [userId, userIdError] = await getCurrentUserIdAction();
   if (userIdError !== null) return [null, userIdError];

@@ -6,6 +6,9 @@ import { insertItemSchema } from "@/server/db/tables/item/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 import { revalidatePath } from "next/cache";
+import { errorLogger } from "@/lib/exceptions";
+
+const itemErrorLog = errorLogger("Item Update Action Error:");
 
 const updateItemNameSchema = insertItemSchema.pick({ name: true });
 
@@ -16,7 +19,10 @@ export const updateItemNameAction = async (
   data: UpdateItemNameType,
 ): Promise<ReturnTuple<number>> => {
   const parseData = updateItemNameSchema.safeParse(data);
-  if (parseData.success === false) return [null, parseData.error.message];
+  if (parseData.error) {
+    itemErrorLog(parseData.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -39,7 +45,10 @@ export const updateItemTypeAction = async (
   data: UpdateItemTypeType,
 ): Promise<ReturnTuple<number>> => {
   const parseData = updateItemTypeSchema.safeParse(data);
-  if (parseData.success === false) return [null, parseData.error.message];
+  if (parseData.error) {
+    itemErrorLog(parseData.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -64,7 +73,10 @@ export const updateItemDescriptionAction = async (
   data: UpdateItemDescriptionType,
 ): Promise<ReturnTuple<number>> => {
   const parseData = updateItemDescriptionSchema.safeParse(data);
-  if (parseData.success === false) return [null, parseData.error.message];
+  if (parseData.error) {
+    itemErrorLog(parseData.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -87,7 +99,10 @@ export const updateItemMpnAction = async (
   data: UpdateItemMpnType,
 ): Promise<ReturnTuple<number>> => {
   const parseData = updateItemMpnSchema.safeParse(data);
-  if (parseData.success === false) return [null, parseData.error.message];
+  if (parseData.error) {
+    itemErrorLog(parseData.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -110,7 +125,10 @@ export const updateItemMakeAction = async (
   data: UpdateItemMakeType,
 ): Promise<ReturnTuple<number>> => {
   const parseData = updateItemMakeSchema.safeParse(data);
-  if (parseData.success === false) return [null, parseData.error.message];
+  if (parseData.error) {
+    itemErrorLog(parseData.error);
+    return [null, "Invalid data"];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
@@ -133,7 +151,10 @@ export const updateItemNotesAction = async (
   data: UpdateItemNotesType,
 ): Promise<ReturnTuple<number>> => {
   const parseData = updateItemNotesSchema.safeParse(data);
-  if (parseData.success === false) return [null, parseData.error.message];
+  if (parseData.error) {
+    itemErrorLog(parseData.error);
+    return [null, parseData.error.message];
+  }
 
   const [currentUserId, currentUserIdError] = await getCurrentUserIdAction();
   if (currentUserIdError !== null) return [null, currentUserIdError];
