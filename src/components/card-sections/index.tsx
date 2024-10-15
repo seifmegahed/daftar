@@ -14,31 +14,35 @@ export function CardNameSection({
   href: string;
 }) {
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <Link href={href}>
-          <p className="line-clamp-1 cursor-pointer text-lg font-bold text-foreground hover:underline">
-            {name}
-          </p>
-        </Link>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>{name}</p>
-      </TooltipContent>
-    </Tooltip>
+    <div className="w-fit">
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <Link href={href}>
+            <p className="line-clamp-1 cursor-pointer text-lg font-bold text-foreground hover:underline">
+              {name}
+            </p>
+          </Link>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{name}</p>
+        </TooltipContent>
+      </Tooltip>
+    </div>
   );
 }
 
 export function CardCreatedAtSection({ date }: { date: Date }) {
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <p className="text-xs text-muted-foreground">{format(date, "PP")}</p>
-      </TooltipTrigger>
-      <TooltipContent>
-        <p>Creation Date</p>
-      </TooltipContent>
-    </Tooltip>
+    <div className="w-fit">
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <p className="text-xs text-muted-foreground">{format(date, "PP")}</p>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>Creation Date</p>
+        </TooltipContent>
+      </Tooltip>
+    </div>
   );
 }
 
@@ -149,6 +153,16 @@ export function CardBodyContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
       {children}
+    </div>
+  );
+}
+
+export function CardIndexSection({ index }: { index: number }) {
+  return (
+    <div className="hidden cursor-pointer items-center justify-center sm:flex">
+      <p className="w-10 text-end text-2xl font-bold text-foreground">
+        {index}
+      </p>
     </div>
   );
 }
