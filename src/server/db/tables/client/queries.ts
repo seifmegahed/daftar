@@ -2,7 +2,7 @@ import { db } from "@/server/db";
 import { asc, count, eq, sql, desc, and } from "drizzle-orm";
 
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
-import { getErrorMessage } from "@/lib/exceptions";
+import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
 
 import { clientsTable } from "./schema";
@@ -18,13 +18,29 @@ import type { InsertClientDataType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { filterDefault, type FilterArgs } from "@/components/filter-and-search";
 
+const errorMessages = {
+  mainTitle: "Client Queries Error:",
+  getPrimaryContactId: "An error occurred while getting primary contact ID",
+  getPrimaryAddressId: "An error occurred while getting primary address ID",
+  getClients: "An error occurred while getting clients",
+  getClient: "An error occurred while getting client",
+  notFound: "Client not found",
+  insert: "An error occurred while inserting client",
+  clientNameExists: "Client name already exists",
+  count: "An error occurred while counting clients",
+  update: "An error occurred while updating client",
+  delete: "An error occurred while deleting client",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
+
 /**
  * Getters
  */
-
 export const getClientPrimaryAddressId = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.getPrimaryAddressId;
   try {
     const [address] = await db
       .select({ primaryAddressId: clientsTable.primaryAddressId })
@@ -32,17 +48,18 @@ export const getClientPrimaryAddressId = async (
       .where(eq(clientsTable.id, clientId))
       .limit(1);
 
-    if (!address?.primaryAddressId)
-      return [null, "Error getting client primary address"];
+    if (!address?.primaryAddressId) return [null, errorMessage];
     return [address.primaryAddressId, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getClientPrimaryContactId = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.getPrimaryContactId;
   try {
     const [contact] = await db
       .select({ id: clientsTable.primaryContactId })
@@ -50,10 +67,11 @@ export const getClientPrimaryContactId = async (
       .where(eq(clientsTable.id, clientId))
       .limit(1);
 
-    if (!contact?.id) return [null, "Error getting client primary contact"];
+    if (!contact?.id) return [null, errorMessage];
     return [contact.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -73,8 +91,9 @@ export const getClientsBrief = async (
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefClientType[]>> => {
+  const errorMessage = errorMessages.getClients;
   try {
-    const allClients = await db
+    const clients = await db
       .select({
         id: clientsTable.id,
         name: clientsTable.name,
@@ -92,9 +111,10 @@ export const getClientsBrief = async (
       .limit(limit)
       .offset((page - 1) * limit);
 
-    return [allClients, null];
+    return [clients, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -128,6 +148,7 @@ export interface GetClientType extends Required<InsertClientDataType> {
 export const getClientFullById = async (
   id: number,
 ): Promise<ReturnTuple<GetClientType>> => {
+  const errorMessage = errorMessages.getClient;
   try {
     const client = await db.query.clientsTable.findFirst({
       where: (client, { eq }) => eq(client.id, id),
@@ -163,13 +184,10 @@ export const getClientFullById = async (
         },
       },
     });
-    if (!client) return [null, "Error: Client not found"];
+    if (!client) return [null, errorMessages.notFound];
     return [client, null];
   } catch (error) {
-    const errorMessage = getErrorMessage(error);
-    if (errorMessage.includes("CONNECT_TIMEOUT"))
-      return [null, "Error connecting to database"];
-    console.log(error);
+    console.log(errorMessages.mainTitle, error);
     return [null, errorMessage];
   }
 };
@@ -186,6 +204,7 @@ export const insertNewClient = async (
   addressData: InsertAddressType,
   contactData: InsertContactType,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
     const client = await db.transaction(async (tx) => {
       const [client] = await tx
@@ -231,13 +250,16 @@ export const insertNewClient = async (
       return updatedClient;
     });
 
-    if (!client) throw new Error("Error inserting new client");
+    if (!client) return [null, errorMessage];
     return [client.id, null];
   } catch (error) {
-    const errorMessage = getErrorMessage(error);
-    if (errorMessage.includes("unique"))
-      return [null, `Client with name ${clientData.name} already exists`];
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [
+      null,
+      checkUniqueConstraintError(error)
+        ? errorMessages.clientNameExists
+        : errorMessage,
+    ];
   }
 };
 
@@ -249,6 +271,7 @@ export type ClientListType = {
 export const listAllClients = async (): Promise<
   ReturnTuple<ClientListType[]>
 > => {
+  const errorMessage = errorMessages.getClients;
   try {
     const clients = await db
       .select({
@@ -258,11 +281,11 @@ export const listAllClients = async (): Promise<
       .from(clientsTable)
       .orderBy(asc(clientsTable.id));
 
-    if (!clients) return [null, "Error getting clients"];
+    if (!clients) return [null, errorMessage];
     return [clients, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting clients"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -286,6 +309,7 @@ const clientFilterQuery = (filter: FilterArgs) => {
 export const getClientsCount = async (
   filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [clients] = await db
       .select({ count: count() })
@@ -293,11 +317,11 @@ export const getClientsCount = async (
       .where(clientFilterQuery(filter))
       .limit(1);
 
-    if (!clients) return [null, "Error getting clients count"];
+    if (!clients) return [null, errorMessage];
     return [clients.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting clients count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -305,6 +329,7 @@ export const updateClient = async (
   id: number,
   data: Partial<InsertClientDataType>,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [client] = await db
       .update(clientsTable)
@@ -312,16 +337,18 @@ export const updateClient = async (
       .where(eq(clientsTable.id, id))
       .returning();
 
-    if (!client) return [null, "Error updating client"];
+    if (!client) return [null, errorMessages.update];
     return [client.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const deleteClient = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.delete;
   try {
     const client = await db.transaction(async (tx) => {
       await tx
@@ -343,9 +370,10 @@ export const deleteClient = async (
       return client;
     });
 
-    if (!client) throw new Error("Error deleting client");
+    if (!client) return [null, errorMessage];
     return [client.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };

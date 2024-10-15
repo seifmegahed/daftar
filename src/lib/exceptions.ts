@@ -13,3 +13,11 @@ export function getErrorMessage(error: unknown): string {
   }
   return "Something went wrong";
 }
+
+export const checkUniqueConstraintError = (error: unknown): boolean => {
+  const errorMessage = getErrorMessage(error);
+  return errorMessage.includes("unique");
+};
+
+export const errorLogger = (title: string) => (error: unknown) =>
+  console.error(title, error);
