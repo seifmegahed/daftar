@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 import type { FilterTypes } from ".";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 function FilterContextMenu({
   value,
@@ -41,9 +42,16 @@ function FilterContextMenu({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <div className="flex size-10 cursor-pointer items-center justify-center rounded-full border text-muted-foreground hover:bg-muted">
-          <Filter className="h-4 w-4" />
-        </div>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <div className="flex size-10 cursor-pointer items-center justify-center rounded-full border text-muted-foreground hover:bg-muted">
+              <Filter className="h-4 w-4" />
+            </div>
+          </TooltipTrigger>
+          <TooltipContent>
+            <p>Filter</p>
+          </TooltipContent>
+        </Tooltip>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-48" align="end">
         <DropdownMenuLabel>Filter</DropdownMenuLabel>

@@ -8,6 +8,7 @@ import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { type Metadata } from "next";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 export const metadata: Metadata = {
   title: "Daftar",
@@ -34,11 +35,13 @@ export default function RootLayout({
           disableTransitionOnChange
           storageKey="theme"
         >
-          <BalancerProvider>
-            <div className="h-full min-h-screen bg-secondary text-foreground">
-              {children}
-            </div>
-          </BalancerProvider>
+          <TooltipProvider>
+            <BalancerProvider>
+              <div className="h-full min-h-screen text-foreground">
+                {children}
+              </div>
+            </BalancerProvider>
+          </TooltipProvider>
           <Toaster />
         </ThemeProvider>
         {env.NEXT_PUBLIC_VERCEL && <Analytics />}

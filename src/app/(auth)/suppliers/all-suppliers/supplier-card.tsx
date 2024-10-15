@@ -1,44 +1,41 @@
-"use client";
-
-import Link from "next/link";
-import { format } from "date-fns";
 import { type BriefSupplierType } from "@/server/db/tables/supplier/queries";
 import SupplierCardContextMenu from "./card-menu";
 import CardWrapper from "@/components/card-wrapper";
+import {
+  CardBodyContainer,
+  CardBodyEndContainer,
+  CardBodyStartContainer,
+  CardCreatedAtSection,
+  CardIdSection,
+  CardMenuContainer,
+  CardNameSection,
+  CardSection,
+  CardSubtitleSection,
+} from "@/components/card-sections";
 
 const SupplierCard = ({ supplier }: { supplier: BriefSupplierType }) => {
   return (
     <CardWrapper>
-      <Link href={`/supplier/${supplier.id}`} className="hidden sm:block">
-        <div className="flex cursor-pointer items-center justify-center">
-          <p className="w-10 text-right text-2xl font-bold text-foreground">
-            {supplier.id}
-          </p>
-        </div>
-      </Link>
-      <div className="flex w-full flex-col justify-between gap-2 sm:flex-row sm:items-center sm:gap-0">
-        <div>
-          <Link href={`/supplier/${supplier.id}`}>
-            <p className="line-clamp-1 cursor-pointer text-lg font-bold text-foreground hover:underline">
-              {supplier.name}
-            </p>
-          </Link>
-          <p className="cursor-pointer text-xs text-muted-foreground">
-            {supplier.field}
-          </p>
-        </div>
-        <div className="sm:w-56 sm:text-end">
-          <p className="line-clamp-1 text-foreground">
-            {supplier.registrationNumber}
-          </p>
-          <p className="text-xs text-muted-foreground">
-            {format(supplier.createdAt, "PP")}
-          </p>
-        </div>
-      </div>
-      <div>
+      <CardIdSection href={`/supplier/${supplier.id}`} id={supplier.id} />
+      <CardBodyContainer>
+        <CardBodyStartContainer>
+          <CardNameSection
+            name={supplier.name}
+            href={`/supplier/${supplier.id}`}
+          />
+          <CardSubtitleSection subtitle={supplier.field} tip="Field" />
+        </CardBodyStartContainer>
+        <CardBodyEndContainer>
+          <CardSection
+            text={supplier.registrationNumber}
+            tip="Registration Number"
+          />
+          <CardCreatedAtSection date={supplier.createdAt} />
+        </CardBodyEndContainer>
+      </CardBodyContainer>
+      <CardMenuContainer>
         <SupplierCardContextMenu supplierId={supplier.id} />
-      </div>
+      </CardMenuContainer>
     </CardWrapper>
   );
 };

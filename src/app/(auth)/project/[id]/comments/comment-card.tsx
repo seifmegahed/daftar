@@ -7,6 +7,11 @@ import type { ProjectCommentType } from "@/server/db/tables/project-comment/quer
 import { X } from "lucide-react";
 import { toast } from "sonner";
 import { deleteProjectCommentAction } from "@/server/actions/project-comments/delete";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 function ProjectCommentCard({
   comment,
@@ -36,7 +41,14 @@ function ProjectCommentCard({
   };
   return (
     <div className="flex w-full gap-4">
-      <AvatarContainer>{getInitials(comment.userName)}</AvatarContainer>
+      <Tooltip>
+        <AvatarContainer>
+          <TooltipTrigger>{getInitials(comment.userName)}</TooltipTrigger>
+        </AvatarContainer>
+        <TooltipContent sideOffset={20}>
+          <p>{comment.userName}</p>
+        </TooltipContent>
+      </Tooltip>
       <div className="flex w-full flex-col gap-2 rounded-lg bg-muted p-4">
         <div className="flex items-start justify-between">
           <p className="flex-shrink text-foreground">{comment.text}</p>
