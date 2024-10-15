@@ -76,8 +76,8 @@ export const getCurrentUserAction = async (): Promise<
 > => {
   const token = cookies().get("token");
   if (!token) return [null, userErrors.userNotFound];
-  const decoded = await verifyToken(token.value);
-  if (decoded === null) return [null, userErrors.userNotFound];
+  const [decoded, decodingError] = await verifyToken(token.value);
+  if (decodingError !== null) return [null, decodingError];
   const id = Number(decoded.payload.id);
   if (isNaN(id)) return [null, userErrors.userNotFound];
 
@@ -103,8 +103,8 @@ export const getCurrentUserIdAction = async (): Promise<
 > => {
   const token = cookies().get("token");
   if (!token) return [null, userErrors.userNotFound];
-  const decoded = await verifyToken(token.value);
-  if (decoded === null) return [null, userErrors.userNotFound];
+  const [decoded, decodingError] = await verifyToken(token.value);
+  if (decodingError !== null) return [null, decodingError];
   const id = Number(decoded.payload.id);
   if (isNaN(id)) return [null, userErrors.userNotFound];
   return [id, null];
@@ -283,8 +283,8 @@ async function checkAdminPermissions(): Promise<ReturnTuple<boolean>> {
   const token = cookies().get("token");
   if (!token) return [null, userErrors.tokenNotFound];
 
-  const decoded = await verifyToken(token.value);
-  if (!decoded?.payload) return [null, userErrors.tokenNotFound];
+  const [decoded, decodingError] = await verifyToken(token.value);
+  if (decodingError !== null) return [null, decodingError];
 
   const role = decoded.payload.role;
   if (role !== "admin") return [null, userErrors.invalidPermissions];

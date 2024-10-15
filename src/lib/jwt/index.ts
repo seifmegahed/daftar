@@ -1,6 +1,8 @@
 import { env } from "@/env";
-import type { UserDataType } from "@/server/db/tables/user/schema";
 import { jwtVerify, SignJWT } from "jose";
+import type { JWTPayload, JWTVerifyResult } from "jose";
+import type { UserDataType } from "@/server/db/tables/user/schema";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const jwtSecret = env.JWT_SECRET;
 const tokenTTL = "1d";
@@ -16,12 +18,14 @@ export const createToken = (payload: TokenPayloadType) => {
   return token;
 };
 
-export const verifyToken = (token: string) => {
+export const verifyToken = async (
+  token: string,
+): Promise<ReturnTuple<JWTVerifyResult<JWTPayload>>> => {
   try {
-    const decoded = jwtVerify(token, new TextEncoder().encode(jwtSecret));
-    return decoded;
+    const decoded = await jwtVerify(token, new TextEncoder().encode(jwtSecret));
+    return [decoded, null];
   } catch (error) {
     console.error("Error verifying token:", error);
-    return null;
+    return [null, "Error verifying token"];
   }
 };

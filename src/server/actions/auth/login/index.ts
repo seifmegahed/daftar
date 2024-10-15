@@ -56,6 +56,8 @@ export const loginAction = async (
      * Perhaps instead of using the vercel env variable, we should use an SSL environment variable
      */
     secure: env.NEXT_PUBLIC_VERCEL ? true : false,
+    // Expires in 1 day
+    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     sameSite: "strict",
   });
 

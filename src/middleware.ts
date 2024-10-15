@@ -6,15 +6,11 @@ import { verifyToken } from "./lib/jwt";
 async function middleware(request: NextRequest) {
   const token = request.cookies.get("token");
 
-  if (!token)
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (!token) return NextResponse.redirect(new URL("/login", request.url));
 
-  const decoded = await verifyToken(token.value)?.catch((error) => {
-    console.error("Error verifying token:", error);
-    return null;
-  });
+  const [decoded, error] = await verifyToken(token.value);
 
-  if (!decoded)
+  if (error !== null)
     return NextResponse.redirect(new URL("/login", request.url));
 
   if (!request.url.includes("/admin") || request.url.includes("/user"))
@@ -22,9 +18,7 @@ async function middleware(request: NextRequest) {
 
   const role = decoded.payload.role;
 
-  if (role !== "admin")
-    return NextResponse.redirect(new URL("/", request.url));
-
+  if (role !== "admin") return NextResponse.redirect(new URL("/", request.url));
 }
 
 export const config = {
