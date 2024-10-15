@@ -24,6 +24,21 @@ import type { UserBriefType } from "@/server/db/tables/user/queries";
 import type { SimpDoc } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { filterDefault, type FilterArgs } from "@/components/filter-and-search";
+import { errorLogger } from "@/lib/exceptions";
+
+const errorMessages = {
+  mainTitle: "Project Queries Error:",
+  insert: "An error occurred while adding project",
+  update: "An error occurred while updating project",
+  delete: "An error occurred while deleting project",
+  getProject: "An error occurred while getting project",
+  count: "An error occurred while counting projects",
+  getProjects: "An error occurred while getting projects",
+  getDocuments: "An error occurred while getting project documents",
+  dataCorrupted: "It seems that some data is corrupted",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
 
 export type BriefProjectType = Pick<
   SelectProjectType,
@@ -38,6 +53,7 @@ export type BriefProjectType = Pick<
 export const getClientProjectsCount = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [projectCount] = await db
       .select({
@@ -46,11 +62,13 @@ export const getClientProjectsCount = async (
       .from(projectsTable)
       .where(eq(projectsTable.clientId, clientId))
       .limit(1);
-    if (!projectCount) return [null, "Error getting project count"];
+
+    if (!projectCount) return [null, errorMessage];
+
     return [projectCount.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -105,6 +123,7 @@ const projectFilterQuery = (filter: FilterArgs) => {
 export const getProjectsCount = async (
   filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [projectCount] = await db
       .select({
@@ -115,11 +134,13 @@ export const getProjectsCount = async (
         projectFilterQuery(filter ?? { filterType: null, filterValue: null }),
       )
       .limit(1);
-    if (!projectCount) return [null, "Error getting project count"];
+
+    if (!projectCount) return [null, errorMessage];
+
     return [projectCount.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -129,6 +150,7 @@ export const getProjectsBrief = async (
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {
+  const errorMessage = errorMessages.getProjects;
   try {
     const projectsResult = await db
       .select({
@@ -155,12 +177,12 @@ export const getProjectsBrief = async (
 
     const projects = z.array(briefProjectSchema).safeParse(projectsResult);
 
-    if (!projects.success) return [null, "Error getting projects"];
+    if (!projects.success) return [null, errorMessages.dataCorrupted];
 
     return [projects.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting projects"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -175,6 +197,7 @@ export type BriefClientProjectType = z.infer<typeof briefClientProjectSchema>;
 export const getClientProjects = async (
   clientId: number,
 ): Promise<ReturnTuple<BriefClientProjectType[]>> => {
+  const errorMessage = errorMessages.getProjects;
   try {
     const projectsResult = await db
       .select({
@@ -194,44 +217,46 @@ export const getClientProjects = async (
       .array(briefClientProjectSchema)
       .safeParse(projectsResult);
 
-    if (!projects.success) return [null, "Error getting projects"];
+    if (!projects.success) return [null, errorMessage];
 
     return [projects.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting projects"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const insertProject = async (
   data: InsertProjectType,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
     const [project] = await db.insert(projectsTable).values(data).returning();
 
-    if (!project) return [null, "Error inserting new project"];
+    if (!project) return [null, errorMessage];
     return [project.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error inserting new project"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getProjectBriefById = async (
   id: number,
 ): Promise<ReturnTuple<SelectProjectType>> => {
+  const errorMessage = errorMessages.getProject;
   try {
     const [project] = await db
       .select()
       .from(projectsTable)
       .where(eq(projectsTable.id, id));
 
-    if (!project) return [null, "Error getting project"];
+    if (!project) return [null, errorMessage];
 
     return [project, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -274,6 +299,7 @@ export type GetProjectType = SelectProjectType & {
 export const getProjectById = async (
   id: number,
 ): Promise<ReturnTuple<GetProjectType>> => {
+  const errorMessage = errorMessages.getProject;
   try {
     const project = await db.query.projectsTable.findFirst({
       where: (project, { eq }) => eq(project.id, id),
@@ -348,11 +374,11 @@ export const getProjectById = async (
         },
       },
     });
-    if (!project) return [null, "Error getting project"];
+    if (!project) return [null, errorMessage];
     return [project, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -371,6 +397,7 @@ export const getProjectLinkedDocuments = async (
   accessToPrivate = false,
   includePath = false,
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
+  const errorMessage = errorMessages.getDocuments;
   try {
     const project = await db.query.projectsTable.findFirst({
       where: (project, { eq }) => eq(project.id, projectId),
@@ -479,7 +506,7 @@ export const getProjectLinkedDocuments = async (
       },
     });
 
-    if (!project) return [null, "Error getting project"];
+    if (!project) return [null, errorMessage];
 
     const uniqueSuppliers = new Map<number, (typeof project.items)[0]>();
     const uniqueItems = new Map<number, (typeof project.saleItems)[0]>();
@@ -520,8 +547,8 @@ export const getProjectLinkedDocuments = async (
       null,
     ];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -529,6 +556,7 @@ export const updateProject = async (
   id: number,
   data: Partial<SelectProjectType>,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [project] = await db
       .update(projectsTable)
@@ -536,30 +564,31 @@ export const updateProject = async (
       .where(eq(projectsTable.id, id))
       .returning();
 
-    if (!project) return [null, "Error updating project"];
+    if (!project) return [null, errorMessage];
     return [project.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error updating project"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const deleteProject = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.delete;
   try {
     const project = await db.transaction(async (tx) => {
       await tx
         .delete(projectItemsTable)
-        .where(eq(projectItemsTable.projectId, id))
+        .where(eq(projectItemsTable.projectId, id));
 
       await tx
         .delete(commercialOfferItemsTable)
-        .where(eq(commercialOfferItemsTable.projectId, id))
+        .where(eq(commercialOfferItemsTable.projectId, id));
 
       await tx
         .delete(documentRelationsTable)
-        .where(eq(documentRelationsTable.projectId, id))
+        .where(eq(documentRelationsTable.projectId, id));
 
       const [project] = await tx
         .delete(projectsTable)
@@ -569,10 +598,10 @@ export const deleteProject = async (
       return project;
     });
 
-    if (!project) return [null, "Error deleting project"];
+    if (!project) return [null, errorMessage];
     return [project.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error deleting project"];
+    logError(error);
+    return [null, errorMessage];
   }
 };

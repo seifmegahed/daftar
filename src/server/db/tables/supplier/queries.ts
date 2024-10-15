@@ -7,7 +7,7 @@ import {
   addressesTable,
   contactsTable,
 } from "@/server/db/schema";
-import { getErrorMessage } from "@/lib/exceptions";
+import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
 
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
@@ -17,13 +17,29 @@ import type { InsertAddressType } from "../address/schema";
 import type { InsertContactType } from "../contact/schema";
 import { filterDefault, type FilterArgs } from "@/components/filter-and-search";
 
+const errorMessages = {
+  mainTitle: "Client Queries Error:",
+  getPrimaryContactId: "An error occurred while getting primary contact ID",
+  getPrimaryAddressId: "An error occurred while getting primary address ID",
+  getSuppliers: "An error occurred while getting suppliers",
+  getSupplier: "An error occurred while getting supplier",
+  notFound: "Supplier not found",
+  insert: "An error occurred while adding supplier",
+  nameExists: "Supplier name already exists",
+  count: "An error occurred while counting suppliers",
+  update: "An error occurred while updating suppliers",
+  delete: "An error occurred while deleting suppliers",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
+
 /**
  * Getters
  */
-
 export const getSupplierPrimaryAddressId = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.getPrimaryAddressId;
   try {
     const [supplier] = await db
       .select({ primaryAddressId: suppliersTable.primaryAddressId })
@@ -31,17 +47,18 @@ export const getSupplierPrimaryAddressId = async (
       .where(eq(suppliersTable.id, supplierId))
       .limit(1);
 
-    if (!supplier?.primaryAddressId)
-      return [null, "Error getting supplier primary address"];
+    if (!supplier?.primaryAddressId) return [null, errorMessage];
     return [supplier.primaryAddressId, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getSupplierPrimaryContactId = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.getPrimaryContactId;
   try {
     const [supplier] = await db
       .select({ id: suppliersTable.primaryContactId })
@@ -49,10 +66,11 @@ export const getSupplierPrimaryContactId = async (
       .where(eq(suppliersTable.id, supplierId))
       .limit(1);
 
-    if (!supplier?.id) return [null, "Error getting supplier primary contact"];
+    if (!supplier?.id) return [null, errorMessage];
     return [supplier.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -94,6 +112,7 @@ export const getSuppliersBrief = async (
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefSupplierType[]>> => {
+  const errorMessage = errorMessages.getSuppliers;
   try {
     const allSuppliers = await db
       .select({
@@ -114,7 +133,8 @@ export const getSuppliersBrief = async (
 
     return [allSuppliers, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -148,6 +168,7 @@ export interface GetSupplierType extends SelectSupplierType {
 export const getSupplierFullById = async (
   id: number,
 ): Promise<ReturnTuple<GetSupplierType>> => {
+  const errorMessage = errorMessages.getSupplier;
   try {
     const supplier = await db.query.suppliersTable.findFirst({
       where: (supplier, { eq }) => eq(supplier.id, id),
@@ -183,13 +204,10 @@ export const getSupplierFullById = async (
         },
       },
     });
-    if (!supplier) return [null, "Error: Supplier not found"];
+    if (!supplier) return [null, errorMessages.notFound];
     return [supplier, null];
   } catch (error) {
-    const errorMessage = getErrorMessage(error);
-    if (errorMessage.includes("CONNECT_TIMEOUT"))
-      return [null, "Error connecting to database"];
-    console.log(error);
+    logError(error);
     return [null, errorMessage];
   }
 };
@@ -199,6 +217,7 @@ export const insertNewSupplier = async (
   addressData: InsertAddressType,
   contactData: InsertContactType,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
     const supplier = await db.transaction(async (tx) => {
       const [supplier] = await tx
@@ -247,13 +266,16 @@ export const insertNewSupplier = async (
 
       return updatedSupplier;
     });
-    if (!supplier) throw new Error("Error inserting new supplier");
+    if (!supplier) return [null, errorMessage];
     return [supplier.id, null];
   } catch (error) {
-    const errorMessage = getErrorMessage(error);
-    if (errorMessage.includes("unique"))
-      return [null, `Supplier with name ${supplierData.name} already exists`];
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [
+      null,
+      checkUniqueConstraintError(error)
+        ? errorMessages.nameExists
+        : errorMessage,
+    ];
   }
 };
 
@@ -265,6 +287,7 @@ export type SupplierListType = {
 export const listAllSuppliers = async (): Promise<
   ReturnTuple<SupplierListType[]>
 > => {
+  const errorMessage = errorMessages.getSuppliers;
   try {
     const suppliers = await db
       .select({
@@ -273,18 +296,17 @@ export const listAllSuppliers = async (): Promise<
       })
       .from(suppliersTable)
       .orderBy(asc(suppliersTable.name));
-
-    if (!suppliers) return [null, "Error getting suppliers"];
     return [suppliers, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting suppliers"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getSuppliersCount = async (
   filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [suppliers] = await db
       .select({ count: count() })
@@ -292,10 +314,11 @@ export const getSuppliersCount = async (
       .where(supplierFilterQuery(filter))
       .limit(1);
 
-    if (!suppliers) return [null, "Error getting suppliers count"];
+    if (!suppliers) return [null, errorMessage];
     return [suppliers.count, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -303,6 +326,7 @@ export const updateSupplier = async (
   supplierId: number,
   data: Partial<InsertSupplierType>,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [returnValue] = await db
       .update(suppliersTable)
@@ -310,16 +334,18 @@ export const updateSupplier = async (
       .where(eq(suppliersTable.id, supplierId))
       .returning();
 
-    if (!returnValue) return [null, "Error updating supplier primary address"];
+    if (!returnValue) return [null, errorMessage];
     return [returnValue.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const deleteSupplier = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.delete;
   try {
     const supplier = await db.transaction(async (tx) => {
       await tx
@@ -345,9 +371,10 @@ export const deleteSupplier = async (
       return supplier;
     });
 
-    if (!supplier) return [null, "Error deleting supplier"];
+    if (!supplier) return [null, errorMessage];
     return [supplier.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };

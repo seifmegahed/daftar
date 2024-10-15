@@ -1,30 +1,41 @@
 import type { ReturnTuple } from "@/utils/type-utils";
-import {
-  contactsTable,
-  type InsertContactType,
-} from "./schema";
+import { contactsTable, type InsertContactType } from "./schema";
 import { db } from "@/server/db";
-import { getErrorMessage } from "@/lib/exceptions";
+import { errorLogger } from "@/lib/exceptions";
 import { count, eq } from "drizzle-orm";
 import { usersTable } from "@/server/db/tables/user/schema";
 import { z } from "zod";
 
+const errorMessages = {
+  mainTitle: "Contact Queries Error:",
+  dataCorrupted: "It seems that some data is corrupted",
+  insert: "An error occurred while adding contact",
+  get: "An error occurred while getting contacts",
+  count: "An error occurred while counting contacts",
+  delete: "An error occurred while deleting contact",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
+
 export const insertNewContact = async (
   data: InsertContactType,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
     const [address] = await db.insert(contactsTable).values(data).returning();
 
-    if (!address) return [null, "Error inserting new contact"];
+    if (!address) return [null, errorMessage];
     return [address.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getClientContactsCount = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [contacts] = await db
       .select({ count: count() })
@@ -32,16 +43,18 @@ export const getClientContactsCount = async (
       .where(eq(contactsTable.clientId, clientId))
       .limit(1);
 
-    if (!contacts) return [null, "Error getting client contacts count"];
+    if (!contacts) return [null, errorMessage];
     return [contacts.count, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getSupplierContactsCount = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.get;
   try {
     const [contacts] = await db
       .select({ count: count() })
@@ -49,26 +62,29 @@ export const getSupplierContactsCount = async (
       .where(eq(contactsTable.supplierId, supplierId))
       .limit(1);
 
-    if (!contacts) return [null, "Error getting supplier contacts count"];
+    if (!contacts) return [null, errorMessage];
     return [contacts.count, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const deleteContact = async (
   contactId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.delete;
   try {
     const [contact] = await db
       .delete(contactsTable)
       .where(eq(contactsTable.id, contactId))
       .returning();
 
-    if (!contact) return [null, "Error deleting contact"];
+    if (!contact) return [null, errorMessage];
     return [contact.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -89,6 +105,7 @@ export type ContactType = z.infer<typeof getContactSchema>;
 export const getClientContacts = async (
   clientId: number,
 ): Promise<ReturnTuple<ContactType[]>> => {
+  const errorMessage = errorMessages.get;
   try {
     const contacts = await db
       .select({
@@ -107,20 +124,22 @@ export const getClientContacts = async (
       .where(eq(contactsTable.clientId, clientId))
       .orderBy(contactsTable.id);
 
-    if (!contacts) return [null, "Error getting client contacts"];
+    if (!contacts) return [null, errorMessage];
     const parsedContacts = z.array(getContactSchema).safeParse(contacts);
 
-    if (!parsedContacts.success) return [null, "Error parsing contacts"];
+    if (!parsedContacts.success) return [null, errorMessages.dataCorrupted];
 
     return [parsedContacts.data, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getSupplierContacts = async (
   supplierId: number,
 ): Promise<ReturnTuple<ContactType[]>> => {
+  const errorMessage = errorMessages.get;
   try {
     const contacts = await db
       .select({
@@ -139,13 +158,14 @@ export const getSupplierContacts = async (
       .where(eq(contactsTable.supplierId, supplierId))
       .orderBy(contactsTable.id);
 
-    if (!contacts) return [null, "Error getting client contacts"];
+    if (!contacts) return [null, errorMessage];
     const parsedContacts = z.array(getContactSchema).safeParse(contacts);
 
-    if (!parsedContacts.success) return [null, "Error parsing contacts"];
+    if (!parsedContacts.success) return [null, errorMessages.dataCorrupted];
 
     return [parsedContacts.data, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };

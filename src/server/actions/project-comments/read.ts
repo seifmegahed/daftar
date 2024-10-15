@@ -27,11 +27,3 @@ export const getProjectCommentsCountAction = async (
   if (error !== null) return [null, error];
   return [count, null];
 };
-
-export const getProjectCommentByIdAction = async (
-  commentId: number,
-): Promise<ReturnTuple<InsertProjectCommentType>> => {
-  const [comment, error] = await getCommentById(commentId);
-  if (error !== null) return [null, error];
-  return [comment, null];
-};

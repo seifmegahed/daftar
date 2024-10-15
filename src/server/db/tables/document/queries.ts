@@ -4,13 +4,27 @@ import { count, eq, desc, sql, and, not } from "drizzle-orm";
 import { documentsTable } from "./schema";
 import type { DocumentDataType } from "./schema";
 
-import { getErrorMessage } from "@/lib/exceptions";
+import { errorLogger } from "@/lib/exceptions";
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
 import { filterDefault } from "@/components/filter-and-search";
 
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { FilterArgs } from "@/components/filter-and-search";
+
+const errorMessages = {
+  mainTitle: "Document Queries Error:",
+  insert: "An error occurred while adding document",
+  update: "And error occurred while updating document",
+  delete: "An error occurred while deleting document",
+  getDocument: "An error occurred while getting document",
+  getDocuments: "An error occurred while getting documents",
+  getPath: "An error occurred while getting document path",
+  count: "An error occurred while counting documents",
+  dataCorrupted: "It seems that some data is corrupted",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
 
 export type SimpDoc = {
   id: number;
@@ -25,17 +39,15 @@ export type SimpDoc = {
 export const insertDocument = async (
   data: DocumentDataType,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
-    const [document] = await db
-      .insert(documentsTable)
-      .values(data)
-      .returning();
+    const [document] = await db.insert(documentsTable).values(data).returning();
+    if (!document) return [null, errorMessage];
 
-    if (!document) return [null, "Error inserting new document"];
     return [document.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error inserting new document"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -60,9 +72,7 @@ const documentSearchQuery = (searchText: string) =>
   `;
 
 export const privateFilterQuery = (accessToPrivate: boolean) =>
-  !accessToPrivate
-    ? not(eq(documentsTable.private, true))
-    : sql`true`;
+  !accessToPrivate ? not(eq(documentsTable.private, true)) : sql`true`;
 
 export type BriefDocumentType = Required<
   Pick<SimpDoc, "id" | "name" | "extension" | "createdAt" | "private">
@@ -75,6 +85,7 @@ export const getDocuments = async (
   accessToPrivate = false,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefDocumentType[]>> => {
+  const errorMessage = errorMessages.getDocuments;
   try {
     const documents = await db
       .select({
@@ -97,12 +108,12 @@ export const getDocuments = async (
       .limit(limit)
       .offset((page - 1) * limit);
 
-    if (!documents) return [null, "Error getting documents"];
+    if (!documents) return [null, errorMessage];
 
     return [documents, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting documents"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -119,6 +130,7 @@ export const getDocumentById = async (
   id: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<Required<DocumentType>>> => {
+  const errorMessage = errorMessages.getDocument;
   try {
     const document = await db.query.documentsTable.findFirst({
       where: (document, { eq, and }) =>
@@ -132,11 +144,12 @@ export const getDocumentById = async (
         },
       },
     });
-    if (!document) return [null, "Error getting document"];
+
+    if (!document) return [null, errorMessage];
     return [document, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -144,6 +157,7 @@ export const getDocumentPath = async (
   id: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<{ name: string; path: string; extension: string }>> => {
+  const errorMessage = errorMessages.getPath;
   try {
     const [path] = await db
       .select({
@@ -157,11 +171,11 @@ export const getDocumentPath = async (
       )
       .limit(1);
 
-    if (!path) return [null, "Error getting document path"];
+    if (!path) return [null, errorMessage];
     return [path, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document path"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -169,6 +183,7 @@ export const getDocumentsCount = async (
   filter: FilterArgs = filterDefault,
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [documents] = await db
       .select({ count: count() })
@@ -178,10 +193,11 @@ export const getDocumentsCount = async (
       )
       .limit(1);
 
-    if (!documents) return [null, "Error getting documents count"];
+    if (!documents) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -190,6 +206,7 @@ export const updateDocument = async (
   data: Partial<DocumentDataType>,
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [document] = await db
       .update(documentsTable)
@@ -199,10 +216,11 @@ export const updateDocument = async (
       )
       .returning();
 
-    if (!document) return [null, "Error updating document"];
+    if (!document) return [null, errorMessage];
     return [document.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -210,6 +228,7 @@ export const deleteDocument = async (
   id: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.delete;
   try {
     const [document] = await db
       .delete(documentsTable)
@@ -218,16 +237,18 @@ export const deleteDocument = async (
       )
       .returning();
 
-    if (!document) return [null, "Error deleting document"];
+    if (!document) return [null, errorMessage];
     return [document.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getDocumentOptions = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<Pick<SimpDoc, "id" | "name" | "extension">[]>> => {
+  const errorMessage = errorMessages.getDocuments;
   try {
     const documents = await db
       .select({
@@ -239,10 +260,10 @@ export const getDocumentOptions = async (
       .where(privateFilterQuery(accessToPrivate))
       .orderBy(desc(documentsTable.name));
 
-    if (!documents) return [null, "Error getting documents"];
+    if (!documents) return [null, errorMessage];
     return [documents, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting documents"];
+    logError(error);
+    return [null, errorMessage];
   }
 };

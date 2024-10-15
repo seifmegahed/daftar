@@ -25,7 +25,7 @@ const errorMessages = {
   getClients: "An error occurred while getting clients",
   getClient: "An error occurred while getting client",
   notFound: "Client not found",
-  insert: "An error occurred while inserting client",
+  insert: "An error occurred while adding client",
   clientNameExists: "Client name already exists",
   count: "An error occurred while counting clients",
   update: "An error occurred while updating client",

@@ -8,7 +8,7 @@ import { projectsTable } from "@/server/db/tables/project/schema";
 import { clientsTable } from "@/server/db/tables/client/schema";
 import { itemsTable } from "@/server/db/tables/item/schema";
 
-import { getErrorMessage } from "@/lib/exceptions";
+import { errorLogger } from "@/lib/exceptions";
 
 import type {
   InsertProjectItemType,
@@ -17,9 +17,23 @@ import type {
 import type { ReturnTuple } from "@/utils/type-utils";
 import { selectSupplierSchema, suppliersTable } from "../supplier/schema";
 
+const errorMessages = {
+  mainTitle: "Project Items Queries Error:",
+  insert: "An error occurred while adding sale item",
+  corruptedData: "It seems that some data is corrupted",
+  getItems: "An error occurred while getting items",
+  getProjects: "An error occurred while getting projects",
+  getSuppliers: "An error occurred while getting suppliers",
+  count: "An error occurred while counting items",
+  delete: "An error occurred while deleting purchase item",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
+
 export const getClientProjectsCount = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [projectCount] = await db
       .select({
@@ -28,28 +42,30 @@ export const getClientProjectsCount = async (
       .from(projectsTable)
       .where(eq(projectsTable.clientId, clientId))
       .limit(1);
-    if (!projectCount) return [null, "Error getting project count"];
+    if (!projectCount) return [null, errorMessage];
+
     return [projectCount.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const insertProjectItem = async (
   data: InsertProjectItemType,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
     const [project] = await db
       .insert(projectItemsTable)
       .values(data)
       .returning();
 
-    if (!project) return [null, "Error inserting project item"];
+    if (!project) return [null, errorMessage];
     return [project.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error inserting project item"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -66,6 +82,7 @@ export type GetProjectItemType = SelectProjectItemType & {
 export const getProjectItems = async (
   projectId: number,
 ): Promise<ReturnTuple<GetProjectItemType[]>> => {
+  const errorMessage = errorMessages.getItems;
   try {
     const projectItems = await db.query.projectItemsTable.findMany({
       where: (projectItem, { eq }) => eq(projectItem.projectId, projectId),
@@ -86,35 +103,37 @@ export const getProjectItems = async (
         },
       },
     });
-    if (!projectItems) return [null, "Error getting project items"];
+    if (!projectItems) return [null, errorMessage];
 
     return [projectItems, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project items"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const deleteProjectItem = async (
   projectItemId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.delete;
   try {
     const [projectItem] = await db
       .delete(projectItemsTable)
       .where(eq(projectItemsTable.id, projectItemId))
       .returning();
 
-    if (!projectItem) return [null, "Error deleting project item"];
+    if (!projectItem) return [null, errorMessage];
     return [projectItem.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error deleting project item"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getSupplierItemsCount = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [items] = await db
       .select({ count: count() })
@@ -122,10 +141,11 @@ export const getSupplierItemsCount = async (
       .where(eq(projectItemsTable.supplierId, supplierId))
       .limit(1);
 
-    if (!items) return [null, "Error getting items count"];
+    if (!items) return [null, errorMessage];
     return [items.count, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -145,6 +165,7 @@ export type SupplierItemType = z.infer<typeof SupplierItemsSchema>;
 export const getSupplierItems = async (
   supplierId: number,
 ): Promise<ReturnTuple<SupplierItemType[]>> => {
+  const errorMessage = errorMessages.count;
   try {
     const items = await db
       .select({
@@ -167,12 +188,12 @@ export const getSupplierItems = async (
 
     const parsedItems = z.array(SupplierItemsSchema).safeParse(items);
 
-    if (parsedItems.error) return [null, "Error getting supplier items"];
+    if (parsedItems.error) return [null, errorMessages.corruptedData];
 
     return [parsedItems.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -190,6 +211,7 @@ export type SupplierProjectsType = z.infer<typeof supplierProjectsSchema>;
 export const getSupplierProjects = async (
   supplierId: number,
 ): Promise<ReturnTuple<SupplierProjectsType[]>> => {
+  const errorMessage = errorMessages.getProjects;
   try {
     const projects = await db
       .select({
@@ -211,7 +233,10 @@ export const getSupplierProjects = async (
 
     const parsedProjects = z.array(supplierProjectsSchema).safeParse(projects);
 
-    if (parsedProjects.error) return [null, "Error getting supplier projects"];
+    if (parsedProjects.error) {
+      logError(parsedProjects.error);
+      return [null, errorMessages.corruptedData];
+    }
 
     const uniqueProjects: SupplierProjectsType[] = [];
 
@@ -223,8 +248,8 @@ export const getSupplierProjects = async (
 
     return [uniqueProjects, null];
   } catch (error) {
-    console.log(error);
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -242,6 +267,7 @@ export type ItemProjectsType = z.infer<typeof itemProjectsSchema>;
 export const getItemProjects = async (
   itemId: number,
 ): Promise<ReturnTuple<ItemProjectsType[]>> => {
+  const errorMessage = errorMessages.getProjects;
   try {
     const projectItems = await db
       .select({
@@ -263,7 +289,10 @@ export const getItemProjects = async (
 
     const parsedProjects = z.array(itemProjectsSchema).safeParse(projectItems);
 
-    if (parsedProjects.error) return [null, "Error getting item projects"];
+    if (parsedProjects.error) {
+      logError(parsedProjects.error);
+      return [null, errorMessages.corruptedData];
+    }
 
     const uniqueProjects: ItemProjectsType[] = [];
 
@@ -275,8 +304,8 @@ export const getItemProjects = async (
 
     return [uniqueProjects, null];
   } catch (error) {
-    console.log(error);
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -293,6 +322,7 @@ export type ItemSupplierType = z.infer<typeof ItemSuppliersSchema>;
 export const getItemSuppliers = async (
   itemId: number,
 ): Promise<ReturnTuple<ItemSupplierType[]>> => {
+  const errorMessage = errorMessages.getSuppliers;
   try {
     const suppliers = await db
       .select({
@@ -312,7 +342,10 @@ export const getItemSuppliers = async (
 
     const parsedSuppliers = z.array(ItemSuppliersSchema).safeParse(suppliers);
 
-    if (parsedSuppliers.error) return [null, "Error getting item suppliers"];
+    if (parsedSuppliers.error) {
+      logError(parsedSuppliers.error);
+      return [null, errorMessages.corruptedData];
+    }
 
     const uniqueSuppliers: ItemSupplierType[] = [];
 
@@ -324,7 +357,7 @@ export const getItemSuppliers = async (
 
     return [uniqueSuppliers, null];
   } catch (error) {
-    console.log(error);
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };

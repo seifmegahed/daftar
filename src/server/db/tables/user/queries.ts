@@ -2,9 +2,27 @@ import { db } from "@/server/db";
 import { type UserDataType, usersTable } from "./schema";
 import { asc, eq, and, count, desc } from "drizzle-orm";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { getErrorMessage } from "@/lib/exceptions";
+import {
+  checkUniqueConstraintError,
+  errorLogger,
+  getErrorMessage,
+} from "@/lib/exceptions";
 import { userErrors } from "@/server/actions/users/errors";
 import { defaultPageLimit } from "@/data/config";
+
+const errorMessages = {
+  mainTitle: "User Queries Error:",
+  getUsers: "An error occurred while getting users",
+  getUser: "An error occurred while getting user",
+  notFound: "User not found",
+  insert: "An error occurred while adding user",
+  nameExists: "User username already exists",
+  count: "An error occurred while counting users",
+  update: "An error occurred while updating users",
+  delete: "An error occurred while deleting users",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
 
 export type GetPartialUserType = Omit<
   UserDataType,
@@ -15,9 +33,11 @@ export type SetPartialUser = Pick<
   "name" | "username" | "role" | "password"
 >;
 
-export const getAllUsers = async (page = 1, limit = defaultPageLimit): Promise<
-  ReturnTuple<GetPartialUserType[]>
-> => {
+export const getAllUsers = async (
+  page = 1,
+  limit = defaultPageLimit,
+): Promise<ReturnTuple<GetPartialUserType[]>> => {
+  const errorMessage = errorMessages.getUsers;
   try {
     const allUsers = await db
       .select({
@@ -37,21 +57,24 @@ export const getAllUsers = async (page = 1, limit = defaultPageLimit): Promise<
 
     return [allUsers, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getUsersCount = async (): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [usersCount] = await db
       .select({ count: count() })
       .from(usersTable)
       .limit(1);
 
-    if (!usersCount) return [null, "Error getting users count"];
+    if (!usersCount) return [null, errorMessage];
     return [usersCount.count, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -59,6 +82,7 @@ export const updateUserRole = async (
   id: number,
   role: string,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [user] = await db
       .update(usersTable)
@@ -66,10 +90,11 @@ export const updateUserRole = async (
       .where(eq(usersTable.id, id))
       .returning();
 
-    if (!user) throw new Error("User not found");
+    if (!user) return [null, errorMessage];
     return [user.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -77,6 +102,7 @@ export const updateUserPassword = async (
   id: number,
   password: string,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [user] = await db
       .update(usersTable)
@@ -84,35 +110,38 @@ export const updateUserPassword = async (
       .where(eq(usersTable.id, id))
       .returning();
 
-    if (!user) throw new Error("User not found");
+    if (!user) return [null, errorMessage];
     return [user.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const insertNewUser = async (
   userData: SetPartialUser,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
-    const [user] = await db
-      .insert(usersTable)
-      .values(userData)
-      .returning();
+    const [user] = await db.insert(usersTable).values(userData).returning();
 
-    if (!user) throw new Error("Error inserting new user");
+    if (!user) return [null, errorMessage];
     return [user.id, null];
   } catch (error) {
-    const errorMessage = getErrorMessage(error);
-    if (errorMessage.includes("unique"))
-      return [null, userErrors.usernameAlreadyExists];
-    return [null, errorMessage];
+    logError(error);
+    return [
+      null,
+      checkUniqueConstraintError(error)
+        ? errorMessages.nameExists
+        : errorMessage,
+    ];
   }
 };
 
 export const getUserById = async (
   id: number,
 ): Promise<ReturnTuple<GetPartialUserType>> => {
+  const errorMessage = errorMessages.getUser;
   try {
     const [user] = await db
       .select({
@@ -127,10 +156,11 @@ export const getUserById = async (
       })
       .from(usersTable)
       .where(eq(usersTable.id, id));
-    if (!user) return [null, userErrors.userNotFound];
+    if (!user) return [null, errorMessages.notFound];
     return [user, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -138,6 +168,7 @@ export const changeUserActiveState = async (
   id: number,
   active: boolean,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [user] = await db
       .update(usersTable)
@@ -145,16 +176,18 @@ export const changeUserActiveState = async (
       .where(eq(usersTable.id, id))
       .returning();
 
-    if (!user) throw new Error("User not found");
+    if (!user) return [null, errorMessage];
     return [user.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const updateUserLastActive = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [user] = await db
       .update(usersTable)
@@ -162,10 +195,11 @@ export const updateUserLastActive = async (
       .where(eq(usersTable.id, id))
       .returning();
 
-    if (!user) throw new Error("User not found");
+    if (!user) return [null, errorMessage];
     return [user.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -184,6 +218,7 @@ export const updateUserLastActive = async (
 export const sensitiveGetUserPasswordById = async (
   id: number,
 ): Promise<ReturnTuple<string>> => {
+  const errorMessage = errorMessages.getUser;
   try {
     const [user] = await db
       .select({
@@ -191,17 +226,18 @@ export const sensitiveGetUserPasswordById = async (
       })
       .from(usersTable)
       .where(eq(usersTable.id, id));
-    if (!user) return [null, userErrors.userNotFound];
+    if (!user) return [null, errorMessages.notFound];
 
     return [user.password, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 type SensitiveGetUserType = Pick<
-UserDataType,
-"id" | "name" | "username" | "role" | "active" | "password"
+  UserDataType,
+  "id" | "name" | "username" | "role" | "active" | "password"
 >;
 
 /**
@@ -224,6 +260,7 @@ UserDataType,
 export const sensitiveGetUserByUsername = async (
   username: string,
 ): Promise<ReturnTuple<SensitiveGetUserType>> => {
+  const errorMessage = errorMessages.getUser;
   try {
     const [user] = await db
       .select({
@@ -239,16 +276,12 @@ export const sensitiveGetUserByUsername = async (
         and(eq(usersTable.username, username), eq(usersTable.active, true)),
       );
 
-    if (!user) return [null, userErrors.userNotFound];
+    if (!user) return [null, errorMessages.notFound];
 
     return [user, null];
   } catch (error) {
-    const errorMessage = getErrorMessage(error);
-
-    if (errorMessage.includes("CONNECT_TIMEOUT"))
-      return [null, "Error connecting to database"];
-
-    return [null, "Something went wrong"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -256,6 +289,7 @@ export const updateUserName = async (
   id: number,
   name: string,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [user] = await db
       .update(usersTable)
@@ -263,10 +297,11 @@ export const updateUserName = async (
       .where(eq(usersTable.id, id))
       .returning();
 
-    if (!user) throw new Error("User not found");
+    if (!user) return [null, errorMessage];
     return [user.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -277,6 +312,7 @@ export type UserBriefType = {
 };
 
 export const listAllUsers = async (): Promise<ReturnTuple<UserBriefType[]>> => {
+  const errorMessage = errorMessages.getUsers;
   try {
     const users = await db
       .select({
@@ -286,10 +322,11 @@ export const listAllUsers = async (): Promise<ReturnTuple<UserBriefType[]>> => {
       .from(usersTable)
       .orderBy(asc(usersTable.name));
 
-    if (!users) return [null, "Error getting users"];
+    if (!users) return [null, errorMessage];
     return [users, null];
   } catch (error) {
+    logError(error);
     console.log(error);
-    return [null, "Error getting users"];
+    return [null, errorMessage];
   }
 };

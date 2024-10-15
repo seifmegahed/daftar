@@ -4,29 +4,47 @@ import { itemsTable } from "./schema";
 
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import { defaultPageLimit } from "@/data/config";
-import { getErrorMessage } from "@/lib/exceptions";
+import {
+  checkUniqueConstraintError,
+  errorLogger,
+  getErrorMessage,
+} from "@/lib/exceptions";
 import { filterDefault } from "@/components/filter-and-search";
 
 import type { AddItemType, SelectItemType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { FilterArgs } from "@/components/filter-and-search";
 
+const errorMessages = {
+  mainTitle: "Item Queries Error:",
+  insert: "An error occurred while adding item",
+  update: "An error occurred while updating item",
+  delete: "An error occurred while deleting item",
+  getItem: "An error occurred while getting item",
+  getItems: "An error occurred while getting items",
+  count: "An error occurred while counting items",
+  nameExits: "Item name already exists",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
+
 export const insertItem = async (
   data: AddItemType,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
-    const [item] = await db
-      .insert(itemsTable)
-      .values(data)
-      .returning();
+    const [item] = await db.insert(itemsTable).values(data).returning();
+    if (!item) return [null, errorMessage];
 
-    if (!item) throw new Error("Error inserting new item");
     return [item.id, null];
   } catch (error) {
-    const errorMessage = getErrorMessage(error);
-    if (errorMessage.includes("unique"))
-      return [null, `Item with name ${data.name} already exists`];
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [
+      null,
+      checkUniqueConstraintError(error)
+        ? errorMessages.nameExits
+        : errorMessage,
+    ];
   }
 };
 
@@ -61,6 +79,7 @@ export const getAllItemsBrief = async (
   searchText?: string,
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefItemType[]>> => {
+  const errorMessage = errorMessages.getItems;
   try {
     const allItems = await db
       .select({
@@ -79,11 +98,12 @@ export const getAllItemsBrief = async (
       .limit(limit)
       .offset((page - 1) * limit);
 
-    if (!allItems) return [null, "Error getting items"];
+    if (!allItems) return [null, errorMessage];
 
     return [allItems, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -100,6 +120,7 @@ export type GetItemDetailType = SelectItemType & {
 export const getItemDetail = async (
   id: number,
 ): Promise<ReturnTuple<GetItemDetailType>> => {
+  const errorMessage = errorMessages.getItem;
   try {
     const item = await db.query.itemsTable.findFirst({
       where: (item, { eq }) => eq(item.id, id),
@@ -118,10 +139,12 @@ export const getItemDetail = async (
         },
       },
     });
-    if (!item) return [null, "Error getting item"];
+    if (!item) return [null, errorMessage];
+
     return [item, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -131,6 +154,7 @@ export type ItemListType = {
 };
 
 export const listAllItems = async (): Promise<ReturnTuple<ItemListType[]>> => {
+  const errorMessage = errorMessages.getItems;
   try {
     const items = await db
       .select({
@@ -140,18 +164,19 @@ export const listAllItems = async (): Promise<ReturnTuple<ItemListType[]>> => {
       .from(itemsTable)
       .orderBy(asc(itemsTable.name));
 
-    if (!items) return [null, "Error getting items"];
+    if (!items) return [null, errorMessage];
 
     return [items, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting items"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getItemsCount = async (
   filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [items] = await db
       .select({ count: count() })
@@ -159,10 +184,11 @@ export const getItemsCount = async (
       .where(itemFilterQuery(filter))
       .limit(1);
 
-    if (!items) return [null, "Error getting items count"];
+    if (!items) return [null, errorMessage];
     return [items.count, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -170,6 +196,7 @@ export const updateItem = async (
   id: number,
   data: Partial<SelectItemType>,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
   try {
     const [item] = await db
       .update(itemsTable)
@@ -177,23 +204,28 @@ export const updateItem = async (
       .where(eq(itemsTable.id, id))
       .returning();
 
-    if (!item) return [null, "Error updating item"];
+    if (!item) return [null, errorMessage];
+    
     return [item.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const deleteItem = async (id: number): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.delete;
   try {
     const [item] = await db
       .delete(itemsTable)
       .where(eq(itemsTable.id, id))
       .returning();
 
-    if (!item) return [null, "Error deleting item"];
+    if (!item) return [null, errorMessage];
+
     return [item.id, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
+    logError(error);
+    return [null, errorMessage];
   }
 };

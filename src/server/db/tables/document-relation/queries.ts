@@ -10,26 +10,50 @@ import {
   suppliersTable,
 } from "@/server/db/schema";
 
+import { errorLogger } from "@/lib/exceptions";
 import type { DocumentRelationsType } from "./schema";
 import type { DocumentDataType } from "@/server/db/tables/document/schema";
 import { privateFilterQuery } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { z } from "zod";
 
+const errorMessages = {
+  mainTitle: "Document Relations Queries Error:",
+  insert: "An error occurred while adding document",
+  update: "And error occurred while updating document",
+  delete: "An error occurred while deleting document",
+  getDocument: "An error occurred while getting document",
+  getDocuments: "An error occurred while getting documents",
+  getPath: "An error occurred while getting document path",
+  count: "An error occurred while counting documents",
+  dataCorrupted: "It seems that some data is corrupted",
+  getProjects: "An error occurred while getting projects",
+  countProjects: "An error occurred while counting projects",
+  getItems: "An error occurred while getting items",
+  countItems: "An error occurred while counting items",
+  getClients: "An error occurred while getting clients",
+  countClients: "An error occurred while counting clients",
+  getSuppliers: "An error occurred while getting suppliers",
+  countSuppliers: "An error occurred while counting suppliers",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
+
 export const insertDocumentRelation = async (
   relation: DocumentRelationsType,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
     const [result] = await db
       .insert(documentRelationsTable)
       .values(relation)
       .returning();
 
-    if (!result) return [null, "Error inserting document relation"];
+    if (!result) return [null, errorMessage];
     return [result.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error inserting document relation"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -37,6 +61,7 @@ export const insertDocumentWithRelation = async (
   document: DocumentDataType,
   relation: Omit<DocumentRelationsType, "documentId">,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
     const documentId = await db.transaction(async (tx) => {
       const [documentResult] = await tx
@@ -52,11 +77,11 @@ export const insertDocumentWithRelation = async (
       return documentResult.id;
     });
 
-    if (!documentId) return [null, "Error inserting document"];
+    if (!documentId) return [null, errorMessage];
     return [documentId, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error inserting document"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -74,6 +99,7 @@ export const getClientDocuments = async (
   clientId: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
+  const errorMessage = errorMessages.getDocuments;
   try {
     const documents = await db
       .select({
@@ -94,13 +120,14 @@ export const getClientDocuments = async (
           privateFilterQuery(accessToPrivate),
         ),
       );
-    if (!documents) return [null, "Error getting client documents"];
+
     const result = z.array(simpDocWithRelationSchema).safeParse(documents);
-    if (result.error) return [null, "Error getting client documents"];
+    if (result.error) return [null, errorMessages.dataCorrupted];
+
     return [result.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting client documents"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -108,6 +135,7 @@ export const getSupplierDocuments = async (
   supplierId: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
+  const errorMessage = errorMessages.getDocuments;
   try {
     const documents = await db
       .select({
@@ -128,13 +156,14 @@ export const getSupplierDocuments = async (
           privateFilterQuery(accessToPrivate),
         ),
       );
-    if (!documents) return [null, "Error getting supplier documents"];
+
     const result = z.array(simpDocWithRelationSchema).safeParse(documents);
-    if (result.error) return [null, "Error getting supplier documents"];
+    if (result.error) return [null, errorMessages.dataCorrupted];
+
     return [result.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting supplier documents"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -142,6 +171,7 @@ export const getItemDocuments = async (
   itemId: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
+  const errorMessage = errorMessages.getDocuments;
   try {
     const documents = await db
       .select({
@@ -165,13 +195,14 @@ export const getItemDocuments = async (
           privateFilterQuery(accessToPrivate),
         ),
       );
-    if (!documents) return [null, "Error getting item documents"];
+
     const result = z.array(simpDocWithRelationSchema).safeParse(documents);
-    if (result.error) return [null, "Error getting item documents"];
+    if (result.error) return [null, errorMessages.dataCorrupted];
+
     return [result.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting item documents"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -179,6 +210,7 @@ export const getProjectDocuments = async (
   projectId: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
+  const errorMessage = errorMessages.getDocuments;
   try {
     const documents = await db
       .select({
@@ -200,14 +232,13 @@ export const getProjectDocuments = async (
         ),
       );
 
-    if (!documents) return [null, "Error getting project documents"];
     const result = z.array(simpDocWithRelationSchema).safeParse(documents);
-    if (result.error) return [null, "Error getting project documents"];
+    if (result.error) return [null, errorMessages.dataCorrupted];
 
     return [result.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project documents"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -215,6 +246,7 @@ export const getClientDocumentsCount = async (
   clientId: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [documents] = await db
       .select({ count: count() })
@@ -230,11 +262,11 @@ export const getClientDocumentsCount = async (
         ),
       )
       .limit(1);
-    if (!documents) return [null, "Error getting client documents count"];
+    if (!documents) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting client documents count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -242,6 +274,7 @@ export const getSupplierDocumentsCount = async (
   supplierId: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [documents] = await db
       .select({ count: count() })
@@ -257,11 +290,11 @@ export const getSupplierDocumentsCount = async (
         ),
       )
       .limit(1);
-    if (!documents) return [null, "Error getting supplier documents count"];
+    if (!documents) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting supplier documents count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -269,6 +302,7 @@ export const getItemDocumentsCount = async (
   itemId: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [documents] = await db
       .select({ count: count() })
@@ -284,11 +318,11 @@ export const getItemDocumentsCount = async (
         ),
       )
       .limit(1);
-    if (!documents) return [null, "Error getting item documents count"];
+    if (!documents) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting item documents count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -296,6 +330,7 @@ export const getProjectDocumentsCount = async (
   projectId: number,
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [documents] = await db
       .select({ count: count() })
@@ -311,44 +346,47 @@ export const getProjectDocumentsCount = async (
         ),
       )
       .limit(1);
-    if (!documents) return [null, "Error getting project documents count"];
+    if (!documents) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project documents count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const deleteDocumentRelation = async (
   relationId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.delete;
   try {
     const [result] = await db
       .delete(documentRelationsTable)
       .where(eq(documentRelationsTable.id, relationId))
       .returning();
-    if (!result) return [null, "Error deleting document relation"];
+    if (!result) return [null, errorMessage];
     return [result.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error deleting document relation"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getDocumentRelationsCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [result] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
       .where(eq(documentRelationsTable.documentId, id))
       .limit(1);
-    if (!result) return [null, "Error getting document relations count"];
+
+    if (!result) return [null, errorMessage];
     return [result.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document relations count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -366,6 +404,7 @@ export type DocumentProjectsType = z.infer<typeof documentProjectsSchema>;
 export const getDocumentProjects = async (
   id: number,
 ): Promise<ReturnTuple<DocumentProjectsType[]>> => {
+  const errorMessage = errorMessages.getProjects;
   try {
     const projects = await db
       .select({
@@ -390,21 +429,20 @@ export const getDocumentProjects = async (
       )
       .orderBy(desc(projectsTable.createdAt));
 
-    if (!projects) return [null, "Error getting document projects"];
     const parsedProjects = z.array(documentProjectsSchema).safeParse(projects);
-
-    if (parsedProjects.error) return [null, "Error getting document projects"];
+    if (parsedProjects.error) return [null, errorMessages.dataCorrupted];
 
     return [parsedProjects.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document projects"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const documentProjectsCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.countProjects;
   try {
     const [projects] = await db
       .select({ count: count() })
@@ -417,11 +455,11 @@ export const documentProjectsCount = async (
       )
       .limit(1);
 
-    if (!projects) return [null, "Error getting document projects count"];
+    if (!projects) return [null, errorMessage];
     return [projects.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document projects count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -437,6 +475,7 @@ export type DocumentClientsType = z.infer<typeof documentClientsSchema>;
 export const getDocumentClients = async (
   id: number,
 ): Promise<ReturnTuple<DocumentClientsType[]>> => {
+  const errorMessage = errorMessages.getClients;
   try {
     const clients = await db
       .select({
@@ -459,19 +498,19 @@ export const getDocumentClients = async (
       .orderBy(desc(clientsTable.createdAt));
 
     const parsedClients = z.array(documentClientsSchema).safeParse(clients);
-
-    if (parsedClients.error) return [null, "Error getting document clients"];
+    if (parsedClients.error) return [null, errorMessages.dataCorrupted];
 
     return [parsedClients.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document clients"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const documentClientsCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.countClients;
   try {
     const [clients] = await db
       .select({ count: count() })
@@ -484,11 +523,11 @@ export const documentClientsCount = async (
       )
       .limit(1);
 
-    if (!clients) return [null, "Error getting document clients count"];
+    if (!clients) return [null, errorMessage];
     return [clients.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document clients count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -505,6 +544,7 @@ export type DocumentSuppliersType = z.infer<typeof documentSuppliersSchema>;
 export const getDocumentSuppliers = async (
   id: number,
 ): Promise<ReturnTuple<DocumentSuppliersType[]>> => {
+  const errorMessage = errorMessages.countSuppliers;
   try {
     const suppliers = await db
       .select({
@@ -530,20 +570,19 @@ export const getDocumentSuppliers = async (
     const parsedSuppliers = z
       .array(documentSuppliersSchema)
       .safeParse(suppliers);
-
-    if (parsedSuppliers.error)
-      return [null, "Error getting document suppliers"];
+    if (parsedSuppliers.error) return [null, errorMessages.dataCorrupted];
 
     return [parsedSuppliers.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document suppliers"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const documentSuppliersCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.countSuppliers;
   try {
     const [suppliers] = await db
       .select({ count: count() })
@@ -556,11 +595,11 @@ export const documentSuppliersCount = async (
       )
       .limit(1);
 
-    if (!suppliers) return [null, "Error getting document suppliers count"];
+    if (!suppliers) return [null, errorMessage];
     return [suppliers.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document suppliers count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -578,6 +617,7 @@ export type DocumentItemsType = z.infer<typeof documentItemsSchema>;
 export const getDocumentItems = async (
   id: number,
 ): Promise<ReturnTuple<DocumentItemsType[]>> => {
+  const errorMessage = errorMessages.getItems;
   try {
     const items = await db
       .select({
@@ -599,19 +639,19 @@ export const getDocumentItems = async (
       .orderBy(desc(itemsTable.createdAt));
 
     const parsedItems = z.array(documentItemsSchema).safeParse(items);
-
-    if (parsedItems.error) return [null, "Error getting document items"];
+    if (parsedItems.error) return [null, errorMessages.dataCorrupted];
 
     return [parsedItems.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document items"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const documentItemsCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.countItems;
   try {
     const [items] = await db
       .select({ count: count() })
@@ -624,10 +664,10 @@ export const documentItemsCount = async (
       )
       .limit(1);
 
-    if (!items) return [null, "Error getting document items count"];
+    if (!items) return [null, errorMessage];
     return [items.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting document items count"];
+    logError(error);
+    return [null, errorMessage];
   }
 };

@@ -5,21 +5,35 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { z } from "zod";
 import { usersTable } from "../user/schema";
 import { desc, eq, count } from "drizzle-orm";
+import { errorLogger } from "@/lib/exceptions";
+
+const errorMessages = {
+  mainTitle: "Project Comment Queries Error:",
+  insert: "An error occurred while adding comment",
+  update: "An error occurred while updating comment",
+  delete: "An error occurred while deleting comment",
+  getComments: "An error occurred while getting comments",
+  count: "An error occurred while counting comments",
+  dataCorrupted: "It seems that some data is corrupted",
+};
+
+const logError = errorLogger(errorMessages.mainTitle);
 
 export const insertProjectComment = async (
   data: InsertProjectCommentType,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.insert;
   try {
     const [comment] = await db
       .insert(projectCommentsTable)
       .values(data)
       .returning();
 
-    if (!comment) return [null, "Error inserting new project comment"];
+    if (!comment) return [null, errorMessage];
     return [comment.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error inserting new project comment"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
@@ -38,6 +52,7 @@ export const getProjectComments = async (
   page: number,
   limit = 15,
 ): Promise<ReturnTuple<ProjectCommentType[]>> => {
+  const errorMessage = errorMessages.getComments;
   try {
     const comments = await db
       .select({
@@ -54,19 +69,21 @@ export const getProjectComments = async (
       .offset((page - 1) * limit)
       .limit(limit);
 
-    if (!comments) return [null, "Error getting project comments"];
+    if (!comments) return [null, errorMessage];
     const parseResult = z.array(projectCommentSchema).safeParse(comments);
-    if (!parseResult.success) return [null, "Error parsing project comments"];
+    if (!parseResult.success) return [null, errorMessages.dataCorrupted];
+
     return [parseResult.data, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project comments"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const getProjectCommentsCount = async (
   projectId: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
   try {
     const [result] = await db
       .select({
@@ -75,43 +92,28 @@ export const getProjectCommentsCount = async (
       .from(projectCommentsTable)
       .where(eq(projectCommentsTable.projectId, projectId))
       .limit(1);
-    if (!result) return [null, "Error getting project comments count"];
+    if (!result) return [null, errorMessage];
     return [result.count, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error getting project comments count"];
-  }
-};
-
-export const getCommentById = async (
-  commentId: number,
-): Promise<ReturnTuple<InsertProjectCommentType>> => {
-  try {
-    const [comment] = await db
-      .select()
-      .from(projectCommentsTable)
-      .where(eq(projectCommentsTable.id, commentId));
-    if (!comment) return [null, "Error getting comment"];
-    return [comment, null];
-  } catch (error) {
-    console.log(error);
-    return [null, "Error getting comment"];
+    logError(error);
+    return [null, errorMessage];
   }
 };
 
 export const deleteProjectComment = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.delete;
   try {
     const [comment] = await db
       .delete(projectCommentsTable)
       .where(eq(projectCommentsTable.id, id))
       .returning();
 
-    if (!comment) return [null, "Error deleting project comment"];
+    if (!comment) return [null, errorMessage];
     return [comment.id, null];
   } catch (error) {
-    console.log(error);
-    return [null, "Error deleting project comment"];
+    logError(error);
+    return [null, errorMessage];
   }
 };

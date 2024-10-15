@@ -8,10 +8,10 @@ import { errorLogger } from "@/lib/exceptions";
 
 const errorMessages = {
   mainTitle: "Address Queries Error:",
-  dataCorrupted: "Error: Addresses data corrupted",
-  insert: "An error occurred while inserting new address",
+  dataCorrupted: "It seems that some data is corrupted",
+  insert: "An error occurred while adding address",
   get: "An error occurred while getting addresses",
-  getCount: "An error occurred while counting addresses",
+  count: "An error occurred while counting addresses",
   delete: "An error occurred while deleting address",
 };
 
@@ -34,7 +34,7 @@ export const insertNewAddress = async (
 export const getClientAddressesCount = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.getCount;
+  const errorMessage = errorMessages.count;
   try {
     const [addresses] = await db
       .select({ count: count() })
@@ -102,7 +102,7 @@ export const getClientAddresses = async (
 export const getSupplierAddressesCount = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.getCount;
+  const errorMessage = errorMessages.count;
   try {
     const [addresses] = await db
       .select({ count: count() })
