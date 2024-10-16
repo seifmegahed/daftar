@@ -108,9 +108,9 @@ export default function LoginForm() {
 
 function LoginInfoSection() {
   return (
-    <div className="flex h-screen w-full items-center justify-center lg:h-full bg-muted">
-      <div className="flex w-full lg:h-screen h-full max-w-screen-md flex-col items-center gap-4 text-center text-sm text-muted-foreground justify-between lg:justify-center">
-        <div className="flex flex-col items-center justify-center gap-4 w-full h-full flex-grow">
+    <div className="flex h-screen w-full items-center justify-center bg-muted lg:h-full">
+      <div className="flex h-full w-full max-w-lg flex-col items-center justify-between gap-4 text-center text-sm text-muted-foreground lg:h-screen lg:justify-center">
+        <div className="flex h-full w-full flex-grow flex-col items-center justify-center gap-4">
           <BookmarkIcon className="h-16 w-16 stroke-secondary-foreground dark:fill-secondary-foreground dark:stroke-none" />
           <DaftarArabicIcon className="stroke-secondary-foreground" />
           <h1 className="mb-4 text-center text-4xl font-bold text-secondary-foreground">
@@ -119,8 +119,9 @@ function LoginInfoSection() {
           <p>
             <Balancer>
               Daftar is an application that allows you to manage your
-              contracting company&apos;s data in one place. The word Daftar in
-              arabic means <i>a folder of records</i>
+              contracting company&apos;s data in one place. The word Daftar{" "}
+              <i>/daf.tar/</i> in arabic means{" "}
+              <i>A folder of records, A book of accounts, or a ledger</i>
             </Balancer>
           </p>
           <p className="hidden lg:block">Sign in to your account to continue</p>
