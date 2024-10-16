@@ -14,21 +14,25 @@ import { getSupplierProjectsCountAction } from "@/server/actions/project-items/r
 import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteSupplierAction } from "@/server/actions/suppliers/delete";
+import ErrorPage from "@/components/error";
 
 async function EditSupplierPage({ params }: { params: { id: string } }) {
-  const supplierId = Number(params.id);
-  if (isNaN(supplierId)) return <p>Error: Supplier ID is not a number</p>;
+  const supplierId = parseInt(params.id);
+  if (isNaN(supplierId)) return <ErrorPage message="Invalid supplier ID" />;
 
   const [supplier, error] = await getSupplierFullByIdAction(supplierId);
-  if (error !== null) return <p>An error occurred, please try again.</p>;
+  if (error !== null) return <ErrorPage message={error} />;
 
   const [currentUser] = await getCurrentUserAction();
   const hasFullAccess = currentUser?.role === "admin";
 
-  const [supplierProjects] = await getSupplierProjectsCountAction(supplierId);
+  const [supplierProjects, supplierProjectsError] =
+    await getSupplierProjectsCountAction(supplierId);
+  if (supplierProjectsError !== null)
+    return <ErrorPage message={supplierProjectsError} />;
 
   const deleteFormInfo =
-    supplierProjects !== null && supplierProjects > 0 ? (
+    supplierProjects > 0 ? (
       <>
         {`You cannot delete a supplier that is referenced in ${supplierProjects > 1 ? `${supplierProjects} projects` : "a project"}.`}
       </>

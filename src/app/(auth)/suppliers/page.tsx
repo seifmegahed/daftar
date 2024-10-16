@@ -10,6 +10,7 @@ import type {
   FilterTypes,
 } from "@/components/filter-and-search";
 import ListPageWrapper from "@/components/list-page-wrapper";
+import ErrorPage from "@/components/error";
 
 const pageLimit = defaultPageLimit;
 
@@ -25,7 +26,7 @@ const filterItems: FilterOptionType[] = [
 ];
 
 async function SuppliersPage({ searchParams }: Props) {
-  const page = Number(searchParams.page) || 1;
+  const page = parseInt(searchParams.page ?? "1");
   const query = searchParams.query ?? "";
 
   const filterValues = {
@@ -33,9 +34,10 @@ async function SuppliersPage({ searchParams }: Props) {
     filterValue: searchParams.fv ?? "",
   };
 
-  const [totalCount] = await getSuppliersCountAction(filterValues);
+  const [count, countError] = await getSuppliersCountAction(filterValues);
+  if (countError !== null) return <ErrorPage message={countError} />;
 
-  const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
+  const totalPages = Math.ceil(count / pageLimit);
 
   return (
     <ListPageWrapper

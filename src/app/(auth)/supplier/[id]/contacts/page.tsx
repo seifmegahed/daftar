@@ -1,21 +1,25 @@
 import ContactCard from "@/components/common-cards/contact";
+import ErrorPage from "@/components/error";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import { getSupplierContactsAction } from "@/server/actions/contacts";
 import { getSupplierPrimaryContactIdAction } from "@/server/actions/suppliers/read";
 
 async function SupplierContactsPage({ params }: { params: { id: string } }) {
-  const supplierId = Number(params.id);
-
-  if (isNaN(supplierId)) return <p>Error: Client ID is not a number</p>;
+  const supplierId = parseInt(params.id);
+  if (isNaN(supplierId)) return <ErrorPage message="Invalid supplier ID" />;
 
   const [contacts, error] = await getSupplierContactsAction(supplierId);
-  if (error !== null) return <p>Error: {error}</p>;
+  if (error !== null) return <ErrorPage message={error} />;
+  if (!contacts.length)
+    return (
+      <ErrorPage title="There seems to be no contacts for this supplier yet" />
+    );
 
   const [primaryContactId, primaryContactError] =
     await getSupplierPrimaryContactIdAction(supplierId);
-  if (primaryContactError !== null) {
-    console.log(primaryContactError);
-  }
+  if (primaryContactError !== null)
+    return <ErrorPage message={primaryContactError} />;
+
   return (
     <ListPageWrapper
       title="Supplier's Contacts"

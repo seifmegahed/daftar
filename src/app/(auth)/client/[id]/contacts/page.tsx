@@ -17,9 +17,9 @@ async function ClientContactsPage({ params }: { params: { id: string } }) {
 
   const [primaryContactId, primaryContactError] =
     await getClientPrimaryContactIdAction(clientId);
-  if (primaryContactError !== null) {
-    console.log(primaryContactError);
-  }
+  if (primaryContactError !== null)
+    return <ErrorPage message={primaryContactError} />;
+  
   return (
     <ListPageWrapper
       title="Client's Contacts"

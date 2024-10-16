@@ -3,10 +3,15 @@ import InfoPageWrapper from "@/components/info-page-wrapper";
 import Section from "@/components/info-section";
 import { getSupplierFullByIdAction } from "@/server/actions/suppliers/read";
 import SupplierSection from "@/components/common-sections/company-section";
+import ErrorPage from "@/components/error";
 
 async function SupplierPage({ params }: { params: { id: string } }) {
-  const [supplier, error] = await getSupplierFullByIdAction(Number(params.id));
-  if (error !== null) return <p>Error: {error}</p>;
+  const supplierId = parseInt(params.id);
+  if (isNaN(supplierId)) return <ErrorPage message="Invalid supplier ID" />;
+
+  const [supplier, error] = await getSupplierFullByIdAction(supplierId);
+  if (error !== null) return <ErrorPage message={error} />;
+  
   return (
     <InfoPageWrapper
       title={supplier.name}

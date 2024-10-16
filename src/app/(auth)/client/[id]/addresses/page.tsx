@@ -17,10 +17,8 @@ async function ClientAddressesPage({ params }: { params: { id: string } }) {
 
   const [primaryAddressId, primaryAddressError] =
     await getClientPrimaryAddressIdAction(clientId);
-
-  if (primaryAddressError !== null) {
-    console.log(primaryAddressError);
-  }
+  if (primaryAddressError !== null)
+    return <ErrorPage message={primaryAddressError} />;
 
   return (
     <ListPageWrapper

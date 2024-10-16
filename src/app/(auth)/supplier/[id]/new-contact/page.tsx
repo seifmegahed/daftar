@@ -1,7 +1,11 @@
 import NewContactForm from "@/components/common-forms/contact-form";
+import ErrorPage from "@/components/error";
 
 function NewContactPage({ params }: { params: { id: string } }) {
-  return <NewContactForm id={Number(params.id)} type="supplier" />;
+  const supplierId = parseInt(params.id);
+  if (isNaN(supplierId)) return <ErrorPage message="Invalid supplier ID" />;
+  
+  return <NewContactForm id={supplierId} type="supplier" />;
 }
 
 export default NewContactPage;
