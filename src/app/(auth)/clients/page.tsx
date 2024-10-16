@@ -25,7 +25,8 @@ const filterItems: FilterOptionType[] = [
 ];
 
 async function ClientsPage({ searchParams }: Props) {
-  const page = Number(searchParams.page) || 1;
+  const pageParam = parseInt(searchParams.page ?? "1");
+  const page = isNaN(pageParam) ? 1 : pageParam;
   const query = searchParams.query ?? "";
 
   const filterValues = {

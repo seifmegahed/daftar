@@ -1,13 +1,19 @@
 import { getItemSuppliersAction } from "@/server/actions/project-items/read";
 import SupplierCard from "@/app/(auth)/suppliers/all-suppliers/supplier-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
+import ErrorPage from "@/components/error";
 
 async function ItemSuppliersPage({ params }: { params: { id: string } }) {
-  const itemId = Number(params.id);
-  if (isNaN(itemId)) return <p>Error: Item ID is not a number</p>;
+  const itemId = parseInt(params.id);
+  if (isNaN(itemId)) return <ErrorPage message="Invalid item ID" />;
 
   const [suppliers, error] = await getItemSuppliersAction(itemId);
-  if (error !== null) return <p>Error: {error}</p>;
+  if (error !== null) return <ErrorPage message={error} />;
+  if (!suppliers.length)
+    return (
+      <ErrorPage title="There seems to be no suppliers linked to this item yet" />
+    );
+
   return (
     <ListPageWrapper
       title="Item's Suppliers"

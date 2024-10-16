@@ -1,6 +1,7 @@
 import { getItemsAction } from "@/server/actions/items/read";
 import ItemCard from "./item-card";
 import type { FilterArgs } from "@/components/filter-and-search";
+import ErrorPage from "@/components/error";
 
 async function ItemsList({
   page = 1,
@@ -12,10 +13,14 @@ async function ItemsList({
   filter?: FilterArgs;
 }) {
   const [items, error] = await getItemsAction(page, filter, query);
-
-  if (error !== null) return <div>Error getting items</div>;
-
-  if (items.length === 0) return <div>No items found</div>;
+  if (error !== null) return <ErrorPage message={error} />;
+  if (!items.length)
+    return (
+      <ErrorPage
+        title="There seems to be no items yet"
+        message="Start adding items to be able to see them here"
+      />
+    );
 
   return (
     <div className="flex flex-col gap-4">

@@ -11,8 +11,8 @@ export const dynamic = "force-dynamic";
 
 const pageLimit = 10;
 
-async function AdminPage({ searchParams }: { searchParams: { page: string } }) {
-  const pageParam = parseInt(searchParams.page);
+async function AdminPage({ searchParams }: { searchParams: { page?: string } }) {
+  const pageParam = parseInt(searchParams.page ?? "1");
   const page = isNaN(pageParam) ? 1 : pageParam;
 
   const [users, error] = await getAllUsersAction(page, defaultPageLimit);

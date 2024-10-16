@@ -19,22 +19,25 @@ import MpnForm from "./mpn-form";
 import DeleteForm from "@/components/common-forms/delete-form";
 
 import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
+import ErrorPage from "@/components/error";
 
 async function EditItemPage({ params }: { params: { id: string } }) {
-  const itemId = Number(params.id);
-  if (isNaN(itemId)) return <p>Error: Item ID is not a number</p>;
+  const itemId = parseInt(params.id);
+  if (isNaN(itemId)) return <ErrorPage message="Invalid item ID" />;
 
   const [item, error] = await getItemDetailsAction(itemId);
-  if (error !== null) return <p>An error occurred, please try again.</p>;
+  if (error !== null) return <ErrorPage message={error} />;
 
   const [currentUser] = await getCurrentUserAction();
   const hasFullAccess = currentUser?.role === "admin";
 
   const [itemReferences, itemReferencesError] =
     await getItemProjectsCountAction(itemId);
+  if (itemReferencesError !== null)
+    return <ErrorPage message={itemReferencesError} />;
 
   const deleteFormInfo =
-    itemReferences !== null && itemReferences > 0 ? (
+    itemReferences > 0 ? (
       <>
         {`You cannot delete an item that is referenced in ${itemReferences > 1 ? `${itemReferences} projects` : "a project"}. If you want to delete this item, you must first unlink it from all its references.`}
       </>

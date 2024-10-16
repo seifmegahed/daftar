@@ -9,6 +9,7 @@ import type {
   FilterTypes,
 } from "@/components/filter-and-search";
 import ListPageWrapper from "@/components/list-page-wrapper";
+import ErrorPage from "@/components/error";
 
 const pageLimit = defaultPageLimit;
 
@@ -22,7 +23,8 @@ const filterItems: FilterOptionType[] = [
 ];
 
 async function ItemsPage({ searchParams }: Props) {
-  const page = Number(searchParams.page) || 1;
+  const pageParam = parseInt(searchParams.page ?? "1");
+  const page = isNaN(pageParam) ? 1 : pageParam;
   const query = searchParams.query ?? "";
 
   const filterValues = {
@@ -30,9 +32,10 @@ async function ItemsPage({ searchParams }: Props) {
     filterValue: searchParams.fv ?? "",
   };
 
-  const [totalCount] = await getItemsCountAction(filterValues);
+  const [count, countError] = await getItemsCountAction(filterValues);
+  if (countError !== null) return <ErrorPage message={countError} />;
 
-  const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
+  const totalPages = Math.ceil(count / pageLimit);
 
   return (
     <ListPageWrapper

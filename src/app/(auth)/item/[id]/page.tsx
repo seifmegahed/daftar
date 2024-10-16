@@ -1,11 +1,16 @@
 import UserInfoSection from "@/components/common-sections/user-info-section";
+import ErrorPage from "@/components/error";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import Section from "@/components/info-section";
 import { getItemDetailsAction } from "@/server/actions/items/read";
 
 async function ItemPage({ params }: { params: { id: string } }) {
-  const [item, error] = await getItemDetailsAction(Number(params.id));
-  if (error !== null) return <p>Error: {error}</p>;
+  const itemId = parseInt(params.id);
+  if (isNaN(itemId)) return <ErrorPage message="Invalid document Id" />;
+
+  const [item, error] = await getItemDetailsAction(itemId);
+  if (error !== null) return <ErrorPage message={error} />;
+  
   return (
     <InfoPageWrapper
       title="Item Details"
