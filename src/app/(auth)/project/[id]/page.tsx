@@ -12,15 +12,19 @@ import Section from "@/components/info-section";
 import ClientSection from "@/components/common-sections/company-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import UserInfoSection from "@/components/common-sections/user-info-section";
+import ErrorPage from "@/components/error";
 
 export const dynamic = "force-dynamic";
 
 async function ProjectPage({ params }: { params: { id: string } }) {
-  const [project, projectErrors] = await getProjectByIdAction(
-    Number(params.id),
-  );
-  if (projectErrors !== null) return <p>projectErrors: {projectErrors}</p>;
-  const [documents] = await getProjectLinkedDocumentsAction(project.id);
+  const projectId = parseInt(params.id);
+  if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
+  
+  const [project, error] = await getProjectByIdAction(projectId);
+  if (error !== null) return <ErrorPage message={error} />;
+
+  const [documents] = await getProjectLinkedDocumentsAction(projectId);
+
   return (
     <InfoPageWrapper
       title={project.name}

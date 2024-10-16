@@ -10,6 +10,7 @@ import Pagination from "@/components/pagination";
 import { Suspense } from "react";
 import { CommentsListSkeleton } from "@/components/skeletons/comment-skeletons";
 import CommentsList from "./comments-list";
+import ErrorPage from "@/components/error";
 
 async function ProjectCommentsPage({
   params,
@@ -18,30 +19,30 @@ async function ProjectCommentsPage({
   params: { id: string };
   searchParams: { page: string };
 }) {
-  const page = Number(searchParams.page) ?? 1;
-  const projectId = Number(params.id);
-  if (isNaN(projectId)) return <div>Error: Project ID is invalid</div>;
+  const projectId = parseInt(params.id);
+  if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
 
   const [currentUser, currentUserError] = await getCurrentUserAction();
-  if (currentUserError !== null) return <div>Error getting current user</div>;
+  if (currentUserError !== null)
+    return <ErrorPage message={currentUserError} />;
 
-  const [projectCommentsCount, countError] =
-    await getProjectCommentsCountAction(projectId);
-  if (countError !== null)
-    return <div>Error getting project comments count</div>;
+  const [count, countError] = await getProjectCommentsCountAction(projectId);
+  if (countError !== null) return <ErrorPage message={countError} />;
 
+  const pageParam = parseInt(searchParams.page ?? "1");
+  const page = isNaN(pageParam) ? 1 : pageParam;
   const commentsPerPage = 10;
-  const numberOfPages = Math.ceil(projectCommentsCount / commentsPerPage);
+  const numberOfPages = Math.ceil(count / commentsPerPage);
 
   const [projectComments, error] = await getProjectCommentsAction(
     projectId,
     page,
     commentsPerPage,
   );
-  if (error !== null) return <div>Error getting project comments</div>;
+  if (error !== null) return <ErrorPage message={error} />;
 
   return (
-    <div className="flex flex-col gap-5 sm:px-0 px-2">
+    <div className="flex flex-col gap-5 px-2 sm:px-0">
       <div className="flex gap-4">
         <AvatarContainer>{getInitials(currentUser.name)}</AvatarContainer>
         <ProjectCommentForm projectId={projectId} />

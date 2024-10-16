@@ -10,12 +10,10 @@ async function ProjectsList({
 }: {
   page?: number;
   query?: string;
-  filter: FilterArgs;
+  filter?: FilterArgs;
 }) {
   const [projects, error] = await getProjectsBriefAction(page, filter, query);
-
   if (error !== null) return <ErrorPage message={error} />;
-
   if (!projects.length)
     return (
       <ErrorPage

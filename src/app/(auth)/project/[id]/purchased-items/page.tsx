@@ -1,12 +1,21 @@
 import { getProjectItemsAction } from "@/server/actions/project-items/read";
 import ProjectItemCard from "./project-item-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
+import ErrorPage from "@/components/error";
 
 export const dynamic = "force-dynamic";
 
 async function ProjectItemsPage({ params }: { params: { id: string } }) {
-  const [projectItems, error] = await getProjectItemsAction(Number(params.id));
-  if (error !== null) return <div>Error getting project items</div>;
+  const projectId = parseInt(params.id);
+  if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
+
+  const [projectItems, error] = await getProjectItemsAction(projectId);
+  if (error !== null) return <ErrorPage message={error} />;
+  if (!projectItems.length)
+    return (
+      <ErrorPage title="There seems to be no items linked to this project yet" />
+    );
+    
   return (
     <ListPageWrapper
       title="Project's Purchased Items"

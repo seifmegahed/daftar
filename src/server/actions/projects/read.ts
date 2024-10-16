@@ -40,7 +40,7 @@ export const getClientProjectsCountAction = async (
 
 export const getProjectsBriefAction = async (
   page: number,
-  filter: FilterArgs,
+  filter?: FilterArgs,
   search?: string,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {
   const [projects, error] = await getProjectsBrief(page, filter, search);

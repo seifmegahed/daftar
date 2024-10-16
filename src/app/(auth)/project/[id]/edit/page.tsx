@@ -20,20 +20,26 @@ import InfoPageWrapper from "@/components/info-page-wrapper";
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteProjectAction } from "@/server/actions/projects/delete";
 import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
+import ErrorPage from "@/components/error";
 
 export const dynamic = "force-dynamic";
 
-async function EditProjectPage({ params }: { params: { id: number } }) {
-  const [project, error] = await getProjectBriefByIdAction(params.id);
-  if (error !== null) return <div>Error getting project</div>;
+async function EditProjectPage({ params }: { params: { id: string } }) {
+  const projectId = parseInt(params.id);
+  if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
+
+  const [project, error] = await getProjectBriefByIdAction(projectId);
+  if (error !== null) return <ErrorPage message={error} />;
 
   const [users, usersError] = await getAllUsersAction();
+  if (usersError !== null) return <ErrorPage message={usersError} />;
+
   const [currentUser, currentUserError] = await getCurrentUserAction();
+  if (currentUserError !== null)
+    return <ErrorPage message={currentUserError} />;
 
   const hasFullAccess =
-    currentUser?.role === "admin" ||
-    currentUser?.id === project.ownerId ||
-    false;
+    currentUser.role === "admin" || currentUser.id === project.ownerId;
 
   return (
     <InfoPageWrapper
