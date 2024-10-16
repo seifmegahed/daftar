@@ -1,6 +1,7 @@
 import { getDocumentsAction } from "@/server/actions/documents/read";
 import DocumentCard from "./document-card";
 import type { FilterArgs } from "@/components/filter-and-search";
+import ErrorPage from "@/components/error";
 
 async function DocumentsList({
   page = 1,
@@ -12,10 +13,14 @@ async function DocumentsList({
   filter?: FilterArgs;
 }) {
   const [documents, error] = await getDocumentsAction(page, filter, query);
-
-  if (error !== null) return <div>Error getting documents</div>;
-
-  if (documents.length === 0) return <div>No documents found</div>;
+  if (error !== null) return <ErrorPage message={error} />;
+  if (!documents.length)
+    return (
+      <ErrorPage
+        title="There seems to be no documents yet"
+        message="Start adding documents to be able to see them here"
+      />
+    );
 
   return (
     <div className="flex flex-col gap-4">
