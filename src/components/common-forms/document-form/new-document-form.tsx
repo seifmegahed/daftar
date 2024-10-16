@@ -1,6 +1,5 @@
 "use client";
 
-import SubmitButton from "@/components/buttons/submit-button";
 import {
   Form,
   FormDescription,
@@ -10,7 +9,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { notesMaxLength } from "@/data/config";
 
@@ -23,6 +21,7 @@ import type { GeneratedRelationType } from ".";
 import Dropzone from "@/components/inputs/drop-zone";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useRouter } from "next/navigation";
+import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 
 const documentSchema = z.object({
   name: z
@@ -107,74 +106,71 @@ function NewDocumentForm({
       className="flex flex-col gap-4"
     >
       <Form {...form}>
-        <h2 className="text-2xl font-bold">New Document Form</h2>
-        <Separator />
-        <FormField
-          name="file"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <Dropzone
-                onUpload={(file) => field.onChange(file)}
-                file={field.value}
-              />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="name"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Name</FormLabel>
-              <Input {...field} />
-              <FormDescription>
-                Enter the name of the document. This is the name you will be
-                using to search and refer to the document.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="private"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <div className="flex items-center justify-between">
-                <FormLabel>Private</FormLabel>
-                <Checkbox
-                  checked={field.value}
-                  onCheckedChange={field.onChange}
+        <FormWrapperWithSubmit
+          title="Add Document"
+          description="Upload a new document"
+          buttonText="Add Document"
+          submitting={form.formState.isSubmitting}
+          dirty={form.formState.isDirty}
+        >
+          <FormField
+            name="file"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <Dropzone
+                  onUpload={(file) => field.onChange(file)}
+                  file={field.value}
                 />
-              </div>
-              <FormDescription>
-                Check this box if you want to make the document private. Only
-                users with the appropriate permissions will be able to access
-                the document.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          name="notes"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Notes</FormLabel>
-              <Textarea {...field} rows={3} className="resize-none" />
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end">
-          <SubmitButton
-            loading={form.formState.isSubmitting}
-            disabled={form.formState.isSubmitting || !form.formState.isDirty}
-            type="submit"
-          >
-            Submit
-          </SubmitButton>
-        </div>
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="name"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Name *</FormLabel>
+                <Input {...field} />
+                <FormDescription>
+                  Enter the name of the document. This is the name you will be
+                  using to search and refer to the document.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="private"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <div className="flex items-center justify-between">
+                  <FormLabel>Private</FormLabel>
+                  <Checkbox
+                    checked={field.value}
+                    onCheckedChange={field.onChange}
+                  />
+                </div>
+                <FormDescription>
+                  Check this box if you want to make the document private. Only
+                  users with the appropriate permissions will be able to access
+                  the document.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="notes"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Notes</FormLabel>
+                <Textarea {...field} rows={3} className="resize-none" />
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        </FormWrapperWithSubmit>
       </Form>
     </form>
   );

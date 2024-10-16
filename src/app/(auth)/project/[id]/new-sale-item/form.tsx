@@ -98,7 +98,7 @@ function NewSaleItemForm({
             name="itemId"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Item</FormLabel>
+                <FormLabel>Item *</FormLabel>
                 <ComboSelect
                   value={field.value ?? null}
                   onChange={field.onChange}
@@ -124,7 +124,7 @@ function NewSaleItemForm({
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Price</FormLabel>
+                <FormLabel>Price *</FormLabel>
                 <Input
                   {...field}
                   type="number"
@@ -142,7 +142,7 @@ function NewSaleItemForm({
             name="currency"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Currency</FormLabel>
+                <FormLabel>Currency *</FormLabel>
                 <Select
                   defaultValue={String(field.value) ?? ""}
                   onValueChange={(value) => field.onChange(Number(value))}
@@ -175,7 +175,7 @@ function NewSaleItemForm({
             name="quantity"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Quantity</FormLabel>
+                <FormLabel>Quantity *</FormLabel>
                 <Input
                   {...field}
                   type="number"

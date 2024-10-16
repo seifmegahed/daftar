@@ -63,7 +63,7 @@ function NewUserForm() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="username">User Name</Label>
+                <Label htmlFor="username">User Name *</Label>
                 <Input
                   id="username"
                   type="username"
@@ -92,7 +92,7 @@ function NewUserForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="name">Name</Label>
+                <Label htmlFor="name">Name *</Label>
                 <Input
                   id="name"
                   type="name"
@@ -115,7 +115,7 @@ function NewUserForm() {
             name="role"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <Label htmlFor="role">Role</Label>
+                <Label htmlFor="role">Role *</Label>
                 <Select
                   onValueChange={field.onChange}
                   value={field.value}
@@ -145,7 +145,7 @@ function NewUserForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="password">Password</Label>
+                <Label htmlFor="password">Password *</Label>
                 <Input
                   id="password"
                   type="password"
@@ -166,7 +166,7 @@ function NewUserForm() {
             name="verifyPassword"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="verify-password">Verify Password</Label>
+                <Label htmlFor="verify-password">Verify Password *</Label>
                 <Input
                   id="verify-password"
                   type="password"

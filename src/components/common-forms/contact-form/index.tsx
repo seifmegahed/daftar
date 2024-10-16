@@ -101,7 +101,7 @@ function NewContactForm({
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name</FormLabel>
+                <FormLabel>Name *</FormLabel>
                 <Input {...field} />
                 <FormMessage />
               </FormItem>

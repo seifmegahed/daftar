@@ -166,7 +166,7 @@ function NewSupplierForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company Name</FormLabel>
+                <FormLabel>Name *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -184,7 +184,7 @@ function NewSupplierForm() {
             name="field"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Field of Business</FormLabel>
+                <FormLabel>Field of Business *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -202,12 +202,12 @@ function NewSupplierForm() {
             name="registrationNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Registration Number (Optional)</FormLabel>
+                <FormLabel>Registration Number</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
                 <FormDescription>
-                  Enter the registration number of the supplier.
+                  Enter the registration number of the supplier. Registration number will appear in the card of the supplier.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -218,7 +218,7 @@ function NewSupplierForm() {
             name="website"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Website (Optional)</FormLabel>
+                <FormLabel>Website</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -234,7 +234,7 @@ function NewSupplierForm() {
             name="notes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes (Optional)</FormLabel>
+                <FormLabel>Notes</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={4} />
                 </FormControl>
@@ -254,7 +254,7 @@ function NewSupplierForm() {
             name="addressName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Address Name</FormLabel>
+                <FormLabel>Address Name *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -274,7 +274,7 @@ function NewSupplierForm() {
             name="addressLine"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Address Line</FormLabel>
+                <FormLabel>Address Line *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -291,7 +291,7 @@ function NewSupplierForm() {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center justify-between py-2">
-                  <FormLabel>Country</FormLabel>
+                  <FormLabel>Country *</FormLabel>
                   <ComboSelect
                     value={field.value as string}
                     onChange={field.onChange}
@@ -328,7 +328,7 @@ function NewSupplierForm() {
             name="addressNotes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes (Optional)</FormLabel>
+                <FormLabel>Notes</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={4} />
                 </FormControl>
@@ -348,7 +348,7 @@ function NewSupplierForm() {
             name="contactName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Contact Name</FormLabel>
+                <FormLabel>Contact Name *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -401,7 +401,7 @@ function NewSupplierForm() {
             name="contactNotes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes (Optional)</FormLabel>
+                <FormLabel>Notes</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={4} />
                 </FormControl>

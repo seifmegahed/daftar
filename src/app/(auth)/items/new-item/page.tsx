@@ -21,15 +21,19 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { notesMaxLength } from "@/data/config";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
+import { emptyToUndefined } from "@/utils/common";
 
 const schema = z.object({
   name: z
     .string({ required_error: "Name is required" })
     .min(4, { message: "Name must be at least 4 characters" })
     .max(64, { message: "Name must not be longer than 64 characters" }),
-  type: z
-    .string()
-    .max(64, { message: "Type must not be longer than 64 characters" }),
+  type: z.preprocess(
+    emptyToUndefined,
+    z
+      .string()
+      .max(64, { message: "Type must not be longer than 64 characters" }),
+  ),
   description: z.string().max(notesMaxLength, {
     message: `Description must not be longer than ${notesMaxLength} characters`,
   }),
@@ -97,7 +101,7 @@ function NewItemForm() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Item Name</FormLabel>
+                <FormLabel>Name *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -115,7 +119,7 @@ function NewItemForm() {
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Type</FormLabel>
+                <FormLabel>Type *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

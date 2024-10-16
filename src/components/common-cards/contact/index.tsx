@@ -17,7 +17,7 @@ const ContactCard = ({
 }) => {
   return (
     <CardWrapper>
-      <div className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4 w-full">
         <div className="flex justify-between">
           <h2 className="text-2xl font-bold">{contact.name}</h2>
           <ContactActionButtons

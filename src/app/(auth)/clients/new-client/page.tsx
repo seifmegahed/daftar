@@ -150,7 +150,7 @@ function NewClientPage() {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company Name</FormLabel>
+                <FormLabel>Name *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -168,12 +168,12 @@ function NewClientPage() {
             name="registrationNumber"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Registration Number (Optional)</FormLabel>
+                <FormLabel>Registration Number</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
                 <FormDescription>
-                  Enter the registration number of the client.
+                  Enter the registration number of the client. Registration number will appear in the card of the client.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -184,7 +184,7 @@ function NewClientPage() {
             name="website"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Website (Optional)</FormLabel>
+                <FormLabel>Website</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -200,7 +200,7 @@ function NewClientPage() {
             name="notes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes (Optional)</FormLabel>
+                <FormLabel>Notes</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={4} />
                 </FormControl>
@@ -220,7 +220,7 @@ function NewClientPage() {
             name="addressName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Address Name</FormLabel>
+                <FormLabel>Address Name *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -240,7 +240,7 @@ function NewClientPage() {
             name="addressLine"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Address Line</FormLabel>
+                <FormLabel>Address Line *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -257,7 +257,7 @@ function NewClientPage() {
             render={({ field }) => (
               <FormItem>
                 <div className="flex items-center justify-between py-2">
-                  <FormLabel>Country</FormLabel>
+                  <FormLabel>Country *</FormLabel>
                   <ComboSelect
                     value={field.value as string}
                     onChange={field.onChange}
@@ -294,7 +294,7 @@ function NewClientPage() {
             name="addressNotes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes (Optional)</FormLabel>
+                <FormLabel>Notes</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={4} />
                 </FormControl>
@@ -314,7 +314,7 @@ function NewClientPage() {
             name="contactName"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Contact Name</FormLabel>
+                <FormLabel>Contact Name *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -367,7 +367,7 @@ function NewClientPage() {
             name="contactNotes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes (Optional)</FormLabel>
+                <FormLabel>Notes</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={4} />
                 </FormControl>

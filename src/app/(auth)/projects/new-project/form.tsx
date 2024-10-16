@@ -107,7 +107,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Project Name</FormLabel>
+                <FormLabel>Name *</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -124,7 +124,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Status</FormLabel>
+                <FormLabel>Status *</FormLabel>
                 <Select
                   defaultValue={String(field.value)}
                   onValueChange={(value) => field.onChange(Number(value))}
@@ -156,7 +156,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="clientId"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Client</FormLabel>
+                <FormLabel>Client *</FormLabel>
                 <FormControl>
                   <ComboSelect
                     value={field.value as number}
@@ -181,7 +181,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="ownerId"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Owner</FormLabel>
+                <FormLabel>Owner *</FormLabel>
                 <FormControl>
                   <ComboSelect
                     value={field.value as number}
@@ -207,7 +207,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description (Optional)</FormLabel>
+                <FormLabel>Description</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={2} />
                 </FormControl>
@@ -223,7 +223,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="notes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes (Optional)</FormLabel>
+                <FormLabel>Notes</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={4} />
                 </FormControl>
