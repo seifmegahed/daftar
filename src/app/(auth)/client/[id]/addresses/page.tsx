@@ -10,6 +10,13 @@ async function ClientAddressesPage({ params }: { params: { id: string } }) {
 
   const [addresses, error] = await getClientAddressesAction(clientId);
   if (error !== null) return <ErrorPage message={error} />;
+  if (!addresses.length)
+    return (
+      <ErrorPage
+        title="There seems to be no addresses for this client yet!"
+        message="Start adding addresses for this client to be able to see them here"
+      />
+    );
 
   const [primaryAddressId, primaryAddressError] =
     await getClientPrimaryAddressIdAction(clientId);

@@ -1,4 +1,5 @@
 import UserInfoSection from "@/components/common-sections/user-info-section";
+import ErrorPage from "@/components/error";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import Section from "@/components/info-section";
 import { getDocumentByIdAction } from "@/server/actions/documents/read";
@@ -6,8 +7,12 @@ import { DownloadIcon } from "lucide-react";
 import Link from "next/link";
 
 async function ItemPage({ params }: { params: { id: string } }) {
-  const [document, error] = await getDocumentByIdAction(Number(params.id));
-  if (error !== null) return <p>Error: {error}</p>;
+  const documentId = parseInt(params.id);
+  if (isNaN(documentId)) return <ErrorPage message="Invalid document Id" />;
+
+  const [document, error] = await getDocumentByIdAction(documentId);
+  if (error !== null) return <ErrorPage message={error} />;
+
   return (
     <InfoPageWrapper
       title="Document"

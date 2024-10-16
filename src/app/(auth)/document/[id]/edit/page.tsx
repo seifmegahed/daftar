@@ -11,6 +11,7 @@ import { getDocumentRelationsCountAction } from "@/server/actions/document-relat
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteDocumentAction } from "@/server/actions/documents/delete";
 import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
+import ErrorPage from "@/components/error";
 
 async function EditDocumentPage({ params }: { params: { id: string } }) {
   const documentId = Number(params.id);
@@ -24,9 +25,11 @@ async function EditDocumentPage({ params }: { params: { id: string } }) {
 
   const [numberOfReferences, numberOfReferencesError] =
     await getDocumentRelationsCountAction(documentId);
+  if (numberOfReferencesError !== null)
+    return <ErrorPage message={numberOfReferencesError} />;
 
   const deleteFormInfo =
-    numberOfReferences !== null && numberOfReferences > 0 ? (
+    numberOfReferences > 0 ? (
       <span>
         {`You cannot delete a document that is referenced in other
         database entries. This document is linked to 

@@ -13,14 +13,12 @@ async function ClientsList({
   filter?: FilterArgs;
 }) {
   const [clients, error] = await getClientsBriefAction(page, filter, query);
-
   if (error !== null) return <ErrorPage message={error} />;
-
   if (!clients.length)
     return (
       <ErrorPage
-        title="There seems to be no clients!"
-        message="Start adding clients to see them here."
+        title="There seems to be no clients yet!"
+        message="Start adding clients to be able to see them here"
       />
     );
 
