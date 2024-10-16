@@ -24,14 +24,12 @@ export default async function SettingsLayout({
     },
   ];
   return (
-    
-            <PageLayout
-              title="Suppliers"
-              description="Manage your suppliers."
-              navLinks={sidebarNavItems}
-            >
-              {children}
-            </PageLayout>
-    
+    <PageLayout
+      title="Suppliers"
+      description="Manage your suppliers"
+      navLinks={sidebarNavItems}
+    >
+      {children}
+    </PageLayout>
   );
 }

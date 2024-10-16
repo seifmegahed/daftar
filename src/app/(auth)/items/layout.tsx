@@ -26,7 +26,7 @@ export default async function SettingsLayout({
   return (
     <PageLayout
       title="Items"
-      description="Manage your items."
+      description="Manage your items"
       navLinks={sidebarNavItems}
     >
       {children}

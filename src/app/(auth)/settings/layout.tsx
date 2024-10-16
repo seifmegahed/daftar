@@ -23,7 +23,7 @@ export default function SettingsLayout({ children }: SettingsLayoutProps) {
   return (
     <PageLayout
       title="Settings"
-      description="Manage your settings."
+      description="Manage your settings"
       navLinks={sidebarNavItems}
     >
       {children}

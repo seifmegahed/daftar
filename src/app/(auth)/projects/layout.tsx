@@ -29,7 +29,7 @@ export default async function SettingsLayout({
   return (
     <PageLayout
       title="Projects"
-      description="Manage your projects."
+      description="Manage your projects"
       navLinks={sidebarNavItems}
     >
       {children}

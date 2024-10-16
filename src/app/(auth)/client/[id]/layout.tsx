@@ -70,7 +70,7 @@ export default async function SettingsLayout({
     <PageLayout
       navLinks={sidebarNavItems}
       title="Client"
-      description="Manage your client account."
+      description="Manage your client account"
     >
       {children}
     </PageLayout>

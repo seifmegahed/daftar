@@ -81,14 +81,12 @@ export default async function SettingsLayout({
   const sidebarNavItems = sidebarNavItemsGenerator(supplierId);
 
   return (
-    
-            <PageLayout
-              title="Supplier"
-              description="Manage your supplier."
-              navLinks={sidebarNavItems}
-            >
-              {children}
-            </PageLayout>
-
+    <PageLayout
+      title="Supplier"
+      description="Manage your supplier"
+      navLinks={sidebarNavItems}
+    >
+      {children}
+    </PageLayout>
   );
 }

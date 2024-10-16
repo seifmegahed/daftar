@@ -62,7 +62,7 @@ export default async function SettingsLayout({
   return (
     <PageLayout
       title="Document"
-      description="Manage your document."
+      description="Manage your document"
       navLinks={sidebarNavItems}
     >
       {children}
