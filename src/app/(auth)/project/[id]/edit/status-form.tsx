@@ -45,15 +45,14 @@ function StatusForm({
     try {
       const [, error] = await updateProjectStatusAction(projectId, data);
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating project status");
-      } else {
-        toast.success("Project status updated successfully");
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Project status updated successfully");
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating project status");
+      toast.error("an error occurred while updating the status");
     }
   };
 

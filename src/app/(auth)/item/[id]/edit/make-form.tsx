@@ -45,15 +45,14 @@ const MakeForm = ({
     try {
       const [, error] = await updateItemMakeAction(id, data);
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating make");
-      } else {
-        toast.success("Make updated successfully");
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Make updated");
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating make");
+      toast.error("An error occurred while updating the make");
     }
   };
   return (

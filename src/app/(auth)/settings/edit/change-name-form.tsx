@@ -49,15 +49,14 @@ function ChangeNameForm({ name }: { name: string }) {
     try {
       const [, error] = await userUpdateUserDisplayNameAction(data);
       if (error !== null) {
-        console.error("Error updating user name:", error);
-        toast.error("Error updating user name");
+        toast.error(error);
         return;
       };
-      toast.success(`Display name updated`);
+      toast.success("Name updated");
       form.reset(data);
     } catch (error) {
-      console.error("Error updating user name:", error);
-      toast.error("Error updating user name");
+      console.error(error);
+      toast.error("An error occurred while updating name");
     }
   };
 

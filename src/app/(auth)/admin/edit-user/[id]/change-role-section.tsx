@@ -51,11 +51,10 @@ function ChangeRoleSection({
         role: role,
       });
       if (error !== null) {
-        console.error(error);
-        toast.error("An error occurred while updating the role");
+        toast.error(error);
         return;
       }
-      toast.success("User role updated!");
+      toast.success("Role updated");
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while updating the role");

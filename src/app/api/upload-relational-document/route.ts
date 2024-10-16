@@ -24,6 +24,9 @@ import type { NextRequest } from "next/server";
 import type { DocumentRelationsType } from "@/server/db/tables/document-relation/schema";
 import { deleteFileAction } from "@/server/actions/documents/delete";
 import { revalidatePath } from "next/cache";
+import { errorLogger } from "@/lib/exceptions";
+
+const documentErrorLog = errorLogger("Upload Relational Document API Error:");
 
 const requestSchema = z.object({
   document: documentSchema.pick({
@@ -56,12 +59,13 @@ export async function POST(request: NextRequest) {
       typeof requestSchema.shape.relation
     >;
   } catch (parseError) {
-    console.log(parseError);
+    documentErrorLog(parseError);
     return new Response("Invalid JSON format", { status: 400 });
   }
 
   const result = requestSchema.safeParse({ document, relation, file });
-  if (!result.success) {
+  if (result.error) {
+    documentErrorLog(result.error);
     return new Response(result.error.message, { status: 400 });
   }
 
@@ -78,8 +82,10 @@ export async function POST(request: NextRequest) {
   if (saveError !== null) return new Response(saveError, { status: 500 });
 
   const extension = validatedFile.name.split(".").pop();
-  if (!extension)
+  if (!extension) {
+    documentErrorLog(`File ${validatedFile.name} has no extension`);
     return new Response("Invalid file extension", { status: 400 });
+  }
 
   const [, documentInsertError] = await insertDocumentWithRelation(
     {
@@ -97,6 +103,6 @@ export async function POST(request: NextRequest) {
     await deleteFileAction(path);
     return new Response(documentInsertError, { status: 500 });
   }
-  revalidatePath("/documents")
+  revalidatePath("/documents");
   return new Response("Document added successfully", { status: 200 });
 }

@@ -3,6 +3,9 @@ import { NextResponse, type NextRequest } from "next/server";
 import fs from "fs/promises";
 import { isCurrentUserAdminAction } from "@/server/actions/users";
 import { env } from "@/env";
+import { errorLogger } from "@/lib/exceptions";
+
+const downloadDocumentErrorLog = errorLogger("Download Document API Error:");
 
 const demoFileUrl =
   "https://utfs.io/f/8hxXWP1VU3rzZIfsDqVanCtxq3HPsDF41gMzIe7XL6l9mUAw";
@@ -36,14 +39,14 @@ export async function GET(
 
     const [access, accessError] = await isCurrentUserAdminAction();
     if (accessError !== null) {
-      return new Response("Error checking access", {
+      return new Response(accessError, {
         status: 500,
       });
     }
 
     const [document, documentError] = await getDocumentPath(documentId, access);
     if (documentError !== null) {
-      return new Response("Error getting document", {
+      return new Response(documentError, {
         status: 500,
       });
     }
@@ -53,10 +56,14 @@ export async function GET(
 
     const fileStatus = await fs.open(document.path, "r");
     const fileStats = await fileStatus.stat();
-    if (fileStats.isDirectory())
-      return new Response("Document is a directory", { status: 500 });
-    if (!fileStats.isFile())
-      return new Response("Document is not a file", { status: 500 });
+    if (fileStats.isDirectory()) {
+      downloadDocumentErrorLog(`Document file ${document.path} is a directory`);
+      return new Response("Document does not exist", { status: 500 });
+    }
+    if (!fileStats.isFile()) {
+      downloadDocumentErrorLog(`Document file ${document.path} does not exist`);
+      return new Response("Document does not exist", { status: 500 });
+    }
 
     const file = await fs.readFile(document.path);
     return new NextResponse(file, {
@@ -67,7 +74,9 @@ export async function GET(
       },
     });
   } catch (error) {
-    console.error("Error serving document:", error);
-    return new Response("Error serving document", { status: 500 });
+    downloadDocumentErrorLog(error);
+    return new Response("An error occurred while getting document", {
+      status: 500,
+    });
   }
 }

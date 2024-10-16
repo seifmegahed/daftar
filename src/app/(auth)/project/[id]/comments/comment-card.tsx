@@ -29,14 +29,12 @@ function ProjectCommentCard({
     try {
       const [, error] = await deleteProjectCommentAction(comment.id, projectId);
       if (error !== null) {
-        console.log(error);
-        toast.error("Error deleting comment");
-      } else {
-        toast.success("Comment deleted");
+        toast.error(error);
+        return;
       }
     } catch (error) {
       console.log(error);
-      toast.error("Error deleting comment");
+      toast.error("An error occurred while deleting the comment");
     }
   };
   return (

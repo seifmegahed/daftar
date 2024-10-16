@@ -47,15 +47,14 @@ const TypeForm = ({
         type: data.type,
       });
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating website");
-      } else {
-        toast.success("Website updated successfully");
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Website updated successfully");
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating website");
+      toast.error("an error occurred while updating the website");
     }
   };
   return (

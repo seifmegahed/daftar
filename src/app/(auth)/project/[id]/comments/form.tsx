@@ -23,14 +23,13 @@ function ProjectCommentForm({ projectId }: { projectId: number }) {
         createdAt: new Date(),
       });
       if (error !== null) {
-        console.log(error);
-        toast.error("Error creating comment");
+        toast.error(error);
         return;
       }
       setText("");
     } catch (error) {
       console.log(error);
-      toast.error("Error creating comment");
+      toast.error("An error occurred while adding the comment");
     }
   };
 
@@ -45,7 +44,7 @@ function ProjectCommentForm({ projectId }: { projectId: number }) {
   return (
     <form onSubmit={handleSubmit} className="relative w-full">
       <textarea
-        className="w-full resize-none rounded-lg border px-4 py-2 outline-none ring-0 bg-background"
+        className="w-full resize-none rounded-lg border bg-background px-4 py-2 outline-none ring-0"
         placeholder="Add a comment..."
         value={text}
         rows={3}

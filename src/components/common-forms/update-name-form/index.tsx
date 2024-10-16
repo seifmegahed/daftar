@@ -75,15 +75,14 @@ function NameForm({
               name: data.name,
             });
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating name");
+        toast.error(error);
       } else {
-        toast.success("Name updated successfully");
+        toast.success("Name updated");
         form.reset(data);
       }
     } catch (error) {
       console.log(error);
-      toast.error("Error updating name");
+      toast.error("An error occurred while updating name");
     }
   };
 

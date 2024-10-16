@@ -14,6 +14,10 @@ import { saveDocumentFile } from "@/server/actions/documents/create";
 import { insertDocument } from "@/server/db/tables/document/queries";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 import { revalidatePath } from "next/cache";
+import { errorLogger } from "@/lib/exceptions";
+import { deleteFileAction } from "@/server/actions/documents/delete";
+
+const uploadErrorLog = errorLogger("Upload Document API Error:");
 
 const requestSchema = z.object({
   document: documentSchema.pick({
@@ -41,13 +45,16 @@ export async function POST(request: NextRequest) {
       typeof requestSchema.shape.document
     >;
   } catch (parseError) {
-    console.log(parseError);
+    uploadErrorLog(parseError);
     return new Response("Invalid JSON format", { status: 400 });
   }
 
   const result = requestSchema.safeParse({ document, relation, file });
-  if (!result.success) {
-    return new Response(result.error.message, { status: 400 });
+  if (result.error) {
+    uploadErrorLog(result.error);
+    return new Response("An error occurred while validating form data", {
+      status: 400,
+    });
   }
 
   const { document: validatedDocument, file: validatedFile } = result.data;
@@ -59,8 +66,10 @@ export async function POST(request: NextRequest) {
   if (saveError !== null) return new Response(saveError, { status: 500 });
 
   const extension = validatedFile.name.split(".").pop();
-  if (!extension)
+  if (!extension) {
+    uploadErrorLog(`File ${validatedFile.name} has no extension`);
     return new Response("Invalid file extension", { status: 400 });
+  }
 
   const [, documentInsertError] = await insertDocument({
     name: validatedDocument.name,
@@ -71,8 +80,10 @@ export async function POST(request: NextRequest) {
     createdBy: userId,
   });
 
-  if (documentInsertError !== null)
+  if (documentInsertError !== null) {
+    await deleteFileAction(path);
     return new Response(documentInsertError, { status: 500 });
+  }
   revalidatePath("/documents");
   return new Response("Document added successfully", { status: 200 });
 }

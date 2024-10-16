@@ -29,13 +29,7 @@ const schema = z.object({
 
 type FormDataType = z.infer<typeof schema>;
 
-const FieldUpdateForm = ({
-  id,
-  field,
-}: {
-  id: number;
-  field: string;
-}) => {
+const FieldUpdateForm = ({ id, field }: { id: number; field: string }) => {
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { field },
@@ -47,15 +41,14 @@ const FieldUpdateForm = ({
         field,
       });
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating field of business");
-      } else {
-        toast.success("Field of business updated successfully");
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Field updated");
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating field of business");
+      toast.error("An error occurred while updating field");
     }
   };
   return (

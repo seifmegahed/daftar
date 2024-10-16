@@ -56,15 +56,14 @@ const RegistrationNumberForm = ({
         registrationNumber: data.registrationNumber,
       });
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating registration number");
-      } else {
-        toast.success("Registration number updated successfully");
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Registration number updated");
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating registration number");
+      toast.error("An error occurred while updating registration number");
     }
   };
   return (

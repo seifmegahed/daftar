@@ -18,6 +18,7 @@ import { getCurrentUserIdAction } from "@/server/actions/users";
 import type { z } from "zod";
 import { redirect } from "next/navigation";
 import { errorLogger } from "@/lib/exceptions";
+import { revalidatePath } from "next/cache";
 
 const addressErrorLog = errorLogger("Address Action Error:");
 
@@ -91,8 +92,10 @@ export const getSupplierAddressesAction = async (
 
 export const deleteAddressAction = async (
   addressId: number,
+  pathname?: string,
 ): Promise<ReturnTuple<number>> => {
   const [returnValue, error] = await deleteAddress(addressId);
   if (error !== null) return [null, error];
+  if (pathname) revalidatePath(pathname);
   return [returnValue, null];
 };

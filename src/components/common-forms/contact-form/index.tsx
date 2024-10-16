@@ -73,11 +73,13 @@ function NewContactForm({
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
-        console.error("Error adding contact:", error);
-        toast.error("An error occurred while adding the contact");
+        toast.error(error);
+        return;
       }
+      form.reset();
+      toast.success("Contact Added");
     } catch (error) {
-      console.error("Error adding contact:", error);
+      console.error(error);
       toast.error("An error occurred while adding the contact");
     }
   };

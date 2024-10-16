@@ -18,7 +18,6 @@ import { Textarea } from "@/components/ui/textarea";
 
 import { toast } from "sonner";
 
-import { getErrorMessage } from "@/lib/exceptions";
 import {
   Select,
   SelectContent,
@@ -77,10 +76,15 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
       const response = await addProjectAction(data);
       if (!response) return;
       const [, error] = response;
-      if (error !== null) return toast.error(error);
+      if (error !== null) {
+        toast.error(error);
+        return;
+      }
+      form.reset();
+      toast.success("Project added")
     } catch (error) {
-      console.error("Error adding project:", error);
-      toast.error(getErrorMessage(error));
+      console.error(error);
+      toast.error("An error occurred while adding the project");
     }
   };
 

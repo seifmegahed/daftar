@@ -45,15 +45,14 @@ const MpnForm = ({
     try {
       const [, error] = await updateItemMpnAction(id, data);
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating website");
-      } else {
-        toast.success("Website updated successfully");
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Website updated successfully");
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating website");
+      toast.error("An error occurred while updating the MPN");
     }
   };
   return (

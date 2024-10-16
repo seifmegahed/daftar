@@ -57,15 +57,14 @@ function NotesForm({
         notes: data.notes,
       });
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating project notes");
-      } else {
-        toast.success("Project notes updated successfully");
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Notes updated");
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating project notes");
+      toast.error("An error occurred while updating notes");
     }
   };
 

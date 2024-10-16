@@ -4,8 +4,12 @@ import { getProjectLinkedDocuments } from "@/server/db/tables/project/queries";
 import AdmZip from "adm-zip";
 import { isCurrentUserAdminAction } from "@/server/actions/users";
 import { env } from "@/env";
+import { errorLogger } from "@/lib/exceptions";
 
-const demoFileUrl = "https://utfs.io/f/8hxXWP1VU3rzUvadaSH46kcDhfaw2WnsM1RXd9iLZKbrONl7";
+const downloadErrorLog = errorLogger("Download Project Documents API Error:");
+
+const demoFileUrl =
+  "https://utfs.io/f/8hxXWP1VU3rzUvadaSH46kcDhfaw2WnsM1RXd9iLZKbrONl7";
 
 async function demoDownload(fileName: string) {
   const file = await fetch(demoFileUrl);
@@ -43,14 +47,13 @@ export async function GET(
 
     const [access, accessError] = await isCurrentUserAdminAction();
     if (accessError !== null) {
-      return new Response("Error checking access", { status: 500 });
+      return new Response(accessError, { status: 500 });
     }
 
     const [projectDocuments, projectDocumentsError] =
       await getProjectLinkedDocuments(projectId, access, true);
-    if (projectDocumentsError !== null) {
-      return new Response("Error getting project", { status: 500 });
-    }
+    if (projectDocumentsError !== null)
+      return new Response(projectDocumentsError, { status: 500 });
 
     if (!existsSync(`tmp`)) {
       fs.mkdirSync(`tmp`);
@@ -58,7 +61,11 @@ export async function GET(
     fs.mkdirSync(tempFolderPath);
 
     for (const projectDoc of projectDocuments.projectDocuments) {
-      if (!projectDoc.path) continue;
+      if (!projectDoc.path) {
+        downloadErrorLog(`Document ${projectDoc.id} has no path`);
+        continue;
+      }
+
       await fs.promises.copyFile(
         projectDoc.path,
         `${tempFolderPath}/${projectDoc.name}.${projectDoc.extension}`,
@@ -66,7 +73,10 @@ export async function GET(
     }
 
     for (const clientDoc of projectDocuments.clientDocuments) {
-      if (!clientDoc.path) continue;
+      if (!clientDoc.path) {
+        downloadErrorLog(`Document ${clientDoc.id} has no path`);
+        continue;
+      }
       await fs.promises.copyFile(
         clientDoc.path,
         `${tempFolderPath}/${clientDoc.name}.${clientDoc.extension}`,
@@ -74,7 +84,11 @@ export async function GET(
     }
 
     for (const itemDoc of projectDocuments.itemsDocuments) {
-      if (!itemDoc.path) continue;
+      if (!itemDoc.path) {
+        downloadErrorLog(`Document ${itemDoc.id} has no path`);
+        continue;
+      }
+
       await fs.promises.copyFile(
         itemDoc.path,
         `${tempFolderPath}/${itemDoc.name}.${itemDoc.extension}`,
@@ -82,7 +96,10 @@ export async function GET(
     }
 
     for (const supplierDoc of projectDocuments.suppliersDocuments) {
-      if (!supplierDoc.path) continue;
+      if (!supplierDoc.path) {
+        downloadErrorLog(`Document ${supplierDoc.id} has no path`);
+        continue;
+      }
       await fs.promises.copyFile(
         supplierDoc.path,
         `${tempFolderPath}/${supplierDoc.name}.${supplierDoc.extension}`,
@@ -108,7 +125,10 @@ export async function GET(
 
     return response;
   } catch (error) {
-    console.error("Error serving project documents:", error);
-    return new Response("Error serving project documents", { status: 500 });
+    downloadErrorLog(error);
+    return new Response(
+      "An error occurred while downloading project documents.",
+      { status: 500 },
+    );
   }
 }

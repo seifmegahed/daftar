@@ -37,9 +37,11 @@ export default function LoginForm() {
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
-        console.error("Error logging in:", error);
         toast.error(error);
+        return;
       }
+      form.reset();
+      toast.success("Logged in");
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while logging in");

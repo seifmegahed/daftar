@@ -70,12 +70,12 @@ function DeleteForm({
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
-        console.log(error);
-        toast.error(`Error deleting ${type}`);
+        toast.error(error);
+        return;
       }
     } catch (error) {
       console.log(error);
-      toast.error(`Error deleting ${type}`);
+      toast.error(`An error occurred while deleting ${type}`);
     }
   };
 

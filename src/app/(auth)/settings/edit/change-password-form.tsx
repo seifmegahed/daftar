@@ -76,14 +76,13 @@ function ChangePasswordForm() {
     try {
       const [, error] = await userUpdateUserPasswordAction(data);
       if (error !== null) {
-        console.error("Error updating user password:", error);
-        toast.error("An error occurred while updating the password");
+        toast.error(error);
         return;
-      };
-      toast.success(`Password updated successfully`);
+      }
+      toast.success("Password updated");
       form.reset();
     } catch (error) {
-      console.error("Error updating user password:", error);
+      console.error(error);
       toast.error("An error occurred while updating the password");
     }
   };

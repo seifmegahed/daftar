@@ -9,7 +9,6 @@ import {
 import { deleteProjectItemAction } from "@/server/actions/project-items/delete";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
@@ -22,23 +21,19 @@ const ProjectItemCardContextMenu = ({
   supplierId: number;
   projectItemId: number;
 }) => {
-  const navigate = useRouter();
-
   const handleDelete = async () => {
-    const result = confirm("Are you sure you want to delete this item?");
+    const result = confirm("Are you sure you want to delete this item from the project?");
     if (!result) return;
     try {
       const [, error] = await deleteProjectItemAction(projectItemId);
       if (error !== null) {
-        console.log(error);
-        toast.error("Error deleting item");
+        toast.error(error);
+        return;
       }
-      else {
-        navigate.refresh();
-      }
+      toast.success("Item deleted from project");
     } catch (error) {
       console.log(error);
-      toast.error("Error deleting item");
+      toast.error("An error occurred while deleting the item");
     }
   };
   return (

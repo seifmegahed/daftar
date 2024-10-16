@@ -10,26 +10,24 @@ import { unlinkDocumentAction } from "@/server/actions/document-relations/delete
 import { type SimpDoc } from "@/server/db/tables/document/queries";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 
 import { toast } from "sonner";
 
 const DocumentCardContextMenu = ({ document }: { document: SimpDoc }) => {
-  const navigate = useRouter();
-
+  const pathname = usePathname();
   const handleUnlink = async () => {
     if (!document.relationId) return;
     try {
-      const [, error] = await unlinkDocumentAction(document.relationId);
+      const [, error] = await unlinkDocumentAction(document.relationId, pathname);
       if (error !== null) {
-        console.log(error);
-        toast.error("Error unlinking document");
-      } else {
-        navigate.refresh();
+        toast.error(error);
+        return;
       }
+      toast.success("Document unlinked")
     } catch (error) {
       console.log(error);
-      toast.error("Error unlinking document");
+      toast.error("An error occurred while unlinking document");
     }
   };
   return (

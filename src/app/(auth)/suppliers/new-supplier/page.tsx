@@ -137,10 +137,10 @@ function NewSupplierForm() {
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
-        console.error("Error adding supplier:", error);
-        toast.error("An error occurred while adding the supplier");
+        toast.error(error);
         return;
       }
+      toast.success("Supplier added");
     } catch (error) {
       console.error("Error adding supplier:", error);
       toast.error("An error occurred while adding the supplier");

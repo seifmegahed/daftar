@@ -60,11 +60,10 @@ function ChangePasswordSection({ userId }: { userId: number }) {
         verifyPassword: data.verifyPassword,
       });
       if (error !== null) {
-        console.error(error);
-        toast.error("An error occurred while updating the password");
+        toast.error(error);
         return;
       }
-      toast.success("Password updated successfully");
+      toast.success("Password updated");
       form.reset();
     } catch (error) {
       console.error(error);

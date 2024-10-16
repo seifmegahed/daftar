@@ -37,14 +37,14 @@ function NewUserForm() {
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
-        console.error(error);
-        toast.error("Error creating user");
+        toast.error(error);
         return;
       }
       form.reset();
+      toast.success("User added");
     } catch (error) {
       console.log(error);
-      toast.error("Error creating user");
+      toast.error("An error occurred while adding the user");
     }
   };
 

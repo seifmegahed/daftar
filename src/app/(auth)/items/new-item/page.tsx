@@ -67,10 +67,11 @@ function NewItemForm() {
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
-        console.error("Error adding item:", error);
-        toast.error("An error occurred while adding the item");
+        toast.error(error);
         return;
       }
+      toast.success("Item added");
+      form.reset();
     } catch (error) {
       console.error("Error adding item:", error);
       toast.error("An error occurred while adding the item");

@@ -56,15 +56,14 @@ function OwnerForm({
         ownerId: data.ownerId,
       });
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating project owner");
-      } else {
-        toast.success("Project owner updated successfully");
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Project owner updated");
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating project owner");
+      toast.error("An error occurred while updating the owner");
     }
   };
 

@@ -50,16 +50,15 @@ function DatesForm({
         endDate: toDBDate(data.endDate),
       });
       if (error !== null) {
-        console.log(error);
-        toast.error("Error updating project dates");
-      } else {
-        toast.success("Project dates updated successfully");
-        setDefaultValues(data);
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Project dates updated");
+      setDefaultValues(data);
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating project dates");
+      toast.error("An error occurred while updating dates");
     }
   };
 

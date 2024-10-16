@@ -54,12 +54,13 @@ function ExistingDocumentForm({
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
-        console.log(error);
-        toast.error("Error adding document");
+        toast.error(error);
+        return;
       }
+      toast.success("Document added")
     } catch (error) {
       console.log(error);
-      toast.error("Error adding document");
+      toast.error("An error occurred while adding document");
     }
   };
 

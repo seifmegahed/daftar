@@ -59,14 +59,14 @@ function DescriptionForm({
       });
       if (error !== null) {
         console.log(error);
-        toast.error("Error updating description");
-      } else {
-        toast.success("Description updated successfully");
-        form.reset(data);
+        toast.error(error);
+        return;
       }
+      toast.success("Description updated");
+      form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("Error updating description");
+      toast.error("An error occurred while updating description");
     }
   };
 

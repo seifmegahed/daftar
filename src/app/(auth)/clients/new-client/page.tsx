@@ -124,13 +124,14 @@ function NewClientPage() {
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
-        console.error("Error adding client:", error);
-        toast.error("An error occurred while adding the client");
+        toast.error(error);
         return;
       }
+      toast.success("Client added");
+      form.reset();
     } catch (error) {
-      console.error("Error adding client:", error);
-      toast.error("An error occurred while adding the client");
+      console.error(error);
+      toast.error("An error occurred while adding client");
     }
   };
 

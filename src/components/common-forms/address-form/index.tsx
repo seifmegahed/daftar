@@ -76,9 +76,11 @@ function NewAddressForm({
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
-        console.error(error);
-        toast.error("An error occurred while adding the address");
+        toast.error(error);
+        return;
       }
+      form.reset();
+      toast.success("Address added")
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while adding the address");

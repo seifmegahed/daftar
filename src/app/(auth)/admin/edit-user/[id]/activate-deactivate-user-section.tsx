@@ -18,8 +18,7 @@ function DeactivateUserSection({ userId }: { userId: number }) {
         active: false,
       });
       if (error !== null) {
-        console.error(error);
-        toast.error("An error occurred while deactivating the user");
+        toast.error(error);
         return;
       }
       toast.success("User deactivated");

@@ -74,7 +74,7 @@ function NewDocumentForm({
         redirect: "follow",
         body,
       });
-      if (!response.ok) toast.error("Error adding document");
+      if (!response.ok) toast.error("An error occurred while adding document");
       else {
         form.reset();
         toast.success("Document added successfully");
@@ -92,10 +92,10 @@ function NewDocumentForm({
         redirect: "follow",
         body,
       });
-      if (!response.ok) toast.error("Error adding document");
+      if (!response.ok) toast.error("An error occurred while adding document");
       else {
         form.reset();
-        toast.success("Document added successfully");
+        toast.success("Document added");
         navigate.push("/documents");
       }
     }

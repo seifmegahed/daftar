@@ -57,19 +57,25 @@ function NewSaleItemForm({
   });
 
   const onSubmit = async (data: FormSchemaType) => {
-    const response = await createCommercialOfferItemAction({
-      projectId,
-      itemId: data.itemId,
-      price: String(data.price),
-      currency: data.currency,
-      quantity: data.quantity,
-    });
-    if (!response) return;
-    const [, error] = response;
-    if (error !== null) {
-      console.error("Error adding item:", error);
-      toast.error("Error adding item");
-      return;
+    try {
+      const response = await createCommercialOfferItemAction({
+        projectId,
+        itemId: data.itemId,
+        price: String(data.price),
+        currency: data.currency,
+        quantity: data.quantity,
+      });
+      if (!response) return;
+      const [, error] = response;
+      if (error !== null) {
+        toast.error(error);
+        return;
+      }
+      form.reset();
+      toast.success("Item added");
+    } catch (error) {
+      console.log(error);
+      toast.error("An error occurred while adding item");
     }
   };
 
