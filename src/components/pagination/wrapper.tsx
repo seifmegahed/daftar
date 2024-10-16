@@ -26,7 +26,7 @@ const PaginationWrapper = ({
         </Button>
       )}
       {children}
-      {currentPage !== totalPages && (
+      {currentPage !== totalPages && totalPages > 1 && (
         <Button
           className="flex size-10 items-center justify-center rounded-full"
           disabled={currentPage === totalPages}
