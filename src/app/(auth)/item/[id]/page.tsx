@@ -1,4 +1,5 @@
 import UserInfoSection from "@/components/common-sections/user-info-section";
+import DataDisplayUnit from "@/components/data-display-unit";
 import ErrorPage from "@/components/error";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import Section from "@/components/info-section";
@@ -10,7 +11,7 @@ async function ItemPage({ params }: { params: { id: string } }) {
 
   const [item, error] = await getItemDetailsAction(itemId);
   if (error !== null) return <ErrorPage message={error} />;
-  
+
   return (
     <InfoPageWrapper
       title="Item Details"
@@ -43,26 +44,11 @@ const ItemGeneralInfoSection = ({
   };
 }) => (
   <>
-    <div className="flex justify-between">
-      <p>Name</p>
-      <p>{item.name}</p>
-    </div>
-    <div className="flex justify-between">
-      <p>Type</p>
-      <p>{item.type}</p>
-    </div>
-    <div className="flex justify-between">
-      <p>Description</p>
-      <p>{item.description}</p>
-    </div>
-    <div className="flex justify-between">
-      <p>MPN</p>
-      <p>{item.mpn}</p>
-    </div>
-    <div className="flex justify-between">
-      <p>Make</p>
-      <p>{item.make}</p>
-    </div>
+    <DataDisplayUnit label="Name" values={[item.name]} />
+    <DataDisplayUnit label="Type" values={[item.type]} />
+    <DataDisplayUnit label="Description" values={[item.description]} />
+    <DataDisplayUnit label="MPN" values={[item.mpn]} />
+    <DataDisplayUnit label="Make" values={[item.make]} />
   </>
 );
 

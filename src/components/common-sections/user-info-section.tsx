@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import DataDisplayUnit from "../data-display-unit";
 
 const UserInfoSection = ({
   data,
@@ -13,24 +14,15 @@ const UserInfoSection = ({
   const { createdAt, updatedAt, creator, updater } = data;
   return (
     <div className="flex flex-col gap-y-2">
-      <div className="flex justify-between">
-        <p>Created At</p>
-        <p>{format(createdAt, "PP")}</p>
-      </div>
-      <div className="flex justify-between">
-        <p>Created By</p>
-        <p>{creator.name}</p>
-      </div>
+      <DataDisplayUnit label="Created At" values={[format(createdAt, "PP")]} />
+      <DataDisplayUnit label="Created By" values={[creator.name]} />
       {updater && (
         <>
-          <div className="flex justify-between">
-            <p>Updated At</p>
-            <p>{updatedAt ? format(updatedAt, "PP") : "N/A"}</p>
-          </div>
-          <div className="flex justify-between">
-            <p>Updated By</p>
-            <p>{updater ? updater.name : "N/A"}</p>
-          </div>
+          <DataDisplayUnit
+            label="Updated At"
+            values={[updatedAt ? format(updatedAt, "PP") : "N/A"]}
+          />
+          <DataDisplayUnit label="Updated By" values={[updater.name]} />
         </>
       )}
     </div>

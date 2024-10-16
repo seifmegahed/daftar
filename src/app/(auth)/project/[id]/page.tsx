@@ -13,13 +13,14 @@ import ClientSection from "@/components/common-sections/company-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import ErrorPage from "@/components/error";
+import DataDisplayUnit from "@/components/data-display-unit";
 
 export const dynamic = "force-dynamic";
 
 async function ProjectPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);
   if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
-  
+
   const [project, error] = await getProjectByIdAction(projectId);
   if (error !== null) return <ErrorPage message={error} />;
 
@@ -32,11 +33,13 @@ async function ProjectPage({ params }: { params: { id: string } }) {
         information about the project. You can also view the documents and items
         linked to this project.`}
     >
-      <Section title="Description">
-        <p>{project.description}</p>
-      </Section>
+      {project.description && (
+        <Section title="Description">
+          <p>{project.description}</p>
+        </Section>
+      )}
       <Section title="Status">
-        <div className="flex justify-end">
+        <div className="flex sm:justify-end">
           <p>{getStatusLabel(project.status)}</p>
         </div>
       </Section>
@@ -44,40 +47,37 @@ async function ProjectPage({ params }: { params: { id: string } }) {
         <ClientSection data={project.client} type="client" />
       </Section>
       <Section title="General Info">
-        <div className="flex justify-between">
-          <p>Owner</p>
-          <p> {project.owner.name}</p>
-        </div>
-        <div className="flex justify-between">
-          <p>Start Date</p>
-          <p>
-            {project.startDate
+        <DataDisplayUnit label="Owner" values={[project.owner.name]} />
+        <DataDisplayUnit
+          label="Start Date"
+          values={[
+            project.startDate
               ? format(new Date(project.startDate), "PP")
-              : "N/A"}
-          </p>
-        </div>
-        <div className="flex justify-between">
-          <p>End Date</p>
-          <p>
-            {project.endDate ? format(new Date(project.endDate), "PP") : "N/A"}
-          </p>
-        </div>
+              : "N/A",
+          ]}
+        />
+        <DataDisplayUnit
+          label="End Date"
+          values={[
+            project.endDate ? format(new Date(project.endDate), "PP") : "N/A",
+          ]}
+        />
       </Section>
       <Section title="Other Info">
         <UserInfoSection data={project} />
       </Section>
-      <Section title="Notes">
-        <div>
-          <p>{project.notes}</p>
-        </div>
-      </Section>
-      <Section title="Documents">
-        {documents === null ? (
-          <p>Error getting project documents.</p>
-        ) : (
+      {project.notes && (
+        <Section title="Notes">
+          <div>
+            <p>{project.notes}</p>
+          </div>
+        </Section>
+      )}
+      {documents && (
+        <Section title="Documents">
           <ProjectDocuments id={project.id} documents={documents} />
-        )}
-      </Section>
+        </Section>
+      )}
     </InfoPageWrapper>
   );
 }

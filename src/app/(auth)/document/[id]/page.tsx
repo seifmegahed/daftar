@@ -1,4 +1,5 @@
 import UserInfoSection from "@/components/common-sections/user-info-section";
+import DataDisplayUnit from "@/components/data-display-unit";
 import ErrorPage from "@/components/error";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import Section from "@/components/info-section";
@@ -19,17 +20,15 @@ async function ItemPage({ params }: { params: { id: string } }) {
       subtitle={`This is the page for the document: ${document.name}. Here you can view all information about the document.`}
     >
       <Section title="General Info">
-        <div className="flex justify-between">
-          <p>Name</p>
-          <p>{document.name}</p>
-        </div>
-        <div className="flex justify-between">
-          <p>Extension</p>
-          <p>{document.extension}</p>
-        </div>
-        <div className="flex justify-end">
+        <DataDisplayUnit label="Name" values={[document.name]} />
+        <DataDisplayUnit label="Extension" values={[document.extension]} />
+        <DataDisplayUnit
+          label="Private"
+          values={[document.private ? "Yes" : "No"]}
+        />
+        <div className="flex sm:justify-end">
           <Link href={`/api/download-document/${document.id}`}>
-            <div className="flex cursor-pointer items-center gap-x-2 text-right">
+            <div className="flex cursor-pointer items-center gap-x-2 sm:text-right">
               <p className="hover:underline">Download</p>
               <DownloadIcon className="mb-1 h-4 w-4" />
             </div>

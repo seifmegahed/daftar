@@ -7,7 +7,9 @@ function AuthenticatedLayout({
   return (
     <div className="min-h-screens flex w-full flex-col">
       <TopNav />
-      <PageContainer>{children}</PageContainer>
+      <PageContainer>
+        {children}
+        </PageContainer>
     </div>
   );
 }
