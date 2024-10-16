@@ -12,10 +12,12 @@ export function FormWrapper({
   description: string;
 }) {
   return (
-    <div className="flex flex-col gap-4 px-2">
-      <h1 className="text-2xl font-bold">{title}</h1>
-      <p className="text-muted-foreground">{description}</p>
-      <Separator />
+    <div className="flex flex-col gap-10 px-2 sm:px-0">
+      <div className="flex flex-col gap-y-4">
+        <h1 className="text-2xl font-bold">{title}</h1>
+        <Separator />
+        <p className="text-muted-foreground">{description}</p>
+      </div>
       {children}
     </div>
   );
@@ -32,7 +34,7 @@ export function FormWrapperWithSubmit({
   children: ReactNode;
   title: string;
   description: string;
-  buttonText: string
+  buttonText: string;
   dirty?: boolean;
   submitting?: boolean;
 }) {

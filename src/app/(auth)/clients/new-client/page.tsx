@@ -211,8 +211,10 @@ function NewClientPage() {
               </FormItem>
             )}
           />
-          <h2 className="text-xl font-bold">Primary Address</h2>
-          <Separator />
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold">Primary Address</h2>
+            <Separator />
+          </div>
           <FormField
             control={form.control}
             name="addressName"
@@ -303,8 +305,10 @@ function NewClientPage() {
               </FormItem>
             )}
           />
-          <h2 className="text-xl font-bold">Primary Contact</h2>
-          <Separator />
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold">Primary Contact</h2>
+            <Separator />
+          </div>
           <FormField
             control={form.control}
             name="contactName"

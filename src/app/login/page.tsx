@@ -108,7 +108,7 @@ export default function LoginForm() {
 
 function LoginInfoSection() {
   return (
-    <div className="flex h-screen w-full items-center justify-center lg:h-full">
+    <div className="flex h-screen w-full items-center justify-center lg:h-full bg-muted">
       <div className="flex w-full lg:h-screen h-full max-w-screen-md flex-col items-center gap-4 text-center text-sm text-muted-foreground justify-between lg:justify-center">
         <div className="flex flex-col items-center justify-center gap-4 w-full h-full flex-grow">
           <BookmarkIcon className="h-16 w-16 stroke-secondary-foreground dark:fill-secondary-foreground dark:stroke-none" />
