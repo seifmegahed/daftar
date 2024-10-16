@@ -51,8 +51,8 @@ export function CardIdSection({ id, href }: { id: number; href: string }) {
     <Tooltip>
       <TooltipTrigger asChild>
         <Link href={href} className="hidden sm:block">
-          <div className="flex cursor-pointer items-center justify-center">
-            <p className="w-10 text-end text-2xl font-bold text-foreground">
+          <div className="flex cursor-pointer items-center justify-center w-10">
+            <p className="text-2xl font-bold text-foreground">
               {id}
             </p>
           </div>
