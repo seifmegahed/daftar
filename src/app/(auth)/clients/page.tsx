@@ -9,6 +9,7 @@ import type {
 } from "@/components/filter-and-search";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 import ListPageWrapper from "@/components/list-page-wrapper";
+import ErrorPage from "@/components/error";
 
 const pageLimit = defaultPageLimit;
 
@@ -32,9 +33,10 @@ async function ClientsPage({ searchParams }: Props) {
     filterValue: searchParams.fv ?? "",
   };
 
-  const [totalCount] = await getClientsCountAction(filterValues);
+  const [count, countError] = await getClientsCountAction(filterValues);
+  if (countError !== null) return <ErrorPage message={countError} />;
 
-  const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
+  const totalPages = Math.ceil(count / pageLimit);
 
   return (
     <ListPageWrapper

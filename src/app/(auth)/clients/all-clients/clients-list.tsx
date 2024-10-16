@@ -1,6 +1,7 @@
 import type { FilterArgs } from "@/components/filter-and-search";
 import Client from "./client-card";
 import { getClientsBriefAction } from "@/server/actions/clients/read";
+import ErrorPage from "@/components/error";
 
 async function ClientsList({
   page = 1,
@@ -13,9 +14,15 @@ async function ClientsList({
 }) {
   const [clients, error] = await getClientsBriefAction(page, filter, query);
 
-  if (error !== null) return <div>Error getting clients</div>;
+  if (error !== null) return <ErrorPage message={error} />;
 
-  if (clients.length === 0) return <div>No clients found</div>;
+  if (!clients.length)
+    return (
+      <ErrorPage
+        title="There seems to be no clients!"
+        message="Start adding clients to see them here."
+      />
+    );
 
   return (
     <div className="flex flex-col gap-4">

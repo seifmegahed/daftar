@@ -17,11 +17,18 @@ async function AdminPage({ searchParams }: { searchParams: { page: string } }) {
 
   const [users, error] = await getAllUsersAction(page, defaultPageLimit);
   if (error !== null) return <ErrorPage message={error} />;
+  if (!users.length)
+    return (
+      <ErrorPage
+        title="There seems to be no users!"
+        message="Start adding users to see them here."
+      />
+    );
 
-  const [totalCount, countError] = await getUsersCountAction();
-  if (countError) return <ErrorPage message={countError} />;
+  const [count, countError] = await getUsersCountAction();
+  if (countError !== null) return <ErrorPage message={countError} />;
 
-  const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
+  const totalPages = Math.ceil(count / pageLimit);
 
   return (
     <ListPageWrapper title="Users" pagination={{ totalPages }}>

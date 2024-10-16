@@ -9,6 +9,7 @@ import { getProjectsCountAction } from "@/server/actions/projects/read";
 import { defaultPageLimit } from "@/data/config";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 import ListPageWrapper from "@/components/list-page-wrapper";
+import ErrorPage from "@/components/error";
 
 const pageLimit = defaultPageLimit;
 
@@ -27,7 +28,8 @@ const filterItems: FilterOptionType[] = [
 ];
 
 async function AllProjects({ searchParams }: Props) {
-  const page = Number(searchParams.page) || 1;
+  const parsedPage = parseInt(searchParams.page ?? "1");
+  const page = isNaN(parsedPage) ? 1 : parsedPage;
   const query = searchParams.query ?? "";
 
   const filterValues = {
@@ -35,9 +37,11 @@ async function AllProjects({ searchParams }: Props) {
     filterValue: searchParams.fv ?? "",
   };
 
-  const [totalCount] = await getProjectsCountAction(filterValues);
+  const [count, countError] =
+    await getProjectsCountAction(filterValues);
+  if (countError !== null) return <ErrorPage message={countError} />;
 
-  const totalPages = Math.ceil((totalCount ?? 1) / pageLimit);
+  const totalPages = Math.ceil((count) / pageLimit);
 
   return (
     <ListPageWrapper
