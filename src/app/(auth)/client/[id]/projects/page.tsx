@@ -11,10 +11,7 @@ async function ClientProjectsPage({ params }: { params: { id: string } }) {
   if (error !== null) return <ErrorPage message={error} />;
   if (!projects.length)
     return (
-      <ErrorPage
-        title="There seems to be no projects linked to this client yet!"
-        message="Start adding projects for this client to be able see them here"
-      />
+      <ErrorPage title="There seems to be no projects linked to this client yet" />
     );
 
   return (

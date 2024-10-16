@@ -20,7 +20,7 @@ async function AdminPage({ searchParams }: { searchParams: { page: string } }) {
   if (!users.length)
     return (
       <ErrorPage
-        title="There seems to be no users yet!"
+        title="There seems to be no users yet"
         message="Start adding users to be able to see them here."
       />
     );

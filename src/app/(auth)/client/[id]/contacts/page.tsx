@@ -12,10 +12,7 @@ async function ClientContactsPage({ params }: { params: { id: string } }) {
   if (error !== null) return <ErrorPage message={error} />;
   if (!contacts.length)
     return (
-      <ErrorPage
-        title="There seems to be no contacts for this client yet!"
-        message="Start adding contacts for this client to be able to see them here"
-      />
+      <ErrorPage title="There seems to be no contacts for this client yet" />
     );
 
   const [primaryContactId, primaryContactError] =

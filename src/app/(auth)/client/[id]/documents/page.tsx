@@ -11,10 +11,7 @@ async function ClientDocumentsPage({ params }: { params: { id: string } }) {
   if (error !== null) return <ErrorPage message={error} />;
   if (!documents.length)
     return (
-      <ErrorPage
-        title="There seems to be no documents linked to this client yet!"
-        message="Start linking documents to this client to be able to see them here"
-      />
+      <ErrorPage title="There seems to be no documents linked to this client yet" />
     );
 
   return (
