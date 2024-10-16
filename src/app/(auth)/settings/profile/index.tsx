@@ -1,17 +1,14 @@
 import { AvatarContainer } from "@/components/avatar";
 import DataDisplayTable from "@/components/data-display-table";
+import ErrorPage from "@/components/error";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getCurrentUserAction } from "@/server/actions/users";
 import { getInitials } from "@/utils/user";
 import { format } from "date-fns";
-import { toast } from "sonner";
 
 async function SettingsProfilePage() {
   const [user, error] = await getCurrentUserAction();
-  if (error !== null) {
-    toast.error(error);
-    return <div>Error getting user</div>;
-  }
+  if (error !== null) return <ErrorPage message={error} />;
   return (
     <InfoPageWrapper title="Profile" subtitle="">
       <div className="flex items-center gap-2">
