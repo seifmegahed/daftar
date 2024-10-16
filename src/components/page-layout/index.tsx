@@ -15,7 +15,7 @@ function PageLayout({
 }) {
   return (
     <div className="h-full min-h-[calc(100vh_-_theme(spacing.16))] bg-background">
-      <div className="space-y-6 p-0 pb-16 md:px-10 md:py-4">
+      <div className="space-y-6 p-0 pb-16 md:px-6">
         <div className="space-y-0.5 p-3 md:p-0">
           <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
           <p className="text-muted-foreground">{description}</p>
