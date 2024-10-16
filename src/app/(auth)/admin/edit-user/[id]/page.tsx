@@ -7,19 +7,30 @@ import {
   getCurrentUserAction,
   getUserByIdAction,
 } from "@/server/actions/users";
-import EditLoadingPage from "../loading";
+import ErrorPage from "@/components/error";
 
 async function EditUserPage({ params }: { params: { id: string } }) {
-  const id = Number(params.id);
-
-  if (isNaN(id)) return <p>Invalid ID</p>;
+  const id = parseInt(params.id);
+  if (isNaN(id)) return <ErrorPage message="Invalid user ID" />;
 
   const [userData, error] = await getUserByIdAction(id);
-  if (error !== null) return <p>Error not found</p>;
+  if (error !== null) return <ErrorPage message={error} />;
 
   const [currentUser, currentUserError] = await getCurrentUserAction();
-  if (currentUserError !== null) return <p>Error not authorized</p>;
-  if (currentUser.role !== "admin") return <p>Error not authorized</p>;
+  if (currentUserError !== null)
+    return (
+      <ErrorPage
+        title="Oops, this page is not accessible"
+        message={currentUserError}
+      />
+    );
+  if (currentUser.role !== "admin")
+    return (
+      <ErrorPage
+        title="Oops, this page is not accessible"
+        message="You are trying to access a private page. You need to be an admin to access this page."
+      />
+    );
 
   return (
     <InfoPageWrapper
