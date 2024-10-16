@@ -14,27 +14,32 @@ import WebsiteForm from "@/components/common-forms/update-website-form";
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteClientAction } from "@/server/actions/clients/delete";
 import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
+import ErrorPage from "@/components/error";
 
 async function EditClientPage({ params }: { params: { id: string } }) {
-  const clientId = Number(params.id);
-  if (isNaN(clientId)) return <p>Error: Client ID is not a number</p>;
+  const clientId = parseInt(params.id);
+  if (isNaN(clientId)) return <ErrorPage message="Invalid client ID" />;
 
   const [client, error] = await getClientFullByIdAction(clientId);
-  if (error !== null) return <p>An error occurred, please try again.</p>;
+  if (error !== null) return <ErrorPage message={error} />;
 
   const [currentUser] = await getCurrentUserAction();
   const hasFullAccess = currentUser?.role === "admin";
 
-  const [clientProjects] = await getClientProjectsCountAction(clientId);
+  const [clientProjects, clientProjectsError] =
+    await getClientProjectsCountAction(clientId);
+  if (clientProjectsError !== null)
+    return <ErrorPage message={clientProjectsError} />;
 
   const deleteFormInfo =
-    clientProjects !== null && clientProjects > 0 ? (
+    clientProjects > 0 ? (
       <>
         {`You cannot delete a client that is linked to ${clientProjects > 1 ? `${clientProjects} projects` : "a project"}.`}
       </>
     ) : (
       <DeleteFormInfo type="client" />
     );
+
   return (
     <InfoPageWrapper
       title="Edit Client"

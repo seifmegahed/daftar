@@ -3,10 +3,15 @@ import Section from "@/components/info-section";
 import ClientSection from "@/components/common-sections/company-section";
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
+import ErrorPage from "@/components/error";
 
 async function ClientPage({ params }: { params: { id: string } }) {
-  const [client, error] = await getClientFullByIdAction(Number(params.id));
-  if (error !== null) return <p>Error: {error}</p>;
+  const clientId = parseInt(params.id);
+  if (isNaN(clientId)) return <ErrorPage message="Invalid Client ID" />;
+
+  const [client, error] = await getClientFullByIdAction(clientId);
+  if (error !== null) return <ErrorPage message={error} />;
+  
   return (
     <InfoPageWrapper
       title={client.name}

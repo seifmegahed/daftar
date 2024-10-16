@@ -1,15 +1,15 @@
 import ContactCard from "@/components/common-cards/contact";
+import ErrorPage from "@/components/error";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import { getClientPrimaryContactIdAction } from "@/server/actions/clients/read";
 import { getClientContactsAction } from "@/server/actions/contacts";
 
 async function ClientContactsPage({ params }: { params: { id: string } }) {
-  const clientId = Number(params.id);
-
-  if (isNaN(clientId)) return <p>Error: Client ID is not a number</p>;
+  const clientId = parseInt(params.id);
+  if (isNaN(clientId)) return <ErrorPage message="Invalid Client ID" />;
 
   const [contacts, error] = await getClientContactsAction(clientId);
-  if (error !== null) return <p>Error: {error}</p>;
+  if (error !== null) return <ErrorPage message={error} />;
 
   const [primaryContactId, primaryContactError] =
     await getClientPrimaryContactIdAction(clientId);

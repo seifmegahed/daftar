@@ -1,11 +1,14 @@
 import ProjectCard from "@/app/(auth)/projects/all-projects/project-card";
+import ErrorPage from "@/components/error";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import { getClientProjectsAction } from "@/server/actions/projects/read";
 
 async function ClientProjectsPage({ params }: { params: { id: string } }) {
-  const [projects, error] = await getClientProjectsAction(Number(params.id));
+  const clientId = parseInt(params.id);
+  if (isNaN(clientId)) return <ErrorPage message="Invalid client ID" />;
 
-  if (error !== null) return <p>Error getting client&apos;s projects</p>;
+  const [projects, error] = await getClientProjectsAction(clientId);
+  if (error !== null) return <ErrorPage message={error} />;
 
   return (
     <ListPageWrapper
