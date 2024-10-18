@@ -3,8 +3,6 @@ import SaleItemCard from "./sale-item-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import { getProjectCommercialOfferItemsAction } from "@/server/actions/commercial-offer-items/read";
 
-export const dynamic = "force-dynamic";
-
 async function ProjectSaleItemPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);
   if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;

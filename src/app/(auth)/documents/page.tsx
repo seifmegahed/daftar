@@ -12,7 +12,7 @@ import type { SearchParamsPropsType } from "@/utils/type-utils";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 
-export const dynamic = "force-dynamic";
+;
 
 const pageLimit = defaultPageLimit;
 

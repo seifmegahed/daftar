@@ -3,8 +3,6 @@ import ProjectItemCard from "./project-item-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 
-export const dynamic = "force-dynamic";
-
 async function ProjectItemsPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);
   if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;

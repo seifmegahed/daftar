@@ -5,7 +5,7 @@ import { getSupplierContactsCountAction } from "@/server/actions/contacts";
 import { getSupplierProjectsCountAction } from "@/server/actions/project-items/read";
 import PageLayout from "@/components/page-layout";
 
-export const dynamic = "force-dynamic";
+;
 
 const basePath = (id: number) => "/supplier/" + id;
 

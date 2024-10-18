@@ -5,7 +5,7 @@ import {
 } from "@/server/actions/project-items/read";
 import PageLayout from "@/components/page-layout";
 
-// export const dynamic = "force-dynamic";
+// ;
 
 const basePath = (id: number) => "/item/" + id;
 

@@ -7,8 +7,6 @@ import { UsersListSkeleton } from "./loading";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 
-export const dynamic = "force-dynamic";
-
 const pageLimit = 10;
 
 async function AdminPage({ searchParams }: { searchParams: { page?: string } }) {

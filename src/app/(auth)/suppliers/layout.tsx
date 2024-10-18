@@ -1,7 +1,7 @@
 import { getSuppliersCountAction } from "@/server/actions/suppliers/read";
 import PageLayout from "@/components/page-layout";
 
-export const dynamic = "force-dynamic";
+;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;

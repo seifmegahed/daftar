@@ -14,7 +14,7 @@ import ErrorPage from "@/components/error";
 
 const pageLimit = defaultPageLimit;
 
-export const dynamic = "force-dynamic";
+;
 
 type Props = {
   searchParams: SearchParamsPropsType;

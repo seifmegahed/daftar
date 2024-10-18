@@ -5,7 +5,6 @@ import { createClient } from "redis";
 
 CacheHandler.onCreation(async () => {
   let client;
-
   try {
     // Create a Redis client.
     client = createClient({

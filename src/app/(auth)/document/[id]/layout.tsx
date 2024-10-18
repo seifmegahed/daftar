@@ -6,7 +6,7 @@ import {
 } from "@/server/actions/document-relations/read";
 import PageLayout from "@/components/page-layout";
 
-export const dynamic = "force-dynamic";
+;
 
 const basePath = (id: number) => "/document/" + id;
 

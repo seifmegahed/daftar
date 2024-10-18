@@ -1,7 +1,7 @@
 import { getProjectsCount } from "@/server/db/tables/project/queries";
 import PageLayout from "@/components/page-layout";
 
-export const dynamic = "force-dynamic";
+;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;

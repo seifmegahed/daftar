@@ -2,8 +2,6 @@ import { listAllItemsAction } from "@/server/actions/items/read";
 import NewSaleItemForm from "./form";
 import ErrorPage from "@/components/error";
 
-export const dynamic = "force-dynamic";
-
 async function NewItemPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);
   if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;

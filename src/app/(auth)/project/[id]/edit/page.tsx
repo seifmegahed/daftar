@@ -22,8 +22,6 @@ import { deleteProjectAction } from "@/server/actions/projects/delete";
 import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import ErrorPage from "@/components/error";
 
-export const dynamic = "force-dynamic";
-
 async function EditProjectPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);
   if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;

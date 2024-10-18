@@ -9,7 +9,6 @@
     "url": "https://github.com/seifmegahed"
   },
   "scripts": {
-    "start:ssl": "NODE_ENV=production node --loader ts-node/esm server.ts",
     "build": "next build",
     "admin": "node ./admin/index.mjs",
     "db:generate": "drizzle-kit generate",
@@ -56,7 +55,7 @@
     "jose": "^5.8.0",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.439.0",
-    "next": "^14.2.14",
+    "next": "^14.2.15",
     "next-themes": "^0.3.0",
     "pm2": "^5.4.2",
     "postgres": "^3.4.4",
@@ -81,7 +80,7 @@
     "@types/node": "^20.16.5",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
-    "@typescript-eslint/eslint-plugin": "^8.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.5.0",
     "@typescript-eslint/parser": "^8.1.0",
     "@vitejs/plugin-react": "^4.3.2",
     "drizzle-kit": "^0.24.0",
@@ -95,7 +94,6 @@
     "prettier-plugin-tailwindcss": "^0.6.5",
     "resize-observer-polyfill": "^1.5.1",
     "tailwindcss": "^3.4.3",
-    "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
     "utility-types": "^3.11.0",
     "vitest": "^2.1.2"

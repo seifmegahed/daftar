@@ -10,10 +10,9 @@ import { defaultPageLimit } from "@/data/config";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
+import { format } from "date-fns";
 
 const pageLimit = defaultPageLimit;
-
-export const dynamic = "force-dynamic";
 
 type Props = {
   searchParams: SearchParamsPropsType;
@@ -28,6 +27,7 @@ const filterItems: FilterOptionType[] = [
 ];
 
 async function AllProjects({ searchParams }: Props) {
+  const time = new Date(Date.now() + 1000 * 60 * 60 * 2);
   const parsedPage = parseInt(searchParams.page ?? "1");
   const page = isNaN(parsedPage) ? 1 : parsedPage;
   const query = searchParams.query ?? "";
@@ -50,6 +50,7 @@ async function AllProjects({ searchParams }: Props) {
       pagination={{ totalPages }}
     >
       <Suspense key={page + query} fallback={<SkeletonList type="B" />}>
+        <div>{format(time, "pp")}</div>
         <ProjectsList
           page={page}
           query={query === "" ? undefined : query}

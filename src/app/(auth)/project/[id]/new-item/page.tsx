@@ -3,8 +3,6 @@ import { listAllSuppliersAction } from "@/server/actions/suppliers/read";
 import NewItemForm from "./form";
 import ErrorPage from "@/components/error";
 
-export const dynamic = "force-dynamic";
-
 async function NewItemPage({ params }: { params: { id: string } }) {
   const [itemsList, itemsError] = await listAllItemsAction();
   if (itemsError !== null) return <ErrorPage message={itemsError} />;

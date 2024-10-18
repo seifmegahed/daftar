@@ -3,23 +3,19 @@
  * for Docker builds.
  */
 await import("./src/env.js");
-import path from "path";
+import { createRequire } from "node:module";
+const require = createRequire(import.meta.url);
 
 /** @type {import("next").NextConfig} */
-
 const config = {
   reactStrictMode: true,
-  typescript: {
-    ignoreBuildErrors: false,
-  },
-  eslint: {
-    ignoreDuringBuilds: false,
-  },
   transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
-  cacheHandler:
-    process.env.CACHE_REDIS === "true"
-      ? path.resolve("./cache-handler.mjs")
-      : undefined,
 };
+
+if (process.env.CACHE_REDIS === "true") {
+  console.log("cache enabled")
+  config.cacheHandler = require.resolve("./cache-handler.mjs");
+  config.cacheMaxMemorySize = 0;
+}
 
 export default config;
