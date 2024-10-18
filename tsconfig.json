@@ -37,7 +37,8 @@
     "**/*.cjs",
     "**/*.js",
     ".next/types/**/*.ts",
-    "server.ts"
+    "server.ts",
+    "cache-handler.mjs"
   ],
   "exclude": ["node_modules", "admin"]
 }

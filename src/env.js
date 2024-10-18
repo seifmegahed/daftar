@@ -9,6 +9,7 @@ export const env = createEnv({
   server: {
     POSTGRES_URL: z.string(),
     JWT_SECRET: z.string().min(32).max(256),
+    CACHE_REDIS: z.boolean(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -29,6 +30,7 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    CACHE_REDIS: process.env.CACHE_REDIS === "true",
     POSTGRES_URL:
       process.env.NEXT_PUBLIC_VERCEL !== "true"
         ? `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`

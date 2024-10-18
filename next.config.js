@@ -5,6 +5,7 @@
 await import("./src/env.js");
 
 /** @type {import("next").NextConfig} */
+
 const config = {
   reactStrictMode: true,
   typescript: {
@@ -14,6 +15,10 @@ const config = {
     ignoreDuringBuilds: false,
   },
   transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
+  cacheHandler:
+    process.env.CACHE_REDIS === "true"
+      ? require.resolve("./cache-handler.mjs")
+      : undefined,
 };
 
 export default config;

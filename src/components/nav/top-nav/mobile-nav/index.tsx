@@ -28,7 +28,7 @@ function MobileNav({ admin }: { admin: boolean }) {
           >
             <BookmarkIcon />
           </Link>
-          <NavLinks admin={admin} />ƒ
+          <NavLinks admin={admin} />
         </nav>
       </SheetContent>
     </Sheet>
