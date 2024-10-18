@@ -3,6 +3,7 @@
  * for Docker builds.
  */
 await import("./src/env.js");
+import path from "path";
 
 /** @type {import("next").NextConfig} */
 
@@ -17,7 +18,7 @@ const config = {
   transpilePackages: ["@t3-oss/env-nextjs", "@t3-oss/env-core"],
   cacheHandler:
     process.env.CACHE_REDIS === "true"
-      ? require.resolve("./cache-handler.mjs")
+      ? path.resolve("./cache-handler.mjs")
       : undefined,
 };
 
