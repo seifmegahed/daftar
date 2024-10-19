@@ -86,7 +86,19 @@ export const getCurrentUserAction = async (): Promise<
   const [user, error] = await getUserByIdAction(id);
 
   if (error !== null) return [null, error];
-  return [user, null];
+  return [
+    {
+      id: user.id,
+      name: user.name,
+      username: user.username,
+      role: user.role,
+      active: user.active,
+      createdAt: user.createdAt,
+      lastActive: user.lastActive,
+      updatedAt: user.updatedAt,
+    },
+    null,
+  ];
 };
 
 /**

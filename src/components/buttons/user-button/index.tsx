@@ -16,21 +16,15 @@ import { toast } from "sonner";
 import { getErrorMessage } from "@/lib/exceptions";
 import { useTheme } from "next-themes";
 import { getInitials } from "@/utils/user";
-import type { UserDataType } from "@/server/db/tables/user/schema";
 import Link from "next/link";
 import { AvatarContainer } from "@/components/avatar";
 import Loading from "@/components/loading";
 
-function UserButton({
-  user,
-}: {
-  user: Pick<UserDataType, "id" | "username" | "name" | "role">;
-}) {
+function UserButton({ user }: { user: { name: string; id: number } }) {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { setTheme } = useTheme();
 
-  if (!user) return null;
   const initials = getInitials(user.name);
 
   const logout = async () => {
