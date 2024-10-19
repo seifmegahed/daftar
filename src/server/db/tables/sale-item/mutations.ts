@@ -1,11 +1,11 @@
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
 
-import { commercialOfferItemsTable } from "./schema";
+import { saleItemsTable } from "./schema";
 
 import { errorLogger } from "@/lib/exceptions";
 
-import type { InsertCommercialOfferItemType } from "./schema";
+import type { InsertSaleItemType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 const errorMessages = {
@@ -16,13 +16,13 @@ const errorMessages = {
 
 const logError = errorLogger(errorMessages.mainTitle);
 
-export const insertCommercialOfferItem = async (
-  data: InsertCommercialOfferItemType,
+export const insertSaleItem = async (
+  data: InsertSaleItemType,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.insert;
   try {
     const [result] = await db
-      .insert(commercialOfferItemsTable)
+      .insert(saleItemsTable)
       .values(data)
       .returning();
 
@@ -34,14 +34,14 @@ export const insertCommercialOfferItem = async (
   }
 };
 
-export const deleteCommercialOfferItem = async (
+export const deleteSaleItem = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.delete;
   try {
     const [result] = await db
-      .delete(commercialOfferItemsTable)
-      .where(eq(commercialOfferItemsTable.id, id))
+      .delete(saleItemsTable)
+      .where(eq(saleItemsTable.id, id))
       .returning();
 
     if (!result) return [null, errorMessage];

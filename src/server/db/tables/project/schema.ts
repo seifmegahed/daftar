@@ -16,7 +16,7 @@ import {
   projectItemsTable,
   clientsTable,
   usersTable,
-  commercialOfferItemsTable,
+  saleItemsTable,
 } from "@/server/db/schema";
 import { notesMaxLength } from "@/data/config";
 
@@ -77,7 +77,7 @@ export const projectRelations = relations(projectsTable, ({ one, many }) => ({
   }),
   documents: many(documentRelationsTable),
   items: many(projectItemsTable),
-  saleItems: many(commercialOfferItemsTable),
+  saleItems: many(saleItemsTable),
 }));
 
 export const insertProjectSchema = createInsertSchema(projectsTable);

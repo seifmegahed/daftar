@@ -9,7 +9,7 @@ import {
   clientsTable,
   usersTable,
   documentRelationsTable,
-  commercialOfferItemsTable,
+  saleItemsTable,
 } from "@/server/db/schema";
 
 import {
@@ -583,8 +583,8 @@ export const deleteProject = async (
         .where(eq(projectItemsTable.projectId, id));
 
       await tx
-        .delete(commercialOfferItemsTable)
-        .where(eq(commercialOfferItemsTable.projectId, id));
+        .delete(saleItemsTable)
+        .where(eq(saleItemsTable.projectId, id));
 
       await tx
         .delete(documentRelationsTable)

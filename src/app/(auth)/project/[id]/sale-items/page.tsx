@@ -1,20 +1,19 @@
 import ErrorPage from "@/components/error";
 import SaleItemCard from "./sale-item-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
-import { getProjectCommercialOfferItemsAction } from "@/server/actions/commercial-offer-items/read";
+import { getProjectSaleItemsAction } from "@/server/actions/sale-items/read";
 
 async function ProjectSaleItemPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);
   if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
 
-  const [saleItems, error] =
-    await getProjectCommercialOfferItemsAction(projectId);
+  const [saleItems, error] = await getProjectSaleItemsAction(projectId);
   if (error !== null) return <ErrorPage message={error} />;
   if (!saleItems.length)
     return (
       <ErrorPage title="There seems to be no sale items linked to this project yet" />
     );
-    
+
   return (
     <ListPageWrapper
       title="Project's Sale Items"

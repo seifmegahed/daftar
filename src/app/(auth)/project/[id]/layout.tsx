@@ -2,8 +2,8 @@ import { getProjectDocumentsCountAction } from "@/server/actions/document-relati
 import { getProjectItemsCountAction } from "@/server/actions/project-items/read";
 import PageLayout from "@/components/page-layout";
 import { isCurrentUserAdminAction } from "@/server/actions/users";
-import { getProjectCommercialOfferItemsCountAction } from "@/server/actions/commercial-offer-items/read";
 import { getProjectCommentsCountAction } from "@/server/actions/project-comments/read";
+import { getProjectSaleItemsCountAction } from "@/server/actions/sale-items/read";
 
 const basePath = (id: number) => "/project/" + id;
 
@@ -11,8 +11,6 @@ interface SettingsLayoutProps {
   children: React.ReactNode;
   params: { id: string };
 }
-
-;
 
 export default async function SettingsLayout({
   children,
@@ -22,8 +20,7 @@ export default async function SettingsLayout({
   if (isNaN(projectId)) return <div>Error: Project ID is invalid</div>;
   const [numberOfDocuments] = await getProjectDocumentsCountAction(projectId);
   const [numberOfItems] = await getProjectItemsCountAction(projectId);
-  const [numberOfSaleItems] =
-    await getProjectCommercialOfferItemsCountAction(projectId);
+  const [numberOfSaleItems] = await getProjectSaleItemsCountAction(projectId);
   const [numberOfComments] = await getProjectCommentsCountAction(projectId);
   const [userAccess] = await isCurrentUserAdminAction();
 

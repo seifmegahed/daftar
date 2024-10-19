@@ -24,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { currencyOptions } from "@/data/lut";
-import { createCommercialOfferItemAction } from "@/server/actions/commercial-offer-items/create";
+import { createSaleItemAction } from "@/server/actions/sale-items/create";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 
 const schema = z.object({
@@ -58,7 +58,7 @@ function NewSaleItemForm({
 
   const onSubmit = async (data: FormSchemaType) => {
     try {
-      const response = await createCommercialOfferItemAction({
+      const response = await createSaleItemAction({
         projectId,
         itemId: data.itemId,
         price: String(data.price),

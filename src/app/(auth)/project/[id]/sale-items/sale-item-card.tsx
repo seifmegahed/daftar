@@ -1,6 +1,6 @@
 import { getCurrencyLabel } from "@/data/lut";
 import SaleItemCardMenu from "./sale-item-card-menu";
-import type { SaleItemType } from "@/server/db/tables/commercial-offer-item/queries";
+import type { SaleItemType } from "@/server/db/tables/sale-item/queries";
 import CardWrapper from "@/components/card-wrapper";
 import {
   CardBodyContainer,

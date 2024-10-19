@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteCommercialOfferItemAction } from "@/server/actions/commercial-offer-items/delete";
+import { deleteSaleItemAction } from "@/server/actions/sale-items/delete";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
@@ -20,15 +20,17 @@ const SaleItemCardMenu = ({
   saleItemId: number;
 }) => {
   const handleDelete = async () => {
-    const result = confirm("Are you sure you want to delete this item from the project?");
+    const result = confirm(
+      "Are you sure you want to delete this item from the project?",
+    );
     if (!result) return;
     try {
-      const [, error] = await deleteCommercialOfferItemAction(saleItemId);
+      const [, error] = await deleteSaleItemAction(saleItemId);
       if (error !== null) {
         toast.error(error);
         return;
       }
-      toast.success("Item deleted from project")
+      toast.success("Item deleted from project");
     } catch (error) {
       console.log(error);
       toast.error("Error deleting item");
