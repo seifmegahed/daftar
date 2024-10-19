@@ -1,6 +1,6 @@
 "use server";
 
-import { deleteProjectItem } from "@/server/db/tables/project-item/queries";
+import { deleteProjectItem } from "@/server/db/tables/project-item/mutations";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { revalidatePath } from "next/cache";
 

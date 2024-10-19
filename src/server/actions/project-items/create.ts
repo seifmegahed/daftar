@@ -1,7 +1,7 @@
 "use server";
 
 import { errorLogger } from "@/lib/exceptions";
-import { insertProjectItem } from "@/server/db/tables/project-item/queries";
+import { insertProjectItem } from "@/server/db/tables/project-item/mutations";
 import { insertProjectItemSchema } from "@/server/db/tables/project-item/schema";
 
 import type { InsertProjectItemType } from "@/server/db/tables/project-item/schema";

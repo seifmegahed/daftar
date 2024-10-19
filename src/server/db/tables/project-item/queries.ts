@@ -12,18 +12,16 @@ import {
 import { selectSupplierSchema } from "@/server/db/tables/supplier/schema";
 import { errorLogger } from "@/lib/exceptions";
 
-import type { InsertProjectItemType, SelectProjectItemType } from "./schema";
+import type { SelectProjectItemType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 const errorMessages = {
   mainTitle: "Project Items Queries Error:",
-  insert: "An error occurred while adding sale item",
   corruptedData: "It seems that some data is corrupted",
   getItems: "An error occurred while getting items",
   getProjects: "An error occurred while getting projects",
   getSuppliers: "An error occurred while getting suppliers",
   count: "An error occurred while counting items",
-  delete: "An error occurred while deleting purchase item",
 };
 
 const logError = errorLogger(errorMessages.mainTitle);
@@ -43,24 +41,6 @@ export const getClientProjectsCount = async (
     if (!projectCount) return [null, errorMessage];
 
     return [projectCount.count, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const insertProjectItem = async (
-  data: InsertProjectItemType,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.insert;
-  try {
-    const [project] = await db
-      .insert(projectItemsTable)
-      .values(data)
-      .returning();
-
-    if (!project) return [null, errorMessage];
-    return [project.id, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];
@@ -104,24 +84,6 @@ export const getProjectItems = async (
     if (!projectItems) return [null, errorMessage];
 
     return [projectItems, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const deleteProjectItem = async (
-  projectItemId: number,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.delete;
-  try {
-    const [projectItem] = await db
-      .delete(projectItemsTable)
-      .where(eq(projectItemsTable.id, projectItemId))
-      .returning();
-
-    if (!projectItem) return [null, errorMessage];
-    return [projectItem.id, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];
