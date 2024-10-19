@@ -1,15 +1,19 @@
 "use server";
 
-import type { z } from "zod";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+import { insertNewClient } from "@/server/db/tables/client/mutations";
 import { getCurrentUserIdAction } from "@/server/actions/users";
+
 import { insertClientSchema } from "@/server/db/tables/client/schema";
-import { insertNewClient } from "@/server/db/tables/client/queries";
-import type { ReturnTuple } from "@/utils/type-utils";
 import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
 import { insertContactSchemaRaw } from "@/server/db/tables/contact/schema";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
+
 import { errorLogger } from "@/lib/exceptions";
+
+import type { z } from "zod";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const clientActionErrorLog = errorLogger("Client Create Action Error:");
 

@@ -1,11 +1,12 @@
 "use server";
 
-import { getCurrentUserAction } from "@/server/actions/users";
-import { deleteClient } from "@/server/db/tables/client/queries";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+import { deleteClient } from "@/server/db/tables/client/mutations";
+import { getCurrentUserAction } from "@/server/actions/users";
 
 import type { ReturnTuple } from "@/utils/type-utils";
-import { revalidatePath } from "next/cache";
 
 export const deleteClientAction = async (
   clientId: number,

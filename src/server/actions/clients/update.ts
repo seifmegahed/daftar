@@ -1,12 +1,16 @@
 "use server";
 
-import type { z } from "zod";
-import { getCurrentUserIdAction } from "@/server/actions/users";
-import { insertClientSchema } from "@/server/db/tables/client/schema";
-import { updateClient } from "@/server/db/tables/client/queries";
-import type { ReturnTuple } from "@/utils/type-utils";
 import { revalidatePath } from "next/cache";
+
+import { updateClient } from "@/server/db/tables/client/mutations";
+import { getCurrentUserIdAction } from "@/server/actions/users";
+
+import { insertClientSchema } from "@/server/db/tables/client/schema";
+
 import { errorLogger } from "@/lib/exceptions";
+
+import type { z } from "zod";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const clientActionErrorLog = errorLogger("Client Update Action Error:");
 
