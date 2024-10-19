@@ -8,14 +8,17 @@
  * the database.
  */
 import { z } from "zod";
-import { type NextRequest } from "next/server";
-import { documentSchema } from "@/server/db/tables/document/schema";
-import { saveDocumentFile } from "@/server/actions/documents/create";
-import { insertDocument } from "@/server/db/tables/document/queries";
-import { getCurrentUserIdAction } from "@/server/actions/users";
 import { revalidatePath } from "next/cache";
-import { errorLogger } from "@/lib/exceptions";
+
 import { deleteFileAction } from "@/server/actions/documents/delete";
+import { saveDocumentFile } from "@/server/actions/documents/create";
+import { insertDocument } from "@/server/db/tables/document/mutations";
+import { getCurrentUserIdAction } from "@/server/actions/users";
+import { documentSchema } from "@/server/db/tables/document/schema";
+
+import { errorLogger } from "@/lib/exceptions";
+
+import type { NextRequest } from "next/server";
 
 const uploadErrorLog = errorLogger("Upload Document API Error:");
 

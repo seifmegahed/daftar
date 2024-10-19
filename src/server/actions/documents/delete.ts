@@ -1,14 +1,17 @@
 "use server";
 
-import { deleteDocument } from "@/server/db/tables/document/queries";
+import fs from "fs";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+import { deleteDocument } from "@/server/db/tables/document/mutations";
 import { getCurrentUserAction } from "../users";
-import type { ReturnTuple } from "@/utils/type-utils";
 import { getDocumentRelationsCountAction } from "../document-relations/read";
 import { getDocumentByIdAction } from "./read";
-import { redirect } from "next/navigation";
-import fs from "fs";
-import { revalidatePath } from "next/cache";
+
 import { errorLogger } from "@/lib/exceptions";
+
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const errorMessages = {
   mainTitle: "Document Delete Action Error:",

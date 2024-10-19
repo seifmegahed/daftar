@@ -1,10 +1,14 @@
-import { NextResponse, type NextRequest } from "next/server";
-import fs, { existsSync } from "fs";
-import { getProjectLinkedDocuments } from "@/server/db/tables/project/queries";
+import fs from "fs";
 import AdmZip from "adm-zip";
-import { isCurrentUserAdminAction } from "@/server/actions/users";
+import { NextResponse } from "next/server";
 import { env } from "@/env";
+
+import { getProjectLinkedDocuments } from "@/server/db/tables/project/queries";
+import { isCurrentUserAdminAction } from "@/server/actions/users";
+
 import { errorLogger } from "@/lib/exceptions";
+
+import type { NextRequest } from "next/server";
 
 const downloadErrorLog = errorLogger("Download Project Documents API Error:");
 
@@ -55,7 +59,7 @@ export async function GET(
     if (projectDocumentsError !== null)
       return new Response(projectDocumentsError, { status: 500 });
 
-    if (!existsSync(`tmp`)) {
+    if (!fs.existsSync(`tmp`)) {
       fs.mkdirSync(`tmp`);
     }
     fs.mkdirSync(tempFolderPath);

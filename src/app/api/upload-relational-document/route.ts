@@ -12,19 +12,20 @@
  * table.
  */
 import { z } from "zod";
+import { revalidatePath } from "next/cache";
 
 import { documentSchema } from "@/server/db/tables/document/schema";
 import { documentRelationsSchema } from "@/server/db/tables/document-relation/schema";
 
 import { saveDocumentFile } from "@/server/actions/documents/create";
+import { deleteFileAction } from "@/server/actions/documents/delete";
 import { insertDocumentWithRelation } from "@/server/db/tables/document-relation/queries";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 
+import { errorLogger } from "@/lib/exceptions";
+
 import type { NextRequest } from "next/server";
 import type { DocumentRelationsType } from "@/server/db/tables/document-relation/schema";
-import { deleteFileAction } from "@/server/actions/documents/delete";
-import { revalidatePath } from "next/cache";
-import { errorLogger } from "@/lib/exceptions";
 
 const documentErrorLog = errorLogger("Upload Relational Document API Error:");
 

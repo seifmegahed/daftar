@@ -1,9 +1,13 @@
-import { getDocumentPath } from "@/server/db/tables/document/queries";
-import { NextResponse, type NextRequest } from "next/server";
 import fs from "fs/promises";
-import { isCurrentUserAdminAction } from "@/server/actions/users";
+import { NextResponse } from "next/server";
 import { env } from "@/env";
+
+import { getDocumentPath } from "@/server/db/tables/document/queries";
+import { isCurrentUserAdminAction } from "@/server/actions/users";
+
+import type { NextRequest } from "next/server";
 import { errorLogger } from "@/lib/exceptions";
+
 
 const downloadDocumentErrorLog = errorLogger("Download Document API Error:");
 

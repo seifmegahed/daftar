@@ -3,7 +3,7 @@
 import type { z } from "zod";
 import { getCurrentUserAction } from "@/server/actions/users";
 import { documentSchema } from "@/server/db/tables/document/schema";
-import { updateDocument } from "@/server/db/tables/document/queries";
+import { updateDocument } from "@/server/db/tables/document/mutations";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { revalidatePath } from "next/cache";
 import { errorLogger } from "@/lib/exceptions";
