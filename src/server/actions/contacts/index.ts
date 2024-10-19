@@ -1,24 +1,30 @@
 "use server";
 
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
 import {
-  type ContactType,
-  deleteContact,
   getClientContacts,
   getClientContactsCount,
   getSupplierContacts,
   getSupplierContactsCount,
-  insertNewContact,
 } from "@/server/db/tables/contact/queries";
+import {
+  insertNewContact,
+  deleteContact,
+} from "@/server/db/tables/contact/mutations";
+import { getCurrentUserIdAction } from "../users";
+
 import {
   insertContactSchemaRaw,
   insertContactSchemaRefineCallback,
 } from "@/server/db/tables/contact/schema";
-import type { ReturnTuple } from "@/utils/type-utils";
-import { getCurrentUserIdAction } from "../users";
-import type { z } from "zod";
-import { redirect } from "next/navigation";
+
 import { errorLogger } from "@/lib/exceptions";
-import { revalidatePath } from "next/cache";
+
+import type { z } from "zod";
+import type { ContactType } from "@/server/db/tables/contact/queries";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const addressErrorLog = errorLogger("Address Action Error:");
 

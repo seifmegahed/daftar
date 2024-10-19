@@ -1,36 +1,22 @@
-import type { ReturnTuple } from "@/utils/type-utils";
-import { contactsTable, type InsertContactType } from "./schema";
-import { db } from "@/server/db";
-import { errorLogger } from "@/lib/exceptions";
-import { count, eq } from "drizzle-orm";
-import { usersTable } from "@/server/db/tables/user/schema";
 import { z } from "zod";
+import { db } from "@/server/db";
+import { count, eq } from "drizzle-orm";
+
+import { contactsTable } from "./schema";
+import { usersTable } from "@/server/db/tables/user/schema";
+
+import { errorLogger } from "@/lib/exceptions";
+
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const errorMessages = {
   mainTitle: "Contact Queries Error:",
   dataCorrupted: "It seems that some data is corrupted",
-  insert: "An error occurred while adding contact",
   get: "An error occurred while getting contacts",
   count: "An error occurred while counting contacts",
-  delete: "An error occurred while deleting contact",
 };
 
 const logError = errorLogger(errorMessages.mainTitle);
-
-export const insertNewContact = async (
-  data: InsertContactType,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.insert;
-  try {
-    const [address] = await db.insert(contactsTable).values(data).returning();
-
-    if (!address) return [null, errorMessage];
-    return [address.id, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
 
 export const getClientContactsCount = async (
   clientId: number,
@@ -64,24 +50,6 @@ export const getSupplierContactsCount = async (
 
     if (!contacts) return [null, errorMessage];
     return [contacts.count, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const deleteContact = async (
-  contactId: number,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.delete;
-  try {
-    const [contact] = await db
-      .delete(contactsTable)
-      .where(eq(contactsTable.id, contactId))
-      .returning();
-
-    if (!contact) return [null, errorMessage];
-    return [contact.id, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];
