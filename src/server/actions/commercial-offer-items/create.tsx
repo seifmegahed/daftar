@@ -1,12 +1,15 @@
 "use server";
 
-import { errorLogger } from "@/lib/exceptions";
-import { insertCommercialOfferItem } from "@/server/db/tables/commercial-offer-item/queries";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+import { insertCommercialOfferItem } from "@/server/db/tables/commercial-offer-item/mutations";
 import { insertCommercialOfferItemSchema } from "@/server/db/tables/commercial-offer-item/schema";
+
+import { errorLogger } from "@/lib/exceptions";
+
 import type { InsertCommercialOfferItemType } from "@/server/db/tables/commercial-offer-item/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 const commercialOfferItemErrorLog = errorLogger(
   "Commercial Offer Item Action Error:",

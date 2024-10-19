@@ -1,8 +1,9 @@
 "use server";
 
-import { deleteCommercialOfferItem } from "@/server/db/tables/commercial-offer-item/queries";
-import { isCurrentUserAdminAction } from "@/server/actions/users";
 import { revalidatePath } from "next/cache";
+
+import { deleteCommercialOfferItem } from "@/server/db/tables/commercial-offer-item/mutations";
+import { isCurrentUserAdminAction } from "@/server/actions/users";
 
 export const deleteCommercialOfferItemAction = async (id: number) => {
   const [access] = await isCurrentUserAdminAction();
