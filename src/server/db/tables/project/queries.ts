@@ -448,7 +448,10 @@ export const getProjectLinkedDocuments = async (
 
     if (!project) return [null, errorMessage];
 
-    const uniqueSuppliers = new Map<number, (typeof project.purchaseItems)[0]>();
+    const uniqueSuppliers = new Map<
+      number,
+      (typeof project.purchaseItems)[0]
+    >();
     const uniqueItems = new Map<number, (typeof project.saleItems)[0]>();
 
     project.purchaseItems.forEach((item) => {

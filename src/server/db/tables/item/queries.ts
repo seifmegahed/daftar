@@ -1,6 +1,7 @@
+import { z } from "zod";
 import { db } from "@/server/db";
-import { asc, count, desc, sql } from "drizzle-orm";
-import { itemsTable } from "@/server/db/schema";
+import { asc, count, desc, sql, eq, inArray } from "drizzle-orm";
+import { clientsTable, itemsTable, projectsTable, purchaseItemsTable, saleItemsTable } from "@/server/db/schema";
 
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 
@@ -16,7 +17,9 @@ const errorMessages = {
   mainTitle: "Item Queries Error:",
   getItem: "An error occurred while getting item",
   getItems: "An error occurred while getting items",
+  getProjects: "An error occurred while getting projects",
   count: "An error occurred while counting items",
+  dataCorrupted: "It seems that some data is corrupted",
 };
 
 const logError = errorLogger(errorMessages.mainTitle);
@@ -159,6 +162,126 @@ export const getItemsCount = async (
 
     if (!items) return [null, errorMessage];
     return [items.count, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
+
+const itemProjectsSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  clientId: z.number(),
+  clientName: z.string(),
+  status: z.number(),
+  createdAt: z.date(),
+});
+
+export type ItemProjectsType = z.infer<typeof itemProjectsSchema>;
+
+export const getItemProjects = async (
+  itemId: number,
+): Promise<ReturnTuple<ItemProjectsType[]>> => {
+  const errorMessage = errorMessages.getProjects;
+  try {
+    const projects = await db.transaction(async (tx) => {
+      const purchaseItems = await tx
+        .select({
+          id: purchaseItemsTable.id,
+          projectId: purchaseItemsTable.projectId,
+        })
+        .from(purchaseItemsTable)
+        .where(eq(purchaseItemsTable.itemId, itemId));
+
+      const saleItems = await tx
+        .select({
+          id: saleItemsTable.id,
+          projectId: saleItemsTable.projectId,
+        })
+        .from(saleItemsTable)
+        .where(eq(saleItemsTable.itemId, itemId));
+
+      const projectIds = new Map<number, number>();
+
+      purchaseItems.forEach((item) => {
+        if (!projectIds.has(item.projectId)) {
+          projectIds.set(item.projectId, item.projectId);
+        }
+      });
+
+      saleItems.forEach((item) => {
+        if (!projectIds.has(item.projectId)) {
+          projectIds.set(item.projectId, item.projectId);
+        }
+      });
+
+      const projectIdsArray = Array.from(projectIds.values());
+
+      const projects = await tx
+        .select({
+          id: projectsTable.id,
+          name: projectsTable.name,
+          clientId: projectsTable.clientId,
+          clientName: clientsTable.name,
+          status: projectsTable.status,
+          createdAt: projectsTable.createdAt,
+        })
+        .from(projectsTable)
+        .where(inArray(projectsTable.id, projectIdsArray))
+        .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
+        .orderBy(desc(projectsTable.id));
+
+      return projects;
+    });
+
+    if (!projects) return [null, errorMessage];
+
+    const parsedProjects = z.array(itemProjectsSchema).safeParse(projects);
+    if (parsedProjects.error) return [null, errorMessages.dataCorrupted];
+
+    return [parsedProjects.data, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
+export const getItemProjectsCount = async (
+  itemId: number,
+): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
+  try {
+    const count = await db.transaction(async (tx) => {
+      const purchaseItems = await tx
+        .select({ projectId: purchaseItemsTable.projectId })
+        .from(purchaseItemsTable)
+        .where(eq(purchaseItemsTable.itemId, itemId));
+
+      const saleItems = await tx
+        .select({ projectId: saleItemsTable.projectId })
+        .from(saleItemsTable)
+        .where(eq(saleItemsTable.itemId, itemId));
+
+      const projectIds = new Map<number, number>();
+
+      purchaseItems.forEach((item) => {
+        if (!projectIds.has(item.projectId)) {
+          projectIds.set(item.projectId, item.projectId);
+        }
+      });
+
+      saleItems.forEach((item) => {
+        if (!projectIds.has(item.projectId)) {
+          projectIds.set(item.projectId, item.projectId);
+        }
+      });
+
+      return projectIds.size;
+    });
+    if (!count) return [null, errorMessage];
+
+    return [count, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];

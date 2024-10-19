@@ -28,27 +28,6 @@ const errorMessages = {
 
 const logError = errorLogger(errorMessages.mainTitle);
 
-export const getClientProjectsCount = async (
-  clientId: number,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.count;
-  try {
-    const [projectCount] = await db
-      .select({
-        count: count(),
-      })
-      .from(projectsTable)
-      .where(eq(projectsTable.clientId, clientId))
-      .limit(1);
-    if (!projectCount) return [null, errorMessage];
-
-    return [projectCount.count, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
 export type GetPurchaseItemType = SelectPurchaseItemType & {
   item: {
     id: number;
@@ -243,89 +222,6 @@ export const getSupplierProjectsCount = async (
       .select({ projectId: purchaseItemsTable.projectId})
       .from(purchaseItemsTable)
       .where(eq(purchaseItemsTable.supplierId, supplierId))
-
-    if (!projects) return [null, errorMessage];
-
-    const uniqueProjects = new Map<number, number>();
-
-    projects.forEach((project) => {
-      if (!uniqueProjects.has(project.projectId)) {
-        uniqueProjects.set(project.projectId, project.projectId);
-      }
-    });
-
-    return [uniqueProjects.size, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-const itemProjectsSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  clientId: z.number(),
-  clientName: z.string(),
-  status: z.number(),
-  createdAt: z.date(),
-});
-
-export type ItemProjectsType = z.infer<typeof itemProjectsSchema>;
-
-export const getItemProjects = async (
-  itemId: number,
-): Promise<ReturnTuple<ItemProjectsType[]>> => {
-  const errorMessage = errorMessages.getProjects;
-  try {
-    const projectItems = await db
-      .select({
-        id: projectsTable.id,
-        name: projectsTable.name,
-        clientId: projectsTable.clientId,
-        clientName: clientsTable.name,
-        status: projectsTable.status,
-        createdAt: projectsTable.createdAt,
-      })
-      .from(purchaseItemsTable)
-      .where(eq(purchaseItemsTable.itemId, itemId))
-      .leftJoin(
-        projectsTable,
-        eq(purchaseItemsTable.projectId, projectsTable.id),
-      )
-      .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
-      .orderBy(desc(projectsTable.createdAt));
-
-    const parsedProjects = z.array(itemProjectsSchema).safeParse(projectItems);
-
-    if (parsedProjects.error) {
-      logError(parsedProjects.error);
-      return [null, errorMessages.corruptedData];
-    }
-
-    const uniqueProjects: ItemProjectsType[] = [];
-
-    parsedProjects.data.forEach((project) => {
-      if (!uniqueProjects.find((_project) => _project.id === project.id)) {
-        uniqueProjects.push(project);
-      }
-    });
-
-    return [uniqueProjects, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const getItemProjectsCount = async (
-  itemId: number,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.countProjects;
-  try {
-    const projects = await db
-      .select({ projectId: purchaseItemsTable.projectId})
-      .from(purchaseItemsTable)
-      .where(eq(purchaseItemsTable.itemId, itemId))
 
     if (!projects) return [null, errorMessage];
 

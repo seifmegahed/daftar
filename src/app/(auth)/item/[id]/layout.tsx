@@ -1,11 +1,7 @@
 import { getItemDocumentsCountAction } from "@/server/actions/document-relations/read";
-import {
-  getItemProjectsCountAction,
-  getItemSuppliersCountAction,
-} from "@/server/actions/purchase-items/read";
+import { getItemProjectsCountAction } from "@/server/actions/items/read";
+import { getItemSuppliersCountAction } from "@/server/actions/purchase-items/read";
 import PageLayout from "@/components/page-layout";
-
-// ;
 
 const basePath = (id: number) => "/item/" + id;
 
@@ -31,7 +27,7 @@ export default async function SettingsLayout({
     },
     {
       title: "Edit",
-      href: basePath(id) + "/edit"
+      href: basePath(id) + "/edit",
     },
     {
       title: "Projects",

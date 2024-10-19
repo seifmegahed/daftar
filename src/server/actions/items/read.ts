@@ -3,6 +3,8 @@
 import {
   getAllItemsBrief,
   getItemDetail,
+  getItemProjects,
+  getItemProjectsCount,
   getItemsCount,
   listAllItems,
 } from "@/server/db/tables/item/queries";
@@ -11,6 +13,7 @@ import type {
   BriefItemType,
   GetItemDetailType,
   ItemListType,
+  ItemProjectsType,
 } from "@/server/db/tables/item/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { FilterArgs } from "@/components/filter-and-search";
@@ -53,4 +56,20 @@ export const getItemsCountAction = async (
   const [items, itemsError] = await getItemsCount(filter);
   if (itemsError !== null) return [null, itemsError];
   return [items, null];
+};
+
+export const getItemProjectsAction = async (
+  itemId: number,
+): Promise<ReturnTuple<ItemProjectsType[]>> => {
+  const [projects, error] = await getItemProjects(itemId);
+  if (error !== null) return [null, error];
+  return [projects, null];
+};
+
+export const getItemProjectsCountAction = async (
+  itemId: number,
+): Promise<ReturnTuple<number>> => {
+  const [count, error] = await getItemProjectsCount(itemId);
+  if (error !== null) return [null, error];
+  return [count, null];
 };
