@@ -1,18 +1,18 @@
 "use server";
 
-import type { z } from "zod";
+import { revalidatePath } from "next/cache";
 
+import { updateProject } from "@/server/db/tables/project/mutations";
 import { insertProjectSchema } from "@/server/db/tables/project/schema";
-import { updateProject } from "@/server/db/tables/project/queries";
-
 import {
   getCurrentUserAction,
   getCurrentUserIdAction,
 } from "@/server/actions/users";
 
-import type { ReturnTuple } from "@/utils/type-utils";
-import { revalidatePath } from "next/cache";
 import { errorLogger } from "@/lib/exceptions";
+
+import type { z } from "zod";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const projectsErrorLog = errorLogger("Project Update Action Error:");
 

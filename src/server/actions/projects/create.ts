@@ -1,16 +1,16 @@
 "use server";
 
-import type { z } from "zod";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 
 import { insertProjectSchema } from "@/server/db/tables/project/schema";
-import { insertProject } from "@/server/db/tables/project/queries";
-
+import { insertProject } from "@/server/db/tables/project/mutations";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 
-import type { ReturnTuple } from "@/utils/type-utils";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { errorLogger } from "@/lib/exceptions";
+
+import type { z } from "zod";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const projectsErrorLog = errorLogger("Project Create Action Error:");
 

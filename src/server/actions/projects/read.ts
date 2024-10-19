@@ -16,11 +16,11 @@ import type {
   BriefProjectType,
   GetProjectLinkedDocumentsType,
 } from "@/server/db/tables/project/queries";
+import { isCurrentUserAdminAction } from "@/server/actions/users";
+
 import type { SelectProjectType } from "@/server/db/tables/project/schema";
 import type { FilterArgs } from "@/components/filter-and-search";
-
 import type { ReturnTuple } from "@/utils/type-utils";
-import { isCurrentUserAdminAction } from "../users";
 
 export const getProjectsCountAction = async (
   filter?: FilterArgs,

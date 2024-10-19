@@ -1,12 +1,13 @@
 "use server";
 
-import { deleteProject, getProjectBriefById } from "@/server/db/tables/project/queries";
-
-import { getCurrentUserAction } from "@/server/actions/users";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+import { deleteProject } from "@/server/db/tables/project/mutations";
+import { getProjectBriefById } from "@/server/db/tables/project/queries";
+import { getCurrentUserAction } from "@/server/actions/users";
 
 import type { ReturnTuple } from "@/utils/type-utils";
-import { revalidatePath } from "next/cache";
 
 export const deleteProjectAction = async (
   id: number,

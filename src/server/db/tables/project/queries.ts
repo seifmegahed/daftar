@@ -1,36 +1,27 @@
 import { z } from "zod";
+import { db } from "@/server/db";
 import { count, desc, eq, sql } from "drizzle-orm";
 
-import { db } from "@/server/db";
 import { projectsTable } from "./schema";
-
-import {
-  projectItemsTable,
-  clientsTable,
-  usersTable,
-  documentRelationsTable,
-  saleItemsTable,
-} from "@/server/db/schema";
+import { clientsTable, usersTable } from "@/server/db/schema";
 
 import {
   dateQueryGenerator,
   prepareSearchText,
   timestampQueryGenerator,
 } from "@/utils/common";
+import { errorLogger } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
+import { filterDefault } from "@/components/filter-and-search";
 
-import type { InsertProjectType, SelectProjectType } from "./schema";
+import type { SelectProjectType } from "./schema";
 import type { UserBriefType } from "@/server/db/tables/user/queries";
 import type { SimpDoc } from "@/server/db/tables/document/queries";
+import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { filterDefault, type FilterArgs } from "@/components/filter-and-search";
-import { errorLogger } from "@/lib/exceptions";
 
 const errorMessages = {
   mainTitle: "Project Queries Error:",
-  insert: "An error occurred while adding project",
-  update: "An error occurred while updating project",
-  delete: "An error occurred while deleting project",
   getProject: "An error occurred while getting project",
   count: "An error occurred while counting projects",
   getProjects: "An error occurred while getting projects",
@@ -220,21 +211,6 @@ export const getClientProjects = async (
     if (!projects.success) return [null, errorMessage];
 
     return [projects.data, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const insertProject = async (
-  data: InsertProjectType,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.insert;
-  try {
-    const [project] = await db.insert(projectsTable).values(data).returning();
-
-    if (!project) return [null, errorMessage];
-    return [project.id, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];
@@ -546,60 +522,6 @@ export const getProjectLinkedDocuments = async (
       },
       null,
     ];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const updateProject = async (
-  id: number,
-  data: Partial<SelectProjectType>,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.update;
-  try {
-    const [project] = await db
-      .update(projectsTable)
-      .set(data)
-      .where(eq(projectsTable.id, id))
-      .returning();
-
-    if (!project) return [null, errorMessage];
-    return [project.id, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const deleteProject = async (
-  id: number,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.delete;
-  try {
-    const project = await db.transaction(async (tx) => {
-      await tx
-        .delete(projectItemsTable)
-        .where(eq(projectItemsTable.projectId, id));
-
-      await tx
-        .delete(saleItemsTable)
-        .where(eq(saleItemsTable.projectId, id));
-
-      await tx
-        .delete(documentRelationsTable)
-        .where(eq(documentRelationsTable.projectId, id));
-
-      const [project] = await tx
-        .delete(projectsTable)
-        .where(eq(projectsTable.id, id))
-        .returning();
-
-      return project;
-    });
-
-    if (!project) return [null, errorMessage];
-    return [project.id, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];
