@@ -1,5 +1,6 @@
-import { count, eq, and, desc, isNotNull } from "drizzle-orm";
+import { z } from "zod";
 import { db } from "@/server/db";
+import { count, eq, and, desc, isNotNull } from "drizzle-orm";
 
 import { documentRelationsTable } from "./schema";
 import {
@@ -10,18 +11,13 @@ import {
   suppliersTable,
 } from "@/server/db/schema";
 
+import { privateFilterQuery } from "@/server/db/tables/document/utils";
 import { errorLogger } from "@/lib/exceptions";
-import type { DocumentRelationsType } from "./schema";
-import type { DocumentDataType } from "@/server/db/tables/document/schema";
-import { privateFilterQuery } from "@/server/db/tables/document/queries";
+
 import type { ReturnTuple } from "@/utils/type-utils";
-import { z } from "zod";
 
 const errorMessages = {
   mainTitle: "Document Relations Queries Error:",
-  insert: "An error occurred while adding document",
-  update: "And error occurred while updating document",
-  delete: "An error occurred while deleting document",
   getDocument: "An error occurred while getting document",
   getDocuments: "An error occurred while getting documents",
   getPath: "An error occurred while getting document path",
@@ -38,52 +34,6 @@ const errorMessages = {
 };
 
 const logError = errorLogger(errorMessages.mainTitle);
-
-export const insertDocumentRelation = async (
-  relation: DocumentRelationsType,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.insert;
-  try {
-    const [result] = await db
-      .insert(documentRelationsTable)
-      .values(relation)
-      .returning();
-
-    if (!result) return [null, errorMessage];
-    return [result.id, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const insertDocumentWithRelation = async (
-  document: DocumentDataType,
-  relation: Omit<DocumentRelationsType, "documentId">,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.insert;
-  try {
-    const documentId = await db.transaction(async (tx) => {
-      const [documentResult] = await tx
-        .insert(documentsTable)
-        .values(document)
-        .returning();
-      if (!documentResult) return undefined;
-      await tx
-        .insert(documentRelationsTable)
-        .values({ ...relation, documentId: documentResult.id })
-        .returning();
-
-      return documentResult.id;
-    });
-
-    if (!documentId) return [null, errorMessage];
-    return [documentId, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
 
 const simpDocWithRelationSchema = z.object({
   relationId: z.number(),
@@ -348,23 +298,6 @@ export const getProjectDocumentsCount = async (
       .limit(1);
     if (!documents) return [null, errorMessage];
     return [documents.count, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const deleteDocumentRelation = async (
-  relationId: number,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.delete;
-  try {
-    const [result] = await db
-      .delete(documentRelationsTable)
-      .where(eq(documentRelationsTable.id, relationId))
-      .returning();
-    if (!result) return [null, errorMessage];
-    return [result.id, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];

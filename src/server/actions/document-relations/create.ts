@@ -1,15 +1,16 @@
 "use server";
 
-import type { RelationDataType } from "@/components/common-forms/document-form";
-import { errorLogger } from "@/lib/exceptions";
-import { insertDocumentRelation } from "@/server/db/tables/document-relation/queries";
-import {
-  documentRelationsSchema,
-  type DocumentRelationsType,
-} from "@/server/db/tables/document-relation/schema";
-import type { ReturnTuple } from "@/utils/type-utils";
-import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+import { insertDocumentRelation } from "@/server/db/tables/document-relation/mutations";
+import { documentRelationsSchema } from "@/server/db/tables/document-relation/schema";
+
+import { errorLogger } from "@/lib/exceptions";
+
+import type { DocumentRelationsType } from "@/server/db/tables/document-relation/schema";
+import type { RelationDataType } from "@/components/common-forms/document-form";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const documentRelationErrorLog = errorLogger("Document Relation Action Error:");
 

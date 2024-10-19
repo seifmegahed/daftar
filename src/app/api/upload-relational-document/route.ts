@@ -19,7 +19,7 @@ import { documentRelationsSchema } from "@/server/db/tables/document-relation/sc
 
 import { saveDocumentFile } from "@/server/actions/documents/create";
 import { deleteFileAction } from "@/server/actions/documents/delete";
-import { insertDocumentWithRelation } from "@/server/db/tables/document-relation/queries";
+import { insertDocumentWithRelation } from "@/server/db/tables/document-relation/mutations";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 
 import { errorLogger } from "@/lib/exceptions";

@@ -19,6 +19,7 @@ import {
   getItemDocumentsCount,
   getProjectDocumentsCount,
 } from "@/server/db/tables/document-relation/queries";
+import { isCurrentUserAdminAction } from "../users";
 
 import type {
   DocumentClientsType,
@@ -29,7 +30,6 @@ import type {
 
 import type { SimpDoc } from "@/server/db/tables/document/queries";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { isCurrentUserAdminAction } from "../users";
 
 const accessReadErrorMessage = "An error occurred while checking access";
 

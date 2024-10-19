@@ -1,9 +1,10 @@
 "use server";
 
-import { deleteDocumentRelation } from "@/server/db/tables/document-relation/queries";
+import { revalidatePath } from "next/cache";
+
+import { deleteDocumentRelation } from "@/server/db/tables/document-relation/mutations";
 
 import type { ReturnTuple } from "@/utils/type-utils";
-import { revalidatePath } from "next/cache";
 
 export const unlinkDocumentAction = async (
   relationId: number,
