@@ -1,9 +1,7 @@
 import { z } from "zod";
 import { db } from "@/server/db";
 import { count, eq } from "drizzle-orm";
-
-import { contactsTable } from "./schema";
-import { usersTable } from "@/server/db/tables/user/schema";
+import { contactsTable, usersTable } from "@/server/db/schema";
 
 import { errorLogger } from "@/lib/exceptions";
 

@@ -1,8 +1,11 @@
-import type { ReturnTuple } from "@/utils/type-utils";
-import { addressesTable, type InsertAddressType } from "./schema";
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
+import { addressesTable } from "@/server/db/schema";
+
 import { errorLogger } from "@/lib/exceptions";
+
+import type { InsertAddressType } from "./schema";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const errorMessages = {
   mainTitle: "Address Mutations Error:",

@@ -1,9 +1,8 @@
 import { db } from "@/server/db";
 import { eq, and } from "drizzle-orm";
+import { documentsTable } from "@/server/db/schema";
 
-import { documentsTable } from "./schema";
 import { privateFilterQuery } from "./utils";
-
 import { errorLogger } from "@/lib/exceptions";
 
 import type { DocumentDataType } from "./schema";

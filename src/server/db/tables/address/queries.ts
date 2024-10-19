@@ -1,10 +1,11 @@
-import type { ReturnTuple } from "@/utils/type-utils";
-import { addressesTable } from "./schema";
+import { z } from "zod";
 import { db } from "@/server/db";
 import { count, eq } from "drizzle-orm";
-import { z } from "zod";
-import { usersTable } from "../user/schema";
+import { addressesTable, usersTable } from "@/server/db/schema";
+
 import { errorLogger } from "@/lib/exceptions";
+
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const errorMessages = {
   mainTitle: "Address Queries Error:",

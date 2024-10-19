@@ -1,18 +1,17 @@
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
-
-import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
-
-import { clientsTable } from "./schema";
 import {
+  clientsTable,
   addressesTable,
   contactsTable,
   documentRelationsTable,
 } from "@/server/db/schema";
 
-import type { InsertAddressType } from "../address/schema";
-import type { InsertContactType } from "../contact/schema";
+import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
+
 import type { InsertClientDataType } from "./schema";
+import type { InsertAddressType } from "@/server/db/tables/address/schema";
+import type { InsertContactType } from "@/server/db/tables/contact/schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 const errorMessages = {

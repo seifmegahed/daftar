@@ -1,7 +1,7 @@
 import { db } from "@/server/db";
 import { asc, count, desc, sql } from "drizzle-orm";
+import { itemsTable } from "@/server/db/schema";
 
-import { itemsTable } from "./schema";
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 
 import { defaultPageLimit } from "@/data/config";

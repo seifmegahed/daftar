@@ -1,7 +1,6 @@
 import { db } from "@/server/db";
 import { count, eq, desc, sql, and } from "drizzle-orm";
-
-import { documentsTable } from "./schema";
+import { documentsTable } from "@/server/db/schema";
 
 import { filterDefault } from "@/components/filter-and-search";
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";

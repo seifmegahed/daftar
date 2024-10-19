@@ -1,7 +1,6 @@
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
-
-import { saleItemsTable } from "./schema";
+import { saleItemsTable } from "@/server/db/schema";
 
 import { errorLogger } from "@/lib/exceptions";
 

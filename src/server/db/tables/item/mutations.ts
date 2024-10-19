@@ -1,7 +1,6 @@
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
-
-import { itemsTable } from "./schema";
+import { itemsTable } from "@/server/db/schema";
 
 import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
 

@@ -1,9 +1,8 @@
 import { z } from "zod";
 import { db } from "@/server/db";
 import { count, eq, and, desc, isNotNull } from "drizzle-orm";
-
-import { documentRelationsTable } from "./schema";
 import {
+  documentRelationsTable,
   clientsTable,
   documentsTable,
   itemsTable,

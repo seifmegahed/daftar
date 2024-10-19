@@ -1,21 +1,19 @@
 import { z } from "zod";
-import { count, desc, eq } from "drizzle-orm";
-
 import { db } from "@/server/db";
-import { projectItemsTable } from "./schema";
+import { count, desc, eq } from "drizzle-orm";
+import {
+  projectItemsTable,
+  projectsTable,
+  clientsTable,
+  suppliersTable,
+  itemsTable,
+} from "@/server/db/schema";
 
-import { projectsTable } from "@/server/db/tables/project/schema";
-import { clientsTable } from "@/server/db/tables/client/schema";
-import { itemsTable } from "@/server/db/tables/item/schema";
-
+import { selectSupplierSchema } from "@/server/db/tables/supplier/schema";
 import { errorLogger } from "@/lib/exceptions";
 
-import type {
-  InsertProjectItemType,
-  SelectProjectItemType,
-} from "@/server/db/tables/project-item/schema";
+import type { InsertProjectItemType, SelectProjectItemType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { selectSupplierSchema, suppliersTable } from "../supplier/schema";
 
 const errorMessages = {
   mainTitle: "Project Items Queries Error:",

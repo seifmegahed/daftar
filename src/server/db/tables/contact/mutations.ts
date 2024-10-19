@@ -1,7 +1,7 @@
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
+import { contactsTable } from "@/server/db/schema";
 
-import { contactsTable } from "./schema";
 import { errorLogger } from "@/lib/exceptions";
 
 import type { InsertContactType } from "./schema";

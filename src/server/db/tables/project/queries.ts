@@ -1,9 +1,7 @@
 import { z } from "zod";
 import { db } from "@/server/db";
 import { count, desc, eq, sql } from "drizzle-orm";
-
-import { projectsTable } from "./schema";
-import { clientsTable, usersTable } from "@/server/db/schema";
+import { projectsTable, clientsTable, usersTable } from "@/server/db/schema";
 
 import {
   dateQueryGenerator,

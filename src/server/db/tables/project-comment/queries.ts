@@ -1,7 +1,6 @@
 import { z } from "zod";
 import { db } from "@/server/db";
 import { desc, eq, count } from "drizzle-orm";
-
 import { usersTable, projectCommentsTable } from "@/server/db/schema";
 
 import { errorLogger } from "@/lib/exceptions";

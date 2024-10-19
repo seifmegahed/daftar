@@ -1,12 +1,11 @@
 import { db } from "@/server/db";
 import { asc, count, eq, sql, desc, and } from "drizzle-orm";
+import { clientsTable } from "@/server/db/schema";
 
-import { clientsTable } from "./schema";
-
-import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import { errorLogger } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
 import { filterDefault } from "@/components/filter-and-search";
+import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 
 import type { InsertClientDataType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";

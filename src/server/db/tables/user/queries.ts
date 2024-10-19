@@ -1,9 +1,12 @@
 import { db } from "@/server/db";
-import { type UserDataType, usersTable } from "./schema";
 import { asc, eq, and, count, desc } from "drizzle-orm";
-import type { ReturnTuple } from "@/utils/type-utils";
+import { usersTable } from "@/server/db/schema";
+
 import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
+
+import type { UserDataType } from "./schema";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const errorMessages = {
   mainTitle: "User Queries Error:",

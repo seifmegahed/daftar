@@ -1,21 +1,22 @@
 import { db } from "@/server/db";
 import { asc, count, sql, desc, eq } from "drizzle-orm";
-
-import { suppliersTable } from "./schema";
 import {
+  suppliersTable,
   documentRelationsTable,
   addressesTable,
   contactsTable,
 } from "@/server/db/schema";
-import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
-import { defaultPageLimit } from "@/data/config";
 
+import { defaultPageLimit } from "@/data/config";
+import { filterDefault } from "@/components/filter-and-search";
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
+import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
+
 import type { InsertSupplierType, SelectSupplierType } from "./schema";
+import type { InsertAddressType } from "@/server/db/tables/address/schema";
+import type { InsertContactType } from "@/server/db/tables/contact/schema";
+import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
-import type { InsertAddressType } from "../address/schema";
-import type { InsertContactType } from "../contact/schema";
-import { filterDefault, type FilterArgs } from "@/components/filter-and-search";
 
 const errorMessages = {
   mainTitle: "Client Queries Error:",

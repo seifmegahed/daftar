@@ -1,8 +1,7 @@
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
-
-import { projectsTable } from "./schema";
 import {
+  projectsTable,
   projectItemsTable,
   documentRelationsTable,
   saleItemsTable,

@@ -1,8 +1,6 @@
 import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
-
-import { documentRelationsTable } from "./schema";
-import { documentsTable } from "@/server/db/schema";
+import { documentRelationsTable, documentsTable } from "@/server/db/schema";
 
 import { errorLogger } from "@/lib/exceptions";
 
