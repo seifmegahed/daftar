@@ -2,13 +2,15 @@
 
 import {
   type AddressType,
-  deleteAddress,
   getClientAddresses,
   getClientAddressesCount,
   getSupplierAddresses,
   getSupplierAddressesCount,
-  insertNewAddress,
 } from "@/server/db/tables/address/queries";
+import {
+  insertNewAddress,
+  deleteAddress,
+} from "@/server/db/tables/address/mutations";
 import {
   insertAddressSchemaRaw,
   insertAddressSchemaRefineCallback,

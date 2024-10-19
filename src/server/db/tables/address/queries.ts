@@ -1,5 +1,5 @@
 import type { ReturnTuple } from "@/utils/type-utils";
-import { addressesTable, type InsertAddressType } from "./schema";
+import { addressesTable } from "./schema";
 import { db } from "@/server/db";
 import { count, eq } from "drizzle-orm";
 import { z } from "zod";
@@ -9,27 +9,11 @@ import { errorLogger } from "@/lib/exceptions";
 const errorMessages = {
   mainTitle: "Address Queries Error:",
   dataCorrupted: "It seems that some data is corrupted",
-  insert: "An error occurred while adding address",
   get: "An error occurred while getting addresses",
   count: "An error occurred while counting addresses",
-  delete: "An error occurred while deleting address",
 };
 
 const logError = errorLogger(errorMessages.mainTitle);
-
-export const insertNewAddress = async (
-  data: InsertAddressType,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.insert;
-  try {
-    const [address] = await db.insert(addressesTable).values(data).returning();
-    if (!address) return [null, errorMessage];
-    return [address.id, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
 
 export const getClientAddressesCount = async (
   clientId: number,
@@ -147,24 +131,6 @@ export const getSupplierAddresses = async (
     if (!parsedAddresses.success) return [null, errorMessages.dataCorrupted];
 
     return [parsedAddresses.data, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const deleteAddress = async (
-  addressId: number,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.delete;
-  try {
-    const [address] = await db
-      .delete(addressesTable)
-      .where(eq(addressesTable.id, addressId))
-      .returning();
-
-    if (!address) return [null, errorMessage];
-    return [address.id, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];
