@@ -1,17 +1,16 @@
+import { z } from "zod";
 import { db } from "@/server/db";
-import { projectCommentsTable } from "./schema";
+import { desc, eq, count } from "drizzle-orm";
+
+import { usersTable, projectCommentsTable } from "@/server/db/schema";
+
+import { errorLogger } from "@/lib/exceptions";
+
 import type { InsertProjectCommentType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { z } from "zod";
-import { usersTable } from "../user/schema";
-import { desc, eq, count } from "drizzle-orm";
-import { errorLogger } from "@/lib/exceptions";
 
 const errorMessages = {
   mainTitle: "Project Comment Queries Error:",
-  insert: "An error occurred while adding comment",
-  update: "An error occurred while updating comment",
-  delete: "An error occurred while deleting comment",
   getComments: "An error occurred while getting comments",
   getComment: "An error occurred while getting comment",
   count: "An error occurred while counting comments",
@@ -19,24 +18,6 @@ const errorMessages = {
 };
 
 const logError = errorLogger(errorMessages.mainTitle);
-
-export const insertProjectComment = async (
-  data: InsertProjectCommentType,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.insert;
-  try {
-    const [comment] = await db
-      .insert(projectCommentsTable)
-      .values(data)
-      .returning();
-
-    if (!comment) return [null, errorMessage];
-    return [comment.id, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
 
 export const projectCommentSchema = z.object({
   id: z.number(),
@@ -95,24 +76,6 @@ export const getProjectCommentsCount = async (
       .limit(1);
     if (!result) return [null, errorMessage];
     return [result.count, null];
-  } catch (error) {
-    logError(error);
-    return [null, errorMessage];
-  }
-};
-
-export const deleteProjectComment = async (
-  id: number,
-): Promise<ReturnTuple<number>> => {
-  const errorMessage = errorMessages.delete;
-  try {
-    const [comment] = await db
-      .delete(projectCommentsTable)
-      .where(eq(projectCommentsTable.id, id))
-      .returning();
-
-    if (!comment) return [null, errorMessage];
-    return [comment.id, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];

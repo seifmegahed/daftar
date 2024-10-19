@@ -2,9 +2,9 @@
 
 import { revalidatePath } from "next/cache";
 
+import { deleteProjectComment } from "@/server/db/tables/project-comment/mutations";
 import { getProjectCommentByIdAction } from "./read";
 import { getCurrentUserIdAction } from "@/server/actions/users";
-import { deleteProjectComment } from "@/server/db/tables/project-comment/queries";
 
 import type { ReturnTuple } from "@/utils/type-utils";
 

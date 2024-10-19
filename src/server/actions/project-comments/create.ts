@@ -2,13 +2,14 @@
 
 import { revalidatePath } from "next/cache";
 
-import { insertProjectComment } from "@/server/db/tables/project-comment/queries";
+import { insertProjectComment } from "@/server/db/tables/project-comment/mutations";
 import { insertProjectCommentSchema } from "@/server/db/tables/project-comment/schema";
 import { getCurrentUserIdAction } from "@/server/actions/users";
 
-import type { ReturnTuple } from "@/utils/type-utils";
-import type { z } from "zod";
 import { errorLogger } from "@/lib/exceptions";
+
+import type { z } from "zod";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const commentsErrorLog = errorLogger("Comments Create Action Error:");
 
