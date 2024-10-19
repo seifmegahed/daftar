@@ -1,11 +1,11 @@
 import { getSupplierDocumentsCountAction } from "@/server/actions/document-relations/read";
-import { getSupplierItemsCountAction } from "@/server/actions/project-items/read";
 import { getSupplierAddressesCountAction } from "@/server/actions/addresses";
 import { getSupplierContactsCountAction } from "@/server/actions/contacts";
-import { getSupplierProjectsCountAction } from "@/server/actions/project-items/read";
+import {
+  getSupplierProjectsCountAction,
+  getSupplierItemsCountAction,
+} from "@/server/actions/purchase-items/read";
 import PageLayout from "@/components/page-layout";
-
-;
 
 const basePath = (id: number) => "/supplier/" + id;
 

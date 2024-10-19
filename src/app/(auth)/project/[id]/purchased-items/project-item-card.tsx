@@ -1,5 +1,5 @@
 import { getCurrencyLabel } from "@/data/lut";
-import { type GetProjectItemType } from "@/server/db/tables/project-item/queries";
+import type { GetPurchaseItemType } from "@/server/db/tables/purchase-item/queries";
 import ProjectItemCardContextMenu from "./project-item-card-menu";
 import CardWrapper from "@/components/card-wrapper";
 import {
@@ -17,7 +17,7 @@ function ProjectItemCard({
   projectItem,
   index,
 }: {
-  projectItem: GetProjectItemType;
+  projectItem: GetPurchaseItemType;
   index: number;
 }) {
   return (

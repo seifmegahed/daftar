@@ -1,4 +1,4 @@
-import { getProjectItemsAction } from "@/server/actions/project-items/read";
+import { getPurchaseItemsAction } from "@/server/actions/purchase-items/read";
 import ProjectItemCard from "./project-item-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
@@ -7,7 +7,7 @@ async function ProjectItemsPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);
   if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
 
-  const [projectItems, error] = await getProjectItemsAction(projectId);
+  const [projectItems, error] = await getPurchaseItemsAction(projectId);
   if (error !== null) return <ErrorPage message={error} />;
   if (!projectItems.length)
     return (

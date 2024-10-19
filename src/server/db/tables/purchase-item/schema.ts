@@ -5,7 +5,7 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import { itemsTable, projectsTable, suppliersTable } from "@/server/db/schema";
 
-export const projectItemsTable = pgTable("project_items", {
+export const purchaseItemsTable = pgTable("purchase_item", {
   id: serial("id").primaryKey(),
   projectId: integer("project_id")
     .references(() => projectsTable.id)
@@ -21,26 +21,26 @@ export const projectItemsTable = pgTable("project_items", {
   quantity: integer("quantity").notNull(),
 });
 
-export const projectItemsRelations = relations(
-  projectItemsTable,
+export const purchaseItemsRelations = relations(
+  purchaseItemsTable,
   ({ one }) => ({
     project: one(projectsTable, {
-      fields: [projectItemsTable.projectId],
+      fields: [purchaseItemsTable.projectId],
       references: [projectsTable.id],
     }),
     item: one(itemsTable, {
-      fields: [projectItemsTable.itemId],
+      fields: [purchaseItemsTable.itemId],
       references: [itemsTable.id],
     }),
     supplier: one(suppliersTable, {
-      fields: [projectItemsTable.supplierId],
+      fields: [purchaseItemsTable.supplierId],
       references: [suppliersTable.id],
     }),
   }),
 );
 
-export const insertProjectItemSchema = createInsertSchema(projectItemsTable);
-export const selectProjectItemSchema = createSelectSchema(projectItemsTable);
+export const insertPurchaseItemSchema = createInsertSchema(purchaseItemsTable);
+export const selectPurchaseItemSchema = createSelectSchema(purchaseItemsTable);
 
-export type InsertProjectItemType = z.infer<typeof insertProjectItemSchema>;
-export type SelectProjectItemType = z.infer<typeof selectProjectItemSchema>;
+export type InsertPurchaseItemType = z.infer<typeof insertPurchaseItemSchema>;
+export type SelectPurchaseItemType = z.infer<typeof selectPurchaseItemSchema>;

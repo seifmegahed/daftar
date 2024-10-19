@@ -2,7 +2,7 @@ import { getItemDocumentsCountAction } from "@/server/actions/document-relations
 import {
   getItemProjectsCountAction,
   getItemSuppliersCountAction,
-} from "@/server/actions/project-items/read";
+} from "@/server/actions/purchase-items/read";
 import PageLayout from "@/components/page-layout";
 
 // ;

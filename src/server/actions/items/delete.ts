@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 
 import { deleteItem } from "@/server/db/tables/item/mutations";
 
-import { getItemProjectsCountAction } from "@/server/actions/project-items/read";
+import { getItemProjectsCountAction } from "@/server/actions/purchase-items/read";
 import { getCurrentUserAction } from "@/server/actions/users";
 
 import type { ReturnTuple } from "@/utils/type-utils";

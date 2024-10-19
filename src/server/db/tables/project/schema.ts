@@ -13,10 +13,10 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
 import {
   documentRelationsTable,
-  projectItemsTable,
   clientsTable,
   usersTable,
   saleItemsTable,
+  purchaseItemsTable,
 } from "@/server/db/schema";
 import { notesMaxLength } from "@/data/config";
 
@@ -76,8 +76,8 @@ export const projectRelations = relations(projectsTable, ({ one, many }) => ({
     references: [usersTable.id],
   }),
   documents: many(documentRelationsTable),
-  items: many(projectItemsTable),
   saleItems: many(saleItemsTable),
+  purchaseItems: many(purchaseItemsTable),
 }));
 
 export const insertProjectSchema = createInsertSchema(projectsTable);

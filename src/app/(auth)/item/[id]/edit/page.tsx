@@ -6,7 +6,7 @@ import {
 } from "@/server/actions/items/update";
 import { deleteItemAction } from "@/server/actions/items/delete";
 import { getCurrentUserAction } from "@/server/actions/users";
-import { getItemProjectsCountAction } from "@/server/actions/project-items/read";
+import { getItemProjectsCountAction } from "@/server/actions/purchase-items/read";
 
 import InfoPageWrapper from "@/components/info-page-wrapper";
 

@@ -8,7 +8,7 @@ export { suppliersTable, supplierRelations } from "./tables/supplier/schema";
 export { saleItemsTable, saleItemsRelations } from "./tables/sale-item/schema";
 export { projectsTable, projectRelations } from "./tables/project/schema";
 export { itemsTable, itemRelations } from "./tables/item/schema";
-export { projectItemsTable, projectItemsRelations } from "./tables/project-item/schema";
+export { purchaseItemsTable, purchaseItemsRelations } from "./tables/purchase-item/schema";
 export { projectCommentsTable, projectCommentsRelations } from "./tables/project-comment/schema";
 
 export { documentsTable, documentRelations } from "./tables/document/schema";

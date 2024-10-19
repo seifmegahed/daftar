@@ -1,5 +1,5 @@
 import { getProjectDocumentsCountAction } from "@/server/actions/document-relations/read";
-import { getProjectItemsCountAction } from "@/server/actions/project-items/read";
+import { getPurchaseItemsCountAction } from "@/server/actions/purchase-items/read";
 import PageLayout from "@/components/page-layout";
 import { isCurrentUserAdminAction } from "@/server/actions/users";
 import { getProjectCommentsCountAction } from "@/server/actions/project-comments/read";
@@ -19,7 +19,7 @@ export default async function SettingsLayout({
   const projectId = Number(params.id);
   if (isNaN(projectId)) return <div>Error: Project ID is invalid</div>;
   const [numberOfDocuments] = await getProjectDocumentsCountAction(projectId);
-  const [numberOfItems] = await getProjectItemsCountAction(projectId);
+  const [numberOfItems] = await getPurchaseItemsCountAction(projectId);
   const [numberOfSaleItems] = await getProjectSaleItemsCountAction(projectId);
   const [numberOfComments] = await getProjectCommentsCountAction(projectId);
   const [userAccess] = await isCurrentUserAdminAction();
@@ -51,7 +51,7 @@ export default async function SettingsLayout({
     },
     {
       title: "New Purchase Item",
-      href: basePath(id) + "/new-item",
+      href: basePath(id) + "/new-purchase-item",
     },
     {
       title: "New Sale Item",

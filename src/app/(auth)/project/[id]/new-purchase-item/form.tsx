@@ -24,7 +24,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { currencyOptions } from "@/data/lut";
-import { addProjectItemAction } from "@/server/actions/project-items/create";
+import { addPurchaseItemAction } from "@/server/actions/purchase-items/create";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 
 const schema = z.object({
@@ -61,7 +61,7 @@ function NewItemForm({
 
   const onSubmit = async (data: FormSchemaType) => {
     try {
-      const response = await addProjectItemAction({
+      const response = await addPurchaseItemAction({
         projectId,
         itemId: data.itemId,
         supplierId: data.supplierId,

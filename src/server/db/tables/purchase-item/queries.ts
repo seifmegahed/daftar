@@ -2,7 +2,7 @@ import { z } from "zod";
 import { db } from "@/server/db";
 import { count, desc, eq } from "drizzle-orm";
 import {
-  projectItemsTable,
+  purchaseItemsTable,
   projectsTable,
   clientsTable,
   suppliersTable,
@@ -12,16 +12,18 @@ import {
 import { selectSupplierSchema } from "@/server/db/tables/supplier/schema";
 import { errorLogger } from "@/lib/exceptions";
 
-import type { SelectProjectItemType } from "./schema";
+import type { SelectPurchaseItemType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 const errorMessages = {
-  mainTitle: "Project Items Queries Error:",
+  mainTitle: "Purchase Items Queries Error:",
   corruptedData: "It seems that some data is corrupted",
   getItems: "An error occurred while getting items",
   getProjects: "An error occurred while getting projects",
   getSuppliers: "An error occurred while getting suppliers",
   count: "An error occurred while counting items",
+  countProjects: "An error occurred while counting projects",
+  countSuppliers: "An error occurred while counting suppliers",
 };
 
 const logError = errorLogger(errorMessages.mainTitle);
@@ -47,7 +49,7 @@ export const getClientProjectsCount = async (
   }
 };
 
-export type GetProjectItemType = SelectProjectItemType & {
+export type GetPurchaseItemType = SelectPurchaseItemType & {
   item: {
     id: number;
     name: string;
@@ -57,12 +59,12 @@ export type GetProjectItemType = SelectProjectItemType & {
   supplier: { id: number; name: string };
 };
 
-export const getProjectItems = async (
+export const getPurchaseItems = async (
   projectId: number,
-): Promise<ReturnTuple<GetProjectItemType[]>> => {
+): Promise<ReturnTuple<GetPurchaseItemType[]>> => {
   const errorMessage = errorMessages.getItems;
   try {
-    const projectItems = await db.query.projectItemsTable.findMany({
+    const projectItems = await db.query.purchaseItemsTable.findMany({
       where: (projectItem, { eq }) => eq(projectItem.projectId, projectId),
       with: {
         item: {
@@ -90,6 +92,25 @@ export const getProjectItems = async (
   }
 };
 
+export const getPurchaseItemsCount = async (
+  projectId: number,
+): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.count;
+  try {
+    const [items] = await db
+      .select({ count: count() })
+      .from(purchaseItemsTable)
+      .where(eq(purchaseItemsTable.projectId, projectId))
+      .limit(1);
+
+    if (!items) return [null, errorMessage];
+    return [items.count, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
 export const getSupplierItemsCount = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
@@ -97,8 +118,8 @@ export const getSupplierItemsCount = async (
   try {
     const [items] = await db
       .select({ count: count() })
-      .from(projectItemsTable)
-      .where(eq(projectItemsTable.supplierId, supplierId))
+      .from(purchaseItemsTable)
+      .where(eq(purchaseItemsTable.supplierId, supplierId))
       .limit(1);
 
     if (!items) return [null, errorMessage];
@@ -132,19 +153,19 @@ export const getSupplierItems = async (
         itemId: itemsTable.id,
         itemName: itemsTable.name,
         itemMake: itemsTable.make,
-        quantity: projectItemsTable.quantity,
-        price: projectItemsTable.price,
+        quantity: purchaseItemsTable.quantity,
+        price: purchaseItemsTable.price,
         projectId: projectsTable.id,
         projectName: projectsTable.name,
         createdAt: projectsTable.createdAt,
       })
-      .from(projectItemsTable)
-      .where(eq(projectItemsTable.supplierId, supplierId))
+      .from(purchaseItemsTable)
+      .where(eq(purchaseItemsTable.supplierId, supplierId))
       .leftJoin(
         projectsTable,
-        eq(projectItemsTable.projectId, projectsTable.id),
+        eq(purchaseItemsTable.projectId, projectsTable.id),
       )
-      .leftJoin(itemsTable, eq(projectItemsTable.itemId, itemsTable.id));
+      .leftJoin(itemsTable, eq(purchaseItemsTable.itemId, itemsTable.id));
 
     const parsedItems = z.array(SupplierItemsSchema).safeParse(items);
 
@@ -182,11 +203,11 @@ export const getSupplierProjects = async (
         status: projectsTable.status,
         createdAt: projectsTable.createdAt,
       })
-      .from(projectItemsTable)
-      .where(eq(projectItemsTable.supplierId, supplierId))
+      .from(purchaseItemsTable)
+      .where(eq(purchaseItemsTable.supplierId, supplierId))
       .leftJoin(
         projectsTable,
-        eq(projectItemsTable.projectId, projectsTable.id),
+        eq(purchaseItemsTable.projectId, projectsTable.id),
       )
       .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
       .orderBy(desc(projectsTable.createdAt));
@@ -207,6 +228,33 @@ export const getSupplierProjects = async (
     });
 
     return [uniqueProjects, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
+export const getSupplierProjectsCount = async (
+  supplierId: number,
+): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.countProjects;
+  try {
+    const projects = await db
+      .select({ projectId: purchaseItemsTable.projectId})
+      .from(purchaseItemsTable)
+      .where(eq(purchaseItemsTable.supplierId, supplierId))
+
+    if (!projects) return [null, errorMessage];
+
+    const uniqueProjects = new Map<number, number>();
+
+    projects.forEach((project) => {
+      if (!uniqueProjects.has(project.projectId)) {
+        uniqueProjects.set(project.projectId, project.projectId);
+      }
+    });
+
+    return [uniqueProjects.size, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];
@@ -238,11 +286,11 @@ export const getItemProjects = async (
         status: projectsTable.status,
         createdAt: projectsTable.createdAt,
       })
-      .from(projectItemsTable)
-      .where(eq(projectItemsTable.itemId, itemId))
+      .from(purchaseItemsTable)
+      .where(eq(purchaseItemsTable.itemId, itemId))
       .leftJoin(
         projectsTable,
-        eq(projectItemsTable.projectId, projectsTable.id),
+        eq(purchaseItemsTable.projectId, projectsTable.id),
       )
       .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
       .orderBy(desc(projectsTable.createdAt));
@@ -263,6 +311,33 @@ export const getItemProjects = async (
     });
 
     return [uniqueProjects, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
+export const getItemProjectsCount = async (
+  itemId: number,
+): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.countProjects;
+  try {
+    const projects = await db
+      .select({ projectId: purchaseItemsTable.projectId})
+      .from(purchaseItemsTable)
+      .where(eq(purchaseItemsTable.itemId, itemId))
+
+    if (!projects) return [null, errorMessage];
+
+    const uniqueProjects = new Map<number, number>();
+
+    projects.forEach((project) => {
+      if (!uniqueProjects.has(project.projectId)) {
+        uniqueProjects.set(project.projectId, project.projectId);
+      }
+    });
+
+    return [uniqueProjects.size, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];
@@ -292,11 +367,11 @@ export const getItemSuppliers = async (
         registrationNumber: suppliersTable.registrationNumber,
         createdAt: suppliersTable.createdAt,
       })
-      .from(projectItemsTable)
-      .where(eq(projectItemsTable.itemId, itemId))
+      .from(purchaseItemsTable)
+      .where(eq(purchaseItemsTable.itemId, itemId))
       .leftJoin(
         suppliersTable,
-        eq(projectItemsTable.supplierId, suppliersTable.id),
+        eq(purchaseItemsTable.supplierId, suppliersTable.id),
       )
       .orderBy(desc(suppliersTable.createdAt));
 
@@ -316,6 +391,33 @@ export const getItemSuppliers = async (
     });
 
     return [uniqueSuppliers, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
+export const getItemSuppliersCount = async (
+  itemId: number,
+): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.countSuppliers;
+  try {
+    const suppliers = await db
+      .select({ supplierId: purchaseItemsTable.supplierId})
+      .from(purchaseItemsTable)
+      .where(eq(purchaseItemsTable.itemId, itemId))
+
+    if (!suppliers) return [null, errorMessage];
+
+    const uniqueSuppliers = new Map<number, number>();
+
+    suppliers.forEach((supplier) => {
+      if (!uniqueSuppliers.has(supplier.supplierId)) {
+        uniqueSuppliers.set(supplier.supplierId, supplier.supplierId);
+      }
+    });
+
+    return [uniqueSuppliers.size, null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];

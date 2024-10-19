@@ -2,7 +2,7 @@ import { db } from "@/server/db";
 import { eq } from "drizzle-orm";
 import {
   projectsTable,
-  projectItemsTable,
+  purchaseItemsTable,
   documentRelationsTable,
   saleItemsTable,
 } from "@/server/db/schema";
@@ -63,8 +63,8 @@ export const deleteProject = async (
   try {
     const project = await db.transaction(async (tx) => {
       await tx
-        .delete(projectItemsTable)
-        .where(eq(projectItemsTable.projectId, id));
+        .delete(purchaseItemsTable)
+        .where(eq(purchaseItemsTable.projectId, id));
 
       await tx.delete(saleItemsTable).where(eq(saleItemsTable.projectId, id));
 

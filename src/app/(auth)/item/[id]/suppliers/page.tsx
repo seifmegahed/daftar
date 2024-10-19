@@ -1,4 +1,4 @@
-import { getItemSuppliersAction } from "@/server/actions/project-items/read";
+import { getItemSuppliersAction } from "@/server/actions/purchase-items/read";
 import SupplierCard from "@/app/(auth)/suppliers/all-suppliers/supplier-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";

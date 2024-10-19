@@ -253,18 +253,8 @@ export type ProjectClientType = {
   } | null;
 };
 
-type ProjectItemType = {
-  id: number;
-  quantity: number;
-  price: string;
-  currency: number;
-  item: { id: number; name: string; make: string | null; mpn: string | null };
-  supplier: { id: number; name: string };
-};
-
 export type GetProjectType = SelectProjectType & {
   client: ProjectClientType;
-  items: ProjectItemType[];
   owner: UserBriefType;
   creator: UserBriefType;
   updater: UserBriefType | null;
@@ -322,30 +312,6 @@ export const getProjectById = async (
             name: true,
           },
         },
-        items: {
-          columns: {
-            id: true,
-            quantity: true,
-            price: true,
-            currency: true,
-          },
-          with: {
-            supplier: {
-              columns: {
-                id: true,
-                name: true,
-              },
-            },
-            item: {
-              columns: {
-                id: true,
-                name: true,
-                make: true,
-                mpn: true,
-              },
-            },
-          },
-        },
       },
     });
     if (!project) return [null, errorMessage];
@@ -396,7 +362,7 @@ export const getProjectLinkedDocuments = async (
             },
           },
         },
-        items: {
+        purchaseItems: {
           columns: {},
           with: {
             supplier: {
@@ -482,10 +448,10 @@ export const getProjectLinkedDocuments = async (
 
     if (!project) return [null, errorMessage];
 
-    const uniqueSuppliers = new Map<number, (typeof project.items)[0]>();
+    const uniqueSuppliers = new Map<number, (typeof project.purchaseItems)[0]>();
     const uniqueItems = new Map<number, (typeof project.saleItems)[0]>();
 
-    project.items.forEach((item) => {
+    project.purchaseItems.forEach((item) => {
       if (!uniqueSuppliers.has(item.supplier.id)) {
         uniqueSuppliers.set(item.supplier.id, item);
       }

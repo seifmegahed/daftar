@@ -10,7 +10,7 @@ import {
 } from "@/server/actions/suppliers/update";
 import { getSupplierFullByIdAction } from "@/server/actions/suppliers/read";
 import FieldUpdateForm from "./update-field-form";
-import { getSupplierProjectsCountAction } from "@/server/actions/project-items/read";
+import { getSupplierProjectsCountAction } from "@/server/actions/purchase-items/read";
 import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteSupplierAction } from "@/server/actions/suppliers/delete";

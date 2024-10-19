@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { deleteProjectItemAction } from "@/server/actions/project-items/delete";
+import { deletePurchaseItemAction } from "@/server/actions/purchase-items/delete";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
@@ -25,7 +25,7 @@ const ProjectItemCardContextMenu = ({
     const result = confirm("Are you sure you want to delete this item from the project?");
     if (!result) return;
     try {
-      const [, error] = await deleteProjectItemAction(projectItemId);
+      const [, error] = await deletePurchaseItemAction(projectItemId);
       if (error !== null) {
         toast.error(error);
         return;

@@ -1,7 +1,7 @@
 import ProjectCard from "@/app/(auth)/projects/all-projects/project-card";
 import ErrorPage from "@/components/error";
 import ListPageWrapper from "@/components/list-page-wrapper";
-import { getSupplierProjectsAction } from "@/server/actions/project-items/read";
+import { getSupplierProjectsAction } from "@/server/actions/purchase-items/read";
 
 async function SupplierProjectsPage({ params }: { params: { id: string } }) {
   const supplierId = parseInt(params.id);

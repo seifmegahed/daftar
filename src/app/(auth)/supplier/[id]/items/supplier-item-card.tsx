@@ -1,4 +1,4 @@
-import type { SupplierItemType } from "@/server/db/tables/project-item/queries";
+import type { SupplierItemType } from "@/server/db/tables/purchase-item/queries";
 import { numberWithCommas } from "@/utils/common";
 import CardWrapper from "@/components/card-wrapper";
 import {

@@ -1,4 +1,4 @@
-import { getItemProjectsAction } from "@/server/actions/project-items/read";
+import { getItemProjectsAction } from "@/server/actions/purchase-items/read";
 import ProjectCard from "@/app/(auth)/projects/all-projects/project-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
