@@ -2,7 +2,7 @@
 
 import { insertItemSchema } from "@/server/db/tables/item/schema";
 import { getCurrentUserIdAction } from "../users";
-import { insertItem } from "@/server/db/tables/item/queries";
+import { insertItem } from "@/server/db/tables/item/mutations";
 
 import type { z } from "zod";
 import type { ReturnTuple } from "@/utils/type-utils";

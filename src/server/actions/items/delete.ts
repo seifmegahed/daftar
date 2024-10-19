@@ -1,12 +1,14 @@
 "use server";
 
-import { deleteItem } from "@/server/db/tables/item/queries";
-import { getCurrentUserAction } from "../users";
-import { getItemProjectsCountAction } from "../project-items/read";
 import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+
+import { deleteItem } from "@/server/db/tables/item/mutations";
+
+import { getItemProjectsCountAction } from "@/server/actions/project-items/read";
+import { getCurrentUserAction } from "@/server/actions/users";
 
 import type { ReturnTuple } from "@/utils/type-utils";
-import { revalidatePath } from "next/cache";
 
 export const deleteItemAction = async (
   id: number,
