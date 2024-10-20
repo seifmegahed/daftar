@@ -1,7 +1,7 @@
-import { CardAMainListSkeleton } from "@/components/skeletons/main-list-skeletons";
+import { CardBMainListSkeleton } from "@/components/skeletons/main-list-skeletons";
 
-function CardAMainListLoadingPage() {
-  return <CardAMainListSkeleton />;
+function CardBMainListLoadingPage() {
+  return <CardBMainListSkeleton />;
 }
 
-export default CardAMainListLoadingPage;
+export default CardBMainListLoadingPage;

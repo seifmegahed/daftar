@@ -10,6 +10,7 @@ import {
   CardMenuContainer,
   CardNameSection,
   CardSection,
+  CardSubtitleSection,
 } from "@/components/card-sections";
 
 const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
@@ -21,6 +22,10 @@ const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
           <CardNameSection
             name={document.name}
             href={`/document/${document.id}`}
+          />
+          <CardSubtitleSection
+            subtitle={document.private ? "Private" : "Public"}
+            tip="Privacy"
           />
         </CardBodyStartContainer>
         <CardBodyEndContainer>
