@@ -8,14 +8,17 @@ import { SendHorizontal } from "lucide-react";
 function ProjectCommentForm({ projectId }: { projectId: number }) {
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const [text, setText] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async (e?: React.FormEvent<HTMLFormElement>) => {
     if (e) e.preventDefault();
+    if (submitting) return;
     if (text.length === 0) return;
     if (text.length > 256) {
       toast.error("Comment must be less than 256 characters");
       return;
     }
+    setSubmitting(true);
     try {
       const [, error] = await createProjectCommentAction({
         projectId,
@@ -30,6 +33,8 @@ function ProjectCommentForm({ projectId }: { projectId: number }) {
     } catch (error) {
       console.log(error);
       toast.error("An error occurred while adding the comment");
+    } finally {
+      setSubmitting(false);
     }
   };
 
@@ -44,16 +49,23 @@ function ProjectCommentForm({ projectId }: { projectId: number }) {
   return (
     <form onSubmit={handleSubmit} className="relative w-full">
       <textarea
-        className="w-full resize-none rounded-lg border bg-background px-4 py-2 outline-none ring-0"
+        className={`w-full resize-none rounded-lg border bg-background px-4 py-2 outline-none ring-0 ${submitting ? "text-muted-foreground caret-transparent opacity-50" : ""}`}
         placeholder="Add a comment..."
         value={text}
         rows={3}
-        onKeyDown={handleKeyDown}
-        onChange={(e) => setText(e.target.value)}
+        onKeyDown={!submitting ? handleKeyDown : undefined}
+        onChange={(e) =>
+          !submitting &&
+          setText((prev) =>
+            e.target.value.length > 256 ? prev : e.target.value,
+          )
+        }
         ref={inputRef}
       />
-      <button type="submit">
-        <SendHorizontal className="absolute end-2 top-2 h-6 w-6 text-muted-foreground/70" />
+      <button type="submit" disabled={submitting}>
+        <SendHorizontal
+          className={`absolute end-2 top-2 h-6 w-6 text-muted-foreground/70 ${submitting ? "opacity-50" : "cursor-pointer"}`}
+        />
       </button>
     </form>
   );

@@ -42,12 +42,12 @@ async function ProjectCommentsPage({
   if (error !== null) return <ErrorPage message={error} />;
 
   return (
-    <div className="flex flex-col gap-5 px-2 sm:px-0">
+    <div className="flex flex-col gap-5 px-2 sm:px-0 w-full max-w-full">
       <div className="flex gap-4">
         <AvatarContainer>{getInitials(currentUser.name)}</AvatarContainer>
         <ProjectCommentForm projectId={projectId} />
       </div>
-      <div className="flex flex-grow flex-col gap-4">
+      <div className="flex flex-grow flex-col gap-4 w-full max-w-full">
         <Suspense fallback={<CommentsListSkeleton />}>
           <CommentsList
             comments={projectComments}

@@ -38,7 +38,7 @@ function ProjectCommentCard({
     }
   };
   return (
-    <div className="flex w-full gap-4">
+    <div className="flex w-full max-w-full gap-4">
       <Tooltip>
         <AvatarContainer>
           <TooltipTrigger>{getInitials(comment.userName)}</TooltipTrigger>
@@ -47,9 +47,13 @@ function ProjectCommentCard({
           <p>{comment.userName}</p>
         </TooltipContent>
       </Tooltip>
-      <div className="flex w-full flex-col gap-2 rounded-lg bg-muted p-4">
-        <div className="flex items-start justify-between">
-          <p className="flex-shrink text-foreground">{comment.text}</p>
+      <div className="flex w-full flex-col gap-2 rounded-lg bg-muted p-4 max-w-full">
+        <div className="flex w-full items-start justify-between">
+          <div className="flex-shrink w-full max-w-[80%]">
+            <p className="">
+              {comment.text}
+            </p>
+          </div>
           {sameUser && (
             <div className="-me-2 -mt-2">
               <button
