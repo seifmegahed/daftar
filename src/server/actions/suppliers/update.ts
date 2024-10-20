@@ -1,9 +1,11 @@
 "use server";
 
-import { getCurrentUserAction } from "../users";
-import { updateSupplier } from "@/server/db/tables/supplier/queries";
-import type { ReturnTuple } from "@/utils/type-utils";
 import { revalidatePath } from "next/cache";
+
+import { updateSupplier } from "@/server/db/tables/supplier/mutations";
+import { getCurrentUserAction } from "@/server/actions/users";
+
+import type { ReturnTuple } from "@/utils/type-utils";
 
 export const updateSupplierPrimaryAddressAction = async (
   supplierId: number,

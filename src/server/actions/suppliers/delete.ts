@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 import { getSupplierProjectsCountAction } from "@/server/actions/purchase-items/read";
-import { deleteSupplier } from "@/server/db/tables/supplier/queries";
+import { deleteSupplier } from "@/server/db/tables/supplier/mutations";
 import { getCurrentUserAction } from "@/server/actions/users";
 
 import type { ReturnTuple } from "@/utils/type-utils";
