@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { env } from "@/env";
 
 import { getDocumentPath } from "@/server/db/tables/document/queries";
-import { isCurrentUserAdminAction } from "@/server/actions/users";
+import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 
 import type { NextRequest } from "next/server";
 import { errorLogger } from "@/lib/exceptions";
@@ -41,7 +41,7 @@ export async function GET(
       return new Response("Invalid ID", { status: 400 });
     }
 
-    const [access, accessError] = await isCurrentUserAdminAction();
+    const [access, accessError] = await hasAccessToPrivateDataAction();
     if (accessError !== null) {
       return new Response(accessError, {
         status: 500,

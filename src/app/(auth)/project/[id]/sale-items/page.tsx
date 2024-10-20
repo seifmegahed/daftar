@@ -3,7 +3,7 @@ import SaleItemCard from "./sale-item-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import { getProjectSaleItemsAction } from "@/server/actions/sale-items/read";
 
-async function ProjectSaleItemPage({ params }: { params: { id: string } }) {
+async function ProjectSaleItemsPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);
   if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
 
@@ -26,4 +26,4 @@ async function ProjectSaleItemPage({ params }: { params: { id: string } }) {
   );
 }
 
-export default ProjectSaleItemPage;
+export default ProjectSaleItemsPage;

@@ -39,3 +39,18 @@ export const projectTypes = [
 
 export const getProjectTypeLabel = (type: number) =>
   projectTypes.find((x) => x.value === type)?.label ?? "Unknown";
+
+export const userRoles = {
+  admin: "admin",
+  sUser: "s-user",
+  user: "user",
+};
+
+export const userRolesList = [
+  { value: "admin", label: "Admin" },
+  { value: "s-user", label: "Super User" },
+  { value: "user", label: "User" },
+];
+
+export const getUserRoleLabel = (role: string) =>
+  userRolesList.find((x) => x.value === role)?.label ?? "Unknown";

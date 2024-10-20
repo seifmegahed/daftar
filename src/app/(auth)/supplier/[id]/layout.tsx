@@ -6,6 +6,7 @@ import {
   getSupplierItemsCountAction,
 } from "@/server/actions/purchase-items/read";
 import PageLayout from "@/components/page-layout";
+import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 
 const basePath = (id: number) => "/supplier/" + id;
 
@@ -31,6 +32,8 @@ export default async function SettingsLayout({
 
   const [contactsCount] = await getSupplierContactsCountAction(supplierId);
 
+  const [access] = await hasAccessToPrivateDataAction();
+
   const sidebarNavItemsGenerator = (id: number) => [
     {
       title: "Supplier",
@@ -44,6 +47,7 @@ export default async function SettingsLayout({
       title: "Items",
       href: basePath(id) + "/items",
       amount: itemsCount ?? 0,
+      hidden: !access,
     },
     {
       title: "Projects",

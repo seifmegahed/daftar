@@ -1,7 +1,7 @@
 import { getProjectDocumentsCountAction } from "@/server/actions/document-relations/read";
 import { getPurchaseItemsCountAction } from "@/server/actions/purchase-items/read";
 import PageLayout from "@/components/page-layout";
-import { isCurrentUserAdminAction } from "@/server/actions/users";
+import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 import { getProjectCommentsCountAction } from "@/server/actions/project-comments/read";
 import { getProjectSaleItemsCountAction } from "@/server/actions/sale-items/read";
 
@@ -22,7 +22,7 @@ export default async function SettingsLayout({
   const [numberOfItems] = await getPurchaseItemsCountAction(projectId);
   const [numberOfSaleItems] = await getProjectSaleItemsCountAction(projectId);
   const [numberOfComments] = await getProjectCommentsCountAction(projectId);
-  const [userAccess] = await isCurrentUserAdminAction();
+  const [userAccess] = await hasAccessToPrivateDataAction();
 
   const sidebarNavItemsGenerator = (id: number) => [
     {
@@ -40,9 +40,10 @@ export default async function SettingsLayout({
       hidden: !userAccess,
     },
     {
-      title: "Purchased Items",
-      href: basePath(id) + "/purchased-items",
+      title: "Purchase Items",
+      href: basePath(id) + "/purchase-items",
       amount: numberOfItems ?? 0,
+      hidden: !userAccess,
     },
     {
       title: "Documents",

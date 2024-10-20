@@ -59,6 +59,14 @@ export const listAllUsersAction = async (): Promise<
   return [users, null];
 };
 
+export const hasAccessToPrivateDataAction = async (): Promise<
+  ReturnTuple<boolean>
+> => {
+  const [user, error] = await getCurrentUserAction();
+  if (error !== null) return [null, error];
+  return [user.role === "admin" || user.role === "s-user", null];
+};
+
 export const isCurrentUserAdminAction = async (): Promise<
   ReturnTuple<boolean>
 > => {

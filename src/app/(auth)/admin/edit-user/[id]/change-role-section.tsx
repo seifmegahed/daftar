@@ -19,12 +19,18 @@ const roleItems = [
   {
     label: "Admin",
     value: "admin",
-    description: "Has access to the admin panel, can add and edit users",
+    description: "Has all privileges",
+  },
+  {
+    labe: "Super User",
+    value: "s-user",
+    description:
+      "Same privileges as a regular user, but has access to all private data",
   },
   {
     label: "User",
     value: "user",
-    description: "Regular user, can preform all actions except admin panel",
+    description: "Regular user",
   },
 ];
 

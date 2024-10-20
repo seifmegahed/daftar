@@ -13,7 +13,7 @@ import type {
 } from "@/server/db/tables/document/queries";
 import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { isCurrentUserAdminAction } from "../users";
+import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 
 export const getDocumentsAction = async (
   page: number,
@@ -21,7 +21,7 @@ export const getDocumentsAction = async (
   searchText?: string,
   limit?: number,
 ): Promise<ReturnTuple<BriefDocumentType[]>> => {
-  const [access, accessError] = await isCurrentUserAdminAction();
+  const [access, accessError] = await hasAccessToPrivateDataAction();
   if (accessError !== null) return [null, accessError];
   const [documents, documentsError] = await getDocuments(
     page,
@@ -37,7 +37,7 @@ export const getDocumentsAction = async (
 export const getDocumentByIdAction = async (
   id: number,
 ): Promise<ReturnTuple<Required<DocumentType>>> => {
-  const [access, accessError] = await isCurrentUserAdminAction();
+  const [access, accessError] = await hasAccessToPrivateDataAction();
   if (accessError !== null) return [null, accessError];
   const [document, documentError] = await getDocumentById(id, access);
   if (documentError !== null) return [null, documentError];
@@ -47,7 +47,7 @@ export const getDocumentByIdAction = async (
 export const getDocumentsCountAction = async (
   filter?: FilterArgs,
 ): Promise<ReturnTuple<number>> => {
-  const [access, accessError] = await isCurrentUserAdminAction();
+  const [access, accessError] = await hasAccessToPrivateDataAction();
   if (accessError !== null) return [null, accessError];
   const [documents, documentsError] = await getDocumentsCount(filter, access);
   if (documentsError !== null) return [null, documentsError];

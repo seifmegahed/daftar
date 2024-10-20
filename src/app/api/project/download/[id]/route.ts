@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { env } from "@/env";
 
 import { getProjectLinkedDocuments } from "@/server/db/tables/project/queries";
-import { isCurrentUserAdminAction } from "@/server/actions/users";
+import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 
 import { errorLogger } from "@/lib/exceptions";
 
@@ -49,7 +49,7 @@ export async function GET(
       return await demoDownload(folderName);
     }
 
-    const [access, accessError] = await isCurrentUserAdminAction();
+    const [access, accessError] = await hasAccessToPrivateDataAction();
     if (accessError !== null) {
       return new Response(accessError, { status: 500 });
     }
