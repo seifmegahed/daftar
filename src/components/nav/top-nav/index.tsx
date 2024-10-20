@@ -4,8 +4,6 @@ import MobileNav from "./mobile-nav";
 import { UserButton } from "@/components/buttons";
 import { getCurrentUserAction } from "@/server/actions/users";
 
-export const revalidate = 3600;
-
 async function TopNav() {
   const [currentUser, error] = await getCurrentUserAction();
   if (error !== null) return <ErrorPage message="Please try again later." />;
@@ -16,7 +14,7 @@ async function TopNav() {
       <MobileNav admin={currentUser.role === "admin"} />
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
         <div className="w-full"></div>
-        <UserButton user={{ name: "Seif Megahed", id: 1 }} />
+        <UserButton user={currentUser} />
       </div>
     </header>
   );
