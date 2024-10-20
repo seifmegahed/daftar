@@ -1,6 +1,11 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
+import { useState } from "react";
+import { useTheme } from "next-themes";
+import { toast } from "sonner";
+import Link from "next/link";
+
+import { logoutAction } from "@/server/actions/auth/logout";
 
 import {
   DropdownMenu,
@@ -9,19 +14,13 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { logoutAction } from "@/server/actions/auth/logout";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-import { toast } from "sonner";
-import { getErrorMessage } from "@/lib/exceptions";
-import { useTheme } from "next-themes";
-import { getInitials } from "@/utils/user";
-import Link from "next/link";
+import { Button } from "@/components/ui/button";
 import { AvatarContainer } from "@/components/avatar";
 import Loading from "@/components/loading";
 
+import { getInitials } from "@/utils/user";
+
 function UserButton({ user }: { user: { name: string; id: number } }) {
-  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { setTheme } = useTheme();
 
@@ -29,17 +28,20 @@ function UserButton({ user }: { user: { name: string; id: number } }) {
 
   const logout = async () => {
     setLoading(true);
-    await logoutAction()
-      .then((res) => {
-        const [, error] = res;
-        if (error) throw new Error(error);
-        router.push("/login");
-      })
-      .catch((error) => {
-        console.error("Error logging out:", error);
-        toast.error(getErrorMessage(error));
-        setLoading(false);
-      });
+    try {
+      const response = await logoutAction();
+      if (!response) return;
+      const [, error] = response;
+      if (error !== null) {
+        toast.error(error);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while logging out");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <DropdownMenu>
