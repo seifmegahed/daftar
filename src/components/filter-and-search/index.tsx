@@ -11,6 +11,7 @@ export const FILTER_TYPE = "ft";
 
 export type FilterTypes =
   | "status"
+  | "type"
   | "startDate"
   | "endDate"
   | "creationDate"

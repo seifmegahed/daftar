@@ -26,6 +26,7 @@ export const projectsTable = pgTable(
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 64 }).notNull().unique(),
     status: integer("status").notNull(),
+    type: integer("type").notNull().default(0),
     description: varchar("description", { length: notesMaxLength }),
     startDate: date("start_date"),
     endDate: date("end_date"),

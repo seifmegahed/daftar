@@ -8,8 +8,8 @@ export const statusCodes = [
   { value: 6, label: "Completed" },
   { value: 7, label: "On Hold" },
   { value: 8, label: "Pending" },
-  { value: 9, label: "Pending" },
-  { value: 10, label: "Pending" },
+  { value: 9, label: "Awaiting Approval" },
+  { value: 10, label: "Approved" },
   { value: 11, label: "Issue" },
 ];
 
@@ -30,3 +30,12 @@ export const currencyOptions = [
 
 export const getCurrencyLabel = (currency: number) =>
   currencyOptions.find((x) => x.value === currency)?.label ?? "Unknown";
+
+export const projectTypes = [
+  { value: 0, label: "Supply" },
+  { value: 1, label: "Service" },
+  { value: 2, label: "Budgetary" },
+];
+
+export const getProjectTypeLabel = (type: number) =>
+  projectTypes.find((x) => x.value === type)?.label ?? "Unknown";

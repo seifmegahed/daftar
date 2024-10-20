@@ -7,13 +7,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { statusCodes } from "@/data/lut";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FILTER_TYPE, FILTER_VALUE } from ".";
 import { Label } from "@/components/ui/label";
 
-function StatusFilter({ defaultValue }: { defaultValue?: string }) {
+function SelectFilter({
+  defaultValue,
+  options,
+  type,
+  label,
+}: {
+  defaultValue?: string;
+  options: { label: string; value: number }[];
+  type: string;
+  label: string;
+}) {
   const [filterValue, setFilterValue] = useState<string | undefined>(
     defaultValue,
   );
@@ -24,16 +33,16 @@ function StatusFilter({ defaultValue }: { defaultValue?: string }) {
   useEffect(() => {
     if (filterValue && filterValue !== defaultValue) {
       const params = new URLSearchParams(searchParams);
-      params.set(FILTER_TYPE, "status");
+      params.set(FILTER_TYPE, type);
       params.set(FILTER_VALUE, filterValue);
       params.set("page", "1");
       router.replace(`${pathname}?${params.toString()}`);
     }
-  }, [filterValue, pathname, searchParams, router, defaultValue]);
+  }, [filterValue, pathname, searchParams, router, defaultValue, type]);
 
   return (
     <div className="flex w-[300px] flex-col gap-2">
-      <Label>Status</Label>
+      <Label>{label}</Label>
       <Select onValueChange={setFilterValue} value={filterValue}>
         <SelectTrigger>
           <SelectValue
@@ -42,7 +51,7 @@ function StatusFilter({ defaultValue }: { defaultValue?: string }) {
           />
         </SelectTrigger>
         <SelectContent>
-          {statusCodes.map((status) => (
+          {options.map((status) => (
             <SelectItem
               key={status.value}
               value={String(status.value)}
@@ -57,4 +66,4 @@ function StatusFilter({ defaultValue }: { defaultValue?: string }) {
   );
 }
 
-export default StatusFilter;
+export default SelectFilter;

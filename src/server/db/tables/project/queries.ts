@@ -90,6 +90,8 @@ const projectFilterQuery = (filter: FilterArgs) => {
   switch (filter.filterType) {
     case "status":
       return sql`status = ${filter.filterValue}`;
+    case "type":
+      return sql`type = ${filter.filterValue}`;
     case "startDate":
       return dateQueryGenerator(projectsTable.startDate, filter.filterValue);
     case "endDate":

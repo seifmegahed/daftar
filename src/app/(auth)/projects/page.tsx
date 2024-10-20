@@ -19,6 +19,7 @@ type Props = {
 
 const filterItems: FilterOptionType[] = [
   { label: "By Status", value: "status" },
+  { label: "By Type", value: "type" },
   { label: "By Start Date", value: "startDate" },
   { label: "By End Date", value: "endDate" },
   { label: "By Creation Date", value: "creationDate" },

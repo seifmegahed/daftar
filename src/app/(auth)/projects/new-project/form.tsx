@@ -29,7 +29,7 @@ import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 import type { UserBriefType } from "@/server/db/tables/user/queries";
 import ComboSelect from "@/components/combo-select-obj";
 import { addProjectAction } from "@/server/actions/projects/create";
-import { statusCodes } from "@/data/lut";
+import { projectTypes, statusCodes } from "@/data/lut";
 import { notesMaxLength } from "@/data/config";
 
 const schema = z.object({
@@ -37,6 +37,7 @@ const schema = z.object({
     .string({ required_error: "Name is required" })
     .min(4, { message: "Name must be at least 4 characters" })
     .max(64, { message: "Name must not be longer than 64 characters" }),
+  type: z.number({ required_error: "Type is required" }),
   status: z.number({ required_error: "Status is required" }),
   description: z.string().max(notesMaxLength, {
     message: `Description must not be longer than ${notesMaxLength} characters`,
@@ -81,7 +82,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
         return;
       }
       form.reset();
-      toast.success("Project added")
+      toast.success("Project added");
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while adding the project");
@@ -114,6 +115,39 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
                 <FormDescription>
                   Enter the name of the project. This is the name you will be
                   using to search and refer to the project.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="type"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Type *</FormLabel>
+                <Select
+                  defaultValue={String(field.value)}
+                  onValueChange={(value) => field.onChange(Number(value))}
+                >
+                  <FormControl>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                  </FormControl>
+                  <SelectContent>
+                    {projectTypes.map((status) => (
+                      <SelectItem
+                        key={status.value}
+                        value={String(status.value)}
+                      >
+                        {status.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <FormDescription>
+                  Select the type of the project.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

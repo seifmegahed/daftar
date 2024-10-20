@@ -1,4 +1,4 @@
-import { getStatusLabel } from "@/data/lut";
+import { getProjectTypeLabel, getStatusLabel } from "@/data/lut";
 import {
   getProjectByIdAction,
   getProjectLinkedDocumentsAction,
@@ -45,6 +45,10 @@ async function ProjectPage({ params }: { params: { id: string } }) {
         <ClientSection data={project.client} type="client" />
       </Section>
       <Section title="General Info">
+        <DataDisplayUnit
+          label="Type"
+          values={[getProjectTypeLabel(project.type)]}
+        />
         <DataDisplayUnit label="Owner" values={[project.owner.name]} />
         <DataDisplayUnit
           label="Start Date"
