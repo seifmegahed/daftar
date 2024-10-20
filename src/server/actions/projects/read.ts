@@ -16,7 +16,7 @@ import type {
   BriefProjectType,
   GetProjectLinkedDocumentsType,
 } from "@/server/db/tables/project/queries";
-import { isCurrentUserAdminAction } from "@/server/actions/users";
+import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 
 import type { SelectProjectType } from "@/server/db/tables/project/schema";
 import type { FilterArgs } from "@/components/filter-and-search";
@@ -75,7 +75,7 @@ export const getProjectByIdAction = async (
 export const getProjectLinkedDocumentsAction = async (
   projectId: number,
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
-  const [access, accessError] = await isCurrentUserAdminAction();
+  const [access, accessError] = await hasAccessToPrivateDataAction();
   if (accessError !== null) return [null, accessError];
   const [project, projectError] = await getProjectLinkedDocuments(
     projectId,

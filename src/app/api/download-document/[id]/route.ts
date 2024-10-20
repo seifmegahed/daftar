@@ -60,6 +60,7 @@ export async function GET(
 
     const fileStatus = await fs.open(document.path, "r");
     const fileStats = await fileStatus.stat();
+    await fileStatus.close();
     if (fileStats.isDirectory()) {
       downloadDocumentErrorLog(`Document file ${document.path} is a directory`);
       return new Response("Document does not exist", { status: 500 });
