@@ -65,6 +65,18 @@ export function CardIdSection({ id, href }: { id: number; href: string }) {
   );
 }
 
+
+export function CardIndexSection({ index }: { index: number }) {
+  return (
+    <div className="hidden cursor-pointer items-center justify-center sm:flex w-10">
+      <p className="text-2xl font-bold text-foreground">
+        {index}
+      </p>
+    </div>
+  );
+}
+
+
 export function CardSection({
   text,
   tip,
@@ -153,16 +165,6 @@ export function CardBodyContainer({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex w-full flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-0">
       {children}
-    </div>
-  );
-}
-
-export function CardIndexSection({ index }: { index: number }) {
-  return (
-    <div className="hidden cursor-pointer items-center justify-center sm:flex">
-      <p className="w-10 text-end text-2xl font-bold text-foreground">
-        {index}
-      </p>
     </div>
   );
 }
