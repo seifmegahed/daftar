@@ -31,7 +31,7 @@ function ComboSelect({
   notFoundMessage = "No item found.",
 }: {
   value?: string | number;
-  onChange?: (value: string | number) => void;  
+  onChange?: (value: string | number) => void;
   className?: string;
   options: { label: string; value: string | number }[];
   selectMessage?: string;
@@ -40,7 +40,7 @@ function ComboSelect({
 }) {
   const [open, setOpen] = useState(false);
 
-  const valueLabel = options.find(x => x.value === value)?.label ?? null;
+  const valueLabel = options.find((x) => x.value === value)?.label ?? null;
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
@@ -50,17 +50,17 @@ function ComboSelect({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-[300px] justify-between",
+            "w-full justify-between",
             className,
             value ? "" : "text-muted-foreground",
           )}
         >
-          {valueLabel ? valueLabel : selectMessage}
+          <p className="truncate">{valueLabel ? valueLabel : selectMessage}</p>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0">
-        <Command className="w-full max-h-[300px] overflow-y-auto">
+      <PopoverContent className="w-full p-0" align="start" >
+        <Command className="max-h-[500px] w-full overflow-y-auto">
           <CommandInput placeholder={searchMessage} />
           <CommandList>
             <CommandEmpty>{notFoundMessage}</CommandEmpty>

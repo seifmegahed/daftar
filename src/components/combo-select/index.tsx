@@ -48,17 +48,17 @@ function ComboSelect({
           role="combobox"
           aria-expanded={open}
           className={cn(
-            "w-[300px] justify-between",
+            "w-full justify-between",
             className,
             value ? "" : "text-muted-foreground",
           )}
         >
-          {value ? value : selectMessage}
+          <p className="truncate">{value ? value : selectMessage}</p>
           <ChevronsUpDown className="ms-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[300px] p-0">
-        <Command>
+      <PopoverContent className="w-full p-0" align="start">
+        <Command className="max-h-[500px] w-full overflow-y-auto">
           <CommandInput placeholder={searchMessage} />
           <CommandList>
             <CommandEmpty>{notFoundMessage}</CommandEmpty>
