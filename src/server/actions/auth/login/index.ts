@@ -1,21 +1,23 @@
 "use server";
-import type { z } from "zod";
 
+import { env } from "@/env";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { createToken } from "@/lib/jwt";
 
-import { UserSchema } from "@/server/db/tables/user/schema";
-import {
-  sensitiveGetUserByUsername,
-  updateUserLastActive,
-} from "@/server/db/tables/user/queries";
+import { sensitiveGetUserByUsername } from "@/server/db/tables/user/queries";
+import { updateUserLastActive } from "@/server/db/tables/user/mutations";
+
+import { createToken } from "@/lib/jwt";
 import { comparePassword } from "@/utils/hashing";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
-import type { ReturnTuple } from "@/utils/type-utils";
+
+import { UserSchema } from "@/server/db/tables/user/schema";
+
 import { loginErrors } from "./errors";
-import { redirect } from "next/navigation";
-import { env } from "@/env";
 import { errorLogger } from "@/lib/exceptions";
+
+import type { z } from "zod";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const loginSchema = UserSchema.pick({
   username: true,
@@ -62,7 +64,7 @@ export const loginAction = async (
      * Secure cookies are only sent to HTTPS endpoints, this should be true in production
      * Perhaps instead of using the vercel env variable, we should use an SSL environment variable
      */
-    secure: env.NEXT_PUBLIC_VERCEL ? true : false,
+    secure: env.NEXT_PUBLIC_VERCEL || env.SSL ? true : false,
     // Expires in 1 day
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     sameSite: "strict",

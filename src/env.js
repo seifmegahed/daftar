@@ -10,6 +10,7 @@ export const env = createEnv({
     POSTGRES_URL: z.string(),
     JWT_SECRET: z.string().min(32).max(256),
     CACHE_REDIS: z.boolean(),
+    SSL: z.boolean(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -31,6 +32,7 @@ export const env = createEnv({
    */
   runtimeEnv: {
     CACHE_REDIS: process.env.CACHE_REDIS === "true",
+    SSL: process.env.SSL === "true",
     POSTGRES_URL:
       process.env.NEXT_PUBLIC_VERCEL !== "true"
         ? `postgresql://${process.env.DATABASE_USER}:${process.env.DATABASE_PASSWORD}@${process.env.DATABASE_HOST}:${process.env.DATABASE_PORT}/${process.env.DATABASE_NAME}`

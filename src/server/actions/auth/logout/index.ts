@@ -1,7 +1,9 @@
 "use server";
-import { errorLogger } from "@/lib/exceptions";
-import type { ReturnTuple } from "@/utils/type-utils";
 import { cookies } from "next/headers";
+
+import { errorLogger } from "@/lib/exceptions";
+
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const logoutErrorLog = errorLogger("Logout Action Error:");
 

@@ -1,31 +1,40 @@
 "use server";
 
-import { errorLogger } from "@/lib/exceptions";
+import { z } from "zod";
+import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
+import { cookies } from "next/headers";
+
 import {
-  changeUserActiveState,
   getAllUsers,
   getUserById,
   getUsersCount,
-  insertNewUser,
   listAllUsers,
   sensitiveGetUserPasswordById,
+} from "@/server/db/tables/user/queries";
+import {
+  changeUserActiveState,
+  insertNewUser,
   updateUserName,
   updateUserPassword,
   updateUserRole,
-  type GetPartialUserType,
-  type UserBriefType,
-} from "@/server/db/tables/user/queries";
-import { UserSchema, UserSchemaRaw } from "@/server/db/tables/user/schema";
-import { checkPasswordComplexity } from "@/utils/password-complexity";
-import { userErrors } from "./errors";
-import type { ReturnTuple } from "@/utils/type-utils";
-import { cookies } from "next/headers";
+} from "@/server/db/tables/user/mutations";
+
 import { verifyToken } from "@/lib/jwt";
+import { checkPasswordComplexity } from "@/utils/password-complexity";
 import { comparePassword, hashPassword } from "@/utils/hashing";
-import { z } from "zod";
-import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { checkUsername } from "@/utils/user-name-check";
+
+import { UserSchema, UserSchemaRaw } from "@/server/db/tables/user/schema";
+
+import { userErrors } from "./errors";
+import { errorLogger } from "@/lib/exceptions";
+
+import type {
+  GetPartialUserType,
+  UserBriefType,
+} from "@/server/db/tables/user/queries";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 const userErrorsLog = errorLogger("User Action Error:");
 
