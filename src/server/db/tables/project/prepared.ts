@@ -1,6 +1,22 @@
 import { db } from "@/server/db";
+import { eq, sql } from "drizzle-orm";
+import { clientsTable, projectsTable } from "@/server/db/schema";
 
-export const preparedProjectLinkedDocsQuery = db.query.projectsTable
+export const clientProjectsQuery = db
+  .select({
+    id: projectsTable.id,
+    name: projectsTable.name,
+    status: projectsTable.status,
+    clientId: projectsTable.clientId,
+    clientName: clientsTable.name,
+    createdAt: projectsTable.createdAt,
+  })
+  .from(projectsTable)
+  .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
+  .where(eq(projectsTable.clientId, sql.placeholder("id")))
+  .prepare("client_projects");
+
+export const projectByIdQuery = db.query.projectsTable
   .findFirst({
     where: (project, { eq, sql }) => eq(project.id, sql.placeholder("id")),
     with: {
@@ -46,6 +62,110 @@ export const preparedProjectLinkedDocsQuery = db.query.projectsTable
         columns: {
           id: true,
           name: true,
+        },
+      },
+    },
+  })
+  .prepare("project_by_id");
+
+export const projectLinkedDocumentsQuery = db.query.projectsTable
+  .findFirst({
+    where: (project, { eq, sql }) => eq(project.id, sql.placeholder("id")),
+    columns: {},
+    with: {
+      client: {
+        columns: {},
+        with: {
+          documents: {
+            columns: {},
+            with: {
+              document: {
+                columns: {
+                  id: true,
+                  name: true,
+                  extension: true,
+                  private: true,
+                },
+              },
+            },
+          },
+        },
+      },
+      purchaseItems: {
+        columns: {},
+        with: {
+          supplier: {
+            columns: { id: true },
+            with: {
+              documents: {
+                columns: {},
+                with: {
+                  document: {
+                    columns: {
+                      id: true,
+                      name: true,
+                      extension: true,
+                      private: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          item: {
+            columns: { id: true },
+            with: {
+              documents: {
+                columns: {},
+                with: {
+                  document: {
+                    columns: {
+                      id: true,
+                      name: true,
+                      extension: true,
+                      private: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      documents: {
+        columns: {},
+        with: {
+          document: {
+            columns: {
+              id: true,
+              name: true,
+              extension: true,
+              private: true,
+            },
+          },
+        },
+      },
+      saleItems: {
+        columns: {},
+        with: {
+          item: {
+            columns: { id: true },
+            with: {
+              documents: {
+                columns: {},
+                with: {
+                  document: {
+                    columns: {
+                      id: true,
+                      name: true,
+                      extension: true,
+                      private: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
       },
     },

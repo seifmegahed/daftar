@@ -1,8 +1,12 @@
 import { z } from "zod";
 import { db } from "@/server/db";
 import { count, desc, eq, sql } from "drizzle-orm";
-import { projectsTable, clientsTable, usersTable } from "@/server/db/schema";
-import { preparedProjectLinkedDocsQuery } from "./prepared";
+import { projectsTable, clientsTable } from "@/server/db/schema";
+import {
+  clientProjectsQuery,
+  projectByIdQuery,
+  projectLinkedDocumentsQuery,
+} from "./prepared";
 
 import {
   dateQueryGenerator,
@@ -37,8 +41,6 @@ export type BriefProjectType = Pick<
 > & {
   clientId: number;
   clientName: string;
-  ownerId: number;
-  ownerName: string;
 };
 
 export const getClientProjectsCount = async (
@@ -161,15 +163,12 @@ export const getProjectsBrief = async (
         createdAt: projectsTable.createdAt,
         clientId: projectsTable.clientId,
         clientName: clientsTable.name,
-        ownerId: projectsTable.ownerId,
-        ownerName: usersTable.name,
         rank: searchText
           ? sql`ts_rank(${projectSearchQuery(searchText ?? "")})`
           : sql`1`,
       })
       .from(projectsTable)
       .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
-      .leftJoin(usersTable, eq(projectsTable.ownerId, usersTable.id))
       .where(projectFilterQuery(filter))
       .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
       .limit(limit)
@@ -195,31 +194,18 @@ const briefClientProjectSchema = briefProjectSchema.omit({
 export type BriefClientProjectType = z.infer<typeof briefClientProjectSchema>;
 
 export const getClientProjects = async (
-  clientId: number,
+  id: number,
 ): Promise<ReturnTuple<BriefClientProjectType[]>> => {
   const errorMessage = errorMessages.getProjects;
   const timer = new performanceTimer("getClientProjects");
-  timer.start();
   try {
-    const projectsResult = await db
-      .select({
-        id: projectsTable.id,
-        name: projectsTable.name,
-        status: projectsTable.status,
-        clientId: projectsTable.clientId,
-        clientName: clientsTable.name,
-        createdAt: projectsTable.createdAt,
-      })
-      .from(projectsTable)
-      .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
-      .where(eq(projectsTable.clientId, clientId))
-      .orderBy(desc(projectsTable.id));
-
+    timer.start();
+    const result = await clientProjectsQuery.execute({
+      id,
+    });
     timer.end();
 
-    const projects = z
-      .array(briefClientProjectSchema)
-      .safeParse(projectsResult);
+    const projects = z.array(briefClientProjectSchema).safeParse(result);
 
     if (!projects.success) return [null, errorMessage];
 
@@ -285,7 +271,7 @@ export const getProjectById = async (
   const timer = new performanceTimer("getProject");
   try {
     timer.start();
-    const project = await preparedProjectLinkedDocsQuery.execute({ id });
+    const project = await projectByIdQuery.execute({ id });
     timer.end();
 
     if (!project) return [null, errorMessage];
@@ -307,131 +293,22 @@ export type GetProjectLinkedDocumentsType = {
 };
 
 export const getProjectLinkedDocuments = async (
-  projectId: number,
+  id: number,
   accessToPrivate = false,
-  includePath = false,
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
   const errorMessage = errorMessages.getDocuments;
   const timer = new performanceTimer("getProjectLinkedDocuments");
-  timer.start();
   try {
-    const project = await db.query.projectsTable.findFirst({
-      where: (project, { eq }) => eq(project.id, projectId),
-      columns: {},
-      with: {
-        client: {
-          columns: {},
-          with: {
-            documents: {
-              columns: {},
-              with: {
-                document: {
-                  columns: {
-                    id: true,
-                    name: true,
-                    extension: true,
-                    path: includePath,
-                    private: true,
-                  },
-                },
-              },
-            },
-          },
-        },
-        purchaseItems: {
-          columns: {},
-          with: {
-            supplier: {
-              columns: { id: true },
-              with: {
-                documents: {
-                  columns: {},
-                  with: {
-                    document: {
-                      columns: {
-                        id: true,
-                        name: true,
-                        extension: true,
-                        path: includePath,
-                        private: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-            item: {
-              columns: { id: true },
-              with: {
-                documents: {
-                  columns: {},
-                  with: {
-                    document: {
-                      columns: {
-                        id: true,
-                        name: true,
-                        extension: true,
-                        path: includePath,
-                        private: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-        documents: {
-          columns: {},
-          with: {
-            document: {
-              columns: {
-                id: true,
-                name: true,
-                extension: true,
-                path: includePath,
-                private: true,
-              },
-            },
-          },
-        },
-        saleItems: {
-          columns: {},
-          with: {
-            item: {
-              columns: { id: true },
-              with: {
-                documents: {
-                  columns: {},
-                  with: {
-                    document: {
-                      columns: {
-                        id: true,
-                        name: true,
-                        extension: true,
-                        path: includePath,
-                        private: true,
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    });
+    timer.start();
+    const result = await projectLinkedDocumentsQuery.execute({ id });
     timer.end();
 
-    if (!project) return [null, errorMessage];
+    if (!result) return [null, errorMessage];
 
-    const uniqueSuppliers = new Map<
-      number,
-      (typeof project.purchaseItems)[0]
-    >();
-    const uniqueItems = new Map<number, (typeof project.saleItems)[0]>();
+    const uniqueSuppliers = new Map<number, (typeof result.purchaseItems)[0]>();
+    const uniqueItems = new Map<number, (typeof result.saleItems)[0]>();
 
-    project.purchaseItems.forEach((item) => {
+    result.purchaseItems.forEach((item) => {
       if (!uniqueSuppliers.has(item.supplier.id)) {
         uniqueSuppliers.set(item.supplier.id, item);
       }
@@ -440,7 +317,7 @@ export const getProjectLinkedDocuments = async (
       }
     });
 
-    project.saleItems.forEach((item) => {
+    result.saleItems.forEach((item) => {
       if (!uniqueItems.has(item.item.id)) {
         uniqueItems.set(item.item.id, item);
       }
@@ -455,10 +332,10 @@ export const getProjectLinkedDocuments = async (
 
     return [
       {
-        projectDocuments: project.documents
+        projectDocuments: result.documents
           .map((x) => x.document)
           .filter(documentPrivateFilter(accessToPrivate)),
-        clientDocuments: project.client.documents
+        clientDocuments: result.client.documents
           .map((x) => x.document)
           .filter(documentPrivateFilter(accessToPrivate)),
         itemsDocuments,
