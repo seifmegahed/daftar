@@ -19,4 +19,18 @@ if (env.NODE_ENV !== "production") globalForDb.conn = conn;
 
 export const db = env.NEXT_PUBLIC_VERCEL
   ? vercelDrizzle(sql, { schema })
-  : drizzle(conn, { schema });
+  : drizzle(
+      /**
+       *  Mocking DB connection in test env
+       *  Waiting for drizzle >= 0.35.0 to be LTS
+       *  for the const db = drizzle.mock() feature
+       * 
+       *  Keep an for release on orm.drizzle.team
+       */
+      env.NODE_ENV === "test"
+        ? ({} as postgres.Sql<Record<string, unknown>>)
+        : conn,
+      {
+        schema,
+      },
+    );
