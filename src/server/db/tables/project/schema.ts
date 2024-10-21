@@ -49,6 +49,9 @@ export const projectsTable = pgTable(
     updatedBy: integer("updated_by").references(() => usersTable.id),
   },
   (table) => ({
+    clientIdIndex: index("project_client_id_index").on(table.clientId),
+    statusIndex: index("project_status_index").on(table.status),
+    typeIndex: index("project_type_index").on(table.type),
     searchIndex: index("search_index").using(
       "gin",
       sql`(

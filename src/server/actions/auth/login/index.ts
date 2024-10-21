@@ -18,6 +18,7 @@ import { errorLogger } from "@/lib/exceptions";
 
 import type { z } from "zod";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const loginSchema = UserSchema.pick({
   username: true,
@@ -31,6 +32,8 @@ const loginErrorLog = errorLogger("Login Action Error:");
 export const loginAction = async (
   data: LoginFormType,
 ): Promise<ReturnTuple<number> | undefined> => {
+  const timer = new performanceTimer("loginAction");
+  timer.start();
   const isValid = loginSchema.safeParse(data);
   if (isValid.error) {
     loginErrorLog(isValid.error);
@@ -69,6 +72,7 @@ export const loginAction = async (
     expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
     sameSite: "strict",
   });
+  timer.end();
 
   redirect("/");
 };

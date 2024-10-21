@@ -11,6 +11,7 @@ import {
 } from "@/server/db/schema";
 
 import { isExactlyOneDefined } from "@/utils/common";
+import { index } from "drizzle-orm/pg-core";
 
 /**
  * XOR Safe-guarded type for document relations
@@ -33,16 +34,34 @@ export type DocumentRelationsType = {
   documentId: number;
 } & RelationsTypeUnion;
 
-export const documentRelationsTable = pgTable("document_relations", {
-  id: serial("id").primaryKey(),
-  documentId: integer("document_id")
-    .references(() => documentsTable.id)
-    .notNull(),
-  projectId: integer("project_id").references(() => projectsTable.id),
-  itemId: integer("item_id").references(() => itemsTable.id),
-  supplierId: integer("supplier_id").references(() => suppliersTable.id),
-  clientId: integer("client_id").references(() => clientsTable.id),
-});
+export const documentRelationsTable = pgTable(
+  "document_relations",
+  {
+    id: serial("id").primaryKey(),
+    documentId: integer("document_id")
+      .references(() => documentsTable.id)
+      .notNull(),
+    projectId: integer("project_id").references(() => projectsTable.id),
+    itemId: integer("item_id").references(() => itemsTable.id),
+    supplierId: integer("supplier_id").references(() => suppliersTable.id),
+    clientId: integer("client_id").references(() => clientsTable.id),
+  },
+  (table) => ({
+    documentIdIndex: index("document_relations_document_id_index").on(
+      table.documentId,
+    ),
+    projectIdIndex: index("document_relations_project_id_index").on(
+      table.projectId,
+    ),
+    itemIdIndex: index("document_relations_item_id_index").on(table.itemId),
+    supplierIdIndex: index("document_relations_supplier_id_index").on(
+      table.supplierId,
+    ),
+    clientIdIndex: index("document_relations_client_id_index").on(
+      table.clientId,
+    ),
+  }),
+);
 
 export const documentRelationsRelations = relations(
   documentRelationsTable,

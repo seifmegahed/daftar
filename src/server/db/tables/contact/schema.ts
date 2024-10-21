@@ -1,4 +1,5 @@
 import {
+  index,
   integer,
   pgTable,
   serial,
@@ -13,44 +14,51 @@ import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 import type { z } from "zod";
 import { notesMaxLength } from "@/data/config";
 
-export const contactsTable = pgTable("contact", {
-  id: serial("id").primaryKey(),
-  // Data fields
-  name: varchar("name", { length: 64 }).notNull(),
-  phoneNumber: varchar("phone_number", { length: 64 }),
-  email: varchar("email", { length: 64 }),
-  notes: varchar("notes", { length: notesMaxLength }),
+export const contactsTable = pgTable(
+  "contact",
+  {
+    id: serial("id").primaryKey(),
+    // Data fields
+    name: varchar("name", { length: 64 }).notNull(),
+    phoneNumber: varchar("phone_number", { length: 64 }),
+    email: varchar("email", { length: 64 }),
+    notes: varchar("notes", { length: notesMaxLength }),
 
-  /**
-   * Foreign keys
-   *
-   * No hard constraints on these fields, they should be implemented on the
-   * application-level.
-   *
-   * The cardinality of these fields should be 1:1
-   * Either a supplier reference or a client reference should be present.
-   *
-   * No issue having both relations present, but I don't see a use case for
-   * it.
-   *
-   * Having neither relation present is not a problem, but it's not ideal.
-   * It depends on the application:
-   *  - If the application is going to query contacts in a vacuum, it's fine.
-   *  - If the application is only going to query contacts by a supplier or
-   *    client, then not having a relation present is going to cause orphaned
-   *    data.
-   */
-  supplierId: integer("supplier_id").references(() => suppliersTable.id),
-  clientId: integer("client_id").references(() => clientsTable.id),
+    /**
+     * Foreign keys
+     *
+     * No hard constraints on these fields, they should be implemented on the
+     * application-level.
+     *
+     * The cardinality of these fields should be 1:1
+     * Either a supplier reference or a client reference should be present.
+     *
+     * No issue having both relations present, but I don't see a use case for
+     * it.
+     *
+     * Having neither relation present is not a problem, but it's not ideal.
+     * It depends on the application:
+     *  - If the application is going to query contacts in a vacuum, it's fine.
+     *  - If the application is only going to query contacts by a supplier or
+     *    client, then not having a relation present is going to cause orphaned
+     *    data.
+     */
+    supplierId: integer("supplier_id").references(() => suppliersTable.id),
+    clientId: integer("client_id").references(() => clientsTable.id),
 
-  // Interaction fields
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
-  createdBy: integer("created_by")
-    .references(() => usersTable.id)
-    .notNull(),
-  updatedBy: integer("updated_by").references(() => usersTable.id),
-});
+    // Interaction fields
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+    createdBy: integer("created_by")
+      .references(() => usersTable.id)
+      .notNull(),
+    updatedBy: integer("updated_by").references(() => usersTable.id),
+  },
+  (table) => ({
+    supplierIdIndex: index("contact_supplier_id_index").on(table.supplierId),
+    clientIdIndex: index("contact_client_id_index").on(table.clientId),
+  }),
+);
 
 export const contactRelations = relations(contactsTable, ({ one }) => ({
   supplier: one(suppliersTable, {

@@ -1,0 +1,19 @@
+CREATE INDEX IF NOT EXISTS "address_supplier_id_index" ON "address" USING btree ("supplier_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "address_client_id_index" ON "address" USING btree ("client_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "contact_supplier_id_index" ON "contact" USING btree ("supplier_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "contact_client_id_index" ON "contact" USING btree ("client_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "document_relations_document_id_index" ON "document_relations" USING btree ("document_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "document_relations_project_id_index" ON "document_relations" USING btree ("project_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "document_relations_item_id_index" ON "document_relations" USING btree ("item_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "document_relations_supplier_id_index" ON "document_relations" USING btree ("supplier_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "document_relations_client_id_index" ON "document_relations" USING btree ("client_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "project_id_index" ON "project_comment" USING btree ("project_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "project_client_id_index" ON "project" USING btree ("client_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "project_status_index" ON "project" USING btree ("status");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "project_type_index" ON "project" USING btree ("type");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "purchase_item_project_id_index" ON "purchase_item" USING btree ("project_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "purchase_item_item_id_index" ON "purchase_item" USING btree ("item_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "purchase_item_supplier_id_index" ON "purchase_item" USING btree ("supplier_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "sale_item_project_id_index" ON "sale_item" USING btree ("project_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "sale_item_item_id_index" ON "sale_item" USING btree ("item_id");--> statement-breakpoint
+CREATE INDEX IF NOT EXISTS "username_index" ON "user" USING btree ("username");

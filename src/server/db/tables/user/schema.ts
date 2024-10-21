@@ -1,5 +1,6 @@
 import {
   boolean,
+  index,
   pgTable,
   serial,
   timestamp,
@@ -7,19 +8,25 @@ import {
 } from "drizzle-orm/pg-core";
 import { z } from "zod";
 
-export const usersTable = pgTable("user", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 64 }).notNull(),
-  username: varchar("username", { length: 64 }).notNull().unique(),
-  role: varchar("role", { length: 32 }).default("user").notNull(),
-  active: boolean("active").notNull().default(true),
-  // Salted password
-  password: varchar("password", { length: 128 }).notNull(),
-  // timestamps
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
-  lastActive: timestamp("last_active"),
-});
+export const usersTable = pgTable(
+  "user",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 64 }).notNull(),
+    username: varchar("username", { length: 64 }).notNull().unique(),
+    role: varchar("role", { length: 32 }).default("user").notNull(),
+    active: boolean("active").notNull().default(true),
+    // Salted password
+    password: varchar("password", { length: 128 }).notNull(),
+    // timestamps
+    createdAt: timestamp("created_at").defaultNow().notNull(),
+    updatedAt: timestamp("updated_at").$onUpdate(() => new Date()),
+    lastActive: timestamp("last_active"),
+  },
+  (table) => ({
+    usernameIndex: index("username_index").on(table.username),
+  }),
+);
 
 export const UserSchemaRaw = {
   id: z.number(),
