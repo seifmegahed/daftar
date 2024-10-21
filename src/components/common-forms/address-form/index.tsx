@@ -120,7 +120,7 @@ function NewAddressForm({
             name="addressLine"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Address Line *</FormLabel>
+                <FormLabel>Address *</FormLabel>
                 <Input {...field} data-testid="address-line" />
                 <FormMessage />
               </FormItem>
@@ -130,20 +130,16 @@ function NewAddressForm({
             name="country"
             render={({ field }) => (
               <FormItem>
-                <div className="flex items-center justify-between py-2">
-                  <FormLabel>Country *</FormLabel>
-                  <ComboSelect
-                    value={field.value as string}
-                    onChange={field.onChange}
-                    options={countries}
-                    selectMessage="Select a country"
-                    searchMessage="Search for a country"
-                    notFoundMessage="Country not found"
-                  />
-                </div>
-                <div className="flex justify-end">
-                  <FormMessage />
-                </div>
+                <FormLabel>Country *</FormLabel>
+                <ComboSelect
+                  value={field.value as string}
+                  onChange={field.onChange}
+                  options={countries}
+                  selectMessage="Select a country"
+                  searchMessage="Search for a country"
+                  notFoundMessage="Country not found"
+                />
+                <FormMessage />
               </FormItem>
             )}
           />
