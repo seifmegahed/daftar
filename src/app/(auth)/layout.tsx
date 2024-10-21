@@ -1,5 +1,4 @@
 import TopNav from "@/components/nav/top-nav";
-import PageContainer from "@/components/page-container";
 
 function AuthenticatedLayout({
   children,
@@ -7,9 +6,9 @@ function AuthenticatedLayout({
   return (
     <div className="min-h-screens flex w-full flex-col">
       <TopNav />
-      <PageContainer>
+      <main className="max-w-screen flex h-full w-full flex-col gap-4 p-4 md:gap-8 md:px-10">
         {children}
-        </PageContainer>
+      </main>
     </div>
   );
 }
