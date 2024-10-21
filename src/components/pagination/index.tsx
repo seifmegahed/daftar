@@ -23,11 +23,7 @@ function Pagination({
   };
 
   return (
-    <PaginationWrapper
-      currentPage={currentPage}
-      totalPages={totalPages}
-      handleClick={(page) => router.replace(createPageUrl(page))}
-    >
+    <PaginationWrapper>
       <Selector
         currentPage={currentPage}
         totalPages={totalPages}
