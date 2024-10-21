@@ -33,7 +33,7 @@ const Selector = ({
     );
 
   // Start
-  if (currentPage <= ceiledPage) {
+  if (currentPage <= ceiledPage + 1) {
     return (
       <PaginationStart
         currentPage={currentPage}
@@ -45,7 +45,7 @@ const Selector = ({
   }
 
   // End
-  if (currentPage + flooredPage >= totalPages) {
+  if (currentPage + flooredPage >= totalPages - 1) {
     return (
       <PaginationEnd
         currentPage={currentPage}

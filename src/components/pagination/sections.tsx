@@ -34,7 +34,7 @@ export const PaginationStart = ({
   handleClick: (page: number) => void;
 }) => (
   <>
-    {Array.from({ length: numberOfElements }).map((_, i) => (
+    {Array.from({ length: numberOfElements + 2 }).map((_, i) => (
       <PaginationButton
         key={i}
         page={i + 1}
@@ -112,12 +112,12 @@ export const PaginationEnd = ({
         <DotsHorizontalIcon />
       </div>
     )}
-    {Array.from({ length: numberOfElements }).map((_, i) => (
+    {Array.from({ length: numberOfElements + 2 }).map((_, i) => (
       <PaginationButton
-        key={i}
-        page={i + totalPages - numberOfElements + 1}
-        disabled={currentPage === i + totalPages - numberOfElements + 1}
-        onClick={() => handleClick(i + totalPages - numberOfElements + 1)}
+        key={i - 2}
+        page={i + totalPages - numberOfElements - 1}
+        disabled={currentPage === i + totalPages - numberOfElements - 1}
+        onClick={() => handleClick(i + totalPages - numberOfElements - 1)}
       />
     ))}
   </>
