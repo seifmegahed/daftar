@@ -10,7 +10,7 @@ function InfoPageWrapper({
   subtitle: string;
 }) {
   return (
-    <div className="flex flex-col gap-10 sm:p-0 p-2">
+    <div className="flex flex-col gap-10 sm:p-0 px-3">
       <div className="flex flex-col gap-y-4">
         <h1 className="text-2xl font-bold">{title}</h1>
         <Separator />

@@ -25,7 +25,7 @@ function PageLayout({
           <aside className="w-full max-w-full lg:-ms-4 lg:w-1/5">
             <SidebarNav links={navLinks} />
           </aside>
-          <div className="flex-1 lg:max-w-2xl sm:mx-0 -mx-4">{children}</div>
+          <div className="flex-1 lg:max-w-2xl sm:mx-0 -mx-3">{children}</div>
         </div>
       </div>
     </div>
