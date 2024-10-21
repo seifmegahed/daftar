@@ -295,12 +295,13 @@ export type GetProjectLinkedDocumentsType = {
 export const getProjectLinkedDocuments = async (
   id: number,
   accessToPrivate = false,
+  pathIncluded = false,
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
   const errorMessage = errorMessages.getDocuments;
   const timer = new performanceTimer("getProjectLinkedDocuments");
   try {
     timer.start();
-    const result = await projectLinkedDocumentsQuery.execute({ id });
+    const result = await projectLinkedDocumentsQuery(pathIncluded).execute({ id });
     timer.end();
 
     if (!result) return [null, errorMessage];

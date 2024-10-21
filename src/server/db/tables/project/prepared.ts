@@ -68,98 +68,67 @@ export const projectByIdQuery = db.query.projectsTable
   })
   .prepare("project_by_id");
 
-export const projectLinkedDocumentsQuery = db.query.projectsTable
-  .findFirst({
-    where: (project, { eq, sql }) => eq(project.id, sql.placeholder("id")),
-    columns: {},
-    with: {
-      client: {
-        columns: {},
-        with: {
-          documents: {
-            columns: {},
-            with: {
-              document: {
-                columns: {
-                  id: true,
-                  name: true,
-                  extension: true,
-                  private: true,
-                },
-              },
-            },
-          },
-        },
-      },
-      purchaseItems: {
-        columns: {},
-        with: {
-          supplier: {
-            columns: { id: true },
-            with: {
-              documents: {
-                columns: {},
-                with: {
-                  document: {
-                    columns: {
-                      id: true,
-                      name: true,
-                      extension: true,
-                      private: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
-          item: {
-            columns: { id: true },
-            with: {
-              documents: {
-                columns: {},
-                with: {
-                  document: {
-                    columns: {
-                      id: true,
-                      name: true,
-                      extension: true,
-                      private: true,
-                    },
+export const projectLinkedDocumentsQuery = (pathIncluded: boolean) =>
+  db.query.projectsTable
+    .findFirst({
+      where: (project, { eq, sql }) => eq(project.id, sql.placeholder("id")),
+      columns: {},
+      with: {
+        client: {
+          columns: {},
+          with: {
+            documents: {
+              columns: {},
+              with: {
+                document: {
+                  columns: {
+                    id: true,
+                    name: true,
+                    extension: true,
+                    path: pathIncluded,
+                    private: true,
                   },
                 },
               },
             },
           },
         },
-      },
-      documents: {
-        columns: {},
-        with: {
-          document: {
-            columns: {
-              id: true,
-              name: true,
-              extension: true,
-              private: true,
+        purchaseItems: {
+          columns: {},
+          with: {
+            supplier: {
+              columns: { id: true },
+              with: {
+                documents: {
+                  columns: {},
+                  with: {
+                    document: {
+                      columns: {
+                        id: true,
+                        name: true,
+                        extension: true,
+                        path: pathIncluded,
+                        private: true,
+                      },
+                    },
+                  },
+                },
+              },
             },
-          },
-        },
-      },
-      saleItems: {
-        columns: {},
-        with: {
-          item: {
-            columns: { id: true },
-            with: {
-              documents: {
-                columns: {},
-                with: {
-                  document: {
-                    columns: {
-                      id: true,
-                      name: true,
-                      extension: true,
-                      private: true,
+            item: {
+              columns: { id: true },
+              with: {
+                documents: {
+                  columns: {},
+                  with: {
+                    document: {
+                      columns: {
+                        id: true,
+                        name: true,
+                        extension: true,
+                        path: pathIncluded,
+                        private: true,
+                      },
                     },
                   },
                 },
@@ -167,7 +136,48 @@ export const projectLinkedDocumentsQuery = db.query.projectsTable
             },
           },
         },
+        documents: {
+          columns: {},
+          with: {
+            document: {
+              columns: {
+                id: true,
+                name: true,
+                extension: true,
+                path: pathIncluded,
+                private: true,
+              },
+            },
+          },
+        },
+        saleItems: {
+          columns: {},
+          with: {
+            item: {
+              columns: { id: true },
+              with: {
+                documents: {
+                  columns: {},
+                  with: {
+                    document: {
+                      columns: {
+                        id: true,
+                        name: true,
+                        extension: true,
+                        path: pathIncluded,
+                        private: true,
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
       },
-    },
-  })
-  .prepare("project_linked_documents");
+    })
+    .prepare(
+      pathIncluded
+        ? "project_linked_documents_with_path"
+        : "project_linked_documents",
+    );
