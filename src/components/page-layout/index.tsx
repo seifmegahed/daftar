@@ -16,7 +16,7 @@ function PageLayout({
   return (
     <div className="h-fit min-h-[calc(100vh_-_theme(spacing.16))]">
       <div className="space-y-6 p-0 pb-16 md:px-6">
-        <div className="space-y-0.5 p-3 md:p-0">
+        <div className="space-y-0.5">
           <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
           <p className="text-muted-foreground">{description}</p>
         </div>
