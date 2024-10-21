@@ -22,7 +22,7 @@ function ListPageWrapperSkeleton({
         </div>
         {filter && (
           <div className="flex items-center justify-between">
-            <Skeleton className="h-[2rem] w-[300px]" />
+            <Skeleton className="h-9 max-w-[300px] w-full" />
             <Skeleton className="h-10 w-10 rounded-full" />
           </div>
         )}
