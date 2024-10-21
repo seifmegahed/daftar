@@ -57,7 +57,12 @@ export const addNewAddressAction = async (
     clientId: isValid.data.supplierId ? null : isValid.data.clientId,
   });
   if (addressInsertError !== null) return [null, addressInsertError];
-  redirect(`/${type}`);
+  const basePath =
+    type === "client"
+      ? `/client/${isValid.data.clientId}`
+      : `/supplier/${isValid.data.supplierId}`;
+  revalidatePath(basePath);
+  redirect(basePath + "/contacts/");
 };
 
 export const getClientAddressesCountAction = async (
