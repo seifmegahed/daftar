@@ -37,7 +37,7 @@ export default function RootLayout({
         >
           <TooltipProvider>
             <BalancerProvider>
-              <div className="h-full min-h-screen text-foreground">
+              <div className="h-screen text-foreground">
                 {children}
               </div>
             </BalancerProvider>

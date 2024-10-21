@@ -14,7 +14,7 @@ function PageLayout({
   navLinks: NavLink[];
 }) {
   return (
-    <div className="h-full min-h-[calc(100vh_-_theme(spacing.16))] bg-background">
+    <div className="h-fit min-h-[calc(100vh_-_theme(spacing.16))]">
       <div className="space-y-6 p-0 pb-16 md:px-6">
         <div className="space-y-0.5 p-3 md:p-0">
           <h2 className="text-2xl font-bold tracking-tight">{title}</h2>
@@ -22,7 +22,7 @@ function PageLayout({
         </div>
         <Separator className="my-6" />
         <div className="flex flex-col space-y-8 lg:flex-row lg:gap-x-12 lg:space-y-0">
-          <aside className="md:-ms-4 w-full max-w-full lg:w-1/5">
+          <aside className="lg:-ms-4 w-full max-w-full lg:w-1/5">
             <SidebarNav links={navLinks} />
           </aside>
           <div className="flex-1 lg:max-w-2xl">{children}</div>
