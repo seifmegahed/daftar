@@ -22,10 +22,10 @@ function PageLayout({
         </div>
         <Separator className="my-6" />
         <div className="flex flex-col space-y-8 lg:flex-row lg:gap-x-12 lg:space-y-0">
-          <aside className="lg:-ms-4 w-full max-w-full lg:w-1/5">
+          <aside className="w-full max-w-full lg:-ms-4 lg:w-1/5">
             <SidebarNav links={navLinks} />
           </aside>
-          <div className="flex-1 lg:max-w-2xl">{children}</div>
+          <div className="flex-1 lg:max-w-2xl sm:mx-0 -mx-4">{children}</div>
         </div>
       </div>
     </div>

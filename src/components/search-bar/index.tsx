@@ -26,7 +26,7 @@ function SearchBar() {
       <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
       <Input
         placeholder="Search"
-        className="pl-8 w-[300px]"
+        className="pl-8 max-w-[300px] w-full"
         onChange={(e) => handleSearch(e.target.value)}
         defaultValue={searchParams.get("query")?.toString()}
       />
