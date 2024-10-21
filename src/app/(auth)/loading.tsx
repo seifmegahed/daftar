@@ -16,7 +16,6 @@ function BaseLoading() {
             <div className="w-full max-w-full lg:-ms-4 lg:w-1/5">
               <div className="max-w-screen flex h-16 min-w-56 space-x-2 overflow-x-scroll lg:h-full lg:flex-col lg:space-x-0 lg:space-y-1 lg:overflow-x-visible lg:px-4">
                 <Skeleton className="h-8 w-full" />
-                <Skeleton className="h-8 w-full" />
               </div>
             </div>
             <div className="flex-1 lg:max-w-2xl">
