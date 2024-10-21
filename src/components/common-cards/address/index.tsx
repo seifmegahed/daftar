@@ -41,7 +41,7 @@ const AddressCard = ({
             {address.city ? (
               <div className="flex justify-between">
                 <p>City</p>
-                <p>{address.city}</p>
+                <p>{address.city ?? "N/A"}</p>
               </div>
             ) : null}
           </div>

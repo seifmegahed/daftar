@@ -17,17 +17,23 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { notesMaxLength } from "@/data/config";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
+import { notesFormSchema } from "@/utils/schemas";
 
 const formSchema = z.object({
   name: z
     .string()
     .min(4, { message: "Name must be at least 4 characters" })
     .max(64, { message: "Name must not be longer than 64 characters" }),
-  phoneNumber: z
-    .string()
-    .max(64, { message: "Phone number must not be longer than 64 characters" }),
+  phoneNumber: z.preprocess(
+    emptyToUndefined,
+    z
+      .string()
+      .max(64, {
+        message: "Phone number must not be longer than 64 characters",
+      })
+      .optional(),
+  ),
   email: z.preprocess(
     emptyToUndefined,
     z
@@ -36,9 +42,7 @@ const formSchema = z.object({
       .max(64, { message: "Email must not be longer than 64 characters" })
       .optional(),
   ),
-  notes: z.string().max(notesMaxLength, {
-    message: `Notes must not be longer than ${notesMaxLength} characters`,
-  }),
+  notes: notesFormSchema,
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;

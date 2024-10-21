@@ -36,7 +36,7 @@ const ContactCard = ({
             </div>
             <div className="flex justify-between">
               <p>Phone Number</p>
-              <p>{contact.phoneNumber}</p>
+              <p>{contact.phoneNumber ?? "N/A"}</p>
             </div>
           </div>
           <div>

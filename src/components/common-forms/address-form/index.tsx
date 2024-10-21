@@ -20,27 +20,30 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 import { countries } from "@/lib/countries";
-import { notesMaxLength } from "@/data/config";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
+import { emptyToUndefined } from "@/utils/common";
+import { notesFormSchema } from "@/utils/schemas";
 
 const formSchema = z.object({
   name: z
     .string()
     .min(4, { message: "Name must be at least 4 characters" })
     .max(64, { message: "Name must not be longer than 64 characters" }),
-  addressLine: z
-    .string()
-    .min(1, { message: "Address line is required" })
-    .max(256, {
+  addressLine: z.preprocess(
+    emptyToUndefined,
+    z.string().max(256, {
       message: "Address line must not be longer than 256 characters",
     }),
+  ),
   country: z.enum(countries, { message: "Country is required" }),
-  city: z
-    .string()
-    .max(64, { message: "City must not be longer than 64 characters" }),
-  notes: z.string().max(notesMaxLength, {
-    message: `Notes must not be longer than ${notesMaxLength} characters`,
-  }),
+  city: z.preprocess(
+    emptyToUndefined,
+    z
+      .string()
+      .max(64, { message: "City must not be longer than 64 characters" })
+      .optional(),
+  ),
+  notes: notesFormSchema,
 });
 
 type FormSchemaType = z.infer<typeof formSchema>;
@@ -80,7 +83,7 @@ function NewAddressForm({
         return;
       }
       form.reset();
-      toast.success("Address added")
+      toast.success("Address added");
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while adding the address");
