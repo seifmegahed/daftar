@@ -13,10 +13,10 @@ const PaginationWrapper = ({
   children: React.ReactNode;
 }) => (
   <div className="flex items-center justify-center">
-    <div className="flex justify-between gap-4">
+    <div className="flex justify-between gap-2 sm:gap-4">
       {currentPage !== 1 && (
         <Button
-          className="flex size-10 items-center justify-center rounded-full"
+          className="hidden size-10 items-center justify-center rounded-full sm:flex"
           disabled={currentPage === 1}
           onClick={() => handleClick(currentPage - 1)}
         >
@@ -28,7 +28,7 @@ const PaginationWrapper = ({
       {children}
       {currentPage !== totalPages && totalPages > 1 && (
         <Button
-          className="flex size-10 items-center justify-center rounded-full"
+          className="hidden size-10 items-center justify-center rounded-full sm:flex"
           disabled={currentPage === totalPages}
           onClick={() => handleClick(currentPage + 1)}
         >
