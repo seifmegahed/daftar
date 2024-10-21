@@ -2,12 +2,14 @@ import { z } from "zod";
 import { db } from "@/server/db";
 import { count, desc, eq, sql } from "drizzle-orm";
 import { projectsTable, clientsTable, usersTable } from "@/server/db/schema";
+import { preparedProjectLinkedDocsQuery } from "./prepared";
 
 import {
   dateQueryGenerator,
   prepareSearchText,
   timestampQueryGenerator,
 } from "@/utils/common";
+import { performanceTimer } from "@/utils/performance";
 import { errorLogger } from "@/lib/exceptions";
 import { defaultPageLimit } from "@/data/config";
 import { filterDefault } from "@/components/filter-and-search";
@@ -43,6 +45,8 @@ export const getClientProjectsCount = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getClientProjectsCount");
+  timer.start();
   try {
     const [projectCount] = await db
       .select({
@@ -51,7 +55,7 @@ export const getClientProjectsCount = async (
       .from(projectsTable)
       .where(eq(projectsTable.clientId, clientId))
       .limit(1);
-
+    timer.end();
     if (!projectCount) return [null, errorMessage];
 
     return [projectCount.count, null];
@@ -115,6 +119,8 @@ export const getProjectsCount = async (
   filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getProjectsCount");
+  timer.start();
   try {
     const [projectCount] = await db
       .select({
@@ -125,6 +131,7 @@ export const getProjectsCount = async (
         projectFilterQuery(filter ?? { filterType: null, filterValue: null }),
       )
       .limit(1);
+    timer.end();
 
     if (!projectCount) return [null, errorMessage];
 
@@ -142,6 +149,8 @@ export const getProjectsBrief = async (
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefProjectType[]>> => {
   const errorMessage = errorMessages.getProjects;
+  const timer = new performanceTimer("getProjectsBrief");
+  timer.start();
   try {
     const projectsResult = await db
       .select({
@@ -165,7 +174,7 @@ export const getProjectsBrief = async (
       .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
       .limit(limit)
       .offset((page - 1) * limit);
-
+    timer.end();
     const projects = z.array(briefProjectSchema).safeParse(projectsResult);
 
     if (!projects.success) return [null, errorMessages.dataCorrupted];
@@ -189,6 +198,8 @@ export const getClientProjects = async (
   clientId: number,
 ): Promise<ReturnTuple<BriefClientProjectType[]>> => {
   const errorMessage = errorMessages.getProjects;
+  const timer = new performanceTimer("getClientProjects");
+  timer.start();
   try {
     const projectsResult = await db
       .select({
@@ -203,6 +214,8 @@ export const getClientProjects = async (
       .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
       .where(eq(projectsTable.clientId, clientId))
       .orderBy(desc(projectsTable.id));
+
+    timer.end();
 
     const projects = z
       .array(briefClientProjectSchema)
@@ -221,11 +234,14 @@ export const getProjectBriefById = async (
   id: number,
 ): Promise<ReturnTuple<SelectProjectType>> => {
   const errorMessage = errorMessages.getProject;
+  const timer = new performanceTimer("getProjectBriefById");
+  timer.start();
   try {
     const [project] = await db
       .select()
       .from(projectsTable)
       .where(eq(projectsTable.id, id));
+    timer.end();
 
     if (!project) return [null, errorMessage];
 
@@ -266,56 +282,12 @@ export const getProjectById = async (
   id: number,
 ): Promise<ReturnTuple<GetProjectType>> => {
   const errorMessage = errorMessages.getProject;
+  const timer = new performanceTimer("getProject");
   try {
-    const project = await db.query.projectsTable.findFirst({
-      where: (project, { eq }) => eq(project.id, id),
-      with: {
-        client: {
-          columns: {
-            id: true,
-            name: true,
-            registrationNumber: true,
-            website: true,
-          },
-          with: {
-            primaryAddress: {
-              columns: {
-                id: true,
-                addressLine: true,
-                city: true,
-                country: true,
-              },
-            },
-            primaryContact: {
-              columns: {
-                id: true,
-                name: true,
-                email: true,
-                phoneNumber: true,
-              },
-            },
-          },
-        },
-        owner: {
-          columns: {
-            id: true,
-            name: true,
-          },
-        },
-        creator: {
-          columns: {
-            id: true,
-            name: true,
-          },
-        },
-        updater: {
-          columns: {
-            id: true,
-            name: true,
-          },
-        },
-      },
-    });
+    timer.start();
+    const project = await preparedProjectLinkedDocsQuery.execute({ id });
+    timer.end();
+
     if (!project) return [null, errorMessage];
     return [project, null];
   } catch (error) {
@@ -340,6 +312,8 @@ export const getProjectLinkedDocuments = async (
   includePath = false,
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
   const errorMessage = errorMessages.getDocuments;
+  const timer = new performanceTimer("getProjectLinkedDocuments");
+  timer.start();
   try {
     const project = await db.query.projectsTable.findFirst({
       where: (project, { eq }) => eq(project.id, projectId),
@@ -447,6 +421,7 @@ export const getProjectLinkedDocuments = async (
         },
       },
     });
+    timer.end();
 
     if (!project) return [null, errorMessage];
 

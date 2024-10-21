@@ -6,6 +6,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
+const prefetch = false;
+
 export function CardNameSection({
   name,
   href,
@@ -17,7 +19,7 @@ export function CardNameSection({
     <div className="w-fit">
       <Tooltip>
         <TooltipTrigger asChild>
-          <Link href={href}>
+          <Link href={href} prefetch={prefetch}>
             <p className="line-clamp-1 cursor-pointer text-lg font-bold text-foreground hover:underline">
               {name}
             </p>
@@ -50,7 +52,7 @@ export function CardIdSection({ id, href }: { id: number; href: string }) {
   return (
     <Tooltip>
       <TooltipTrigger asChild>
-        <Link href={href} className="hidden sm:block">
+        <Link href={href} prefetch={prefetch} className="hidden sm:block">
           <div className="flex cursor-pointer items-center justify-center w-10">
             <p className="text-2xl font-bold text-foreground">
               {id}
@@ -91,7 +93,7 @@ export function CardSection({
       <Tooltip>
         <TooltipTrigger asChild>
           {href ? (
-            <Link href={href}>
+            <Link href={href} prefetch={prefetch}>
               <p className="line-clamp-1 cursor-pointer text-foreground hover:underline">
                 {text ?? "N/A"}
               </p>
@@ -122,7 +124,7 @@ export function CardSubtitleSection({
       <Tooltip>
         <TooltipTrigger asChild>
           {href ? (
-            <Link href={href}>
+            <Link href={href} prefetch={prefetch}>
               <p className="cursor-pointer text-xs text-muted-foreground hover:underline">
                 {subtitle ?? "N/A"}
               </p>
