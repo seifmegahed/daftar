@@ -11,6 +11,7 @@ import { defaultPageLimit } from "@/data/config";
 import type { DocumentDataType } from "./schema";
 import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "Document Queries Error:",
@@ -66,7 +67,9 @@ export const getDocuments = async (
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefDocumentType[]>> => {
   const errorMessage = errorMessages.getDocuments;
+  const timer = new performanceTimer("getDocuments");
   try {
+    timer.start();
     const documents = await db
       .select({
         id: documentsTable.id,
@@ -87,6 +90,7 @@ export const getDocuments = async (
       )
       .limit(limit)
       .offset((page - 1) * limit);
+    timer.end();
 
     if (!documents) return [null, errorMessage];
 
@@ -111,7 +115,9 @@ export const getDocumentById = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<Required<DocumentType>>> => {
   const errorMessage = errorMessages.getDocument;
+  const timer = new performanceTimer("getDocumentById");
   try {
+    timer.start();
     const document = await db.query.documentsTable.findFirst({
       where: (document, { eq, and }) =>
         and(eq(document.id, id), privateFilterQuery(accessToPrivate)),
@@ -124,6 +130,7 @@ export const getDocumentById = async (
         },
       },
     });
+    timer.end();
 
     if (!document) return [null, errorMessages.notFound];
     return [document, null];
@@ -138,7 +145,9 @@ export const getDocumentPath = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<{ name: string; path: string; extension: string }>> => {
   const errorMessage = errorMessages.getPath;
+  const timer = new performanceTimer("getDocumentPath");
   try {
+    timer.start();
     const [path] = await db
       .select({
         name: documentsTable.name,
@@ -150,6 +159,7 @@ export const getDocumentPath = async (
         and(eq(documentsTable.id, id), privateFilterQuery(accessToPrivate)),
       )
       .limit(1);
+    timer.end();
 
     if (!path) return [null, errorMessage];
     return [path, null];
@@ -164,7 +174,9 @@ export const getDocumentsCount = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getDocumentsCount");
   try {
+    timer.start();
     const [documents] = await db
       .select({ count: count() })
       .from(documentsTable)
@@ -172,6 +184,7 @@ export const getDocumentsCount = async (
         and(documentFilterQuery(filter), privateFilterQuery(accessToPrivate)),
       )
       .limit(1);
+    timer.end();
 
     if (!documents) return [null, errorMessage];
     return [documents.count, null];
@@ -185,7 +198,9 @@ export const getDocumentOptions = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<Pick<SimpDoc, "id" | "name" | "extension">[]>> => {
   const errorMessage = errorMessages.getDocuments;
+  const timer = new performanceTimer("getDocumentOptions");
   try {
+    timer.start();
     const documents = await db
       .select({
         id: documentsTable.id,
@@ -195,6 +210,7 @@ export const getDocumentOptions = async (
       .from(documentsTable)
       .where(privateFilterQuery(accessToPrivate))
       .orderBy(desc(documentsTable.name));
+    timer.end();
 
     if (!documents) return [null, errorMessage];
     return [documents, null];
