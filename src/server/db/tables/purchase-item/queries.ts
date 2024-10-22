@@ -14,6 +14,7 @@ import { errorLogger } from "@/lib/exceptions";
 
 import type { SelectPurchaseItemType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "Purchase Items Queries Error:",
@@ -42,7 +43,9 @@ export const getPurchaseItems = async (
   projectId: number,
 ): Promise<ReturnTuple<GetPurchaseItemType[]>> => {
   const errorMessage = errorMessages.getItems;
+  const timer = new performanceTimer("getPurchaseItems");
   try {
+    timer.start();
     const projectItems = await db.query.purchaseItemsTable.findMany({
       where: (projectItem, { eq }) => eq(projectItem.projectId, projectId),
       with: {
@@ -63,6 +66,7 @@ export const getPurchaseItems = async (
       },
     });
     if (!projectItems) return [null, errorMessage];
+    timer.end();
 
     return [projectItems, null];
   } catch (error) {
@@ -75,12 +79,15 @@ export const getPurchaseItemsCount = async (
   projectId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getPurchaseItemsCount");
   try {
+    timer.start();
     const [items] = await db
       .select({ count: count() })
       .from(purchaseItemsTable)
       .where(eq(purchaseItemsTable.projectId, projectId))
       .limit(1);
+    timer.end();
 
     if (!items) return [null, errorMessage];
     return [items.count, null];
@@ -94,12 +101,15 @@ export const getSupplierItemsCount = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getSupplierItemsCount");
   try {
+    timer.start();
     const [items] = await db
       .select({ count: count() })
       .from(purchaseItemsTable)
       .where(eq(purchaseItemsTable.supplierId, supplierId))
       .limit(1);
+    timer.end();
 
     if (!items) return [null, errorMessage];
     return [items.count, null];
@@ -126,7 +136,9 @@ export const getSupplierItems = async (
   supplierId: number,
 ): Promise<ReturnTuple<SupplierItemType[]>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getSupplierItems");
   try {
+    timer.start();
     const items = await db
       .select({
         itemId: itemsTable.id,
@@ -145,11 +157,11 @@ export const getSupplierItems = async (
         eq(purchaseItemsTable.projectId, projectsTable.id),
       )
       .leftJoin(itemsTable, eq(purchaseItemsTable.itemId, itemsTable.id));
+    timer.end();
 
     const parsedItems = z.array(SupplierItemsSchema).safeParse(items);
 
     if (parsedItems.error) return [null, errorMessages.corruptedData];
-
     return [parsedItems.data, null];
   } catch (error) {
     logError(error);
@@ -172,7 +184,9 @@ export const getSupplierProjects = async (
   supplierId: number,
 ): Promise<ReturnTuple<SupplierProjectsType[]>> => {
   const errorMessage = errorMessages.getProjects;
+  const timer = new performanceTimer("getSupplierProjects");
   try {
+    timer.start();
     const projects = await db
       .select({
         id: projectsTable.id,
@@ -190,6 +204,7 @@ export const getSupplierProjects = async (
       )
       .leftJoin(clientsTable, eq(projectsTable.clientId, clientsTable.id))
       .orderBy(desc(projectsTable.createdAt));
+    timer.end();
 
     const parsedProjects = z.array(supplierProjectsSchema).safeParse(projects);
 
@@ -217,11 +232,14 @@ export const getSupplierProjectsCount = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.countProjects;
+  const timer = new performanceTimer("getSupplierProjectsCount");
   try {
+    timer.start();
     const projects = await db
-      .select({ projectId: purchaseItemsTable.projectId})
+      .select({ projectId: purchaseItemsTable.projectId })
       .from(purchaseItemsTable)
-      .where(eq(purchaseItemsTable.supplierId, supplierId))
+      .where(eq(purchaseItemsTable.supplierId, supplierId));
+    timer.end();
 
     if (!projects) return [null, errorMessage];
 
@@ -254,7 +272,9 @@ export const getItemSuppliers = async (
   itemId: number,
 ): Promise<ReturnTuple<ItemSupplierType[]>> => {
   const errorMessage = errorMessages.getSuppliers;
+  const timer = new performanceTimer("getItemSuppliers");
   try {
+    timer.start();
     const suppliers = await db
       .select({
         id: suppliersTable.id,
@@ -270,6 +290,7 @@ export const getItemSuppliers = async (
         eq(purchaseItemsTable.supplierId, suppliersTable.id),
       )
       .orderBy(desc(suppliersTable.createdAt));
+    timer.end();
 
     const parsedSuppliers = z.array(ItemSuppliersSchema).safeParse(suppliers);
 
@@ -297,11 +318,14 @@ export const getItemSuppliersCount = async (
   itemId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.countSuppliers;
+  const timer = new performanceTimer("getItemSuppliersCount");
   try {
+    timer.start();
     const suppliers = await db
-      .select({ supplierId: purchaseItemsTable.supplierId})
+      .select({ supplierId: purchaseItemsTable.supplierId })
       .from(purchaseItemsTable)
-      .where(eq(purchaseItemsTable.itemId, itemId))
+      .where(eq(purchaseItemsTable.itemId, itemId));
+    timer.end();
 
     if (!suppliers) return [null, errorMessage];
 
