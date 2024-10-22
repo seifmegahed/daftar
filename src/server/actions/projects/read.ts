@@ -77,8 +77,10 @@ export const getProjectLinkedDocumentsAction = async (
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
   const [access, accessError] = await hasAccessToPrivateDataAction();
   if (accessError !== null) return [null, accessError];
-  const execute = getProjectLinkedDocumentsCached(projectId, access);
-  const [project, projectError] = await execute();
+  const [project, projectError] = await getProjectLinkedDocumentsCached(
+    projectId,
+    access,
+  );
   // const [project, projectError] = await getProjectLinkedDocuments(
   //   projectId,
   //   access,

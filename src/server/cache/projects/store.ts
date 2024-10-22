@@ -15,12 +15,8 @@ import { tags } from "./tags";
 export const getProjectBriefByIdCached = async (id: number) =>
   unstable_cache(getProjectBriefById, [tags.projectBrief(id)]);
 
-export const getProjectLinkedDocumentsCached = (
-  id: number,
-  access?: boolean,
-  path = false,
-) =>
-  unstable_cache(
-    async () => getProjectLinkedDocuments(id, access),
-    [tags.projectDocuments(id, access, path)],
-  );
+export const getProjectLinkedDocumentsCached = unstable_cache(
+  async (id: number, access?: boolean, path?: boolean) =>
+    getProjectLinkedDocuments(id, access, path),
+  ["project-linked-documents"],
+);
