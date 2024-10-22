@@ -10,6 +10,7 @@ import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 import type { InsertClientDataType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { FilterArgs } from "@/components/filter-and-search";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "Client Queries Error:",
@@ -27,12 +28,15 @@ export const getClientPrimaryAddressId = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.getPrimaryAddressId;
+  const timer = new performanceTimer("getClientPrimaryAddressId");
   try {
+    timer.start();
     const [address] = await db
       .select({ primaryAddressId: clientsTable.primaryAddressId })
       .from(clientsTable)
       .where(eq(clientsTable.id, clientId))
       .limit(1);
+    timer.end();
 
     if (!address?.primaryAddressId) return [null, errorMessage];
     return [address.primaryAddressId, null];
@@ -46,12 +50,15 @@ export const getClientPrimaryContactId = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.getPrimaryContactId;
+  const timer = new performanceTimer("getClientPrimaryContactId");
   try {
+    timer.start();
     const [contact] = await db
       .select({ id: clientsTable.primaryContactId })
       .from(clientsTable)
       .where(eq(clientsTable.id, clientId))
       .limit(1);
+    timer.end();
 
     if (!contact?.id) return [null, errorMessage];
     return [contact.id, null];
@@ -78,7 +85,9 @@ export const getClientsBrief = async (
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefClientType[]>> => {
   const errorMessage = errorMessages.getClients;
+  const timer = new performanceTimer("getClientsBrief");
   try {
+    timer.start();
     const clients = await db
       .select({
         id: clientsTable.id,
@@ -96,6 +105,7 @@ export const getClientsBrief = async (
       )
       .limit(limit)
       .offset((page - 1) * limit);
+    timer.end();
 
     return [clients, null];
   } catch (error) {
@@ -135,7 +145,9 @@ export const getClientFullById = async (
   id: number,
 ): Promise<ReturnTuple<GetClientType>> => {
   const errorMessage = errorMessages.getClient;
+  const timer = new performanceTimer("getClientFullById");
   try {
+    timer.start();
     const client = await db.query.clientsTable.findFirst({
       where: (client, { eq }) => eq(client.id, id),
       with: {
@@ -170,6 +182,8 @@ export const getClientFullById = async (
         },
       },
     });
+    timer.end();
+
     if (!client) return [null, errorMessages.notFound];
     return [client, null];
   } catch (error) {
@@ -187,7 +201,9 @@ export const listAllClients = async (): Promise<
   ReturnTuple<ClientListType[]>
 > => {
   const errorMessage = errorMessages.getClients;
+  const timer = new performanceTimer("listAllClients");
   try {
+    timer.start();
     const clients = await db
       .select({
         id: clientsTable.id,
@@ -195,6 +211,7 @@ export const listAllClients = async (): Promise<
       })
       .from(clientsTable)
       .orderBy(asc(clientsTable.id));
+    timer.end();
 
     if (!clients) return [null, errorMessage];
     return [clients, null];
@@ -225,12 +242,15 @@ export const getClientsCount = async (
   filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getClientsCount");
   try {
+    timer.start();
     const [clients] = await db
       .select({ count: count() })
       .from(clientsTable)
       .where(clientFilterQuery(filter))
       .limit(1);
+    timer.end();
 
     if (!clients) return [null, errorMessage];
     return [clients.count, null];
