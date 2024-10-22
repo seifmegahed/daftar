@@ -6,6 +6,7 @@ import { addressesTable, usersTable } from "@/server/db/schema";
 import { errorLogger } from "@/lib/exceptions";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "Address Queries Error:",
@@ -20,12 +21,15 @@ export const getClientAddressesCount = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getClientAddressesCount");
   try {
+    timer.start();
     const [addresses] = await db
       .select({ count: count() })
       .from(addressesTable)
       .where(eq(addressesTable.clientId, clientId))
       .limit(1);
+    timer.end();
 
     if (!addresses) return [null, errorMessage];
     return [addresses.count, null];
@@ -54,7 +58,9 @@ export const getClientAddresses = async (
   clientId: number,
 ): Promise<ReturnTuple<AddressType[]>> => {
   const errorMessage = errorMessages.get;
+  const timer = new performanceTimer("getClientAddresses");
   try {
+    timer.start();
     const addresses = await db
       .select({
         id: addressesTable.id,
@@ -72,6 +78,7 @@ export const getClientAddresses = async (
       .leftJoin(usersTable, eq(addressesTable.createdBy, usersTable.id))
       .where(eq(addressesTable.clientId, clientId))
       .orderBy(addressesTable.id);
+    timer.end();
 
     if (!addresses) return [null, errorMessage];
     const parsedAddresses = z.array(getAddressSchema).safeParse(addresses);
@@ -88,12 +95,15 @@ export const getSupplierAddressesCount = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getSupplierAddressesCount");
   try {
+    timer.start();
     const [addresses] = await db
       .select({ count: count() })
       .from(addressesTable)
       .where(eq(addressesTable.supplierId, supplierId))
       .limit(1);
+    timer.end();
 
     if (!addresses) return [null, errorMessage];
     return [addresses.count, null];
@@ -107,7 +117,9 @@ export const getSupplierAddresses = async (
   supplierId: number,
 ): Promise<ReturnTuple<AddressType[]>> => {
   const errorMessage = errorMessages.get;
+  const timer = new performanceTimer("getSupplierAddresses");
   try {
+    timer.start();
     const addresses = await db
       .select({
         id: addressesTable.id,
@@ -125,7 +137,8 @@ export const getSupplierAddresses = async (
       .leftJoin(usersTable, eq(addressesTable.createdBy, usersTable.id))
       .where(eq(addressesTable.supplierId, supplierId))
       .orderBy(addressesTable.id);
-
+    timer.end();
+    
     if (!addresses) return [null, errorMessage];
     const parsedAddresses = z.array(getAddressSchema).safeParse(addresses);
 
