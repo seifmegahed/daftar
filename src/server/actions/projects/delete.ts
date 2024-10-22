@@ -8,6 +8,10 @@ import { getProjectBriefById } from "@/server/db/tables/project/queries";
 import { getCurrentUserAction } from "@/server/actions/users";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import {
+  revalidateProjectBrief,
+  revalidateProjectLinkedDocuments,
+} from "@/server/cache/projects/revalidate";
 
 export const deleteProjectAction = async (
   id: number,
@@ -24,6 +28,8 @@ export const deleteProjectAction = async (
   const [, error] = await deleteProject(id);
   if (error !== null) return [null, error];
 
+  revalidateProjectBrief(id);
+  revalidateProjectLinkedDocuments(id);
   revalidatePath("/projects");
   redirect("/projects");
 };

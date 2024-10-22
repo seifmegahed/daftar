@@ -13,6 +13,7 @@ import { errorLogger } from "@/lib/exceptions";
 
 import type { z } from "zod";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { revalidateProjectBrief } from "@/server/cache/projects/revalidate";
 
 const projectsErrorLog = errorLogger("Project Update Action Error:");
 
@@ -40,6 +41,8 @@ export const updateProjectStatusAction = async (
     status: isValid.data.status,
   });
   if (error !== null) return [null, error];
+
+  revalidateProjectBrief(id);
   revalidatePath("projects");
   return [projectId, null];
 };
@@ -72,6 +75,8 @@ export const updateProjectNameAction = async (
     name: isValid.data.name,
   });
   if (error !== null) return [null, error];
+
+  revalidateProjectBrief(id);
   revalidatePath("projects");
   return [projectId, null];
 };
