@@ -1,7 +1,13 @@
 import { z } from "zod";
 import { db } from "@/server/db";
 import { asc, count, desc, sql, eq, inArray } from "drizzle-orm";
-import { clientsTable, itemsTable, projectsTable, purchaseItemsTable, saleItemsTable } from "@/server/db/schema";
+import {
+  clientsTable,
+  itemsTable,
+  projectsTable,
+  purchaseItemsTable,
+  saleItemsTable,
+} from "@/server/db/schema";
 
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
 
@@ -12,6 +18,7 @@ import { errorLogger } from "@/lib/exceptions";
 import type { SelectItemType } from "./schema";
 import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "Item Queries Error:",
@@ -56,7 +63,9 @@ export const getAllItemsBrief = async (
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefItemType[]>> => {
   const errorMessage = errorMessages.getItems;
+  const timer = new performanceTimer("getAllItemsBrief");
   try {
+    timer.start();
     const allItems = await db
       .select({
         id: itemsTable.id,
@@ -73,6 +82,7 @@ export const getAllItemsBrief = async (
       .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
       .limit(limit)
       .offset((page - 1) * limit);
+    timer.end();
 
     if (!allItems) return [null, errorMessage];
 
@@ -97,7 +107,9 @@ export const getItemDetail = async (
   id: number,
 ): Promise<ReturnTuple<GetItemDetailType>> => {
   const errorMessage = errorMessages.getItem;
+  const timer = new performanceTimer("getItemDetail");
   try {
+    timer.start();
     const item = await db.query.itemsTable.findFirst({
       where: (item, { eq }) => eq(item.id, id),
       with: {
@@ -115,8 +127,9 @@ export const getItemDetail = async (
         },
       },
     });
-    if (!item) return [null, errorMessage];
+    timer.end();
 
+    if (!item) return [null, errorMessage];
     return [item, null];
   } catch (error) {
     logError(error);
@@ -131,7 +144,9 @@ export type ItemListType = {
 
 export const listAllItems = async (): Promise<ReturnTuple<ItemListType[]>> => {
   const errorMessage = errorMessages.getItems;
+  const timer = new performanceTimer("listAllItems");
   try {
+    timer.start();
     const items = await db
       .select({
         id: itemsTable.id,
@@ -139,9 +154,9 @@ export const listAllItems = async (): Promise<ReturnTuple<ItemListType[]>> => {
       })
       .from(itemsTable)
       .orderBy(asc(itemsTable.name));
+    timer.end();
 
     if (!items) return [null, errorMessage];
-
     return [items, null];
   } catch (error) {
     logError(error);
@@ -153,12 +168,15 @@ export const getItemsCount = async (
   filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getItemsCount");
   try {
+    timer.start();
     const [items] = await db
       .select({ count: count() })
       .from(itemsTable)
       .where(itemFilterQuery(filter))
       .limit(1);
+    timer.end();
 
     if (!items) return [null, errorMessage];
     return [items.count, null];
@@ -167,7 +185,6 @@ export const getItemsCount = async (
     return [null, errorMessage];
   }
 };
-
 
 const itemProjectsSchema = z.object({
   id: z.number(),
@@ -184,7 +201,9 @@ export const getItemProjects = async (
   itemId: number,
 ): Promise<ReturnTuple<ItemProjectsType[]>> => {
   const errorMessage = errorMessages.getProjects;
+  const timer = new performanceTimer("getItemProjects");
   try {
+    timer.start();
     const projects = await db.transaction(async (tx) => {
       const purchaseItems = await tx
         .select({
@@ -234,6 +253,7 @@ export const getItemProjects = async (
 
       return projects;
     });
+    timer.end();
 
     if (!projects) return [null, errorMessage];
 
@@ -251,7 +271,9 @@ export const getItemProjectsCount = async (
   itemId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getItemProjectsCount");
   try {
+    timer.start();
     const count = await db.transaction(async (tx) => {
       const purchaseItems = await tx
         .select({ projectId: purchaseItemsTable.projectId })
@@ -279,8 +301,9 @@ export const getItemProjectsCount = async (
 
       return projectIds.size;
     });
-    if (!count) return [null, errorMessage];
+    timer.end();
 
+    if (!count) return [null, errorMessage];
     return [count, null];
   } catch (error) {
     logError(error);
