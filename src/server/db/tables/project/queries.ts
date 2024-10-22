@@ -70,16 +70,12 @@ export const getClientProjectsCount = async (
 const briefProjectSchema = z.object({
   id: z.number(),
   name: z.string(),
-  description: z.string(),
   status: z.number(),
 
   createdAt: z.date(),
 
   clientId: z.number(),
   clientName: z.string(),
-
-  ownerId: z.number(),
-  ownerName: z.string(),
 });
 
 const projectSearchQuery = (searchText: string) =>
@@ -175,8 +171,8 @@ export const getProjectsBrief = async (
       .offset((page - 1) * limit);
     timer.end();
     const projects = z.array(briefProjectSchema).safeParse(projectsResult);
-
-    if (!projects.success) return [null, errorMessages.dataCorrupted];
+    console.log(projects.error?.errors[0]);
+    if (projects.error) return [null, errorMessages.dataCorrupted];
 
     return [projects.data, null];
   } catch (error) {
@@ -185,17 +181,9 @@ export const getProjectsBrief = async (
   }
 };
 
-const briefClientProjectSchema = briefProjectSchema.omit({
-  ownerId: true,
-  ownerName: true,
-  description: true,
-});
-
-export type BriefClientProjectType = z.infer<typeof briefClientProjectSchema>;
-
 export const getClientProjects = async (
   id: number,
-): Promise<ReturnTuple<BriefClientProjectType[]>> => {
+): Promise<ReturnTuple<BriefProjectType[]>> => {
   const errorMessage = errorMessages.getProjects;
   const timer = new performanceTimer("getClientProjects");
   try {
@@ -205,7 +193,7 @@ export const getClientProjects = async (
     });
     timer.end();
 
-    const projects = z.array(briefClientProjectSchema).safeParse(result);
+    const projects = z.array(briefProjectSchema).safeParse(result);
 
     if (!projects.success) return [null, errorMessage];
 

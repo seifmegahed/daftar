@@ -11,7 +11,6 @@ import {
 } from "@/server/db/tables/project/queries";
 
 import type {
-  BriefClientProjectType,
   GetProjectType,
   BriefProjectType,
   GetProjectLinkedDocumentsType,
@@ -50,7 +49,7 @@ export const getProjectsBriefAction = async (
 
 export const getClientProjectsAction = async (
   clientId: number,
-): Promise<ReturnTuple<BriefClientProjectType[]>> => {
+): Promise<ReturnTuple<BriefProjectType[]>> => {
   const [projects, error] = await getClientProjects(clientId);
   if (error !== null) return [null, error];
   return [projects, null];
