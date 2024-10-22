@@ -10,6 +10,7 @@ import { errorLogger } from "@/lib/exceptions";
 import type { SelectSupplierType } from "./schema";
 import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "Supplier Queries Error:",
@@ -27,12 +28,15 @@ export const getSupplierPrimaryAddressId = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.getPrimaryAddressId;
+  const timer = new performanceTimer("getSupplierPrimaryAddressId");
   try {
+    timer.start();
     const [supplier] = await db
       .select({ primaryAddressId: suppliersTable.primaryAddressId })
       .from(suppliersTable)
       .where(eq(suppliersTable.id, supplierId))
       .limit(1);
+    timer.end();
 
     if (!supplier?.primaryAddressId) return [null, errorMessage];
     return [supplier.primaryAddressId, null];
@@ -46,12 +50,15 @@ export const getSupplierPrimaryContactId = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.getPrimaryContactId;
+  const timer = new performanceTimer("getSupplierPrimaryContactId");
   try {
+    timer.start();
     const [supplier] = await db
       .select({ id: suppliersTable.primaryContactId })
       .from(suppliersTable)
       .where(eq(suppliersTable.id, supplierId))
       .limit(1);
+    timer.end();
 
     if (!supplier?.id) return [null, errorMessage];
     return [supplier.id, null];
@@ -100,7 +107,9 @@ export const getSuppliersBrief = async (
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<BriefSupplierType[]>> => {
   const errorMessage = errorMessages.getSuppliers;
+  const timer = new performanceTimer("getSuppliersBrief");
   try {
+    timer.start();
     const allSuppliers = await db
       .select({
         id: suppliersTable.id,
@@ -117,6 +126,7 @@ export const getSuppliersBrief = async (
       .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
       .limit(limit)
       .offset((page - 1) * limit);
+    timer.end();
 
     return [allSuppliers, null];
   } catch (error) {
@@ -156,7 +166,9 @@ export const getSupplierFullById = async (
   id: number,
 ): Promise<ReturnTuple<GetSupplierType>> => {
   const errorMessage = errorMessages.getSupplier;
+  const timer = new performanceTimer("getSupplierFullById");
   try {
+    timer.start();
     const supplier = await db.query.suppliersTable.findFirst({
       where: (supplier, { eq }) => eq(supplier.id, id),
       with: {
@@ -191,6 +203,8 @@ export const getSupplierFullById = async (
         },
       },
     });
+    timer.end();
+
     if (!supplier) return [null, errorMessages.notFound];
     return [supplier, null];
   } catch (error) {
@@ -208,7 +222,9 @@ export const listAllSuppliers = async (): Promise<
   ReturnTuple<SupplierListType[]>
 > => {
   const errorMessage = errorMessages.getSuppliers;
+  const timer = new performanceTimer("listAllSuppliers");
   try {
+    timer.start();
     const suppliers = await db
       .select({
         id: suppliersTable.id,
@@ -216,6 +232,8 @@ export const listAllSuppliers = async (): Promise<
       })
       .from(suppliersTable)
       .orderBy(asc(suppliersTable.name));
+    timer.end();
+
     return [suppliers, null];
   } catch (error) {
     logError(error);
@@ -227,12 +245,15 @@ export const getSuppliersCount = async (
   filter: FilterArgs = filterDefault,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getSuppliersCount");
   try {
+    timer.start();
     const [suppliers] = await db
       .select({ count: count() })
       .from(suppliersTable)
       .where(supplierFilterQuery(filter))
       .limit(1);
+    timer.end();
 
     if (!suppliers) return [null, errorMessage];
     return [suppliers.count, null];
