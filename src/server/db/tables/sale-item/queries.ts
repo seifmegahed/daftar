@@ -6,6 +6,7 @@ import { saleItemsTable, itemsTable } from "@/server/db/schema";
 import { errorLogger } from "@/lib/exceptions";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "Sale Item Queries Error:",
@@ -32,7 +33,9 @@ export const getProjectSaleItems = async (
   projectId: number,
 ): Promise<ReturnTuple<SaleItemType[]>> => {
   const errorMessage = errorMessages.getItems;
+  const timer = new performanceTimer("getProjectSaleItems");
   try {
+    timer.start();
     const data = await db
       .select({
         id: saleItemsTable.id,
@@ -47,6 +50,7 @@ export const getProjectSaleItems = async (
       .leftJoin(itemsTable, eq(saleItemsTable.itemId, itemsTable.id))
       .where(eq(saleItemsTable.projectId, projectId))
       .orderBy(saleItemsTable.id);
+    timer.end();
 
     if (!data) return [null, errorMessages.corruptedData];
     const parseResult = z.array(saleItemSchema).safeParse(data);
@@ -65,12 +69,15 @@ export const getProjectSaleItemsCount = async (
   projectId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getProjectSaleItemsCount");
   try {
+    timer.start();
     const [result] = await db
       .select({ count: count() })
       .from(saleItemsTable)
       .where(eq(saleItemsTable.projectId, projectId))
       .limit(1);
+    timer.end();
 
     if (!result) return [null, errorMessage];
     return [result.count, null];
