@@ -7,6 +7,7 @@ import { defaultPageLimit } from "@/data/config";
 
 import type { UserDataType } from "./schema";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "User Queries Error:",
@@ -28,7 +29,9 @@ export const getAllUsers = async (
   limit = defaultPageLimit,
 ): Promise<ReturnTuple<GetPartialUserType[]>> => {
   const errorMessage = errorMessages.getUsers;
+  const timer = new performanceTimer("getAllUsers");
   try {
+    timer.start();
     const allUsers = await db
       .select({
         id: usersTable.id,
@@ -44,6 +47,7 @@ export const getAllUsers = async (
       .orderBy(desc(usersTable.id))
       .limit(limit)
       .offset((page - 1) * limit);
+    timer.end();
 
     return [allUsers, null];
   } catch (error) {
@@ -54,11 +58,14 @@ export const getAllUsers = async (
 
 export const getUsersCount = async (): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getUsersCount");
   try {
+    timer.start();
     const [usersCount] = await db
       .select({ count: count() })
       .from(usersTable)
       .limit(1);
+    timer.end();
 
     if (!usersCount) return [null, errorMessage];
     return [usersCount.count, null];
@@ -72,7 +79,9 @@ export const getUserById = async (
   id: number,
 ): Promise<ReturnTuple<GetPartialUserType>> => {
   const errorMessage = errorMessages.getUser;
+  const timer = new performanceTimer("getUserById");
   try {
+    timer.start();
     const [user] = await db
       .select({
         id: usersTable.id,
@@ -86,6 +95,8 @@ export const getUserById = async (
       })
       .from(usersTable)
       .where(eq(usersTable.id, id));
+    timer.end();
+
     if (!user) return [null, errorMessages.notFound];
     return [user, null];
   } catch (error) {
@@ -110,15 +121,18 @@ export const sensitiveGetUserPasswordById = async (
   id: number,
 ): Promise<ReturnTuple<string>> => {
   const errorMessage = errorMessages.getUser;
+  const timer = new performanceTimer("sensitiveGetUserPasswordById");
   try {
+    timer.start();
     const [user] = await db
       .select({
         password: usersTable.password,
       })
       .from(usersTable)
       .where(eq(usersTable.id, id));
-    if (!user) return [null, errorMessages.notFound];
+    timer.end();
 
+    if (!user) return [null, errorMessages.notFound];
     return [user.password, null];
   } catch (error) {
     logError(error);
@@ -152,7 +166,9 @@ export const sensitiveGetUserByUsername = async (
   username: string,
 ): Promise<ReturnTuple<SensitiveGetUserType>> => {
   const errorMessage = errorMessages.getUser;
+  const timer = new performanceTimer("sensitiveGetUserByUsername");
   try {
+    timer.start();
     const [user] = await db
       .select({
         id: usersTable.id,
@@ -166,9 +182,9 @@ export const sensitiveGetUserByUsername = async (
       .where(
         and(eq(usersTable.username, username), eq(usersTable.active, true)),
       );
+    timer.end();
 
     if (!user) return [null, errorMessages.notFound];
-
     return [user, null];
   } catch (error) {
     logError(error);
@@ -184,7 +200,9 @@ export type UserBriefType = {
 
 export const listAllUsers = async (): Promise<ReturnTuple<UserBriefType[]>> => {
   const errorMessage = errorMessages.getUsers;
+  const timer = new performanceTimer("listAllUsers");
   try {
+    timer.start();
     const users = await db
       .select({
         id: usersTable.id,
@@ -192,6 +210,7 @@ export const listAllUsers = async (): Promise<ReturnTuple<UserBriefType[]>> => {
       })
       .from(usersTable)
       .orderBy(asc(usersTable.name));
+    timer.end();
 
     if (!users) return [null, errorMessage];
     return [users, null];
