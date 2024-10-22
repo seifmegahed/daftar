@@ -14,6 +14,7 @@ import { privateFilterQuery } from "@/server/db/tables/document/utils";
 import { errorLogger } from "@/lib/exceptions";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "Document Relations Queries Error:",
@@ -49,7 +50,9 @@ export const getClientDocuments = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
   const errorMessage = errorMessages.getDocuments;
+  const timer = new performanceTimer("getClientDocuments");
   try {
+    timer.start();
     const documents = await db
       .select({
         relationId: documentRelationsTable.id,
@@ -69,6 +72,7 @@ export const getClientDocuments = async (
           privateFilterQuery(accessToPrivate),
         ),
       );
+    timer.end();
 
     const result = z.array(simpDocWithRelationSchema).safeParse(documents);
     if (result.error) return [null, errorMessages.dataCorrupted];
@@ -85,7 +89,9 @@ export const getSupplierDocuments = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
   const errorMessage = errorMessages.getDocuments;
+  const timer = new performanceTimer("getSupplierDocuments");
   try {
+    timer.start();
     const documents = await db
       .select({
         relationId: documentRelationsTable.id,
@@ -105,6 +111,7 @@ export const getSupplierDocuments = async (
           privateFilterQuery(accessToPrivate),
         ),
       );
+    timer.end();
 
     const result = z.array(simpDocWithRelationSchema).safeParse(documents);
     if (result.error) return [null, errorMessages.dataCorrupted];
@@ -121,7 +128,9 @@ export const getItemDocuments = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
   const errorMessage = errorMessages.getDocuments;
+  const timer = new performanceTimer("getItemDocuments");
   try {
+    timer.start();
     const documents = await db
       .select({
         relationId: documentRelationsTable.id,
@@ -144,6 +153,7 @@ export const getItemDocuments = async (
           privateFilterQuery(accessToPrivate),
         ),
       );
+    timer.end();
 
     const result = z.array(simpDocWithRelationSchema).safeParse(documents);
     if (result.error) return [null, errorMessages.dataCorrupted];
@@ -160,7 +170,9 @@ export const getProjectDocuments = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<SimpDocWithRelation[]>> => {
   const errorMessage = errorMessages.getDocuments;
+  const timer = new performanceTimer("getProjectDocuments");
   try {
+    timer.start();
     const documents = await db
       .select({
         relationId: documentRelationsTable.id,
@@ -180,6 +192,7 @@ export const getProjectDocuments = async (
           privateFilterQuery(accessToPrivate),
         ),
       );
+    timer.end();
 
     const result = z.array(simpDocWithRelationSchema).safeParse(documents);
     if (result.error) return [null, errorMessages.dataCorrupted];
@@ -196,7 +209,9 @@ export const getClientDocumentsCount = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getClientDocumentsCount");
   try {
+    timer.start();
     const [documents] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
@@ -211,6 +226,8 @@ export const getClientDocumentsCount = async (
         ),
       )
       .limit(1);
+    timer.end();
+
     if (!documents) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
@@ -224,7 +241,9 @@ export const getSupplierDocumentsCount = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getSupplierDocumentsCount");
   try {
+    timer.start();
     const [documents] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
@@ -239,6 +258,8 @@ export const getSupplierDocumentsCount = async (
         ),
       )
       .limit(1);
+    timer.end();
+
     if (!documents) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
@@ -252,7 +273,9 @@ export const getItemDocumentsCount = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getItemDocumentsCount");
   try {
+    timer.start();
     const [documents] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
@@ -267,6 +290,8 @@ export const getItemDocumentsCount = async (
         ),
       )
       .limit(1);
+    timer.end();
+
     if (!documents) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
@@ -280,7 +305,9 @@ export const getProjectDocumentsCount = async (
   accessToPrivate = false,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getProjectDocumentsCount");
   try {
+    timer.start();
     const [documents] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
@@ -295,6 +322,8 @@ export const getProjectDocumentsCount = async (
         ),
       )
       .limit(1);
+    timer.end();
+
     if (!documents) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
@@ -307,12 +336,15 @@ export const getDocumentRelationsCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getDocumentRelationCount")
   try {
+    timer.start();
     const [result] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
       .where(eq(documentRelationsTable.documentId, id))
       .limit(1);
+    timer.end();
 
     if (!result) return [null, errorMessage];
     return [result.count, null];
@@ -337,7 +369,9 @@ export const getDocumentProjects = async (
   id: number,
 ): Promise<ReturnTuple<DocumentProjectsType[]>> => {
   const errorMessage = errorMessages.getProjects;
+  const timer = new performanceTimer("getDocumentProjects")
   try {
+    timer.start();
     const projects = await db
       .select({
         id: projectsTable.id,
@@ -360,6 +394,7 @@ export const getDocumentProjects = async (
         ),
       )
       .orderBy(desc(projectsTable.createdAt));
+    timer.end();
 
     const parsedProjects = z.array(documentProjectsSchema).safeParse(projects);
     if (parsedProjects.error) return [null, errorMessages.dataCorrupted];
@@ -375,7 +410,9 @@ export const documentProjectsCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.countProjects;
+  const timer = new performanceTimer("documentProjectsCount")
   try {
+    timer.start();
     const [projects] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
@@ -386,6 +423,7 @@ export const documentProjectsCount = async (
         ),
       )
       .limit(1);
+    timer.end();
 
     if (!projects) return [null, errorMessage];
     return [projects.count, null];
@@ -408,7 +446,9 @@ export const getDocumentClients = async (
   id: number,
 ): Promise<ReturnTuple<DocumentClientsType[]>> => {
   const errorMessage = errorMessages.getClients;
+  const timer = new performanceTimer("getDocumentClients")
   try {
+    timer.start();
     const clients = await db
       .select({
         id: clientsTable.id,
@@ -428,6 +468,7 @@ export const getDocumentClients = async (
         eq(documentRelationsTable.clientId, clientsTable.id),
       )
       .orderBy(desc(clientsTable.createdAt));
+    timer.end();
 
     const parsedClients = z.array(documentClientsSchema).safeParse(clients);
     if (parsedClients.error) return [null, errorMessages.dataCorrupted];
@@ -443,7 +484,9 @@ export const documentClientsCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.countClients;
+  const timer = new performanceTimer("documentClientsCount")
   try {
+    timer.start();
     const [clients] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
@@ -454,6 +497,7 @@ export const documentClientsCount = async (
         ),
       )
       .limit(1);
+    timer.end();
 
     if (!clients) return [null, errorMessage];
     return [clients.count, null];
@@ -477,7 +521,9 @@ export const getDocumentSuppliers = async (
   id: number,
 ): Promise<ReturnTuple<DocumentSuppliersType[]>> => {
   const errorMessage = errorMessages.countSuppliers;
+  const timer = new performanceTimer("getDocumentSuppliers")
   try {
+    timer.start();
     const suppliers = await db
       .select({
         id: suppliersTable.id,
@@ -498,6 +544,7 @@ export const getDocumentSuppliers = async (
         eq(documentRelationsTable.supplierId, suppliersTable.id),
       )
       .orderBy(desc(suppliersTable.createdAt));
+    timer.end();
 
     const parsedSuppliers = z
       .array(documentSuppliersSchema)
@@ -515,7 +562,9 @@ export const documentSuppliersCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.countSuppliers;
+  const timer = new performanceTimer("documentSuppliersCount")
   try {
+    timer.start();
     const [suppliers] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
@@ -526,6 +575,7 @@ export const documentSuppliersCount = async (
         ),
       )
       .limit(1);
+    timer.end();
 
     if (!suppliers) return [null, errorMessage];
     return [suppliers.count, null];
@@ -550,7 +600,9 @@ export const getDocumentItems = async (
   id: number,
 ): Promise<ReturnTuple<DocumentItemsType[]>> => {
   const errorMessage = errorMessages.getItems;
+  const timer = new performanceTimer("getDocumentItems")
   try {
+    timer.start();
     const items = await db
       .select({
         id: itemsTable.id,
@@ -569,6 +621,7 @@ export const getDocumentItems = async (
       )
       .leftJoin(itemsTable, eq(documentRelationsTable.itemId, itemsTable.id))
       .orderBy(desc(itemsTable.createdAt));
+    timer.end();
 
     const parsedItems = z.array(documentItemsSchema).safeParse(items);
     if (parsedItems.error) return [null, errorMessages.dataCorrupted];
@@ -584,7 +637,9 @@ export const documentItemsCount = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.countItems;
+  const timer = new performanceTimer("documentItemsCount")
   try {
+    timer.start();
     const [items] = await db
       .select({ count: count() })
       .from(documentRelationsTable)
@@ -595,6 +650,7 @@ export const documentItemsCount = async (
         ),
       )
       .limit(1);
+    timer.end();
 
     if (!items) return [null, errorMessage];
     return [items.count, null];
