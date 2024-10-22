@@ -6,6 +6,7 @@ import { contactsTable, usersTable } from "@/server/db/schema";
 import { errorLogger } from "@/lib/exceptions";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { performanceTimer } from "@/utils/performance";
 
 const errorMessages = {
   mainTitle: "Contact Queries Error:",
@@ -20,12 +21,15 @@ export const getClientContactsCount = async (
   clientId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.count;
+  const timer = new performanceTimer("getClientContactsCount");
   try {
+    timer.start();
     const [contacts] = await db
       .select({ count: count() })
       .from(contactsTable)
       .where(eq(contactsTable.clientId, clientId))
       .limit(1);
+    timer.end();
 
     if (!contacts) return [null, errorMessage];
     return [contacts.count, null];
@@ -39,12 +43,15 @@ export const getSupplierContactsCount = async (
   supplierId: number,
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.get;
+  const timer = new performanceTimer("getSupplierContactsCount");
   try {
+    timer.start();
     const [contacts] = await db
       .select({ count: count() })
       .from(contactsTable)
       .where(eq(contactsTable.supplierId, supplierId))
       .limit(1);
+    timer.end();
 
     if (!contacts) return [null, errorMessage];
     return [contacts.count, null];
@@ -72,7 +79,9 @@ export const getClientContacts = async (
   clientId: number,
 ): Promise<ReturnTuple<ContactType[]>> => {
   const errorMessage = errorMessages.get;
+  const timer = new performanceTimer("getClientContacts");
   try {
+    timer.start();
     const contacts = await db
       .select({
         id: contactsTable.id,
@@ -89,6 +98,7 @@ export const getClientContacts = async (
       .leftJoin(usersTable, eq(contactsTable.createdBy, usersTable.id))
       .where(eq(contactsTable.clientId, clientId))
       .orderBy(contactsTable.id);
+    timer.end();
 
     if (!contacts) return [null, errorMessage];
     const parsedContacts = z.array(getContactSchema).safeParse(contacts);
@@ -106,7 +116,9 @@ export const getSupplierContacts = async (
   supplierId: number,
 ): Promise<ReturnTuple<ContactType[]>> => {
   const errorMessage = errorMessages.get;
+  const timer = new performanceTimer("getSupplierContacts");
   try {
+    timer.start();
     const contacts = await db
       .select({
         id: contactsTable.id,
@@ -123,6 +135,7 @@ export const getSupplierContacts = async (
       .leftJoin(usersTable, eq(contactsTable.createdBy, usersTable.id))
       .where(eq(contactsTable.supplierId, supplierId))
       .orderBy(contactsTable.id);
+    timer.end();
 
     if (!contacts) return [null, errorMessage];
     const parsedContacts = z.array(getContactSchema).safeParse(contacts);
