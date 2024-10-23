@@ -357,6 +357,72 @@ documentRelationsSchema.parse({
 })
 ```
 
+#### Full Text Search
+In this project, we implemented full text search using `ts_vector` and `to_tsvector` functions. And I created search indexes using `GIN` index type. This allows for fast full text search.
+
+**Example**
+
+```ts
+const clientsTable = pgTable(
+  "client",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 64 }).notNull().unique(),
+    // ...
+  },
+  (table) => ({
+    clientsSearchIndex: index("clients_search_index").using(
+      "gin",
+      sql`to_tsvector('english', ${table.name})`,
+    ),
+  }),
+);
+```
+
+I wrote a utility function `prepareSearchText` that takes a search text and prepares it for full text search. It removes any extra spaces, converts it to lowercase, and adds a wildcard at the end of the search text. This function needs some improvements, but it works for now.
+
+```ts
+export const prepareSearchText = (searchText: string) => {
+  searchText = searchText.trim().replace(/\s+/g, " ").toLowerCase();
+  if (!searchText) return "";
+  const searchTextArray = searchText.split(" ");
+  searchTextArray[searchTextArray.length - 1] += ":*";
+  return searchTextArray.join(" | ");
+};
+```
+
+**Example Usage**
+
+```ts
+
+const clientSearchQuery = (searchText: string) =>
+  sql`
+      to_tsvector('english', ${clientsTable.name}) ,
+      to_tsquery(${prepareSearchText(searchText)})
+  `;
+
+const getClients = async (searchText: string) => {
+  const clients = await db
+    .select({
+      id: clientsTable.id,
+      name: clientsTable.name,
+      rank: searchText
+        ? sql`ts_rank(${clientSearchQuery(searchText)})`
+        : sql`1`,
+    })
+    .from(clientsTable)
+    .orderBy((table) =>
+      searchText ? desc(table.rank) : desc(clientsTable.id),
+    );
+
+  return clients;
+}
+```
+
+In this example, we create a virtual column called `rank` that ranks the clients based on the search text using `ts_rank`. We then order the results by the `rank` column if a search text is provided, otherwise we order by the `id` column.
+
+I use this approach in all my search queries so that I don't have to query the count of the results every time a user is searching to adjust the pagination element. This makes the queries faster and more efficient.
+
 ## Environment Variables
 You can find an example of the environment variables in the `.env-e` file.
 Copy the `.env-e` file to `.env` and fill in the values.
