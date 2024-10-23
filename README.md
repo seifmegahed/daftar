@@ -257,8 +257,8 @@ In this project, I have implemented a simple role-based access control system. T
 - User - Regular users can only access public data and perform basic actions
 
 > Note: 
->   - Basic actions include viewing, adding, editing. They do not include deleting.
->   - Private data includes any financial data like sale items, and documents that are marked as private.
+>   - Basic actions include creating and editing. In most cases they do not include deleting.
+>   - Private data includes any financial data like sale items or documents that are marked as private.
 
 
 ### Error Handling
