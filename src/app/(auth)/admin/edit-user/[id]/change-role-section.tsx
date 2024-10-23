@@ -22,7 +22,7 @@ const roleItems = [
     description: "Has all privileges",
   },
   {
-    labe: "Super User",
+    label: "Super User",
     value: "s-user",
     description:
       "Same privileges as a regular user, but has access to all private data",

@@ -1,4 +1,5 @@
 import CardWrapper from "@/components/card-wrapper";
+import { getUserRoleLabel } from "@/data/lut";
 import type { GetPartialUserType } from "@/server/db/tables/user/queries";
 import { format } from "date-fns";
 import { Edit } from "lucide-react";
@@ -23,17 +24,10 @@ function UserCard({ user }: { user: GetPartialUserType }) {
           <div className="text-sm text-muted-foreground">{user.username}</div>
         </div>
         <div className="flex min-w-48 flex-col gap-1">
-          {user.role === "admin" ? (
-            <div className="flex justify-between gap-2 text-sm text-muted-foreground">
-              <div>Role:</div>
-              <div>Admin</div>
-            </div>
-          ) : (
-            <div className="flex justify-between gap-6 text-sm text-muted-foreground">
-              <div>Role:</div>
-              <div>User</div>
-            </div>
-          )}
+          <div className="flex justify-between gap-2 text-sm text-muted-foreground">
+            <div>Role:</div>
+            <div>{getUserRoleLabel(user.role)}</div>
+          </div>
           <div className="flex justify-between gap-6 text-sm text-muted-foreground">
             <div>Active:</div>
             <div>{user.active ? "Yes" : "No"}</div>
