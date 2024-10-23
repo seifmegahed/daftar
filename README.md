@@ -41,7 +41,7 @@ The interface layer is responsible for the communication between the business lo
 
 The business logic layer is responsible for the business logic of the application. It handles the data validation, communication between the interface and the frontend.
 
-![Design Diagram](/docs/images/system-design-flow.png)
+![Design Diagram](/docs/images/system-design-diagram.png)
 
 ### Data Validation
 ![Data Flow Diagram](/docs/images/system-design-data-validation.png)
