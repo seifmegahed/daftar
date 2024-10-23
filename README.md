@@ -1,10 +1,18 @@
 # Daftar
 
-An ERP Web App to manage Engineering Business's contracting projects and resources
+A Web App to manage Engineering Business's data. The user can create, update, and delete clients, suppliers, items, and documents (files). 
+The end goal is for the user to link all this data together to create a project. This makes looking up data easier and more efficient.
 
-This web app is not meant to be deployed to a cloud provider.
-It uses the server's filesystem to store and retrieve files, and might use web sockets in the future.
-So Vercel, Netlify, or any other VPS hosting provider is not recommended.
+This is a full stack web app written in Typescript using Next.js 14.
+
+This web app is not meant to be deployed to a serverless hosting provider.
+It required read/write permissions to the server's filesystem to store and retrieve files.
+So Vercel, Netlify, or any other serverless hosting provider is not recommended.
+
+That being said, I have hosted a demo version of this app on Vercel. 
+It is fully functional, but the file uploading and downloading features are faked.
+
+To use the demo version, you can contact me at seifmegahed at me dot com.
 
 ## Tech Stack
 - Typescript
@@ -15,10 +23,27 @@ So Vercel, Netlify, or any other VPS hosting provider is not recommended.
 - Drizzle ORM
 - PostgreSQL
 - Zod
+- Redis
+- Nginx
+- PM2
 
-## System Architecture
+## System Design
+I have the designed the system to be as modular as possible with an emphasis on separation of concerns. This approach allows for easier maintenance, scalability, and flexibility in the future. However, I would like to refactor the code in the future to make it comply with uncle bob's clean architecture principles.
 
-### Data Flow Design
+In my design I separated the system into three main layers:
+- The frontend
+- The interface
+- The business logic
+
+The frontend is responsible for the user interface, including the layout, styling, and interactivity. It does have some business logic in the form of user input validation. This validation happens on both the frontend and the business logic layer.
+
+The interface layer is responsible for the communication between the business logic and the database or other external systems. It handles the data retrieval and mutation operations.
+
+The business logic layer is responsible for the business logic of the application. It handles the data validation, communication between the interface and the frontend.
+
+![Design Diagram](/docs/images/system-design-flow.png)
+
+### Data Validation
 ![Data Flow Diagram](/docs/images/system-design-data-validation.png)
 
 As **Immanuel Kant** famously noted in his 1808 Medium article, *"A Critique of Software Development: Observations on the Metaphysics of a Sublime System Design"*: **"You kant trust data coming from the client."**
@@ -31,80 +56,176 @@ By validating on both ends, we can prevent invalid data from slipping through an
 
 ### Error Handling
 
-In this project, I've adopted a GO-like error-handling approach. The main goal is to ensure a clear separation of concerns when returning data or errors, making it explicit that any function either returns valid data or an error message, never both, and graceful server-client error communication. This design promotes safer, more predictable code that’s easy to reason about and maintain.
+In this project, I've adopted a GO-like error-handling approach. I have implemented this approach using type that takes in a generic and creates a tuple of either the generic and a null or a null and an error message.
 
 ```ts
-/** 
- * XOR
+/**
+ * This type ensures the the return is either the generic value or the error message.
  * 
- * Either return a value or an error message, never both and never neither 
- * @return [null, errorMessage] | [returnValue, null]
+ * Acts as an XOR gate (Either Or) (Never Neither) (Never Both)
+ * 
+ * This forces the caller to handle the error case.
+ *
+ * @param T The generic type to return
+ * @returns A tuple of the generic type and a null or a null and a string error message
  */
-type ReturnTuple<T> = readonly [T, null] | readonly [null, string];
+export type ReturnTuple<T> = readonly [T, null] | readonly [null, string];
 ```
 
-By using TypeScript’s type system, the `ReturnTuple` type ensures that our functions can only return valid data or an error message, but never both. This ensures that handling edge cases and errors is enforced by the compiler, reducing the risk of unhandled exceptions or ambiguous states in the application.
-
-When extending this approach to client-server communication, it provides several key benefits:
-
-**1. Explicit Error Communication**  
-Passing errors as part of the function’s return type means that both the server and client can explicitly handle success and failure cases. Instead of relying on HTTP status codes alone or throwing exceptions, the server can send a clear, structured response, ensuring that the client always knows what went wrong.
-
-On the client side, this translates into predictable handling of error states. The client receives the response and immediately checks whether it contains valid data or an error message, leading to a smoother user experience and reducing the risk of unhandled or silent failures.
-
-**2. Reduced Reliance on Status Codes**  
-While HTTP status codes are still important for signaling the overall success or failure of a request, relying solely on them for error handling can sometimes lead to confusion or missed cases. For instance, some errors may not correspond cleanly to specific HTTP codes.
-
-With the `ReturnTuple<T>` approach, the response always contains an error message that the client can act upon, even if the status code is ambiguous. This helps prevent issues like unexpected 200 responses with error details hidden in the payload or unclear 500 responses where the client isn't sure what went wrong.
-
-**3. Graceful Client-Side Handling**  
-On the client side, this pattern allows for more graceful error handling. Since the client is guaranteed to receive a structured response, it can gracefully degrade user experience by displaying user-friendly error messages or retrying the failed operation without crashing the app or getting stuck in unexpected states.
-
-For instance:
+**Example Usage**
 
 ```typescript
-const [data, error] = await fetchUserData();
+function fetchUserData(): Promise<ReturnTuple<User>> {
+  return [user, null];
+}
 
-if (error) {
+/**
+ * we assign the result of the fetchUserData function to a tuple
+ */
+const [user, error] = await fetchUserData();
+
+/**
+ * if the error is not null, it means that an error occurred
+ * and we can handle it accordingly
+ */
+if (error !== null) {
   displayErrorMessage(error); // Show a friendly message to the user
 } else {
-  updateUIWithData(data); // Proceed with normal flow
+  /**
+   * here we can assume that the user is not null
+   * and we can safely access its properties
+   */
+  updateUIWithData(user); // Proceed with normal flow
 }
 ```
 
-By passing errors in this manner, the application becomes more resilient and responsive to edge cases and potential failures.
+In my opinion this approach has several advantages:
 
----
+**1. Forced Error handling**
 
-By integrating this GO-like error-handling approach into both the client and server, the system gains a more structured and robust way of handling errors. This leads to better-defined data flows, more reliable communication, and a smoother experience for users and developers alike.
+In the example above, when we call `fetchUserData()` typescript expects the `user` const to be of type `User | null`. however, if we handle the null case in `error` or `user`, typescript will infer that `user` is of type `User`. This forces us to handle the error exception.
 
-Here's an example of a function that retrieves a user by their ID:
+**2. Better performance**
 
+Throwing an error in a try-catch block is considered by some to be expensive. By using this approach, we can create error messages for petty error cases without throwing an error.
+
+**Example**
 ```ts
-async function getUserById(id: number): Promise<ReturnTuple<UserDataType>> {
+function fetchUserData(id: number): Promise<ReturnTuple<User>> {
   try {
-    const user = await getUserByIdQuery(id);
+    /**
+     * fetch user data from the database
+     */
+    const [user] = await db.select().from(userTable).where(eq(userTable.id, id));
+
+    /**
+     * if the user is not found, return an error message
+     * Otherwise return user
+     */
     if (!user) return [null, "User not found"];
     return [user, null];
   } catch (error) {
-    return [null, getErrorMessage(error)];
-  }
-}
-
-// Example usage of the function:
-async function handleGetUser(id: number) {
-  // could be implemented in a try-catch block to catch network errors
-  const [user, error] = await getUserById(id);
-
-  if (error) {
-    console.error("Failed to fetch user:", error);
-    // Handle the error, display a message to the user, etc.
-  } else {
-    console.log("User data:", user);
-    // Continue with normal execution
+    /**
+     * if an error occurs, return an error message
+     * and log error
+     */
+    console.error("User Fetch Error:", error)
+    return [null, "An error occurred while fetching user data"];
   }
 }
 ```
+
+In this example, we can safely assume that the user might not exist in the database. If the user is not found, instead of throwing an error, we can just return an error message.
+As for any other errors that might occur, we're still able to catch them in the try-catch block and handle them gracefully.
+
+**3. Better Error Communication**
+
+By using this approach, we can communicate errors in a more structured way. Instead of returning a generic error object and parsing it, we can return a specific error message that describes the error in a user-friendly way. and we can still catch any other errors that might occur on the client-side.
+
+**Example**
+```tsx
+"use client"
+
+function incrementServerSideCount() {
+
+  const handleIncrementCount = async () => {
+    try {
+      const [count, error] = await incrementCountAction();
+      if (error !== null) {
+        toast.error(error);
+        return;
+      }
+      toast.success(`Count incremented to ${count}`);
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while incrementing the count");
+    }
+  }
+
+  return (
+    <button onClick={handleIncrementCount}>
+      Increment Count
+    </button>
+  )
+}
+```
+
+In this client-side example, we bind a server action to button click that mutates a server side value. Here we handle returned error messages and show them to the user using a toast, yet we still use a try-catch block to catch any other errors that might occur and toast a generic error message to the user.
+
+**Edge Cases**
+In some cases, a server action might call a redirect. In this case, the return type would be undefined. This would cause an error in the client-side if we use any of the above approaches.
+To overcome this, we need to handle the undefined case first before assigning the result to a tuple.
+
+**Server-Side Example** 
+```ts
+const logoutAction = async (id: number): Promise<ReturnTuple<number> | undefined> => {
+  const [userId, error] = await logoutUser(id);
+  if (error !== null) {
+    return [undefined, error];
+  }
+  redirect("/login");
+}
+```
+here we call the `logoutUser` function which handles the logout logic and returns a tuple of either the userId or an error message.
+
+**Client-Side Example**
+```tsx
+"use client"
+
+function LogoutButton({ id }: { id: number }) {
+  const handleLogout = async () => {
+    try {
+      /**
+       * we call the logoutAction function
+       * and assign the result to a const
+       */
+      const response = await logoutAction(id);
+
+      /**
+       * Here we handle the undefined case which is expected
+       * when the server redirects to the login page
+       * and we can safely ignore it and wait for the redirect
+       */
+      if(!response) return;
+
+      /**
+       * If the logout action returns a value, it means that an error occurred
+       * and we can handle it accordingly
+       */
+      const [, error] = response;
+      if (error !== null) {
+        toast.error(error);
+        return;
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while logging out");
+    }
+  }
+```
+
+In this example, the logout server action will return undefined if successful because of the redirect call.
+So on the client side we first store the response in a const and then handle the undefined case. then we handle the error case.
 
 ### Database Design
 ![Database Diagram](/docs/images/system-design-database-diagram-4.svg)
