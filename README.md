@@ -54,6 +54,211 @@ In keeping with this timeless philosophy, I've implemented validation using `Zod
 
 By validating on both ends, we can prevent invalid data from slipping through and safeguard the integrity of the system, which simplifies the debugging process and enhances overall reliability.
 
+### Database Design
+Based on the nature of this project, the obvious choice would be to use a relational database. I opted for PostgreSQL, as it is a mature and well-established database that is widely used in the industry. As for interfacing with the database, I used Drizzle ORM, which is a powerful and flexible ORM that allows for easy querying and manipulation of the database.
+Drizzle uses a syntax that closely resemble SQL, making it easy to learn and use. It also provides a lot of features that make it a powerful tool for working with databases such as transactions, migrations, and more.
+
+![Database Diagram](/docs/images/system-design-database-diagram-5.svg)
+
+This diagram is a relation representation diagram. It is meant to show the relations between the tables.
+
+The main data tables in the data base are as follows:
+- Projects
+- Clients
+- Suppliers
+- Items
+- Documents
+  
+These tables form the apps main data.
+
+#### Relations
+
+**Project**
+- One Owner
+- One Client
+- Many Documents
+- Many Sale Items
+- Many Purchase Items
+- Many Comments
+
+**Client**
+- Many Documents
+- Many Projects
+- Many Addresses
+- Many Contacts
+
+**Supplier**
+- Many Documents
+- Many Purchase Items
+- Many Addresses
+- Many Contacts
+
+**Item**
+- Many Documents
+- Many Suppliers
+
+**Document**
+- Many Projects
+- Many Items
+- Many Suppliers
+- Many Clients
+
+In this design there are three many to many relations between the tables. I achieve this relationship by creating a table that stores the relations between the tables.
+- DocumentRelations
+- SaleItems
+- PurchaseItems
+
+Sale Items and Purchase Items are essentially the same, except that a purchase item has a supplier.
+
+Document relations is a bit complicated. First let me define what a document is and provide use cases.
+A document is essentially a file. It can be a pdf, a word document, or a spreadsheet etc. An Item for example can have a `User Manual` document linked to it. 
+A project might have a `Contract` document linked to it, etc. 
+
+Documents can be shared across all relations. For example two Items might share a `Factory Compliance Certificate` Document.
+
+**Limitations**
+
+The issue with this approach is that in the document relations table, none of the fields are enforced at the database level to be not null except for the documentId. Which opens up the possibility of creating stray document relation records that are not linked to any other record.
+In order to prevent this, we have to enforce the relations at the application level. This means that we need to check that there is one and only one defined record for each document relation apart from the documentId. I used `Zod` to achieve this.
+
+```ts
+const isExactlyOneDefined = <T extends object>(obj: T): boolean => {
+  const definedValues = Object.values(obj).filter(
+    (value) => value !== null && value !== undefined,
+  );
+  return definedValues.length === 1;
+};
+
+const documentRelationsSchema = createInsertSchema(
+  documentRelationsTable,
+)
+  .omit({ documentId: true })
+  .refine((data) => {
+    const { projectId, itemId, supplierId, clientId } = data;
+    return isExactlyOneDefined({ projectId, itemId, supplierId, clientId });
+  });
+```
+
+Using the isExactlyOneDefined utility function, we can ensure that the document relations table accepts one and only one of the relations apart from the documentId.
+
+**Example Usage**
+
+```typescript
+// This will throw an error
+documentRelationsSchema.parse({
+  documentId: 1,
+  projectId: 1,
+  itemId: 1,
+  supplierId: 1,
+  clientId: 1,
+})
+
+// This will throw an error
+documentRelationsSchema.parse({
+  documentId: 1,
+  projectId: 1,
+  clientId: 1,
+})
+
+  // This will throw an error
+documentRelationsSchema.parse({
+  documentId: 1,
+})
+
+// This will pass
+documentRelationsSchema.parse({
+  documentId: 1,
+  projectId: 1,
+})
+```
+
+#### Full Text Search
+In this project, we implemented full text search using `ts_vector` and `to_tsvector` functions. And I created search indexes using `GIN` index type. This allows for fast full text search.
+
+**Example**
+
+```ts
+const clientsTable = pgTable(
+  "client",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 64 }).notNull().unique(),
+    // ...
+  },
+  (table) => ({
+    clientsSearchIndex: index("clients_search_index").using(
+      "gin",
+      sql`to_tsvector('english', ${table.name})`,
+    ),
+  }),
+);
+```
+
+I wrote a utility function `prepareSearchText` that takes a search text and prepares it for full text search. It removes any extra spaces, converts it to lowercase, and adds a wildcard at the end of the search text. This function needs some improvements, but it works for now.
+
+```ts
+export const prepareSearchText = (searchText: string) => {
+  searchText = searchText.trim().replace(/\s+/g, " ").toLowerCase();
+  if (!searchText) return "";
+  const searchTextArray = searchText.split(" ");
+  searchTextArray[searchTextArray.length - 1] += ":*";
+  return searchTextArray.join(" | ");
+};
+```
+
+**Example Usage**
+
+```ts
+
+const clientSearchQuery = (searchText: string) =>
+  sql`
+      to_tsvector('english', ${clientsTable.name}) ,
+      to_tsquery(${prepareSearchText(searchText)})
+  `;
+
+const getClients = async (searchText: string) => {
+  const clients = await db
+    .select({
+      id: clientsTable.id,
+      name: clientsTable.name,
+      rank: searchText
+        ? sql`ts_rank(${clientSearchQuery(searchText)})`
+        : sql`1`,
+    })
+    .from(clientsTable)
+    .orderBy((table) =>
+      searchText ? desc(table.rank) : desc(clientsTable.id),
+    );
+
+  return clients;
+}
+```
+
+In this example, we create a virtual column called `rank` that ranks the clients based on the search text using `ts_rank`. We then order the results by the `rank` column if a search text is provided, otherwise we order by the `id` column.
+
+I use this approach in all my search queries so that I don't have to query the count of the results every time a user is searching to adjust the pagination element. This makes the queries faster and more efficient.
+
+### Authentication
+
+Authentication is a crucial aspect of any web application. In this project, I wrote a custom authentication system that uses JWT tokens to authenticate users. The design uses `Jose` for signing and verifying the tokens, and `bcrypt` for hashing the passwords.
+
+The authentication happens at the middleware level, by checking the token in the request headers. If the token is valid, the request is allowed to proceed. If the token is invalid or missing, the user is redirected to the login page.
+
+The application has no sign up or registration functionality by design. Users are created by an admin user. The admin user can create new users, but they are not allowed to sign up themselves.
+
+Creating an initial admin user is done by running the `admin` script. This script creates an admin user with the given username and password, and persists the admin user in the database. This user can then be used to access the admin panel and add other users.
+
+#### Roles
+
+In this project, I have implemented a simple role-based access control system. The roles are:
+
+- Admin - Admins have all privileges, and can access all private data and perform all actions
+- Super User - Super users can access all private data and perform basic actions
+- User - Regular users can only access public data and perform basic actions
+
+> Note: Basic actions include viewing, adding, editing. They do not include deleting.
+
+
 ### Error Handling
 
 In this project, I've adopted a GO-like error-handling approach. I have implemented this approach using type that takes in a generic and creates a tuple of either the generic and a null or a null and an error message.
@@ -238,190 +443,6 @@ Later on in during the development of the project, I found a video that explains
 You can find the video [here](https://youtu.be/WRuNQWPD5QI?si=_UYf1bn7KL4amFO5). To be honest i had some doubts about this approach and it's usefulness, but this video gave me the more confidence in it. (although it was posted after I had already implemented it :P)
 
 The decision to use null over undefined wasn't really an intentional one. I just wanted to pay tribute to the GOphers. Maybe there is utility in a null value being a valid value, but I haven't explored this further tbh.
-
-### Database Design
-Based on the nature of this project, the obvious choice would be to use a relational database. I opted for PostgreSQL, as it is a mature and well-established database that is widely used in the industry. As for interfacing with the database, I used Drizzle ORM, which is a powerful and flexible ORM that allows for easy querying and manipulation of the database.
-Drizzle uses a syntax that closely resemble SQL, making it easy to learn and use. It also provides a lot of features that make it a powerful tool for working with databases such as transactions, migrations, and more.
-
-![Database Diagram](/docs/images/system-design-database-diagram-5.svg)
-
-This diagram is a relation representation diagram. It is meant to show the relations between the tables.
-
-The main data tables in the data base are as follows:
-- Projects
-- Clients
-- Suppliers
-- Items
-- Documents
-  
-These tables form the apps main data.
-
-#### Relations
-
-**Project**
-- One Owner
-- One Client
-- Many Documents
-- Many Sale Items
-- Many Purchase Items
-- Many Comments
-
-**Client**
-- Many Documents
-- Many Projects
-- Many Addresses
-- Many Contacts
-
-**Supplier**
-- Many Documents
-- Many Purchase Items
-- Many Addresses
-- Many Contacts
-
-**Item**
-- Many Documents
-- Many Suppliers
-
-**Document**
-- Many Projects
-- Many Items
-- Many Suppliers
-- Many Clients
-
-In this design there are three many to many relations between the tables. I achieve this relationship by creating a table that stores the relations between the tables.
-- DocumentRelations
-- SaleItems
-- PurchaseItems
-
-Sale Items and Purchase Items are essentially the same, except that a purchase item has a supplier.
-
-Document relations is a bit complicated. First let me define what a document is and provide use cases.
-A document is essentially a file. It can be a pdf, a word document, or a spreadsheet etc. An Item for example can have a `User Manual` document linked to it. 
-A project might have a `Contract` document linked to it, etc. 
-
-Documents can be shared across all relations. For example two Items might share a `Factory Compliance Certificate` Document.
-
-**Limitations**
-
-The issue with this approach is that in the document relations table, none of the fields are enforced at the database level to be not null except for the documentId. Which opens up the possibility of creating stray document relation records that are not linked to any other record.
-In order to prevent this, we have to enforce the relations at the application level. This means that we need to check that there is one and only one defined record for each document relation apart from the documentId. I used `Zod` to achieve this.
-
-```ts
-const isExactlyOneDefined = <T extends object>(obj: T): boolean => {
-  const definedValues = Object.values(obj).filter(
-    (value) => value !== null && value !== undefined,
-  );
-  return definedValues.length === 1;
-};
-
-const documentRelationsSchema = createInsertSchema(
-  documentRelationsTable,
-)
-  .omit({ documentId: true })
-  .refine((data) => {
-    const { projectId, itemId, supplierId, clientId } = data;
-    return isExactlyOneDefined({ projectId, itemId, supplierId, clientId });
-  });
-```
-
-Using the isExactlyOneDefined utility function, we can ensure that the document relations table accepts one and only one of the relations apart from the documentId.
-
-**Example Usage**
-
-```typescript
-// This will throw an error
-documentRelationsSchema.parse({
-  documentId: 1,
-  projectId: 1,
-  itemId: 1,
-  supplierId: 1,
-  clientId: 1,
-})
-
-// This will throw an error
-documentRelationsSchema.parse({
-  documentId: 1,
-  projectId: 1,
-  clientId: 1,
-})
-
-  // This will throw an error
-documentRelationsSchema.parse({
-  documentId: 1,
-})
-
-// This will pass
-documentRelationsSchema.parse({
-  documentId: 1,
-  projectId: 1,
-})
-```
-
-#### Full Text Search
-In this project, we implemented full text search using `ts_vector` and `to_tsvector` functions. And I created search indexes using `GIN` index type. This allows for fast full text search.
-
-**Example**
-
-```ts
-const clientsTable = pgTable(
-  "client",
-  {
-    id: serial("id").primaryKey(),
-    name: varchar("name", { length: 64 }).notNull().unique(),
-    // ...
-  },
-  (table) => ({
-    clientsSearchIndex: index("clients_search_index").using(
-      "gin",
-      sql`to_tsvector('english', ${table.name})`,
-    ),
-  }),
-);
-```
-
-I wrote a utility function `prepareSearchText` that takes a search text and prepares it for full text search. It removes any extra spaces, converts it to lowercase, and adds a wildcard at the end of the search text. This function needs some improvements, but it works for now.
-
-```ts
-export const prepareSearchText = (searchText: string) => {
-  searchText = searchText.trim().replace(/\s+/g, " ").toLowerCase();
-  if (!searchText) return "";
-  const searchTextArray = searchText.split(" ");
-  searchTextArray[searchTextArray.length - 1] += ":*";
-  return searchTextArray.join(" | ");
-};
-```
-
-**Example Usage**
-
-```ts
-
-const clientSearchQuery = (searchText: string) =>
-  sql`
-      to_tsvector('english', ${clientsTable.name}) ,
-      to_tsquery(${prepareSearchText(searchText)})
-  `;
-
-const getClients = async (searchText: string) => {
-  const clients = await db
-    .select({
-      id: clientsTable.id,
-      name: clientsTable.name,
-      rank: searchText
-        ? sql`ts_rank(${clientSearchQuery(searchText)})`
-        : sql`1`,
-    })
-    .from(clientsTable)
-    .orderBy((table) =>
-      searchText ? desc(table.rank) : desc(clientsTable.id),
-    );
-
-  return clients;
-}
-```
-
-In this example, we create a virtual column called `rank` that ranks the clients based on the search text using `ts_rank`. We then order the results by the `rank` column if a search text is provided, otherwise we order by the `id` column.
-
-I use this approach in all my search queries so that I don't have to query the count of the results every time a user is searching to adjust the pagination element. This makes the queries faster and more efficient.
 
 ## Environment Variables
 You can find an example of the environment variables in the `.env-e` file.
