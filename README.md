@@ -446,6 +446,24 @@ You can find the video [here](https://youtu.be/WRuNQWPD5QI?si=_UYf1bn7KL4amFO5).
 
 The decision to use null over undefined wasn't really an intentional one. I just wanted to pay tribute to the GOphers. Maybe there is utility in a null value being a valid value, but I haven't explored this further tbh.
 
+### Production
+
+The production build is built using `next build` and then it is served using `PM2` and `Nginx`. 
+
+**Scaling**
+
+I use `PM2` to spin multiple instances of the application, and handle the load balancing. The `PM2` configuration is done in the `pm2.json` file. There you can define how many instances you want.
+
+**Cache**
+
+Since `PM2` serves multiple instances of the app, the production build must use a centralized cache store. This is done using `Redis` and `@neshca/cache-handler` package in the `cache-handler.mjs` file. This cache handler is passed to NextJs in the `next.config.js` file.
+
+**SSL**
+
+At first I wrote a simple `server.ts` script to handle SSL, but opted to use `Nginx` instead. This is because `Nginx` is more flexible and much more powerful at handling SSL than `Node.js`. Also this creates a separation of concerns between the server and the app.
+ 
+![Production Stack](/docs/images/production-stack.png)
+
 ## Environment Variables
 You can find an example of the environment variables in the `.env-e` file.
 Copy the `.env-e` file to `.env` and fill in the values.
