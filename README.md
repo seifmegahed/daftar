@@ -103,13 +103,14 @@ In my opinion this approach has several advantages:
 
 **1. Forced Error handling**
 
-In the example above, when we call `fetchUserData()` typescript expects the `user` const to be of type `User | null`. however, if we handle the null case in `error` or `user`, typescript will infer that `user` is of type `User`. This forces us to handle the error exception.
+In the example above, when we call `fetchUserData()` typescript expects the `user` const to be of type `User | null`. However, if we handle the null case in `error` or `user`, typescript will infer that `user` is of type `User`. This forces us to handle the error exception.
 
 **2. Better performance**
 
 Throwing an error in a try-catch block is considered by some to be expensive. By using this approach, we can create error messages for petty error cases without throwing an error.
 
 **Example**
+
 ```ts
 function fetchUserData(id: number): Promise<ReturnTuple<User>> {
   try {
@@ -143,6 +144,7 @@ As for any other errors that might occur, we're still able to catch them in the 
 By using this approach, we can communicate errors in a more structured way. Instead of returning a generic error object and parsing it, we can return a specific error message that describes the error in a user-friendly way. and we can still catch any other errors that might occur on the client-side.
 
 **Example**
+
 ```tsx
 "use client"
 
@@ -173,10 +175,12 @@ function incrementServerSideCount() {
 In this client-side example, we bind a server action to button click that mutates a server side value. Here we handle returned error messages and show them to the user using a toast, yet we still use a try-catch block to catch any other errors that might occur and toast a generic error message to the user.
 
 **Edge Cases**
+
 In some cases, a server action might call a redirect. In this case, the return type would be undefined. This would cause an error in the client-side if we use any of the above approaches.
 To overcome this, we need to handle the undefined case first before assigning the result to a tuple.
 
 **Server-Side Example** 
+
 ```ts
 const logoutAction = async (id: number): Promise<ReturnTuple<number> | undefined> => {
   const [userId, error] = await logoutUser(id);
@@ -189,6 +193,7 @@ const logoutAction = async (id: number): Promise<ReturnTuple<number> | undefined
 here we call the `logoutUser` function which handles the logout logic and returns a tuple of either the userId or an error message.
 
 **Client-Side Example**
+
 ```tsx
 "use client"
 
@@ -227,100 +232,130 @@ function LogoutButton({ id }: { id: number }) {
 In this example, the logout server action will return undefined if successful because of the redirect call.
 So on the client side we first store the response in a const and then handle the undefined case. then we handle the error case.
 
+**Note**
+
+Later on in during the development of the project, I found a video that explains this approach. In the video, the author returns a the error object instead of an error message.
+You can find the video [here](https://youtu.be/WRuNQWPD5QI?si=_UYf1bn7KL4amFO5). To be honest i had some doubts about this approach and it's usefulness, but this video gave me the more confidence in it. (although it was posted after I had already implemented it :P)
+
+The decision to use null over undefined wasn't really an intentional one. I just wanted to pay tribute to the GOphers. Maybe there is utility in a null value being a valid value, but I haven't explored this further tbh.
+
 ### Database Design
-![Database Diagram](/docs/images/system-design-database-diagram-4.svg)
+Based on the nature of this project, the obvious choice would be to use a relational database. I opted for PostgreSQL, as it is a mature and well-established database that is widely used in the industry. As for interfacing with the database, I used Drizzle ORM, which is a powerful and flexible ORM that allows for easy querying and manipulation of the database.
+Drizzle uses a syntax that closely resemble SQL, making it easy to learn and use. It also provides a lot of features that make it a powerful tool for working with databases such as transactions, migrations, and more.
 
-This is a conceptual diagram of the database design. It is not a complete or accurate representation of the actual database schema. The actual schema has more data fields and constraints. This diagram is meant to provide a high-level overview of the database structure.
+![Database Diagram](/docs/images/system-design-database-diagram-5.svg)
 
-#### Limitations
+This diagram is a relation representation diagram. It is meant to show the relations between the tables.
 
-This design introduces polymorphic relationships, meaning a table can reference multiple other tables. The `DocumentsRelations` table acts as an intermediate table to store relationships between documents, projects, items, suppliers, and clients.
+The main data tables in the data base are as follows:
+- Projects
+- Clients
+- Suppliers
+- Items
+- Documents
+  
+These tables form the apps main data.
 
-##### Integrity
+#### Relations
 
-A major concern with this design is the lack of strict database-level constraints to ensure that each row in the `DocumentsRelations` table references exactly one entity besides the `Documents` table. For example, a row should reference either a project, item, supplier, or client, but not multiple entities simultaneously. 
+**Project**
+- One Owner
+- One Client
+- Many Documents
+- Many Sale Items
+- Many Purchase Items
+- Many Comments
 
-Since the relationship is polymorphic, we can't apply `NOT NULL` constraints to these foreign keys:
+**Client**
+- Many Documents
+- Many Projects
+- Many Addresses
+- Many Contacts
 
-```sql
-table DocumentsRelations (
-  id int [pk]
-  documentId int [ref: > Documents.id, not null]
+**Supplier**
+- Many Documents
+- Many Purchase Items
+- Many Addresses
+- Many Contacts
 
-  projectId int [ref: > Projects.id]
-  itemId int [ref: > Items.id]
-  supplierId int [ref: > Suppliers.id]
-  clientId int [ref: > Clients.id]
+**Item**
+- Many Documents
+- Many Suppliers
+
+**Document**
+- Many Projects
+- Many Items
+- Many Suppliers
+- Many Clients
+
+In this design there are three many to many relations between the tables. I achieve this relationship by creating a table that stores the relations between the tables.
+- DocumentRelations
+- SaleItems
+- PurchaseItems
+
+Sale Items and Purchase Items are essentially the same, except that a purchase item has a supplier.
+
+Document relations is a bit complicated. First let me define what a document is and provide use cases.
+A document is essentially a file. It can be a pdf, a word document, or a spreadsheet etc. An Item for example can have a `User Manual` document linked to it. 
+A project might have a `Contract` document linked to it, etc. 
+
+Documents can be shared across all relations. For example two Items might share a `Factory Compliance Certificate` Document.
+
+**Limitations**
+
+The issue with this approach is that in the document relations table, none of the fields are enforced at the database level to be not null except for the documentId. Which opens up the possibility of creating stray document relation records that are not linked to any other record.
+In order to prevent this, we have to enforce the relations at the application level. This means that we need to check that there is one and only one defined record for each document relation apart from the documentId. I used `Zod` to achieve this.
+
+```ts
+const isExactlyOneDefined = <T extends object>(obj: T): boolean => {
+  const definedValues = Object.values(obj).filter(
+    (value) => value !== null && value !== undefined,
+  );
+  return definedValues.length === 1;
+};
+
+const documentRelationsSchema = createInsertSchema(
+  documentRelationsTable,
 )
+  .omit({ documentId: true })
+  .refine((data) => {
+    const { projectId, itemId, supplierId, clientId } = data;
+    return isExactlyOneDefined({ projectId, itemId, supplierId, clientId });
+  });
 ```
 
-**Application-Level Enforcement**  
-To address this, we can enforce integrity at the application level by adding validation logic in the server or application code. For example, we can create specific functions to handle inserting relations, ensuring that only one relationship type is assigned per row:
+Using the isExactlyOneDefined utility function, we can ensure that the document relations table accepts one and only one of the relations apart from the documentId.
 
-```ts
-function createProjectDocumentRelationAction(projectId: number, documentId: number) {
-  // Ensure only projectId and documentId are passed, and others are null
-  ...
-}
+**Example Usage**
+
+```typescript
+// This will throw an error
+documentRelationsSchema.parse({
+  documentId: 1,
+  projectId: 1,
+  itemId: 1,
+  supplierId: 1,
+  clientId: 1,
+})
+
+// This will throw an error
+documentRelationsSchema.parse({
+  documentId: 1,
+  projectId: 1,
+  clientId: 1,
+})
+
+  // This will throw an error
+documentRelationsSchema.parse({
+  documentId: 1,
+})
+
+// This will pass
+documentRelationsSchema.parse({
+  documentId: 1,
+  projectId: 1,
+})
 ```
-
-By doing this, we can tightly control how relations are inserted and avoid situations where multiple foreign keys are populated at once.
-
-##### Querying
-
-Another challenge with this design is querying documents when many columns in the `DocumentsRelations` table are `null`. Using `LEFT JOIN` to join related tables (e.g., projects, suppliers, and clients) can result in complex queries, especially when we need to account for which entity a document is related to.
-
-For instance, querying for documents and their related entities:
-
-```ts
-const documentRelations = await db
-  .select({
-    project: projects,
-    supplier: suppliers,
-    client: clients,
-    document: documents,
-  })
-  .from(documents)
-  .leftJoin(documentsRelations, eq(documents.id, documentsRelations.documentId))
-  .leftJoin(projects, eq(documentsRelations.projectId, projects.id))
-  .leftJoin(suppliers, eq(documentsRelations.supplierId, suppliers.id))
-  .leftJoin(clients, eq(documentsRelations.clientId, clients.id))
-  .where(eq(documents.id, documentId));
-```
-
-This can become cumbersome, as many of the joined tables will have `null` values when they are not related to a specific document. However, we can simplify the query when retrieving documents by referencing a specific entity:
-
-```ts
-const projectWithDocuments = await db
-  .select({
-    project: projects,
-    relatedDocuments: documents,
-  })
-  .from(projects)
-  .leftJoin(documentsRelations, eq(projects.id, documentsRelations.projectId))
-  .leftJoin(documents, eq(documentsRelations.documentId, documents.id))
-  .where(eq(projects.id, projectId));
-```
-
-This query works more efficiently by narrowing the focus to documents related to a specific project.
-
-##### Scaling
-
-A significant consideration is the scalability of this design. Adding new types of relationships, such as "users having many documents," requires altering the `DocumentsRelations` table by adding new foreign key columns (e.g., `userId`). Each time a new entity needs to be related to documents, we will need to perform a database migration, which can become time-consuming and difficult to manage as the system evolves.
-
-For better scalability, I considered moving toward a more generalized polymorphic pattern, where each relation is represented by a `refTable` and `refId` pair, thus avoiding the need to add new columns for each type of relationship:
-
-```sql
-table DocumentsRelations (
-  id int [pk]
-  documentId int [ref: > Documents.id, not null]
-  refTable enum('projects', 'items', 'suppliers', 'clients')
-  refId int [not null]
-)
-```
-
-This allows for a more flexible design that can accommodate new relationships without requiring schema changes, but lacks foreign key referential integrity, and it requires complex queries to retrieve related data. 
-So I decided to go with the strict referential integrity design.
 
 ## Environment Variables
 You can find an example of the environment variables in the `.env-e` file.
