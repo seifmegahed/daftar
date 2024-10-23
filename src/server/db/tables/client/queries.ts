@@ -68,7 +68,7 @@ export const getClientPrimaryContactId = async (
   }
 };
 
-const projectSearchQuery = (searchText: string) =>
+const clientSearchQuery = (searchText: string) =>
   sql`
       to_tsvector('english', ${clientsTable.name}) ,
       to_tsquery(${prepareSearchText(searchText)})
@@ -95,7 +95,7 @@ export const getClientsBrief = async (
         registrationNumber: clientsTable.registrationNumber,
         createdAt: clientsTable.createdAt,
         rank: searchText
-          ? sql`ts_rank(${projectSearchQuery(searchText ?? "")})`
+          ? sql`ts_rank(${clientSearchQuery(searchText ?? "")})`
           : sql`1`,
       })
       .from(clientsTable)
