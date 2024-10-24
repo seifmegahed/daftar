@@ -110,7 +110,7 @@ async function DocumentForm({
         </TabsContent>
         {relationData.relationTo === "project" && (
           <TabsContent value="generate">
-            <GenerateOfferForm />
+            <GenerateOfferForm relationData={relationData} />
           </TabsContent>
         )}
       </div>

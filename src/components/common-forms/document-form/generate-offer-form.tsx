@@ -1,16 +1,20 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import type { RelationDataType } from ".";
 
-export function GenerateOfferForm() {
+export function GenerateOfferForm({ relationData }: { relationData: RelationDataType }) {
   const handleGenerate = async () => {
+    const formData = new FormData();
+    formData.append("id", relationData.relationId.toString());
     try {
       await fetch("/api/generate-commercial-offer", {
         method: "POST",
+        body: formData,
       }).then(async (response) => {
         const filename = response.headers
           .get("Content-Disposition")
-          ?.split("filename=")[1];
+          ?.split("filename=")[1]?.slice(1);
         if (filename) {
           const link = document.createElement("a");
           const blob = await response.blob();
