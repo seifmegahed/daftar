@@ -12,7 +12,7 @@ So Vercel, Netlify, or any other serverless hosting provider is not recommended.
 That being said, I have hosted a demo version of this app on Vercel. 
 It is fully functional, but the file uploading and downloading features are faked.
 
-To use the demo version, you can contact me at seifmegahed at me dot com.
+To use the demo version, you can contact me via email.
 
 ## Tech Stack
 - Typescript
