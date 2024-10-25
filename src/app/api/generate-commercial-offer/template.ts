@@ -29,7 +29,7 @@ export const template: Template = {
         backgroundColor: "",
         opacity: 1,
         readOnly: true,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "head",
       },
       {
@@ -48,7 +48,7 @@ export const template: Template = {
         backgroundColor: "",
         opacity: 1,
         readOnly: true,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "billedToLabel",
       },
       {
@@ -68,7 +68,7 @@ export const template: Template = {
         backgroundColor: "",
         opacity: 1,
         dynamicFontSize: { min: 3, max: 13, fit: "vertical" },
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "billedToInput",
       },
       {
@@ -90,7 +90,7 @@ export const template: Template = {
         underline: false,
         text: "Invoice No.{InvoiceNo}\n{Date}",
         variables: ["InvoiceNo", "Date"],
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "info",
       },
       {
@@ -103,10 +103,10 @@ export const template: Template = {
         showHead: true,
         head: ["Item", "Qty", "Unit Price", "Total"],
         headWidthPercentages: [40, 15, 20, 25],
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         tableStyles: { borderColor: "#000000", borderWidth: 0 },
         headStyles: {
-          // fontName: "NotoSerifJP-Regular",
+          // fontName: "amiri",
           fontSize: 13,
           characterSpacing: 0,
           alignment: "center",
@@ -119,7 +119,7 @@ export const template: Template = {
           padding: { top: 5, right: 5, bottom: 5, left: 5 },
         },
         bodyStyles: {
-          // fontName: "NotoSerifJP-Regular",
+          // fontName: "amiri",
           fontSize: 13,
           characterSpacing: 0,
           alignment: "center",
@@ -151,7 +151,7 @@ export const template: Template = {
         backgroundColor: "",
         opacity: 1,
         readOnly: true,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "subtotalLabel",
       },
       {
@@ -170,7 +170,7 @@ export const template: Template = {
         backgroundColor: "",
         opacity: 1,
         readOnly: true,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "taxLabel",
       },
       {
@@ -199,7 +199,7 @@ export const template: Template = {
         fontColor: "#000000",
         backgroundColor: "",
         opacity: 1,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "subtotalInput",
       },
       {
@@ -217,7 +217,7 @@ export const template: Template = {
         fontColor: "#000000",
         backgroundColor: "",
         opacity: 1,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "taxInput",
       },
       {
@@ -233,7 +233,7 @@ export const template: Template = {
         lineHeight: 1,
         characterSpacing: 0,
         fontColor: "#000000",
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         backgroundColor: "",
         opacity: 1,
         readOnly: true,
@@ -254,7 +254,7 @@ export const template: Template = {
         fontColor: "#000000",
         backgroundColor: "",
         opacity: 1,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "totalInput",
       },
       {
@@ -270,7 +270,7 @@ export const template: Template = {
         lineHeight: 1,
         characterSpacing: 0,
         fontColor: "#000000",
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         backgroundColor: "",
         opacity: 1,
         readOnly: true,
@@ -292,7 +292,7 @@ export const template: Template = {
         backgroundColor: "",
         opacity: 1,
         readOnly: true,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "paymentInfoLabel",
       },
       {
@@ -312,7 +312,7 @@ export const template: Template = {
         backgroundColor: "",
         opacity: 1,
         dynamicFontSize: { min: 3, max: 13, fit: "vertical" },
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "paymentInfoInput",
       },
       {
@@ -331,7 +331,7 @@ export const template: Template = {
         backgroundColor: "",
         opacity: 1,
         readOnly: true,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "shopName",
       },
       {
@@ -350,7 +350,7 @@ export const template: Template = {
         backgroundColor: "",
         opacity: 1,
         readOnly: true,
-        // fontName: "NotoSerifJP-Regular",
+        // fontName: "amiri",
         name: "shopAddress",
       },
     ],
