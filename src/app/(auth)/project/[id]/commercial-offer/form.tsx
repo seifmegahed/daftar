@@ -23,16 +23,37 @@ type GenerateOfferFormProps = {
   saleItems: Array<{ name: string; quantity: number; price: string }>;
 };
 
-const schema = z.object({
-  companyName: z.preprocess(emptyToUndefined, z.string()),
-  companyAddress: z.preprocess(emptyToUndefined, z.string()),
-  companyCountry: z.preprocess(emptyToUndefined, z.string()),
-  companyPhoneNmA: z.preprocess(emptyToUndefined, z.string()),
-  companyPhoneNmB: z.preprocess(emptyToUndefined, z.string()),
-  offerValidityInDays: z.preprocess(emptyToUndefined, z.string()),
-  advancePercentage: z.preprocess(emptyToUndefined, z.string()),
-  deliveryPeriod: z.preprocess(emptyToUndefined, z.string()),
-});
+const schema = z
+  .object({
+    companyName: z.preprocess(emptyToUndefined, z.string()),
+    companyAddress: z.preprocess(emptyToUndefined, z.string()),
+    companyCountry: z.preprocess(emptyToUndefined, z.string()),
+    companyPhoneNmA: z.preprocess(emptyToUndefined, z.string()),
+    companyPhoneNmB: z.preprocess(emptyToUndefined, z.string()),
+    offerValidityInDays: z.preprocess(emptyToUndefined, z.string()),
+    advancePercentage: z.preprocess(emptyToUndefined, z.string()),
+    deliveryPeriod: z.preprocess(emptyToUndefined, z.string()),
+  })
+  .superRefine((data, ctx) => {
+    const { offerValidityInDays, advancePercentage } = data;
+    if (isNaN(parseInt(offerValidityInDays))) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Offer Validity must be a number",
+        path: ["offerValidityInDays"],
+      });
+      return false;
+    }
+    if (isNaN(parseInt(advancePercentage))) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "Advance Percentage must be a number",
+        path: ["advancePercentage"],
+      });
+      return false;
+    }
+    return true;
+  });
 
 type FormSchemaType = z.infer<typeof schema>;
 
@@ -47,7 +68,7 @@ function GenerateOfferForm({}: GenerateOfferFormProps) {
     advancePercentage: localStorage.getItem("advancePercentage") ?? "",
     deliveryPeriod: localStorage.getItem("deliveryPeriod") ?? "",
   };
-  
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues,
@@ -192,7 +213,7 @@ function GenerateOfferForm({}: GenerateOfferFormProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Delivery Period</FormLabel>
-                <Input {...field}  placeholder="2 - 3 months" />
+                <Input {...field} placeholder="2 - 3 months" />
                 <FormDescription>
                   Enter the delivery period of the project. This will be
                   displayed on the commercial offer document terms.
