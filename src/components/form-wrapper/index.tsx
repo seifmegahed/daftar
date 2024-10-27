@@ -35,8 +35,8 @@ export function FormWrapperWithSubmit({
   title: string;
   description: string;
   buttonText: string;
-  dirty?: boolean;
-  submitting?: boolean;
+  dirty: boolean;
+  submitting: boolean;
 }) {
   return (
     <FormWrapper title={title} description={description}>
@@ -44,7 +44,7 @@ export function FormWrapperWithSubmit({
       <div className="flex justify-end py-4">
         <SubmitButton
           type="submit"
-          disabled={submitting ?? !dirty}
+          disabled={submitting || !dirty}
           loading={submitting}
         >
           {buttonText}

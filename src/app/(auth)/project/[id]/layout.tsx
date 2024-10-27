@@ -38,6 +38,11 @@ export default async function SettingsLayout({
       href: basePath(id) + "/documents",
     },
     {
+      title: "Commercial Offer",
+      href: basePath(id) + "/commercial-offer",
+      hidden: !userAccess,
+    },
+    {
       title: "New Purchase Item",
       href: basePath(id) + "/new-purchase-item",
     },

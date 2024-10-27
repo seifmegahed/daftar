@@ -8,7 +8,6 @@ import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 import type { NextRequest } from "next/server";
 import { errorLogger } from "@/lib/exceptions";
 
-
 const downloadDocumentErrorLog = errorLogger("Download Document API Error:");
 
 const demoFileUrl =
@@ -70,7 +69,8 @@ export async function GET(
       return new Response("Document does not exist", { status: 500 });
     }
 
-    const file = await fs.readFile(document.path);
+    const path = document.path;
+    const file = await fs.readFile(path);
     return new NextResponse(file, {
       status: 200,
       headers: {

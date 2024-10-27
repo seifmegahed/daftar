@@ -3,6 +3,7 @@ import { createCommercialOffer } from "@/server/actions/commercial-offer/create"
 import type { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
+  console.log("POST");
   const formData = await request.formData();
 
   const id = parseInt(formData.get("id")?.toString() ?? "");
