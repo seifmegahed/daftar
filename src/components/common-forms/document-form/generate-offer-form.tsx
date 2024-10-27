@@ -2,8 +2,15 @@
 
 import type { RelationDataType } from ".";
 import { useRouter } from "next/navigation";
-import SubmitButton from "@/components/buttons/submit-button";
 import { useState } from "react";
+// import {
+//   Form,
+//   FormDescription,
+//   FormField,
+//   FormItem,
+//   FormMessage,
+// } from "@/components/ui/form";
+import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 
 export function GenerateOfferForm({
   relationData,
@@ -43,14 +50,16 @@ export function GenerateOfferForm({
     }
   };
   return (
-    <div className="flex justify-center py-10">
-      <SubmitButton
-        onClick={handleGenerate}
-        loading={loading}
-        disabled={loading}
+    <form onSubmit={handleGenerate}>
+      <FormWrapperWithSubmit
+        title="Generate Offer"
+        description="Generate a commercial offer for the project"
+        buttonText="Generate"
+        submitting={loading}
+        dirty={false}
       >
-        Generate Offer
-      </SubmitButton>
-    </div>
+        <></>
+      </FormWrapperWithSubmit>
+    </form>
   );
 }

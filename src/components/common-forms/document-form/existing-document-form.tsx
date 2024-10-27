@@ -12,10 +12,9 @@ import {
   FormItem,
 } from "@/components/ui/form";
 import ComboSelect from "@/components/combo-select-obj";
-import SubmitButton from "@/components/buttons/submit-button";
-import { Separator } from "@/components/ui/separator";
 import { addDocumentRelationAction } from "@/server/actions/document-relations/create";
 import { toast } from "sonner";
+import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 
 const schema = z.object({
   id: z.number(),
@@ -57,7 +56,7 @@ function ExistingDocumentForm({
         toast.error(error);
         return;
       }
-      toast.success("Document added")
+      toast.success("Document added");
     } catch (error) {
       console.log(error);
       toast.error("An error occurred while adding document");
@@ -65,40 +64,33 @@ function ExistingDocumentForm({
   };
 
   return (
-    <form
-      {...form}
-      onSubmit={form.handleSubmit(onSubmit)}
-      className="flex flex-col gap-4"
-    >
-      <h2 className="text-2xl font-bold">Existing Document Form</h2>
-      <Separator />
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       <Form {...form}>
-        <FormField
-          name="id"
-          control={form.control}
-          render={({ field }) => (
-            <FormItem>
-              <ComboSelect
-                options={documentOptions}
-                onChange={field.onChange}
-                value={field.value}
-              />
-              <FormDescription>
-                Search and select the document you want to link. After selecting
-                the document, press submit to link the document.
-              </FormDescription>
-            </FormItem>
-          )}
-        />
-        <div className="flex justify-end">
-          <SubmitButton
-            loading={form.formState.isSubmitting}
-            disabled={form.formState.isSubmitting || !form.formState.isDirty}
-            type="submit"
-          >
-            Submit
-          </SubmitButton>
-        </div>
+        <FormWrapperWithSubmit
+          title="Add Existing Document"
+          description="Add an existing document to the project"
+          buttonText="Add Document"
+          submitting={form.formState.isSubmitting}
+          dirty={form.formState.isDirty}
+        >
+          <FormField
+            name="id"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <ComboSelect
+                  options={documentOptions}
+                  onChange={field.onChange}
+                  value={field.value}
+                />
+                <FormDescription>
+                  Search and select the document you want to link. After
+                  selecting the document, press submit to link the document.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+        </FormWrapperWithSubmit>
       </Form>
     </form>
   );

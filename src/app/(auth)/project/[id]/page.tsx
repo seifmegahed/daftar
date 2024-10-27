@@ -25,8 +25,6 @@ async function ProjectPage({ params }: { params: { id: string } }) {
   const [documents, linkedDocumentsError] = await getProjectLinkedDocumentsAction(projectId);
   if (linkedDocumentsError !== null) return <ErrorPage message={linkedDocumentsError} />;
 
-  console.log(documents);
-
   return (
     <InfoPageWrapper
       title={project.name}
