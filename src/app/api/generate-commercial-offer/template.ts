@@ -15,7 +15,7 @@ export const templateSchema = z.object({
       companyEmail: z.string(),
     })
     .default({
-      companyAddress: "51 Rossetta st.",
+      companyAddress: "51 Rosetta st.",
       companyCountry: "Alexandria, Egypt",
       companyPhoneNmB: "+20 123 456 789",
       companyPhoneNmA: "+20 123 456 789",
@@ -127,7 +127,7 @@ export const template: Template = {
         name: "clientField",
         type: "multiVariableText",
         content:
-          '{"clientAddress":"27 Ismalia street","clientCountry":"Damanhour, Egypt","clientPhoneNumber":"+201228464989","clientEmail":"wagdy@gmail.com\\n"}',
+          '{"clientAddress":"27 Syria street","clientCountry":"Alexandria, Egypt","clientPhoneNumber":"+20 123 456 7890","clientEmail":"purchasing@example.com\\n"}',
         position: { x: 120, y: 58 },
         width: 70,
         height: 50,
@@ -179,7 +179,7 @@ export const template: Template = {
         name: "projectData",
         type: "multiVariableText",
         content:
-          '{"offerReference":"Balboa","projectName":"Ekhteyar","projectManager":"Seif Megahed","ownerNumber":"+5229215","ownerEmail":"seif@me.com"}',
+          '{"offerReference":"P1CO20302","projectName":"Project 1","projectManager":"John Doe","ownerNumber":"+20 123 456 7890","ownerEmail":"johndoe@example.com"}',
         position: { x: 80, y: 110 },
         width: 49.21,
         height: 40,
@@ -210,7 +210,7 @@ export const template: Template = {
         name: "message",
         type: "text",
         content:
-          "Dear Sir / Madam\n\n     Please Find enclosed here our quotation for the above mentioned subject. In case of any changes or comments you may require, please don’t hesitate to contact us.",
+          "Dear Sir / Madam\n\n\tPlease Find enclosed here our quotation for the above mentioned subject. In case of any changes or comments you may require, please don’t hesitate to contact us.",
         position: { x: 20, y: 160 },
         width: 170,
         height: 30,
