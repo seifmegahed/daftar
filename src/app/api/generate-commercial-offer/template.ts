@@ -90,7 +90,7 @@ export const template: Template = {
         strikethrough: false,
         underline: false,
         readOnly: false,
-        fontName: "amiriBold",
+        fontName: "readexProBold",
       },
       {
         name: "companyField",
@@ -121,7 +121,7 @@ export const template: Template = {
           "companyEmail",
         ],
         required: true,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
       {
         name: "clientField",
@@ -151,7 +151,7 @@ export const template: Template = {
           "clientEmail",
         ],
         required: true,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
       {
         name: "projectKeys",
@@ -172,7 +172,7 @@ export const template: Template = {
         strikethrough: false,
         underline: false,
         required: false,
-        fontName: "amiriBold",
+        fontName: "readexProBold",
         readOnly: true,
       },
       {
@@ -204,7 +204,7 @@ export const template: Template = {
           "ownerEmail",
         ],
         required: true,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
       {
         name: "message",
@@ -226,7 +226,7 @@ export const template: Template = {
         strikethrough: false,
         underline: false,
         required: false,
-        fontName: "amiri",
+        fontName: "readexPro",
         readOnly: true,
       },
       {
@@ -249,14 +249,14 @@ export const template: Template = {
         underline: false,
         required: false,
         readOnly: true,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
       {
         name: "clientName",
         type: "text",
         content: "Client",
-        position: { x: 120, y: 50 },
-        width: 70,
+        position: { x: 70, y: 50 },
+        width: 120,
         height: 10,
         rotate: 0,
         alignment: "right",
@@ -271,7 +271,7 @@ export const template: Template = {
         underline: false,
         required: true,
         readOnly: false,
-        fontName: "amiriBold",
+        fontName: "readexProBold",
       },
       {
         name: "date",
@@ -293,7 +293,7 @@ export const template: Template = {
         underline: false,
         required: true,
         readOnly: false,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
       {
         name: "tocLabel",
@@ -315,7 +315,7 @@ export const template: Template = {
         underline: false,
         required: false,
         readOnly: true,
-        fontName: "amiriBold",
+        fontName: "readexProBold",
       },
       {
         name: "toc",
@@ -337,7 +337,7 @@ export const template: Template = {
         underline: false,
         required: false,
         readOnly: true,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
     ],
     [
@@ -361,7 +361,7 @@ export const template: Template = {
         underline: false,
         required: false,
         readOnly: true,
-        fontName: "amiriBold",
+        fontName: "readexProBold",
       },
       {
         name: "offerValidityLabel",
@@ -383,7 +383,7 @@ export const template: Template = {
         strikethrough: false,
         underline: false,
         readOnly: true,
-        fontName: "amiri",
+        fontName: "readexProBold",
       },
       {
         name: "offerValidityKeys",
@@ -428,7 +428,7 @@ export const template: Template = {
         text: "{offerValidityInDays} days\n\nOffer date\n\n- Should extension of validity be required beyond\nthe fixed period ({offerValidityInDays}) days, please contact us before the end of validity period to obtain a written extended validity period.\n\n- Beyond the fixed period of offer validity {companyName} is entitled to review / modify or cancel the prices and offers conditions.\n\n- In case of deterioration of EGP exchange rate\nversus the EUR/USD during the price list or offer\nvalidity period, then {companyName} has the right\nto reevaluate the price list or the offer to reflect\nsuch currency effect in the pricing.",
         variables: ["companyName", "offerValidityInDays"],
         required: true,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
       {
         name: "paymentLabel",
@@ -450,7 +450,7 @@ export const template: Template = {
         strikethrough: false,
         underline: false,
         readOnly: true,
-        fontName: "amiri",
+        fontName: "readexProBold",
       },
       {
         name: "payment",
@@ -474,7 +474,7 @@ export const template: Template = {
         text: "( 25% ) advance payment from the total price by certified cheque or cash\n( 75% ) upon delivery through certified cheque or cash",
         variables: [],
         required: false,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
       {
         name: "taxesLabel",
@@ -496,7 +496,7 @@ export const template: Template = {
         strikethrough: false,
         underline: false,
         readOnly: true,
-        fontName: "amiri",
+        fontName: "readexProBold",
       },
       {
         name: "taxes",
@@ -520,7 +520,7 @@ export const template: Template = {
         text: "This offer excludes the value added tax of (14%)",
         variables: [],
         required: false,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
       {
         name: "deliveryPeriodLabel",
@@ -542,7 +542,7 @@ export const template: Template = {
         strikethrough: false,
         underline: false,
         readOnly: true,
-        fontName: "amiri",
+        fontName: "readexProBold",
       },
       {
         name: "deliveryPeriod",
@@ -566,7 +566,7 @@ export const template: Template = {
         text: "Delivery period is within {deliveryPeriod} from receiving the advance payment",
         variables: ["deliveryPeriod"],
         required: true,
-        fontName: "amiri",
+        fontName: "readexPro",
       },
     ],
     [
@@ -580,10 +580,10 @@ export const template: Template = {
         showHead: true,
         head: ["Item", "Qty", "Unit Price", "Total"],
         headWidthPercentages: [40, 15, 20, 25],
-        fontName: "amiri",
+        fontName: "readexPro",
         tableStyles: { borderWidth: 0, borderColor: "#000000" },
         headStyles: {
-          fontName: "amiri",
+          fontName: "readexPro",
           fontSize: 13,
           characterSpacing: 0,
           alignment: "center",
@@ -592,11 +592,11 @@ export const template: Template = {
           fontColor: "#000000",
           borderColor: "#000000",
           backgroundColor: "",
-          borderWidth: { top: 0.1, right: 0, bottom: 0, left: 0 },
+          borderWidth: { top: 0, right: 0, bottom: 0, left: 0 },
           padding: { top: 5, right: 5, bottom: 5, left: 5 },
         },
         bodyStyles: {
-          fontName: "amiri",
+          fontName: "readexPro",
           fontSize: 10,
           characterSpacing: 0,
           alignment: "center",
@@ -606,7 +606,7 @@ export const template: Template = {
           borderColor: "#000000",
           backgroundColor: "",
           alternateBackgroundColor: "",
-          borderWidth: { top: 0.1, right: 0, bottom: 0.1, left: 0 },
+          borderWidth: { top: 0.1, right: 0, bottom: 0, left: 0 },
           padding: { top: 6, right: 5, bottom: 5, left: 5 },
         },
         columnStyles: {
@@ -636,7 +636,7 @@ export const template: Template = {
         underline: false,
         required: false,
         readOnly: true,
-        fontName: "amiriBold",
+        fontName: "readexProBold",
       },
     ],
   ],
