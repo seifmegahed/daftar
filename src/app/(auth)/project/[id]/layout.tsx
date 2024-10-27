@@ -1,8 +1,7 @@
-import ErrorPage from "@/components/error";
 import PageLayout from "@/components/page-layout";
 import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 
-const basePath = (id: number) => "/project/" + id;
+const basePath = (id: string) => "/project/" + id;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
@@ -11,14 +10,11 @@ interface SettingsLayoutProps {
 
 export default async function SettingsLayout({
   children,
-  params: { id },
+  params,
 }: SettingsLayoutProps) {
-  const projectId = parseInt(id);
-  if (isNaN(projectId)) return <ErrorPage message="Invalid project id" />;
-  
   const [userAccess] = await hasAccessToPrivateDataAction();
 
-  const sidebarNavItemsGenerator = (id: number) => [
+  const sidebarNavItemsGenerator = (id: string) => [
     {
       title: "Project",
       href: basePath(id),
@@ -60,7 +56,7 @@ export default async function SettingsLayout({
     },
   ];
 
-  const sidebarNavItems = sidebarNavItemsGenerator(projectId);
+  const sidebarNavItems = sidebarNavItemsGenerator(params.id);
   return (
     <PageLayout
       title="Project"

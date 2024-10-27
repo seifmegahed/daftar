@@ -1,28 +1,23 @@
-import { getSuppliersCountAction } from "@/server/actions/suppliers/read";
 import PageLayout from "@/components/page-layout";
-
-;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
 }
 
+const sidebarNavItems = [
+  {
+    title: "All Suppliers",
+    href: "/suppliers",
+  },
+  {
+    title: "New Supplier",
+    href: "/suppliers/new-supplier",
+  },
+];
+
 export default async function SettingsLayout({
   children,
 }: SettingsLayoutProps) {
-  const [numberOfSuppliers] = await getSuppliersCountAction();
-
-  const sidebarNavItems = [
-    {
-      title: "All Suppliers",
-      href: "/suppliers",
-      amount: numberOfSuppliers ?? 0,
-    },
-    {
-      title: "New Supplier",
-      href: "/suppliers/new-supplier",
-    },
-  ];
   return (
     <PageLayout
       title="Suppliers"

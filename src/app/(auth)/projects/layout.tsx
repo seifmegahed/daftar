@@ -1,31 +1,23 @@
-import { getProjectsCount } from "@/server/db/tables/project/queries";
 import PageLayout from "@/components/page-layout";
-
-;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
 }
 
+const sidebarNavItems = [
+  {
+    title: "All Projects",
+    href: "/projects",
+  },
+  {
+    title: "New Project",
+    href: "/projects/new-project",
+  },
+];
+
 export default async function SettingsLayout({
   children,
 }: SettingsLayoutProps) {
-  const [numberOfProjects, error] = await getProjectsCount();
-  if (error !== null)
-    return <div>Something went wrong. Please try again later.</div>;
-
-  const sidebarNavItems = [
-    {
-      title: "All Projects",
-      href: "/projects",
-      amount: numberOfProjects,
-    },
-    {
-      title: "New Project",
-      href: "/projects/new-project",
-    },
-  ];
-
   return (
     <PageLayout
       title="Projects"

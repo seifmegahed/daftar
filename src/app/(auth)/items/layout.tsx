@@ -1,28 +1,23 @@
-import { getItemsCountAction } from "@/server/actions/items/read";
 import PageLayout from "@/components/page-layout";
-
-;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
 }
 
+const sidebarNavItems = [
+  {
+    title: "All Items",
+    href: "/items",
+  },
+  {
+    title: "New Item",
+    href: "/items/new-item",
+  },
+];
+
 export default async function SettingsLayout({
   children,
 }: SettingsLayoutProps) {
-  const [numberOfItems] = await getItemsCountAction();
-
-  const sidebarNavItems = [
-    {
-      title: "All Items",
-      href: "/items",
-      amount: numberOfItems ?? 0,
-    },
-    {
-      title: "New Item",
-      href: "/items/new-item",
-    },
-  ];
   return (
     <PageLayout
       title="Items"
