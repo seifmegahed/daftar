@@ -1,9 +1,6 @@
-import { getProjectDocumentsCountAction } from "@/server/actions/document-relations/read";
-import { getPurchaseItemsCountAction } from "@/server/actions/purchase-items/read";
+import ErrorPage from "@/components/error";
 import PageLayout from "@/components/page-layout";
 import { hasAccessToPrivateDataAction } from "@/server/actions/users";
-import { getProjectCommentsCountAction } from "@/server/actions/project-comments/read";
-import { getProjectSaleItemsCountAction } from "@/server/actions/sale-items/read";
 
 const basePath = (id: number) => "/project/" + id;
 
@@ -14,14 +11,11 @@ interface SettingsLayoutProps {
 
 export default async function SettingsLayout({
   children,
-  params,
+  params: { id },
 }: SettingsLayoutProps) {
-  const projectId = Number(params.id);
-  if (isNaN(projectId)) return <div>Error: Project ID is invalid</div>;
-  const [numberOfDocuments] = await getProjectDocumentsCountAction(projectId);
-  const [numberOfItems] = await getPurchaseItemsCountAction(projectId);
-  const [numberOfSaleItems] = await getProjectSaleItemsCountAction(projectId);
-  const [numberOfComments] = await getProjectCommentsCountAction(projectId);
+  const projectId = parseInt(id);
+  if (isNaN(projectId)) return <ErrorPage message="Invalid project id" />;
+  
   const [userAccess] = await hasAccessToPrivateDataAction();
 
   const sidebarNavItemsGenerator = (id: number) => [
@@ -36,19 +30,16 @@ export default async function SettingsLayout({
     {
       title: "Sale Items",
       href: basePath(id) + "/sale-items",
-      amount: numberOfSaleItems ?? 0,
       hidden: !userAccess,
     },
     {
       title: "Purchase Items",
       href: basePath(id) + "/purchase-items",
-      amount: numberOfItems ?? 0,
       hidden: !userAccess,
     },
     {
       title: "Documents",
       href: basePath(id) + "/documents",
-      amount: numberOfDocuments ?? 0,
     },
     {
       title: "New Purchase Item",
@@ -66,7 +57,6 @@ export default async function SettingsLayout({
     {
       title: "Comments",
       href: basePath(id) + "/comments",
-      amount: numberOfComments ?? 0,
     },
   ];
 

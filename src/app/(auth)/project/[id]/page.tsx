@@ -22,7 +22,10 @@ async function ProjectPage({ params }: { params: { id: string } }) {
   const [project, error] = await getProjectByIdAction(projectId);
   if (error !== null) return <ErrorPage message={error} />;
 
-  const [documents] = await getProjectLinkedDocumentsAction(projectId);
+  const [documents, linkedDocumentsError] = await getProjectLinkedDocumentsAction(projectId);
+  if (linkedDocumentsError !== null) return <ErrorPage message={linkedDocumentsError} />;
+
+  console.log(documents);
 
   return (
     <InfoPageWrapper

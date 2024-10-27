@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
       status: 500,
     });
 
-  return new Response(file.buffer, {
+  return new Response(file, {
     headers: {
       "Content-Type": "application/pdf",
       "Content-Disposition": `attachment; filename="${file.name}"`,

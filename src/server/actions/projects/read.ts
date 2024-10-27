@@ -3,11 +3,11 @@
 import {
   getProjectById,
   getProjectsBrief,
-  // getProjectLinkedDocuments,
   getProjectsCount,
   getProjectBriefById,
   getClientProjectsCount,
   getClientProjects,
+  getProjectLinkedDocuments,
 } from "@/server/db/tables/project/queries";
 
 import type {
@@ -20,7 +20,6 @@ import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 import type { SelectProjectType } from "@/server/db/tables/project/schema";
 import type { FilterArgs } from "@/components/filter-and-search";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { getProjectLinkedDocumentsCached } from "@/server/cache/projects/store";
 
 export const getProjectsCountAction = async (
   filter?: FilterArgs,
@@ -77,14 +76,14 @@ export const getProjectLinkedDocumentsAction = async (
 ): Promise<ReturnTuple<GetProjectLinkedDocumentsType>> => {
   const [access, accessError] = await hasAccessToPrivateDataAction();
   if (accessError !== null) return [null, accessError];
-  const [project, projectError] = await getProjectLinkedDocumentsCached(
-    projectId,
-    access,
-  );
-  // const [project, projectError] = await getProjectLinkedDocuments(
+  // const [project, projectError] = await getProjectLinkedDocumentsCached(
   //   projectId,
   //   access,
   // );
+  const [project, projectError] = await getProjectLinkedDocuments(
+    projectId,
+    access,
+  );
   if (projectError !== null) return [null, projectError];
   return [project, null];
 };

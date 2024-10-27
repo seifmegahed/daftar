@@ -11,10 +11,10 @@ import type { GetProjectType } from "@/server/db/tables/project/queries";
 export const generateCommercialOfferFile = async (data: {
   project: GetProjectType;
   saleItems: Array<{ name: string; quantity: number; price: string }>;
-}): Promise<ReturnTuple<{ buffer: ArrayBuffer; name: string }>> => {
+}): Promise<ReturnTuple<File>> => {
   const { project, saleItems } = data;
   const offerReference = `P${project.id}C-${Date.now().toString(16).toUpperCase()}`;
-  
+
   const [inputs, inputsError] = prepareInputs(
     {
       project: project,
@@ -38,7 +38,9 @@ export const generateCommercialOfferFile = async (data: {
     const buffer = await blob.arrayBuffer();
     const name = `${offerReference}.pdf`;
 
-    return [{ buffer, name }, null];
+    const file = new File([buffer], name, { type: "application/pdf" });
+
+    return [file, null];
   } catch (error) {
     console.error(error);
     return [null, "Error generating PDF"];
