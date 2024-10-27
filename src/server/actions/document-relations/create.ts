@@ -11,7 +11,7 @@ import { errorLogger } from "@/lib/exceptions";
 import type { DocumentRelationsType } from "@/server/db/tables/document-relation/schema";
 import type { RelationDataType } from "@/components/common-forms/document-form";
 import type { ReturnTuple } from "@/utils/type-utils";
-import { revalidateProjectLinkedDocuments } from "@/server/cache/projects/revalidate";
+// import { revalidateProjectLinkedDocuments } from "@/server/cache/projects/revalidate";
 
 const documentRelationErrorLog = errorLogger("Document Relation Action Error:");
 
@@ -29,10 +29,10 @@ export const addDocumentRelationAction = async (
   if (resultError !== null) return [null, resultError];
 
   const { relationId: id, relationTo: type } = relationData;
-  switch (type) {
-    case "project":
-      revalidateProjectLinkedDocuments(id);
-  }
+  // switch (type) {
+  //   case "project":
+  //     revalidateProjectLinkedDocuments(id);
+  // }
   revalidatePath(`/${type}/${id}/documents`);
   redirect(`/${type}/${id}/documents`);
 };
