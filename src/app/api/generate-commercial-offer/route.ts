@@ -4,12 +4,9 @@ import type { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
   console.log("POST");
-  const formData = await request.formData();
+  const formData = await request.formData()
 
-  const id = parseInt(formData.get("id")?.toString() ?? "");
-  if (isNaN(id)) return new Response("Invalid id", { status: 400 });
-
-  const [file, error] = await createCommercialOffer({ projectId: id });
+  const [file, error] = await createCommercialOffer(formData);
   if (error !== null)
     return new Response("An error occurred while generating the file", {
       status: 500,

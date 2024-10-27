@@ -7,11 +7,11 @@ export const commercialOfferInputSchema = z.object({
   date: z.string().default(format(new Date(), "dd MMMM yyyy")),
   companyField: z
     .object({
-      companyAddress: z.string(),
-      companyCountry: z.string(),
-      companyPhoneNmB: z.string(),
-      companyPhoneNmA: z.string(),
-      companyEmail: z.string(),
+      companyAddress: z.string().default("51 Rosetta st."),
+      companyCountry: z.string().default("Alexandria, Egypt"),
+      companyPhoneNmB: z.string().default("+20 123 456 789"),
+      companyPhoneNmA: z.string().default("+20 123 456 789"),
+      companyEmail: z.string().default("info@acme-inc.com"),
     })
     .default({
       companyAddress: "51 Rosetta st.",
@@ -41,8 +41,8 @@ export const commercialOfferInputSchema = z.object({
     .transform((value) => JSON.stringify(value)),
   offerValidity: z
     .object({
-      companyName: z.string(),
-      offerValidityInDays: z.string(),
+      companyName: z.string().default("ACME INC"),
+      offerValidityInDays: z.string().default("7"),
     })
     .default({ companyName: "ACME INC", offerValidityInDays: "7" })
     .transform((value) => JSON.stringify(value)),
@@ -66,4 +66,6 @@ export const commercialOfferInputSchema = z.object({
     ),
 });
 
-export type CommercialOfferInputType = z.infer<typeof commercialOfferInputSchema>;
+export type CommercialOfferInputType = z.infer<
+  typeof commercialOfferInputSchema
+>;

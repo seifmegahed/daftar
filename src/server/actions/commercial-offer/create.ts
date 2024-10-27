@@ -11,11 +11,23 @@ import type { ReturnTuple } from "@/utils/type-utils";
 
 type GenerateCommercialOfferArgs = {
   projectId: number;
+  companyName?: string;
+  companyAddress?: string;
+  companyCountry?: string;
+  companyPhoneNmA?: string;
+  companyPhoneNmB?: string;
+  companyEmail?: string;
+  offerValidityInDays?: number;
+  advancePercentage?: number;
+  deliveryPeriod?: string;
 };
 
 export const createCommercialOffer = async (
-  args: GenerateCommercialOfferArgs,
+  formData: FormData,
 ): Promise<ReturnTuple<File>> => {
+  const [args, parseError] = parseFormData(formData);
+  if (parseError !== null) return [null, parseError];
+
   const { projectId } = args;
 
   const [project, projectError] = await getProjectByIdAction(projectId);
@@ -29,6 +41,7 @@ export const createCommercialOffer = async (
   const [file, error] = await generateCommercialOfferFile({
     project,
     saleItems,
+    otherData: args,
   });
   if (error !== null) return [null, error];
 
@@ -56,4 +69,43 @@ export const createCommercialOffer = async (
   if (documentError !== null) return [null, documentError];
 
   return [file, null];
+};
+
+const parseFormData = (
+  formData: FormData,
+): ReturnTuple<GenerateCommercialOfferArgs> => {
+  const projectId = parseInt(formData.get("id")?.toString() ?? "");
+  if (isNaN(projectId)) return [null, "Invalid id"];
+  const companyName = formData.get("companyName")?.toString();
+  const companyAddress = formData.get("companyAddress")?.toString();
+  const companyCountry = formData.get("companyCountry")?.toString();
+  const companyPhoneNmA = formData.get("companyPhoneNmA")?.toString();
+  const companyPhoneNmB = formData.get("companyPhoneNmB")?.toString();
+  const companyEmail = formData.get("companyEmail")?.toString();
+  const offerValidityInDays = formData.get("offerValidityInDays")?.toString();
+  const advancePercentage = formData.get("advancePercentage")?.toString();
+  const deliveryPeriod = formData.get("deliveryPeriod")?.toString();
+  if (advancePercentage && isNaN(parseInt(advancePercentage)))
+    return [null, "Invalid advance percentage"];
+  if (offerValidityInDays && isNaN(parseInt(offerValidityInDays)))
+    return [null, "Invalid offer validity"];
+  return [
+    {
+      projectId,
+      companyName,
+      companyAddress,
+      companyCountry,
+      companyPhoneNmA,
+      companyPhoneNmB,
+      companyEmail,
+      offerValidityInDays: offerValidityInDays
+        ? parseInt(offerValidityInDays)
+        : undefined,
+      advancePercentage: advancePercentage
+        ? parseInt(advancePercentage)
+        : undefined,
+      deliveryPeriod,
+    },
+    null,
+  ];
 };

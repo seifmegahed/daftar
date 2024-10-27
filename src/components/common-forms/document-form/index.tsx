@@ -2,7 +2,6 @@ import { Tabs, TabsTrigger, TabsList, TabsContent } from "@/components/ui/tabs";
 import NewDocumentForm from "./new-document-form";
 import ExistingDocumentForm from "./existing-document-form";
 import { getDocumentOptionsAction } from "@/server/actions/documents/read";
-import { GenerateOfferForm } from "./generate-offer-form";
 
 export type RelationDataType = {
   relationTo: "client" | "supplier" | "project" | "item";
@@ -91,11 +90,6 @@ async function DocumentForm({
         <TabsTrigger value="new" className="h-10 w-48">
           New Document
         </TabsTrigger>
-        {relationData.relationTo === "project" && (
-          <TabsTrigger value="generate" className="h-10 w-48">
-            Generate Offer
-          </TabsTrigger>
-        )}
       </TabsList>
       <div className="p-2">
         <TabsContent value="new">
@@ -108,11 +102,6 @@ async function DocumentForm({
             relationData={relationData}
           />
         </TabsContent>
-        {relationData.relationTo === "project" && (
-          <TabsContent value="generate">
-            <GenerateOfferForm relationData={relationData} />
-          </TabsContent>
-        )}
       </div>
     </Tabs>
   );

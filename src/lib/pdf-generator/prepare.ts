@@ -9,6 +9,17 @@ export const prepareInputs = (
   data: {
     project: GetProjectType;
     saleItems: Array<{ name: string; quantity: number; price: string }>;
+    otherData: {
+      companyName?: string;
+      companyAddress?: string;
+      companyCountry?: string;
+      companyPhoneNmA?: string;
+      companyPhoneNmB?: string;
+      companyEmail?: string;
+      offerValidityInDays?: number;
+      advancePercentage?: number;
+      deliveryPeriod?: string;
+    };
   },
   offerReference: string,
 ): ReturnTuple<CommercialOfferInputType> => {
@@ -38,6 +49,24 @@ export const prepareInputs = (
   };
 
   const inputsParsed = commercialOfferInputSchema.safeParse({
+    title: data.otherData.companyName,
+    companyField: {
+      companyAddress: data.otherData.companyAddress,
+      companyCountry: data.otherData.companyCountry,
+      companyPhoneNmA: data.otherData.companyPhoneNmA,
+      companyPhoneNmB: data.otherData.companyPhoneNmB,
+      companyEmail: data.otherData.companyEmail,
+    },
+    offerValidity: {
+      companyName: data.otherData.companyName,
+      offerValidityInDays: String(data.otherData.offerValidityInDays),
+    },
+    payment: {
+      paymentAdvance: data.otherData.advancePercentage, // needs further implementation
+    },
+    deliveryPeriod: {
+      deliveryPeriod: data.otherData.deliveryPeriod,
+    },
     clientName: project.client.name,
     clientField: {
       clientAddress: project.client.primaryAddress?.addressLine ?? "",

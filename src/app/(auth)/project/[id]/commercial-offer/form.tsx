@@ -3,6 +3,8 @@
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+// import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 import {
   Form,
@@ -13,14 +15,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
-
-import type { GetProjectType } from "@/server/db/tables/project/queries";
-import { emptyToUndefined } from "@/utils/common";
 import { Input } from "@/components/ui/input";
 
+import { emptyToUndefined } from "@/utils/common";
+import { toast } from "sonner";
+
+// import type { GetProjectType } from "@/server/db/tables/project/queries";
+
 type GenerateOfferFormProps = {
-  project: GetProjectType;
-  saleItems: Array<{ name: string; quantity: number; price: string }>;
+  // project: GetProjectType;
+  // saleItems: Array<{ name: string; quantity: number; price: string }>;
+  projectId: number;
 };
 
 const schema = z
@@ -30,6 +35,7 @@ const schema = z
     companyCountry: z.preprocess(emptyToUndefined, z.string()),
     companyPhoneNmA: z.preprocess(emptyToUndefined, z.string()),
     companyPhoneNmB: z.preprocess(emptyToUndefined, z.string()),
+    companyEmail: z.preprocess(emptyToUndefined, z.string().email()),
     offerValidityInDays: z.preprocess(emptyToUndefined, z.string()),
     advancePercentage: z.preprocess(emptyToUndefined, z.string()),
     deliveryPeriod: z.preprocess(emptyToUndefined, z.string()),
@@ -57,16 +63,39 @@ const schema = z
 
 type FormSchemaType = z.infer<typeof schema>;
 
-function GenerateOfferForm({}: GenerateOfferFormProps) {
+const createFormData = (values: {
+  data: FormSchemaType;
+  projectId: number;
+}) => {
+  const { data, projectId } = values;
+  const formData = new FormData();
+  formData.append("id", projectId.toString());
+  formData.append("companyName", data.companyName);
+  formData.append("companyAddress", data.companyAddress);
+  formData.append("companyCountry", data.companyCountry);
+  formData.append("companyPhoneNmA", data.companyPhoneNmA);
+  formData.append("companyPhoneNmB", data.companyPhoneNmB);
+  formData.append("companyEmail", data.companyEmail);
+  formData.append("offerValidityInDays", data.offerValidityInDays);
+  formData.append("advancePercentage", data.advancePercentage);
+  formData.append("deliveryPeriod", data.deliveryPeriod);
+  return formData;
+};
+
+function GenerateOfferForm({ projectId }: GenerateOfferFormProps) {
+  const storage = typeof window !== "undefined" ? localStorage : null;
+  // const [loading, setLoading] = useState(false);
+  const navigate = useRouter();
   const defaultValues = {
-    companyName: localStorage.getItem("companyName") ?? "",
-    companyAddress: localStorage.getItem("companyAddress") ?? "",
-    companyCountry: localStorage.getItem("companyCountry") ?? "",
-    companyPhoneNmA: localStorage.getItem("companyPhoneNmA") ?? "",
-    companyPhoneNmB: localStorage.getItem("companyPhoneNmB") ?? "",
-    offerValidityInDays: localStorage.getItem("offerValidityInDays") ?? "",
-    advancePercentage: localStorage.getItem("advancePercentage") ?? "",
-    deliveryPeriod: localStorage.getItem("deliveryPeriod") ?? "",
+    companyName: storage?.getItem("companyName") ?? "",
+    companyAddress: storage?.getItem("companyAddress") ?? "",
+    companyCountry: storage?.getItem("companyCountry") ?? "",
+    companyPhoneNmA: storage?.getItem("companyPhoneNmA") ?? "",
+    companyPhoneNmB: storage?.getItem("companyPhoneNmB") ?? "",
+    companyEmail: storage?.getItem("companyEmail") ?? "",
+    offerValidityInDays: storage?.getItem("offerValidityInDays") ?? "",
+    advancePercentage: storage?.getItem("advancePercentage") ?? "",
+    deliveryPeriod: storage?.getItem("deliveryPeriod") ?? "",
   };
 
   const form = useForm<FormSchemaType>({
@@ -74,15 +103,46 @@ function GenerateOfferForm({}: GenerateOfferFormProps) {
     defaultValues,
   });
 
+  const setStorage = (data: FormSchemaType) => {
+    storage?.setItem("companyName", data.companyName);
+    storage?.setItem("companyAddress", data.companyAddress);
+    storage?.setItem("companyCountry", data.companyCountry);
+    storage?.setItem("companyPhoneNmA", data.companyPhoneNmA);
+    storage?.setItem("companyPhoneNmB", data.companyPhoneNmB);
+    storage?.setItem("companyEmail", data.companyEmail);
+    storage?.setItem("offerValidityInDays", data.offerValidityInDays);
+    storage?.setItem("advancePercentage", data.advancePercentage);
+    storage?.setItem("deliveryPeriod", data.deliveryPeriod);
+  };
+
   const onSubmit = async (data: FormSchemaType) => {
-    localStorage.setItem("companyName", data.companyName);
-    localStorage.setItem("companyAddress", data.companyAddress);
-    localStorage.setItem("companyCountry", data.companyCountry);
-    localStorage.setItem("companyPhoneNmA", data.companyPhoneNmA);
-    localStorage.setItem("companyPhoneNmB", data.companyPhoneNmB);
-    localStorage.setItem("offerValidityInDays", data.offerValidityInDays);
-    localStorage.setItem("advancePercentage", data.advancePercentage);
-    localStorage.setItem("deliveryPeriod", data.deliveryPeriod);
+    setStorage(data);
+    try {
+      const formData = createFormData({ data, projectId });
+      await fetch("/api/generate-commercial-offer", {
+        method: "POST",
+        body: formData,
+      }).then(async (response) => {
+        const filename = response.headers
+          .get("Content-Disposition")
+          ?.split("filename=")[1]
+          ?.slice(1);
+        if (filename) {
+          const link = document.createElement("a");
+          const blob = await response.blob();
+          link.href = window.URL.createObjectURL(blob);
+          link.download = filename;
+          link.click();
+          link.remove();
+          navigate.replace("documents");
+        } else {
+          toast.error("An error occurred while generating the file");
+        }
+      });
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred while generating the file");
+    }
   };
 
   return (
@@ -168,6 +228,21 @@ function GenerateOfferForm({}: GenerateOfferFormProps) {
                   Enter the secondary phone number of your company. This is the
                   phone number will be displayed on the commercial offer
                   document.
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            name="companyEmail"
+            control={form.control}
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email *</FormLabel>
+                <Input {...field} placeholder="info@acme-inc.com" />
+                <FormDescription>
+                  Enter the email address of your company. This email will be
+                  displayed on the commercial offer document.
                 </FormDescription>
                 <FormMessage />
               </FormItem>

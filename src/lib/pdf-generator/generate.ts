@@ -11,14 +11,25 @@ import type { GetProjectType } from "@/server/db/tables/project/queries";
 export const generateCommercialOfferFile = async (data: {
   project: GetProjectType;
   saleItems: Array<{ name: string; quantity: number; price: string }>;
+  otherData: {
+    companyName?: string;
+    companyAddress?: string;
+    companyCountry?: string;
+    companyPhoneNmA?: string;
+    companyPhoneNmB?: string;
+    companyEmail?: string;
+    offerValidityInDays?: number;
+    advancePercentage?: number;
+  };
 }): Promise<ReturnTuple<File>> => {
-  const { project, saleItems } = data;
+  const { project, saleItems, otherData } = data;
   const offerReference = `P${project.id}C-${Date.now().toString(16).toUpperCase()}`;
 
   const [inputs, inputsError] = prepareInputs(
     {
-      project: project,
-      saleItems: saleItems,
+      project,
+      saleItems,
+      otherData,
     },
     offerReference,
   );
