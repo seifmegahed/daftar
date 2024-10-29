@@ -1,10 +1,18 @@
 "use client";
 
-import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-// import { useState } from "react";
 import { useRouter } from "next/navigation";
+
+import {
+  schema,
+  getStorageValues,
+  setStorageValues,
+  createFormData,
+  getFileName,
+  createLink,
+} from "./utils";
+import { toast } from "sonner";
 
 import {
   Form,
@@ -17,128 +25,34 @@ import {
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 import { Input } from "@/components/ui/input";
 
-import { emptyToUndefined } from "@/utils/common";
-import { toast } from "sonner";
+import type { FormSchemaType } from "./utils";
 
-// import type { GetProjectType } from "@/server/db/tables/project/queries";
-
-type GenerateOfferFormProps = {
-  // project: GetProjectType;
-  // saleItems: Array<{ name: string; quantity: number; price: string }>;
-  projectId: number;
-};
-
-const schema = z
-  .object({
-    companyName: z.preprocess(emptyToUndefined, z.string()),
-    companyAddress: z.preprocess(emptyToUndefined, z.string()),
-    companyCountry: z.preprocess(emptyToUndefined, z.string()),
-    companyPhoneNmA: z.preprocess(emptyToUndefined, z.string()),
-    companyPhoneNmB: z.preprocess(emptyToUndefined, z.string()),
-    companyEmail: z.preprocess(emptyToUndefined, z.string().email()),
-    offerValidityInDays: z.preprocess(emptyToUndefined, z.string()),
-    advancePercentage: z.preprocess(emptyToUndefined, z.string()),
-    deliveryPeriod: z.preprocess(emptyToUndefined, z.string()),
-  })
-  .superRefine((data, ctx) => {
-    const { offerValidityInDays, advancePercentage } = data;
-    if (isNaN(parseInt(offerValidityInDays))) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Offer Validity must be a number",
-        path: ["offerValidityInDays"],
-      });
-      return false;
-    }
-    if (isNaN(parseInt(advancePercentage))) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Advance Percentage must be a number",
-        path: ["advancePercentage"],
-      });
-      return false;
-    }
-    return true;
-  });
-
-type FormSchemaType = z.infer<typeof schema>;
-
-const createFormData = (values: {
-  data: FormSchemaType;
-  projectId: number;
-}) => {
-  const { data, projectId } = values;
-  const formData = new FormData();
-  formData.append("id", projectId.toString());
-  formData.append("companyName", data.companyName);
-  formData.append("companyAddress", data.companyAddress);
-  formData.append("companyCountry", data.companyCountry);
-  formData.append("companyPhoneNmA", data.companyPhoneNmA);
-  formData.append("companyPhoneNmB", data.companyPhoneNmB);
-  formData.append("companyEmail", data.companyEmail);
-  formData.append("offerValidityInDays", data.offerValidityInDays);
-  formData.append("advancePercentage", data.advancePercentage);
-  formData.append("deliveryPeriod", data.deliveryPeriod);
-  return formData;
-};
-
-function GenerateOfferForm({ projectId }: GenerateOfferFormProps) {
-  const storage = typeof window !== "undefined" ? localStorage : null;
-  // const [loading, setLoading] = useState(false);
+function GenerateOfferForm({ projectId }: { projectId: number }) {
   const navigate = useRouter();
-  const defaultValues = {
-    companyName: storage?.getItem("companyName") ?? "",
-    companyAddress: storage?.getItem("companyAddress") ?? "",
-    companyCountry: storage?.getItem("companyCountry") ?? "",
-    companyPhoneNmA: storage?.getItem("companyPhoneNmA") ?? "",
-    companyPhoneNmB: storage?.getItem("companyPhoneNmB") ?? "",
-    companyEmail: storage?.getItem("companyEmail") ?? "",
-    offerValidityInDays: storage?.getItem("offerValidityInDays") ?? "",
-    advancePercentage: storage?.getItem("advancePercentage") ?? "",
-    deliveryPeriod: storage?.getItem("deliveryPeriod") ?? "",
-  };
+  const storage = typeof window !== "undefined" ? localStorage : null;
+
+  const defaultValues = getStorageValues(storage);
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues,
   });
 
-  const setStorage = (data: FormSchemaType) => {
-    storage?.setItem("companyName", data.companyName);
-    storage?.setItem("companyAddress", data.companyAddress);
-    storage?.setItem("companyCountry", data.companyCountry);
-    storage?.setItem("companyPhoneNmA", data.companyPhoneNmA);
-    storage?.setItem("companyPhoneNmB", data.companyPhoneNmB);
-    storage?.setItem("companyEmail", data.companyEmail);
-    storage?.setItem("offerValidityInDays", data.offerValidityInDays);
-    storage?.setItem("advancePercentage", data.advancePercentage);
-    storage?.setItem("deliveryPeriod", data.deliveryPeriod);
-  };
-
   const onSubmit = async (data: FormSchemaType) => {
-    setStorage(data);
+    setStorageValues(storage, data);
     try {
-      const formData = createFormData({ data, projectId });
-      await fetch("/api/generate-commercial-offer", {
+      const response = await fetch("/api/generate-commercial-offer", {
         method: "POST",
-        body: formData,
-      }).then(async (response) => {
-        const filename = response.headers
-          .get("Content-Disposition")
-          ?.split("filename=")[1]
-          ?.slice(1);
-        if (filename) {
-          const link = document.createElement("a");
-          const blob = await response.blob();
-          link.href = window.URL.createObjectURL(blob);
-          link.download = filename;
-          link.click();
-          link.remove();
-          navigate.replace("documents");
-        } else {
-          toast.error("An error occurred while generating the file");
-        }
+        body: createFormData({ data, projectId }),
       });
+      const filename = getFileName(response);
+      if (!filename) {
+        toast.error("An error occurred while generating the file");
+        return;
+      }
+      const blob = await response.blob();
+      createLink(document, blob, filename);
+      navigate.replace("documents");
     } catch (error) {
       console.error(error);
       toast.error("An error occurred while generating the file");
