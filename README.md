@@ -10,7 +10,7 @@ It required read/write permissions to the server's filesystem to store and retri
 So Vercel, Netlify, or any other serverless hosting provider is not recommended.
 
 That being said, I have hosted a demo version of this app on Vercel. 
-It is fully functional, but the file uploading and downloading features are faked.
+It is fully functional, but the file upload and download features are faked.
 
 To use the demo version, you can contact me via email.
 
@@ -267,7 +267,7 @@ In this project, I've adopted a GO-like error-handling approach. I have implemen
 
 ```ts
 /**
- * This type ensures the the return is either the generic value or the error message.
+ * This type ensures the the return is either the expected value or an error message.
  * 
  * Acts as an XOR gate (Either Or) (Never Neither) (Never Both)
  * 
@@ -353,8 +353,6 @@ By using this approach, we can communicate errors in a more structured way. Inst
 **Example**
 
 ```tsx
-"use client"
-
 function incrementServerSideCount() {
 
   const handleIncrementCount = async () => {
@@ -379,11 +377,12 @@ function incrementServerSideCount() {
 }
 ```
 
-In this client-side example, we bind a server action to button click that mutates a server side value. Here we handle returned error messages and show them to the user using a toast, yet we still use a try-catch block to catch any other errors that might occur and toast a generic error message to the user.
+In this client-side example, we bind a server action function call to button click. The function increments a server side variable and returns the result. 
+Here we handle returned error messages and show them to the user using a toast, but we still use a try-catch block to catch any other errors that might occur and toast a generic error message to the user.
 
 **Edge Cases**
 
-In some cases, a server action might call a redirect. In this case, the return type would be undefined. This would cause an error in the client-side if we use any of the above approaches.
+In some cases, a server action might call a `redirect` call back from next/navigate. In this case, the return type would be undefined. This would cause an error in the client-side if we use any of the above approaches.
 To overcome this, we need to handle the undefined case first before assigning the result to a tuple.
 
 **Server-Side Example** 
@@ -402,8 +401,6 @@ here we call the `logoutUser` function which handles the logout logic and return
 **Client-Side Example**
 
 ```tsx
-"use client"
-
 function LogoutButton({ id }: { id: number }) {
   const handleLogout = async () => {
     try {
@@ -441,10 +438,10 @@ So on the client side we first store the response in a const and then handle the
 
 **Note**
 
-Later on in during the development of the project, I found a video that explains this approach. In the video, the author returns a the error object instead of an error message.
-You can find the video [here](https://youtu.be/WRuNQWPD5QI?si=_UYf1bn7KL4amFO5). To be honest i had some doubts about this approach and it's usefulness, but this video gave me the more confidence in it. (although it was posted after I had already implemented it :P)
+Later on, during the development of the project, I found a video that explains this approach. In the video the author returns a the error object instead of an error message.
+You can find the video [here](https://youtu.be/WRuNQWPD5QI?si=_UYf1bn7KL4amFO5). To be honest i had some doubts about this approach and it's usefulness, but this video gave me more confidence in it. (although it was posted after I had already implemented it :P)
 
-The decision to use null over undefined wasn't really an intentional one. I just wanted to pay tribute to the GOphers. Maybe there is utility in a null value being a valid value, but I haven't explored this further tbh.
+The decision to use null over undefined wasn't really an intentional one. I felt like paying tribute to the GOphers. Maybe there is utility in a null value being a valid value, but I haven't explored this further tbh.
 
 ### Production
 
@@ -507,7 +504,39 @@ Alternatively, you can set the `ADMIN_USERNAME` and `ADMIN_PASSWORD` environment
 ```bash
 pnpm run admin
 ```
-  
+
+## Development and Production
+
+```bash
+pnpm install
+```
+
+To run the application in development mode, use the following command:
+
+```bash
+pnpm run dev
+```
+
+There are two ways to run the application in production mode. The first is to use `next start` which will start a regular instance of the application.
+
+```bash
+pnpm run start
+```
+
+The second way is to use pm2 to run the application in production mode. To do this, first install pm2 globally using the following command:
+
+```bash
+npm install pm2 -g
+```
+
+Then, run the following command to start the application:
+
+```bash
+pm2 start pm2.json
+```
+
+To configure pm2, you can modify the `pm2.json` file. This file contains the configuration for the application, including the path to the application's entry point, the port to use, and the number of instances to run.
+
 ## License
 
 MIT
