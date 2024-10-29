@@ -276,7 +276,7 @@ function GenerateOfferForm({ projectId }: GenerateOfferFormProps) {
                   Enter the percentage of the advance payment. This will be
                   displayed on the commercial offer document terms.
                   <br />
-                  Example: 25%
+                  Example: 25
                 </FormDescription>
                 <FormMessage />
               </FormItem>

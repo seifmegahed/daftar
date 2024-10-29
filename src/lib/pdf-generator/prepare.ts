@@ -8,7 +8,12 @@ import type { CommercialOfferInputType } from "./schema";
 export const prepareInputs = (
   data: {
     project: GetProjectType;
-    saleItems: Array<{ name: string; quantity: number; price: string }>;
+    saleItems: Array<{
+      name: string;
+      quantity: number;
+      price: string;
+      currency: string;
+    }>;
     otherData: {
       companyName?: string;
       companyAddress?: string;
@@ -23,13 +28,9 @@ export const prepareInputs = (
   },
   offerReference: string,
 ): ReturnTuple<CommercialOfferInputType> => {
-  const { project, saleItems } = data;
-  let total = 0;
-  for (const saleItem of saleItems) {
-    total += parseFloat(saleItem.price) * saleItem.quantity;
-  }
+  const { project, saleItems, otherData } = data;
 
-  const saleItemsSection = saleItems.map((saleItem) => {
+  const items = saleItems.map((saleItem) => {
     const { quantity, name } = saleItem;
     const price = parseFloat(saleItem.price);
     const total = price * quantity;
@@ -38,34 +39,56 @@ export const prepareInputs = (
       quantity: String(quantity),
       price: numberWithCommas(price),
       total: numberWithCommas(total),
+      cur: saleItem.currency,
     };
   });
 
-  const totalSection = {
-    name: "",
-    quantity: "",
-    price: "",
-    total: numberWithCommas(total),
-  };
+  const currencies: string[] = [];
+  for (const saleItem of saleItems) {
+    if (!currencies.includes(saleItem.currency)) {
+      currencies.push(saleItem.currency);
+    }
+  }
 
-  const inputsParsed = commercialOfferInputSchema.safeParse({
+  for (const currency of currencies) {
+    const total = saleItems.reduce((acc, saleItem) => {
+      if (saleItem.currency === currency) {
+        return acc + parseFloat(saleItem.price) * saleItem.quantity;
+      }
+      return acc;
+    }, 0);
+    items.push({
+      name: `Total (${currency})`,
+      quantity: "",
+      price: "",
+      total: numberWithCommas(total),
+      cur: currency,
+    });
+  }
+
+  const postPercentage = otherData.advancePercentage
+    ? String(100 - otherData.advancePercentage)
+    : undefined;
+
+  const inputs = {
     title: data.otherData.companyName,
     companyField: {
-      companyAddress: data.otherData.companyAddress,
-      companyCountry: data.otherData.companyCountry,
-      companyPhoneNmA: data.otherData.companyPhoneNmA,
-      companyPhoneNmB: data.otherData.companyPhoneNmB,
-      companyEmail: data.otherData.companyEmail,
+      companyAddress: otherData.companyAddress,
+      companyCountry: otherData.companyCountry,
+      companyPhoneNmA: otherData.companyPhoneNmA,
+      companyPhoneNmB: otherData.companyPhoneNmB,
+      companyEmail: otherData.companyEmail,
     },
     offerValidity: {
-      companyName: data.otherData.companyName,
-      offerValidityInDays: String(data.otherData.offerValidityInDays),
+      companyName: otherData.companyName,
+      offerValidityInDays: String(otherData.offerValidityInDays),
     },
     payment: {
-      paymentAdvance: data.otherData.advancePercentage, // needs further implementation
+      advancePercentage: String(otherData.advancePercentage),
+      postPercentage,
     },
     deliveryPeriod: {
-      deliveryPeriod: data.otherData.deliveryPeriod,
+      deliveryPeriod: otherData.deliveryPeriod,
     },
     clientName: project.client.name,
     clientField: {
@@ -84,8 +107,10 @@ export const prepareInputs = (
       projectName: project.name,
       projectManager: project.owner.name,
     },
-    items: [...saleItemsSection, totalSection],
-  });
+    items,
+  };
+
+  const inputsParsed = commercialOfferInputSchema.safeParse(inputs);
 
   if (inputsParsed.error) {
     console.log(inputsParsed.error.errors);

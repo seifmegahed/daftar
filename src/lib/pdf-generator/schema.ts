@@ -3,8 +3,8 @@ import { z } from "zod";
 
 export const commercialOfferInputSchema = z.object({
   title: z.string().default("ACME INC"),
-  companyName: z.string().default("ACME INC"),
   date: z.string().default(format(new Date(), "dd MMMM yyyy")),
+  companyName: z.string().default("ACME INC"),
   companyField: z
     .object({
       companyAddress: z.string().default("51 Rosetta st."),
@@ -12,13 +12,6 @@ export const commercialOfferInputSchema = z.object({
       companyPhoneNmB: z.string().default("+20 123 456 789"),
       companyPhoneNmA: z.string().default("+20 123 456 789"),
       companyEmail: z.string().default("info@acme-inc.com"),
-    })
-    .default({
-      companyAddress: "51 Rosetta st.",
-      companyCountry: "Alexandria, Egypt",
-      companyPhoneNmB: "+20 123 456 789",
-      companyPhoneNmA: "+20 123 456 789",
-      companyEmail: "info@acme-inc.com",
     })
     .transform((value) => JSON.stringify(value)),
   clientName: z.string(),
@@ -35,7 +28,7 @@ export const commercialOfferInputSchema = z.object({
       offerReference: z.string(),
       projectName: z.string(),
       projectManager: z.string(),
-      ownerNumber: z.string().default("+20 123 456 789"),
+      ownerNumber: z.string().default("+20 123 456 7890"),
       ownerEmail: z.string().default("sales@acme-inc.com"),
     })
     .transform((value) => JSON.stringify(value)),
@@ -44,13 +37,17 @@ export const commercialOfferInputSchema = z.object({
       companyName: z.string().default("ACME INC"),
       offerValidityInDays: z.string().default("7"),
     })
-    .default({ companyName: "ACME INC", offerValidityInDays: "7" })
     .transform((value) => JSON.stringify(value)),
   deliveryPeriod: z
     .object({
-      deliveryPeriod: z.string(),
+      deliveryPeriod: z.string().default("2 - 3 months"),
     })
-    .default({ deliveryPeriod: "2 - 3 months" })
+    .transform((value) => JSON.stringify(value)),
+  payment: z
+    .object({
+      advancePercentage: z.string().default("25"),
+      postPercentage: z.string().default("75"),
+    })
     .transform((value) => JSON.stringify(value)),
   items: z
     .array(
@@ -59,10 +56,17 @@ export const commercialOfferInputSchema = z.object({
         quantity: z.string(),
         price: z.string(),
         total: z.string(),
+        cur: z.string().default("EGP"),
       }),
     )
     .transform((value) =>
-      value.map((item) => [item.name, item.quantity, item.price, item.total]),
+      value.map((item) => [
+        item.name,
+        item.quantity,
+        item.price,
+        item.total,
+        item.cur,
+      ]),
     ),
 });
 

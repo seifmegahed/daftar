@@ -10,7 +10,7 @@ import type { GetProjectType } from "@/server/db/tables/project/queries";
 
 export const generateCommercialOfferFile = async (data: {
   project: GetProjectType;
-  saleItems: Array<{ name: string; quantity: number; price: string }>;
+  saleItems: Array<{ name: string; quantity: number; price: string; currency: string }>;
   otherData: {
     companyName?: string;
     companyAddress?: string;

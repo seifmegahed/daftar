@@ -8,6 +8,7 @@ import { getCurrentUserIdAction } from "../users";
 import { insertDocumentWithRelation } from "@/server/db/tables/document-relation/mutations";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { getCurrencyLabel } from "@/data/lut";
 
 type GenerateCommercialOfferArgs = {
   projectId: number;
@@ -40,7 +41,10 @@ export const createCommercialOffer = async (
 
   const [file, error] = await generateCommercialOfferFile({
     project,
-    saleItems,
+    saleItems: saleItems.map((value) => ({
+      ...value,
+      currency: getCurrencyLabel(value.currency),
+    })),
     otherData: args,
   });
   if (error !== null) return [null, error];
