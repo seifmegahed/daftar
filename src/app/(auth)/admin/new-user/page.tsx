@@ -112,6 +112,48 @@ function NewUserForm() {
           />
           <FormField
             control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <Label htmlFor="email">Email *</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  autoComplete="new-email"
+                  {...field}
+                />
+                <FormMessage />
+                <FormDescription>
+                  User&apos;s email must be a valid email address. This email
+                  will be used in commercial offer document if the user is the
+                  project owner/manager.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <Label htmlFor="phoneNumber">Phone Number *</Label>
+                <Input
+                  id="phoneNumber"
+                  type="phoneNumber"
+                  autoComplete="new-phoneNumber"
+                  {...field}
+                />
+                <FormMessage />
+                <FormDescription>
+                  User&apos;s phone number must be a valid phone number. This
+                  phone number will be used in commercial offer document if the
+                  user is the project owner/manager.
+                </FormDescription>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="role"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">

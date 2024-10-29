@@ -14,6 +14,14 @@ export const usersTable = pgTable(
     id: serial("id").primaryKey(),
     name: varchar("name", { length: 64 }).notNull(),
     username: varchar("username", { length: 64 }).notNull().unique(),
+
+    email: varchar("email", { length: 64 })
+      .notNull()
+      .default("john-doe@example.com"), // Should be unique in production
+    phoneNumber: varchar("phone_number", { length: 64 })
+      .notNull()
+      .default("+20 123 456 7890"), // Should be unique in production
+
     role: varchar("role", { length: 32 }).default("user").notNull(),
     active: boolean("active").notNull().default(true),
     // Salted password
@@ -51,6 +59,17 @@ export const UserSchemaRaw = {
   createdAt: z.date(),
   lastActive: z.date().nullable(),
   updatedAt: z.date().nullable(),
+  email: z
+    .string({ required_error: "Email is required" })
+    .email({ message: "Email must be a valid email" })
+    .max(64, { message: "Email must be at most 64 characters" })
+    .default("john-doe@example.com")
+    .optional(),
+  phoneNumber: z
+    .string({ required_error: "Phone Number is required" })
+    .max(64, { message: "Phone Number must be at most 64 characters" })
+    .default("+20 123 456 7890")
+    .optional(),
 };
 
 export const UserSchema = z.object(UserSchemaRaw);

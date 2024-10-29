@@ -8,6 +8,8 @@ import {
   getUserByIdAction,
 } from "@/server/actions/users";
 import ErrorPage from "@/components/error";
+import ChangeEmailSection from "./change-email-section";
+import ChangePhoneNumberSection from "./change-phone-number-section";
 
 async function EditUserPage({ params }: { params: { id: string } }) {
   const id = parseInt(params.id);
@@ -38,6 +40,12 @@ async function EditUserPage({ params }: { params: { id: string } }) {
       subtitle={`This is the edit page for the user: ${userData.name}. Here you can edit the user details.`}
     >
       <ChangeNameSection userId={userData.id} name={userData.name} />
+      <ChangeEmailSection userId={userData.id} email={userData.email ?? ""} type="admin" />
+      <ChangePhoneNumberSection
+        userId={userData.id}
+        phoneNumber={userData.phoneNumber ?? ""}
+        type="admin"
+      />
       <ChangeRoleSection userId={userData.id} userRole={userData.role} />
       <ChangePasswordSection userId={userData.id} />
       <ActivateDeactivateUserSection

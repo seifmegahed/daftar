@@ -6,6 +6,8 @@ import { z } from "zod";
 export const schema = UserSchema.pick({
   username: true,
   password: true,
+  email: true,
+  phoneNumber: true,
   verifyPassword: true,
   name: true,
   role: true,
@@ -40,6 +42,8 @@ export type NewUserFormType = z.infer<typeof schema>;
 
 export const defaultValues: NewUserFormType = {
   username: "",
+  email: "",
+  phoneNumber: "",
   password: "",
   verifyPassword: "",
   name: "",

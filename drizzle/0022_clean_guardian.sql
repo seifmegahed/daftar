@@ -1,0 +1,2 @@
+ALTER TABLE "user" ADD COLUMN "email" varchar(64) DEFAULT 'john-doe@example.com' NOT NULL;--> statement-breakpoint
+ALTER TABLE "user" ADD COLUMN "phone_number" varchar(64) DEFAULT '+20 123 456 7890' NOT NULL;

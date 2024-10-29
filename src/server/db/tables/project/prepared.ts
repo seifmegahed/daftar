@@ -106,6 +106,8 @@ export const projectByIdQuery = db.query.projectsTable
         columns: {
           id: true,
           name: true,
+          email: true,
+          phoneNumber: true,
         },
       },
       creator: {

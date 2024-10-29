@@ -247,7 +247,7 @@ export type ProjectClientType = {
 
 export type GetProjectType = SelectProjectType & {
   client: ProjectClientType;
-  owner: UserBriefType;
+  owner: UserBriefType & { email: string; phoneNumber: string };
   creator: UserBriefType;
   updater: UserBriefType | null;
 };

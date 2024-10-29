@@ -18,6 +18,7 @@ import {
   updateUserName,
   updateUserPassword,
   updateUserRole,
+  updateUser,
 } from "@/server/db/tables/user/mutations";
 
 import { verifyToken } from "@/lib/jwt";
@@ -294,6 +295,78 @@ export const userUpdateUserPasswordAction = async (
   return result;
 };
 
+const userUpdateUserPhoneNumberSchema = UserSchema.pick({
+  id: true,
+  phoneNumber: true,
+});
+
+type UserUpdateUserPhoneNumberFormType = z.infer<
+  typeof userUpdateUserPhoneNumberSchema
+>;
+
+/**
+ * Update User Phone Number - Same User Only
+ *
+ * User Server Action to update a user's phone number
+ *
+ * @param data - Data to update the user's phone number
+ *   - id: ID of the user to update
+ *   - phoneNumber: New phone number of the user
+ * @returns Tuple containing either the updated user's ID or an error message if there is one
+ */
+export const userUpdateUserPhoneNumberAction = async (
+  data: UserUpdateUserPhoneNumberFormType,
+): Promise<ReturnTuple<number>> => {
+  const [userId, currentUserError] = await getCurrentUserIdAction();
+  if (currentUserError !== null) return [null, currentUserError];
+
+  const isValid = userUpdateUserPhoneNumberSchema.safeParse(data);
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
+
+  const [result, error] = await updateUser(userId, data);
+  if (error !== null) return [null, error];
+  revalidatePath("/settings");
+  return [result, null];
+};
+
+const userUpdateUserEmailSchema = UserSchema.pick({
+  id: true,
+  email: true,
+});
+
+type UserUpdateUserEmailFormType = z.infer<typeof userUpdateUserEmailSchema>;
+
+/**
+ * Update User Email - Same User Only
+ *
+ * User Server Action to update a user's email
+ *
+ * @param data - Data to update the user's email
+ *   - id: ID of the user to update
+ *   - email: New email of the user
+ * @returns Tuple containing either the updated user's ID or an error message if there is one
+ */
+export const userUpdateUserEmailAction = async (
+  data: UserUpdateUserEmailFormType,
+): Promise<ReturnTuple<number>> => {
+  const [userId, currentUserError] = await getCurrentUserIdAction();
+  if (currentUserError !== null) return [null, currentUserError];
+
+  const isValid = userUpdateUserEmailSchema.safeParse(data);
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
+
+  const [result, error] = await updateUser(userId, data);
+  if (error !== null) return [null, error];
+  revalidatePath("/settings");
+  return [result, null];
+};
+
 /******************************************************************************/
 /*                                                                            */
 /*                                                                            */
@@ -455,6 +528,84 @@ export const adminUpdateUserDisplayNameAction = async (
   }
 
   const [result, error] = await updateUserName(data.id, data.name);
+  if (error !== null) return [null, error];
+  revalidatePath("/admin/");
+  revalidatePath(`/admin/edit-user/${data.id}`);
+  return [result, null];
+};
+
+const updateUserEmailSchema = UserSchema.pick({
+  id: true,
+  email: true,
+});
+
+type UpdateUserEmailFormType = z.infer<typeof updateUserEmailSchema>;
+
+/**
+ * Update User Email - Admin Only
+ *
+ * Admin Server Action to update a user's email
+ *
+ * Checks if the requesting user has admin permissions
+ *
+ * @param data - Data to update the user's email
+ *   - id: ID of the user to update
+ *   - email: New email of the user
+ * @returns Tuple containing either the updated user's ID or an error message if there is one
+ */
+export const adminUpdateUserEmailAction = async (
+  data: UpdateUserEmailFormType,
+): Promise<ReturnTuple<number>> => {
+  const [, isAdminError] = await checkAdminPermissions();
+  if (isAdminError !== null) return [null, isAdminError];
+
+  const isValid = updateUserEmailSchema.safeParse(data);
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
+
+  const [result, error] = await updateUser(data.id, data);
+  if (error !== null) return [null, error];
+  revalidatePath("/admin/");
+  revalidatePath(`/admin/edit-user/${data.id}`);
+  return [result, null];
+};
+
+const updateUserPhoneNumberSchema = UserSchema.pick({
+  id: true,
+  phoneNumber: true,
+});
+
+type UpdateUserPhoneNumberFormType = z.infer<
+  typeof updateUserPhoneNumberSchema
+>;
+
+/**
+ * Update User Phone Number - Admin Only
+ *
+ * Admin Server Action to update a user's phone number
+ *
+ * Checks if the requesting user has admin permissions
+ *
+ * @param data - Data to update the user's phone number
+ *   - id: ID of the user to update
+ *   - phoneNumber: New phone number of the user
+ * @returns Tuple containing either the updated user's ID or an error message if there is one
+ */
+export const adminUpdateUserPhoneNumberAction = async (
+  data: UpdateUserPhoneNumberFormType,
+): Promise<ReturnTuple<number>> => {
+  const [, isAdminError] = await checkAdminPermissions();
+  if (isAdminError !== null) return [null, isAdminError];
+
+  const isValid = updateUserPhoneNumberSchema.safeParse(data);
+  if (isValid.error) {
+    userErrorsLog(isValid.error);
+    return [null, userErrors.invalidData];
+  }
+
+  const [result, error] = await updateUser(data.id, data);
   if (error !== null) return [null, error];
   revalidatePath("/admin/");
   revalidatePath(`/admin/edit-user/${data.id}`);

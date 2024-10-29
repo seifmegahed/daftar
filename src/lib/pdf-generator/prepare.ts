@@ -106,6 +106,8 @@ export const prepareInputs = (
       offerReference,
       projectName: project.name,
       projectManager: project.owner.name,
+      ownerNumber: project.owner.phoneNumber,
+      ownerEmail: project.owner.email,
     },
     items,
   };

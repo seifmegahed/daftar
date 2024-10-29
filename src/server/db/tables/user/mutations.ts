@@ -19,7 +19,7 @@ const logError = errorLogger(errorMessages.mainTitle);
 
 type SetPartialUser = Pick<
   UserDataType,
-  "name" | "username" | "role" | "password"
+  "name" | "username" | "role" | "password" | "email" | "phoneNumber"
 >;
 
 export const updateUserRole = async (
@@ -130,6 +130,26 @@ export const updateUserName = async (
     const [user] = await db
       .update(usersTable)
       .set({ name })
+      .where(eq(usersTable.id, id))
+      .returning();
+
+    if (!user) return [null, errorMessage];
+    return [user.id, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
+export const updateUser = async (
+  id: number,
+  data: Partial<SetPartialUser>,
+): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.update;
+  try {
+    const [user] = await db
+      .update(usersTable)
+      .set(data)
       .where(eq(usersTable.id, id))
       .returning();
 

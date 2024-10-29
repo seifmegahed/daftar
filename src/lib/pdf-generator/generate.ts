@@ -10,7 +10,12 @@ import type { GetProjectType } from "@/server/db/tables/project/queries";
 
 export const generateCommercialOfferFile = async (data: {
   project: GetProjectType;
-  saleItems: Array<{ name: string; quantity: number; price: string; currency: string }>;
+  saleItems: Array<{
+    name: string;
+    quantity: number;
+    price: string;
+    currency: string;
+  }>;
   otherData: {
     companyName?: string;
     companyAddress?: string;
@@ -22,17 +27,9 @@ export const generateCommercialOfferFile = async (data: {
     advancePercentage?: number;
   };
 }): Promise<ReturnTuple<File>> => {
-  const { project, saleItems, otherData } = data;
-  const offerReference = `P${project.id}C-${Date.now().toString(16).toUpperCase()}`;
+  const offerReference = `P${data.project.id}C-${Date.now().toString(16).toUpperCase()}`;
 
-  const [inputs, inputsError] = prepareInputs(
-    {
-      project,
-      saleItems,
-      otherData,
-    },
-    offerReference,
-  );
+  const [inputs, inputsError] = prepareInputs(data, offerReference);
   if (inputsError !== null) return [null, inputsError];
 
   try {

@@ -92,6 +92,8 @@ export const getUserById = async (
         lastActive: usersTable.lastActive,
         createdAt: usersTable.createdAt,
         updatedAt: usersTable.updatedAt,
+        email: usersTable.email,
+        phoneNumber: usersTable.phoneNumber,
       })
       .from(usersTable)
       .where(eq(usersTable.id, id));
