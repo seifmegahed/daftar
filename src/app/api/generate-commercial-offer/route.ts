@@ -3,7 +3,6 @@ import { createCommercialOffer } from "@/server/actions/commercial-offer/create"
 import type { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
-  console.log("POST");
   const formData = await request.formData()
 
   const [file, error] = await createCommercialOffer(formData);
