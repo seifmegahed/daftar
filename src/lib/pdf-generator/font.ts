@@ -2,10 +2,10 @@ import type { Font } from "@pdfme/common";
 import fs from "node:fs/promises";
 
 const readexPro = await fs.readFile(
-  "public/fonts/Readex_Pro/static/ReadexPro-ExtraLight.ttf",
+  "src/fonts/Readex_Pro/static/ReadexPro-ExtraLight.ttf",
 );
 const readexProBold = await fs.readFile(
-  "public/fonts/Readex_Pro/static/ReadexPro-SemiBold.ttf",
+  "src/fonts/Readex_Pro/static/ReadexPro-SemiBold.ttf",
 );
 const readexProFontData = Buffer.from(readexPro).toString("base64");
 const readexProBoldFontData = Buffer.from(readexProBold).toString("base64");
