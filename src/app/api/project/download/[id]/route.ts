@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 import { env } from "@/env";
 
 import { getProjectLinkedDocuments } from "@/server/db/tables/project/queries";
-import { hasAccessToPrivateDataAction } from "@/server/actions/users";
+import { getCurrentUserIdAction, hasAccessToPrivateDataAction } from "@/server/actions/users";
 
 import { errorLogger } from "@/lib/exceptions";
 
@@ -36,6 +36,11 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   try {
+    const [, userError] = await getCurrentUserIdAction();
+    if (userError !== null) {
+      return new Response(userError, { status: 500 });
+    }
+
     const { id } = params;
     const projectId = Number(id);
     if (isNaN(projectId)) {

@@ -32,6 +32,11 @@ const requestSchema = z.object({
 });
 
 export async function POST(request: NextRequest) {
+  const [userId, userError] = await getCurrentUserIdAction();
+  if (userError !== null) {
+    return new Response(userError, { status: 500 });
+  }
+
   const formData = await request.formData();
 
   const documentJson = formData.get("document") as string;
@@ -61,9 +66,6 @@ export async function POST(request: NextRequest) {
   }
 
   const { document: validatedDocument, file: validatedFile } = result.data;
-
-  const [userId, userIdError] = await getCurrentUserIdAction();
-  if (userIdError !== null) return new Response(userIdError, { status: 500 });
 
   const [path, saveError] = await saveDocumentFile(validatedFile);
   if (saveError !== null) return new Response(saveError, { status: 500 });

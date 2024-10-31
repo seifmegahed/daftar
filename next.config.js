@@ -4,7 +4,10 @@
  */
 await import("./src/env.js");
 import { createRequire } from "node:module";
+import createNextIntlPlugin from "next-intl/plugin";
+
 const require = createRequire(import.meta.url);
+const withNextIntl = createNextIntlPlugin();
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -13,9 +16,9 @@ const config = {
 };
 
 if (process.env.CACHE_REDIS === "true") {
-  console.log("cache enabled")
+  console.log("cache enabled");
   config.cacheHandler = require.resolve("./cache-handler.mjs");
   config.cacheMaxMemorySize = 0;
 }
 
-export default config;
+export default withNextIntl(config);

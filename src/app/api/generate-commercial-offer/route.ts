@@ -1,8 +1,14 @@
 import { createCommercialOffer } from "@/server/actions/commercial-offer/create";
+import { getCurrentUserIdAction } from "@/server/actions/users";
 
 import type { NextRequest } from "next/server";
 
 export async function POST(request: NextRequest) {
+  const [, userError] = await getCurrentUserIdAction();
+  if (userError !== null) {
+    return new Response(userError, { status: 500 });
+  }
+  
   const formData = await request.formData()
 
   const [file, error] = await createCommercialOffer(formData);

@@ -3,35 +3,65 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import { verifyToken } from "./lib/jwt";
 
-async function middleware(request: NextRequest) {
-  const token = request.cookies.get("token");
+import createMiddleware from "next-intl/middleware";
+import { routing } from "./i18n/routing";
 
-  if (!token) return NextResponse.redirect(new URL("/login", request.url));
+const locales = ["en", "ar"];
+
+function getLocaleFromPath(pathname: string): string {
+  const parts = pathname.split("/");
+  if (!parts[1]) return "en";
+  return locales.includes(parts[1]) ? parts[1] : "en";
+}
+
+const i18nMiddleware = createMiddleware(routing);
+
+async function authMiddleware(request: NextRequest) {
+  const locale = getLocaleFromPath(request.nextUrl.pathname);
+  const makeUrl = (url: string) => `/${locale}${url}`;
+
+  const token = request.cookies.get("token");
+  if (!token)
+    return NextResponse.redirect(new URL(makeUrl("/login"), request.url));
 
   const [decoded, error] = await verifyToken(token.value);
-
   if (error !== null)
-    return NextResponse.redirect(new URL("/login", request.url));
+    return NextResponse.redirect(new URL(makeUrl("/login"), request.url));
 
-  if (!request.url.includes("/admin") || request.url.includes("/user"))
-    return NextResponse.next();
+  // Check for admin-only access
+  if (request.nextUrl.pathname.startsWith(`/${locale}/admin`)) {
+    const role = decoded.payload.role;
+    if (role !== "admin") {
+      return NextResponse.redirect(new URL(makeUrl("/"), request.url));
+    }
+  }
 
-  const role = decoded.payload.role;
+  return NextResponse.next();
+}
 
-  if (role !== "admin") return NextResponse.redirect(new URL("/", request.url));
+async function middleware(request: NextRequest) {
+  const response = i18nMiddleware(request);
+
+  // If the response is a redirect or an error, return it
+  if (!response.ok) return response;
+
+  if (request.url.includes("login")) return response;
+
+  // Continue with authentication checks for page routes
+  return authMiddleware(request);
 }
 
 export const config = {
   matcher: [
-    /**
-     *  Match all request paths except for the ones starting with:
-     *    - /login
-     *    - _next/static (static files)
-     *    - _next/image (image optimization files)
-     *    - favicon.ico (favicon file)
-     *    - favicon.svg (favicon file)
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico, sitemap.xml, robots.txt (metadata files)
      */
-    "/((?!login|_next/static|_next/image|favicon.ico|favicon.svg).*)",
+    "/((?!api|_next/static|_next/image|favicon.ico|sitemap.xml|robots.txt).*)",
+    // "/(ar|en)/:path*",
   ],
 };
 

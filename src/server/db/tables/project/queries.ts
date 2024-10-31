@@ -171,7 +171,6 @@ export const getProjectsBrief = async (
       .offset((page - 1) * limit);
     timer.end();
     const projects = z.array(briefProjectSchema).safeParse(projectsResult);
-    console.log(projects.error?.errors[0]);
     if (projects.error) return [null, errorMessages.dataCorrupted];
 
     return [projects.data, null];

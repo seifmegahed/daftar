@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 import { env } from "@/env";
 
 import { getDocumentPath } from "@/server/db/tables/document/queries";
-import { hasAccessToPrivateDataAction } from "@/server/actions/users";
+import { getCurrentUserIdAction, hasAccessToPrivateDataAction } from "@/server/actions/users";
 
 import type { NextRequest } from "next/server";
 import { errorLogger } from "@/lib/exceptions";
@@ -34,6 +34,11 @@ export async function GET(
   { params }: { params: { id: string } },
 ) {
   try {
+    const [, userError] = await getCurrentUserIdAction();
+    if (userError !== null) {
+      return new Response(userError, { status: 500 });
+    }
+    
     const { id } = params;
     const documentId = Number(id);
     if (isNaN(documentId)) {
