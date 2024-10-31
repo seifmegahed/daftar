@@ -18,13 +18,13 @@ export function CardNameSection({
   return (
     <div className="w-fit">
       <Tooltip>
-        <TooltipTrigger asChild>
-          <Link href={href} prefetch={prefetch}>
+        <Link href={href} prefetch={prefetch}>
+          <TooltipTrigger asChild>
             <p className="line-clamp-1 cursor-pointer text-lg font-bold text-foreground hover:underline">
               {name}
             </p>
-          </Link>
-        </TooltipTrigger>
+          </TooltipTrigger>
+        </Link>
         <TooltipContent>
           <p>{name}</p>
         </TooltipContent>
@@ -51,15 +51,13 @@ export function CardCreatedAtSection({ date }: { date: Date }) {
 export function CardIdSection({ id, href }: { id: number; href: string }) {
   return (
     <Tooltip>
-      <TooltipTrigger asChild>
-        <Link href={href} prefetch={prefetch} className="hidden sm:block">
-          <div className="flex cursor-pointer items-center justify-center w-10">
-            <p className="text-2xl font-bold text-foreground">
-              {id}
-            </p>
+      <Link href={href} prefetch={prefetch} className="hidden sm:block">
+        <TooltipTrigger asChild>
+          <div className="flex w-10 cursor-pointer items-center justify-center">
+            <p className="text-2xl font-bold text-foreground">{id}</p>
           </div>
-        </Link>
-      </TooltipTrigger>
+        </TooltipTrigger>
+      </Link>
       <TooltipContent>
         <p>ID</p>
       </TooltipContent>
@@ -67,17 +65,13 @@ export function CardIdSection({ id, href }: { id: number; href: string }) {
   );
 }
 
-
 export function CardIndexSection({ index }: { index: number }) {
   return (
-    <div className="hidden cursor-pointer items-center justify-center sm:flex w-10">
-      <p className="text-2xl font-bold text-foreground">
-        {index}
-      </p>
+    <div className="hidden w-10 cursor-pointer items-center justify-center sm:flex">
+      <p className="text-2xl font-bold text-foreground">{index}</p>
     </div>
   );
 }
-
 
 export function CardSection({
   text,
@@ -91,17 +85,19 @@ export function CardSection({
   return (
     <div className="w-fit">
       <Tooltip>
-        <TooltipTrigger asChild>
-          {href ? (
-            <Link href={href} prefetch={prefetch}>
+        {href ? (
+          <Link href={href} prefetch={prefetch}>
+            <TooltipTrigger asChild>
               <p className="line-clamp-1 cursor-pointer text-foreground hover:underline">
                 {text ?? "N/A"}
               </p>
-            </Link>
-          ) : (
+            </TooltipTrigger>
+          </Link>
+        ) : (
+          <TooltipTrigger asChild>
             <p className="line-clamp-1 text-foreground">{text ?? "N/A"}</p>
-          )}
-        </TooltipTrigger>
+          </TooltipTrigger>
+        )}
         <TooltipContent>
           <p>{tip}</p>
         </TooltipContent>
@@ -122,17 +118,19 @@ export function CardSubtitleSection({
   return (
     <div className="w-fit">
       <Tooltip>
-        <TooltipTrigger asChild>
-          {href ? (
-            <Link href={href} prefetch={prefetch}>
+        {href ? (
+          <Link href={href} prefetch={prefetch}>
+            <TooltipTrigger asChild>
               <p className="cursor-pointer text-xs text-muted-foreground hover:underline">
                 {subtitle ?? "N/A"}
               </p>
-            </Link>
-          ) : (
+            </TooltipTrigger>
+          </Link>
+        ) : (
+          <TooltipTrigger asChild>
             <p className="text-xs text-muted-foreground">{subtitle ?? "N/A"}</p>
-          )}
-        </TooltipTrigger>
+          </TooltipTrigger>
+        )}
         <TooltipContent>
           <p>{tip}</p>
         </TooltipContent>
