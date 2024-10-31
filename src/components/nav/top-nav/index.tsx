@@ -1,7 +1,7 @@
 import ErrorPage from "@/components/error";
 import DesktopNav from "./desktop-nav";
 import MobileNav from "./mobile-nav";
-import { UserButton } from "@/components/buttons";
+import { UserButton, LanguageButton } from "@/components/buttons";
 import { getCurrentUserAction } from "@/server/actions/users";
 
 async function TopNav() {
@@ -13,8 +13,10 @@ async function TopNav() {
       <DesktopNav admin={currentUser.role === "admin"} />
       <MobileNav admin={currentUser.role === "admin"} />
       <div className="flex w-full items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-        <div className="w-full"></div>
-        <UserButton user={currentUser} />
+        <div className="w-full flex items-center gap-4 justify-end">
+          <LanguageButton />
+          <UserButton user={currentUser} />
+        </div>
       </div>
     </header>
   );

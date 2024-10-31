@@ -18,21 +18,20 @@ const i18nMiddleware = createMiddleware(routing);
 
 async function authMiddleware(request: NextRequest) {
   const locale = getLocaleFromPath(request.nextUrl.pathname);
-  const makeUrl = (url: string) => `/${locale}${url}`;
+  // const makeUrl = (url: string) => `/${locale}${url}`;
 
   const token = request.cookies.get("token");
-  if (!token)
-    return NextResponse.redirect(new URL(makeUrl("/login"), request.url));
+  if (!token) return NextResponse.redirect(new URL("/login", request.url));
 
   const [decoded, error] = await verifyToken(token.value);
   if (error !== null)
-    return NextResponse.redirect(new URL(makeUrl("/login"), request.url));
+    return NextResponse.redirect(new URL("/login", request.url));
 
   // Check for admin-only access
   if (request.nextUrl.pathname.startsWith(`/${locale}/admin`)) {
     const role = decoded.payload.role;
     if (role !== "admin") {
-      return NextResponse.redirect(new URL(makeUrl("/"), request.url));
+      return NextResponse.redirect(new URL("/", request.url));
     }
   }
 

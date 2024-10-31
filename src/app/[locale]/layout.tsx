@@ -41,7 +41,7 @@ export default async function RootLayout({
       dir={direction}
       content="initial-scale=1.0 maximum-scale=1.0"
     >
-      <NextIntlClientProvider messages={messages}>
+      <NextIntlClientProvider locale={locale} messages={messages}>
         <head />
         <body>
           <ThemeProvider
