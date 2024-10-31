@@ -19,9 +19,10 @@ import {
 } from "@/components/ui/form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { type UserBriefType } from "@/server/db/tables/user/queries";
 import { toast } from "sonner";
 import { updateProjectOwnerAction } from "@/server/actions/projects/update";
+
+import type { UserBriefType } from "@/server/db/tables/user/queries";
 
 const schema = z.object({
   ownerId: z.preprocess((value: unknown) => Number(value), z.number()),

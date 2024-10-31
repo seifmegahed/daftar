@@ -1,15 +1,16 @@
 import { Suspense } from "react";
 import ProjectsList from "./all-projects/projects-list";
+import SkeletonList from "@/components/skeletons";
+import { getProjectsCountAction } from "@/server/actions/projects/read";
+import { defaultPageLimit } from "@/data/config";
+import ListPageWrapper from "@/components/list-page-wrapper";
+import ErrorPage from "@/components/error";
+
+import type { SearchParamsPropsType } from "@/utils/type-utils";
 import type {
   FilterOptionType,
   FilterTypes,
 } from "@/components/filter-and-search";
-import SkeletonList from "@/components/skeletons";
-import { getProjectsCountAction } from "@/server/actions/projects/read";
-import { defaultPageLimit } from "@/data/config";
-import type { SearchParamsPropsType } from "@/utils/type-utils";
-import ListPageWrapper from "@/components/list-page-wrapper";
-import ErrorPage from "@/components/error";
 
 const pageLimit = defaultPageLimit;
 

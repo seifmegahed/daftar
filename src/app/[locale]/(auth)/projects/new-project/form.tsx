@@ -26,11 +26,12 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
-import type { UserBriefType } from "@/server/db/tables/user/queries";
 import ComboSelect from "@/components/combo-select-obj";
 import { addProjectAction } from "@/server/actions/projects/create";
 import { projectTypes, statusCodes } from "@/data/lut";
 import { notesMaxLength } from "@/data/config";
+
+import type { UserBriefType } from "@/server/db/tables/user/queries";
 
 const schema = z.object({
   name: z

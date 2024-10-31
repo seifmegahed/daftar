@@ -1,4 +1,3 @@
-import Pagination from "@/components/pagination";
 import { defaultPageLimit } from "@/data/config";
 import { getAllUsersAction, getUsersCountAction } from "@/server/actions/users";
 import AllUsersList from "./all-users";

@@ -1,5 +1,5 @@
 import { getDocumentProjectsAction } from "@/server/actions/document-relations/read";
-import ProjectCard from "../../../projects/all-projects/project-card";
+import ProjectCard from "@/app/[locale]/(auth)/projects/all-projects/project-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 

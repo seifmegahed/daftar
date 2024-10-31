@@ -1,4 +1,4 @@
-import ProjectCard from "@/app/(auth)/projects/all-projects/project-card";
+import ProjectCard from "@/app/[locale]/(auth)/projects/all-projects/project-card";
 import ErrorPage from "@/components/error";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import { getClientProjectsAction } from "@/server/actions/projects/read";

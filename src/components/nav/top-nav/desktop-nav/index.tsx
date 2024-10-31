@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { BookmarkIcon } from "@/icons";
 
 import NavLinks from "../nav-links";

@@ -1,7 +1,7 @@
 import { getProjectsBriefAction } from "@/server/actions/projects/read";
 import ProjectCard from "./project-card";
-import type { FilterArgs } from "@/components/filter-and-search";
 import ErrorPage from "@/components/error";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 async function ProjectsList({
   page = 1,

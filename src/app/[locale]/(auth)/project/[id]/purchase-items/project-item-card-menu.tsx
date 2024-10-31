@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { deletePurchaseItemAction } from "@/server/actions/purchase-items/delete";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 import { toast } from "sonner";
 

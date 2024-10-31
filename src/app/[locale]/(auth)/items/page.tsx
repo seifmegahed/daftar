@@ -3,13 +3,14 @@ import { defaultPageLimit } from "@/data/config";
 import SkeletonList from "@/components/skeletons";
 import ItemsList from "./all-items/items-list";
 import { getItemsCountAction } from "@/server/actions/items/read";
+import ListPageWrapper from "@/components/list-page-wrapper";
+import ErrorPage from "@/components/error";
+
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 import type {
   FilterOptionType,
   FilterTypes,
 } from "@/components/filter-and-search";
-import ListPageWrapper from "@/components/list-page-wrapper";
-import ErrorPage from "@/components/error";
 
 const pageLimit = defaultPageLimit;
 

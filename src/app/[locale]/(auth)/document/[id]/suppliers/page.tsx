@@ -1,5 +1,5 @@
 import { getDocumentSuppliersAction } from "@/server/actions/document-relations/read";
-import SupplierCard from "../../../suppliers/all-suppliers/supplier-card";
+import SupplierCard from "@/app/[locale]/(auth)/suppliers/all-suppliers/supplier-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 

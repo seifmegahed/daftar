@@ -3,7 +3,6 @@ import {
   getProjectByIdAction,
   getProjectLinkedDocumentsAction,
 } from "@/server/actions/projects/read";
-import { type SimpDoc } from "@/server/db/tables/document/queries";
 import { format } from "date-fns";
 import Link from "next/link";
 import DocumentCard from "@/components/common-cards/document";
@@ -14,6 +13,8 @@ import InfoPageWrapper from "@/components/info-page-wrapper";
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import ErrorPage from "@/components/error";
 import DataDisplayUnit from "@/components/data-display-unit";
+
+import type { SimpDoc } from "@/server/db/tables/document/queries";
 
 async function ProjectPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);

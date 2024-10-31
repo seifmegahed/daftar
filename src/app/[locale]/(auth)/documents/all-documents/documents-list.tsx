@@ -1,7 +1,7 @@
 import { getDocumentsAction } from "@/server/actions/documents/read";
 import DocumentCard from "./document-card";
-import type { FilterArgs } from "@/components/filter-and-search";
 import ErrorPage from "@/components/error";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 async function DocumentsList({
   page = 1,

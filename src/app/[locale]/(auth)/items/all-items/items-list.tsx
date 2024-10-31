@@ -1,7 +1,7 @@
 import { getItemsAction } from "@/server/actions/items/read";
 import ItemCard from "./item-card";
-import type { FilterArgs } from "@/components/filter-and-search";
 import ErrorPage from "@/components/error";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 async function ItemsList({
   page = 1,

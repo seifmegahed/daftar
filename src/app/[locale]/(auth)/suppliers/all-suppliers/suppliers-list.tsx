@@ -1,7 +1,7 @@
 import SupplierCard from "./supplier-card";
 import { getSuppliersBriefAction } from "@/server/actions/suppliers/read";
-import type { FilterArgs } from "@/components/filter-and-search";
 import ErrorPage from "@/components/error";
+import type { FilterArgs } from "@/components/filter-and-search";
 
 async function SuppliersList({
   page = 1,

@@ -1,5 +1,5 @@
 import { getItemSuppliersAction } from "@/server/actions/purchase-items/read";
-import SupplierCard from "@/app/(auth)/suppliers/all-suppliers/supplier-card";
+import SupplierCard from "@/app/[locale]/(auth)/suppliers/all-suppliers/supplier-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 

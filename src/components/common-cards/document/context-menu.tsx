@@ -9,7 +9,8 @@ import {
 import { unlinkDocumentAction } from "@/server/actions/document-relations/delete";
 import { type SimpDoc } from "@/server/db/tables/document/queries";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
-import Link from "next/link";
+import APILink from "next/link";
+import { Link } from "@/i18n/routing";
 import { usePathname } from "next/navigation";
 
 import { toast } from "sonner";
@@ -43,11 +44,11 @@ const DocumentCardContextMenu = ({ document }: { document: SimpDoc }) => {
             Document Page
           </DropdownMenuItem>
         </Link>
-        <Link href={`/api/download-document/${document.id}`}>
+        <APILink href={`/api/download-document/${document.id}`}>
           <DropdownMenuItem className="cursor-pointer">
             Download Document
           </DropdownMenuItem>
-        </Link>
+        </APILink>
         {document.relationId ? (
           <DropdownMenuItem className="cursor-pointer" onClick={handleUnlink}>
             <p className="text-red-500">Unlink Document</p>

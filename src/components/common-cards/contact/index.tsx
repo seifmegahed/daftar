@@ -1,8 +1,8 @@
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import ContactActionButtons from "../contact/action-buttons";
-import type { ContactType } from "@/server/db/tables/contact/queries";
 import CardWrapper from "@/components/card-wrapper";
+import type { ContactType } from "@/server/db/tables/contact/queries";
 
 const ContactCard = ({
   contact,

@@ -1,16 +1,17 @@
 import { Suspense } from "react";
+
 import SuppliersList from "./all-suppliers/suppliers-list";
 import { defaultPageLimit } from "@/data/config";
 import { getSuppliersCountAction } from "@/server/actions/suppliers/read";
 import SkeletonList from "@/components/skeletons";
+import ListPageWrapper from "@/components/list-page-wrapper";
+import ErrorPage from "@/components/error";
 
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 import type {
   FilterOptionType,
   FilterTypes,
 } from "@/components/filter-and-search";
-import ListPageWrapper from "@/components/list-page-wrapper";
-import ErrorPage from "@/components/error";
 
 const pageLimit = defaultPageLimit;
 

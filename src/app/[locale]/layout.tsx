@@ -7,12 +7,13 @@ import { Provider as BalancerProvider } from "react-wrap-balancer";
 import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
-import { type Metadata } from "next";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { routing } from "@/i18n/routing";
 import { notFound } from "next/navigation";
 import { getMessages } from "next-intl/server";
 import { NextIntlClientProvider } from "next-intl";
+
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Daftar",

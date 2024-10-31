@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { loginAction } from "@/server/actions/auth/login";
 import { toast } from "sonner";
 import { env } from "@/env";
-import { defaultValues, schema, type LoginFormType } from "./schema";
+import { defaultValues, schema,} from "./schema";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -21,9 +21,12 @@ import { PasswordInput } from "@/components/inputs/password";
 import { Label } from "@/components/ui/label";
 import Loading from "@/components/loading";
 import Balancer from "react-wrap-balancer";
+
 import { BookmarkIcon } from "@/icons";
 import DaftarArabicIcon from "@/icons/daftar-arabic-icon";
 import { ChevronDown } from "lucide-react";
+
+import type { LoginFormType } from "./schema";
 
 export default function LoginForm() {
   const form = useForm<LoginFormType>({

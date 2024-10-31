@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import {
   DropdownMenu,

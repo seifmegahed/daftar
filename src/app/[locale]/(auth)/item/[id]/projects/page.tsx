@@ -1,5 +1,5 @@
 import { getItemProjectsAction } from "@/server/actions/items/read";
-import ProjectCard from "@/app/(auth)/projects/all-projects/project-card";
+import ProjectCard from "@/app/[locale]/(auth)/projects/all-projects/project-card";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 

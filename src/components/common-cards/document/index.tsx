@@ -1,5 +1,5 @@
 import { FileIcon } from "lucide-react";
-import Link from "next/link";
+import Link from "next/link"
 import { type SimpDoc } from "@/server/db/tables/document/queries";
 import DocumentCardContextMenu from "./context-menu";
 import { cn } from "@/lib/utils";

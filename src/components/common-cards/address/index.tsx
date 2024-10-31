@@ -1,8 +1,8 @@
 import { Separator } from "@/components/ui/separator";
 import { format } from "date-fns";
 import AddressActionButtons from "./action-buttons";
-import type { AddressType } from "@/server/db/tables/address/queries";
 import CardWrapper from "@/components/card-wrapper";
+import type { AddressType } from "@/server/db/tables/address/queries";
 
 const AddressCard = ({
   address,

@@ -1,4 +1,3 @@
-import { type BriefSupplierType } from "@/server/db/tables/supplier/queries";
 import SupplierCardContextMenu from "./card-menu";
 import CardWrapper from "@/components/card-wrapper";
 import {
@@ -12,6 +11,8 @@ import {
   CardSection,
   CardSubtitleSection,
 } from "@/components/card-sections";
+
+import type { BriefSupplierType } from "@/server/db/tables/supplier/queries";
 
 const SupplierCard = ({ supplier }: { supplier: BriefSupplierType }) => {
   return (

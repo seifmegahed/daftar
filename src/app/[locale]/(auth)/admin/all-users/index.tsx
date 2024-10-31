@@ -3,7 +3,7 @@ import { getUserRoleLabel } from "@/data/lut";
 import type { GetPartialUserType } from "@/server/db/tables/user/queries";
 import { format } from "date-fns";
 import { Edit } from "lucide-react";
-import Link from "next/link";
+import { Link } from "@/i18n/routing";
 
 function AllUsersList({ users }: { users: GetPartialUserType[] }) {
   return (
