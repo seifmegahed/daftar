@@ -1,5 +1,4 @@
 {
-  "direction": "rtl",
   "topnav": {
     "Projects": "المشاريع",
     "Clients": "العملاء",
@@ -7,5 +6,34 @@
     "Items": "المواد",
     "Documents": "المستندات",
     "Admin": "المدير"
+  },
+  "user-button": {
+    "light-mode": "الوضع العادي",
+    "dark-mode": "الوضع المظلم",
+    "settings": "الإعدادات",
+    "logout": "تسجيل الخروج"
+  },
+  "projects": {
+    "layout": {
+      "title": "المشاريع",
+      "description": "إدارة المشاريع",
+      "All Projects": "جميع المشاريع",
+      "New Project": "مشروع جديد"
+    },
+    "all-projects-page": {
+      "title": "الصفحة الرئيسية لجميع المشاريع"
+    }
+  },
+  "search-bar": {
+    "placeholder": "البحث"
+  },
+  "project-card": {
+    "menu": {
+      "project-page": "الصفحة الرئيسية للمشروع",
+      "project-documents": "المستندات المرفقة للمشروع",
+      "project-comments": "التعليقات المرفقة للمشروع",
+      "edit": "تعديل المشروع",
+      "delete": "حذف المشروع"
+    }
   }
 }

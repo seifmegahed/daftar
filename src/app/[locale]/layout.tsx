@@ -8,12 +8,12 @@ import "@/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { routing } from "@/i18n/routing";
-import { notFound } from "next/navigation";
-import { getMessages, setRequestLocale } from "next-intl/server";
+import { getMessages } from "next-intl/server";
+import { setValidatedLocale } from "@/i18n/set-locale";
 import { NextIntlClientProvider } from "next-intl";
 
 import type { Metadata } from "next";
+import type { LocaleParams } from "@/i18n/set-locale";
 
 export const metadata: Metadata = {
   title: "Daftar",
@@ -24,13 +24,8 @@ export const metadata: Metadata = {
 export default async function RootLayout({
   children,
   params: { locale },
-}: Readonly<{ children: React.ReactNode; params: { locale: "en" | "ar" } }>) {
-  // Ensure that the incoming `locale` is valid
-  if (!routing.locales.includes(locale)) {
-    notFound();
-  }
-
-  setRequestLocale(locale);
+}: Readonly<{ children: React.ReactNode; params: LocaleParams }>) {
+  setValidatedLocale(locale);
 
   // Providing all messages to the client
   // side is the easiest way to get started

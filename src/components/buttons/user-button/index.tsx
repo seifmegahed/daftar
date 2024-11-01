@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { Link } from "@/i18n/routing";
@@ -19,12 +19,23 @@ import { AvatarContainer } from "@/components/avatar";
 import Loading from "@/components/loading";
 
 import { getInitials } from "@/utils/user";
+import { useTranslations } from "next-intl";
+import { LogOut, MoonIcon, SettingsIcon, SunIcon } from "lucide-react";
+import { getDirection } from "@/utils/common";
 
 function UserButton({ user }: { user: { name: string; id: number } }) {
   const [loading, setLoading] = useState(false);
   const { setTheme } = useTheme();
+  const [direction, setDirection] = useState<Direction>("ltr");
+
+  useEffect(() => {
+    if (!document) return;
+    setDirection(getDirection(document));
+  }, []);
 
   const initials = getInitials(user.name);
+
+  const t = useTranslations("user-button");
 
   const logout = async () => {
     setLoading(true);
@@ -43,8 +54,9 @@ function UserButton({ user }: { user: { name: string; id: number } }) {
       setLoading(false);
     }
   };
+  
   return (
-    <DropdownMenu>
+    <DropdownMenu dir={direction}>
       <DropdownMenuTrigger asChild>
         <Button
           variant="secondary"
@@ -64,7 +76,9 @@ function UserButton({ user }: { user: { name: string; id: number } }) {
             setTheme("dark");
           }}
         >
-          Dark Mode
+          <div className="flex w-full cursor-pointer items-center justify-between">
+            {t("dark-mode")} <MoonIcon className="h-4 w-4" />
+          </div>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="hidden dark:block"
@@ -72,13 +86,26 @@ function UserButton({ user }: { user: { name: string; id: number } }) {
             setTheme("light");
           }}
         >
-          Light Mode
+          <div className="flex w-full cursor-pointer items-center justify-between">
+            {t("light-mode")}
+            <SunIcon className="h-4 w-4" />
+          </div>
         </DropdownMenuItem>
         <Link href="/settings">
-          <DropdownMenuItem>Settings</DropdownMenuItem>
+          <DropdownMenuItem>
+            <div className="flex w-full cursor-pointer items-center justify-between">
+              {t("settings")}
+              <SettingsIcon className="h-4 w-4" />
+            </div>
+          </DropdownMenuItem>
         </Link>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={logout}>Logout</DropdownMenuItem>
+        <DropdownMenuItem onClick={logout}>
+          <div className="flex w-full cursor-pointer items-center justify-between">
+            {t("logout")}
+            <LogOut className="h-4 w-4" />
+          </div>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

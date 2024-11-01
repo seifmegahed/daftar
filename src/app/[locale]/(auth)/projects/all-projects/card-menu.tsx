@@ -9,10 +9,20 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { useTranslations } from "next-intl";
+import { getDirection } from "@/utils/common";
+import { useEffect, useState } from "react";
 
 const ProjectCardContextMenu = ({ projectId }: { projectId: number }) => {
+  const [direction, setDirection] = useState<Direction>("ltr");
+  const t = useTranslations("project-card.menu");
+
+  useEffect(() => {
+    if (!document) return;
+    setDirection(getDirection(document));
+  }, []);
   return (
-    <DropdownMenu>
+    <DropdownMenu dir={direction}>
       <DropdownMenuTrigger asChild>
         <div className="flex cursor-pointer items-center justify-center rounded-full p-2 hover:bg-muted">
           <DotsVerticalIcon />
@@ -20,21 +30,21 @@ const ProjectCardContextMenu = ({ projectId }: { projectId: number }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <Link href={`/project/${projectId}`}>
-          <DropdownMenuItem>Project Page</DropdownMenuItem>
-        </Link>
-        <Link href={`/project/${projectId}/items`}>
-          <DropdownMenuItem>Project Items</DropdownMenuItem>
+          <DropdownMenuItem>{t("project-page")}</DropdownMenuItem>
         </Link>
         <Link href={`/project/${projectId}/documents`}>
-          <DropdownMenuItem>Project Documents</DropdownMenuItem>
+          <DropdownMenuItem>{t("project-documents")}</DropdownMenuItem>
+        </Link>
+        <Link href={`/project/${projectId}/comments`}>
+          <DropdownMenuItem>{t("project-comments")}</DropdownMenuItem>
         </Link>
         <Separator className="my-1" />
         <Link href={`/project/${projectId}/edit`}>
-          <DropdownMenuItem>Edit Project</DropdownMenuItem>
+          <DropdownMenuItem>{t("edit")}</DropdownMenuItem>
         </Link>
         <Link href={`/project/${projectId}/edit#delete`} scroll>
           <DropdownMenuItem>
-            <p className="text-red-500">Delete Project</p>
+            <p className="text-red-500">{t("delete")}</p>
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>

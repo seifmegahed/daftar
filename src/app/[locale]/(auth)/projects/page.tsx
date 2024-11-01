@@ -3,6 +3,8 @@ import ProjectsList from "./all-projects/projects-list";
 import SkeletonList from "@/components/skeletons";
 import { getProjectsCountAction } from "@/server/actions/projects/read";
 import { defaultPageLimit } from "@/data/config";
+import { getTranslations } from "next-intl/server";
+
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 
@@ -11,11 +13,13 @@ import type {
   FilterOptionType,
   FilterTypes,
 } from "@/components/filter-and-search";
+import { setLocale, type LocaleParams } from "@/i18n/set-locale";
 
 const pageLimit = defaultPageLimit;
 
 type Props = {
   searchParams: SearchParamsPropsType;
+  params: LocaleParams;
 };
 
 const filterItems: FilterOptionType[] = [
@@ -27,7 +31,9 @@ const filterItems: FilterOptionType[] = [
   { label: "By Update Date", value: "updateDate" },
 ];
 
-async function AllProjects({ searchParams }: Props) {
+async function AllProjects({ searchParams, params }: Props) {
+  setLocale(params.locale);
+  
   const parsedPage = parseInt(searchParams.page ?? "1");
   const page = isNaN(parsedPage) ? 1 : parsedPage;
   const query = searchParams.query ?? "";
@@ -37,15 +43,16 @@ async function AllProjects({ searchParams }: Props) {
     filterValue: searchParams.fv ?? "",
   };
 
-  const [count, countError] =
-    await getProjectsCountAction(filterValues);
+  const [count, countError] = await getProjectsCountAction(filterValues);
   if (countError !== null) return <ErrorPage message={countError} />;
 
-  const totalPages = Math.ceil((count) / pageLimit);
+  const totalPages = Math.ceil(count / pageLimit);
+
+  const t = await getTranslations("projects.all-projects-page");
 
   return (
     <ListPageWrapper
-      title="All Project Page"
+      title={t("title")}
       filter={{ filterItems, filterValues }}
       pagination={{ totalPages }}
     >

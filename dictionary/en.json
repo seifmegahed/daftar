@@ -1,5 +1,4 @@
 {
-  "direction": "ltr",
   "topnav": {
     "Projects": "Projects",
     "Clients": "Clients",
@@ -7,5 +6,34 @@
     "Items": "Items",
     "Documents": "Documents",
     "Admin": "Admin"
+  },
+  "user-button": {
+    "light-mode": "Light Mode",
+    "dark-mode": "Dark Mode",
+    "settings": "Settings",
+    "logout": "Logout"
+  },
+  "projects": {
+    "layout": {
+      "title": "Projects",
+      "description": "Manage your projects",
+      "All Projects": "All Projects",
+      "New Project": "New Project"
+    },
+    "all-projects-page": {
+      "title": "All Projects Page"
+    }
+  },
+  "search-bar": {
+    "placeholder": "Search"
+  },
+  "project-card": {
+    "menu": {
+      "project-page": "Project Page",
+      "project-documents": "Project Documents",
+      "project-comments": "Project Comments",
+      "edit": "Edit Project",
+      "delete": "Delete Project"
+    }
   }
 }
