@@ -29,6 +29,31 @@
     },
     "all-projects-page": {
       "title": "الصفحة الرئيسية لجميع المشاريع"
+    },
+    "new-project-page": {
+      "title": "إضافة مشروع",
+      "description": "أدخل التفاصيل الخاصة بالمشروع الذي تريد إضافته",
+      "button-text": "إضافة المشروع",
+      "name-field-label": "الاسم *",
+      "name-field-description": "أدخل اسم المشروع. هذا هو الاسم الذي ستستخدمه للبحث والمراجعة عن المشروع.",
+      "type-field-label": "النوع *",
+      "type-field-description": "اختر النوع للمشروع.",
+      "status-field-label": "الحالة *",
+      "status-field-description": "اختر حالة المشروع.",
+      "client-field-label": "العميل *",
+      "client-select-message": "اختر العميل",
+      "client-search-message": "ابحث عن العميل",
+      "client-not-found-message": "لم يتم العثور على العميل.",
+      "client-field-description": "اختر العميل لهذا المشروع.",
+      "owner-field-label": "المالك *",
+      "owner-select-message": "اختر مستخدم",
+      "owner-search-message": "ابحث عن مستخدم",
+      "owner-not-found-message": "لم يتم العثور على المستخدم.",
+      "owner-field-description": "اختر المستخدم الذي سيكون مسؤولاً عن هذا المشروع.",
+      "description-field-label": "الوصف",
+      "description-field-description": "أدخل وصف المشروع.",
+      "notes-field-label": "الملاحظات",
+      "notes-field-description": "أدخل أي ملاحظات عن المشروع."
     }
   },
   "search-bar": {

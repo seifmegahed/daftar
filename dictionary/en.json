@@ -29,6 +29,31 @@
     },
     "all-projects-page": {
       "title": "All Projects Page"
+    },
+    "new-project-page": {
+      "title": "Add Project",
+      "description": "Enter the details of the project you want to add",
+      "button-text": "Add Project",
+      "name-field-label": "Name *",
+      "name-field-description": "Enter the name of the project. This is the name you will be using to search and refer to the project.",
+      "type-field-label": "Type *",
+      "type-field-description": "Select the type of the project.",
+      "status-field-label": "Status *",
+      "status-field-description": "Select the status of the project.",
+      "client-field-label": "Client *",
+      "client-select-message": "Select client",
+      "client-search-message": "Search for client",
+      "client-not-found-message": "Client not found.",
+      "client-field-description": "Select the client that this project is for.",
+      "owner-field-label": "Owner *",
+      "owner-select-message": "Select a user",
+      "owner-search-message": "Search for a user",
+      "owner-not-found-message": "User not found.",
+      "owner-field-description": "Select the user who will be responsible for this project.",
+      "description-field-label": "Description",
+      "description-field-description": "Enter a description of the project.",
+      "notes-field-label": "Notes",
+      "notes-field-description": "Enter any notes about the project."
     }
   },
   "search-bar": {

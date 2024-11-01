@@ -32,6 +32,8 @@ import { projectTypes, statusCodes } from "@/data/lut";
 import { notesMaxLength } from "@/data/config";
 
 import type { UserBriefType } from "@/server/db/tables/user/queries";
+import { useLocale, useTranslations } from "next-intl";
+import { getDirection } from "@/utils/common";
 
 const schema = z.object({
   name: z
@@ -68,6 +70,10 @@ type NewProjectFormProps = {
 };
 
 function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
+  const t = useTranslations("projects.new-project-page");
+  const locale = useLocale() as "en" | "ar";
+  const direction = getDirection(locale);
+
   const form = useForm<ProjectFormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues,
@@ -98,9 +104,9 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
     >
       <Form {...form}>
         <FormWrapperWithSubmit
-          title="Add Project"
-          description="Enter the details of the project you want to add."
-          buttonText="Add Project"
+          title={t("title")}
+          description={t("description")}
+          buttonText={t("button-text")}
           dirty={form.formState.isDirty}
           submitting={form.formState.isSubmitting}
         >
@@ -109,14 +115,11 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name *</FormLabel>
+                <FormLabel>{t("name-field-label")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-                <FormDescription>
-                  Enter the name of the project. This is the name you will be
-                  using to search and refer to the project.
-                </FormDescription>
+                <FormDescription>{t("name-field-description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -126,10 +129,11 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Type *</FormLabel>
+                <FormLabel>{t("type-field-label")}</FormLabel>
                 <Select
                   defaultValue={String(field.value)}
                   onValueChange={(value) => field.onChange(Number(value))}
+                  dir={direction}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -142,14 +146,12 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
                         key={status.value}
                         value={String(status.value)}
                       >
-                        {status.label}
+                        {status[locale]}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
-                <FormDescription>
-                  Select the type of the project.
-                </FormDescription>
+                <FormDescription>{t("type-field-description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -159,10 +161,11 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="status"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Status *</FormLabel>
+                <FormLabel>{t("status-field-label")}</FormLabel>
                 <Select
                   defaultValue={String(field.value)}
                   onValueChange={(value) => field.onChange(Number(value))}
+                  dir={direction}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -175,13 +178,13 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
                         key={status.value}
                         value={String(status.value)}
                       >
-                        {status.label}
+                        {status[locale]}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select the status of the project.
+                  {t("status-field-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -191,7 +194,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="clientId"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Client *</FormLabel>
+                <FormLabel>{t("client-field-label")}</FormLabel>
                 <FormControl>
                   <ComboSelect
                     value={field.value as number}
@@ -200,13 +203,13 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
                       value: client.id,
                       label: client.name,
                     }))}
-                    selectMessage="Select client"
-                    searchMessage="Search for client"
-                    notFoundMessage="Client not found."
+                    selectMessage={t("client-select-message")}
+                    searchMessage={t("client-search-message")}
+                    notFoundMessage={t("client-not-found-message")}
                   />
                 </FormControl>
                 <FormDescription>
-                  Select the client that this project is for.
+                  {t("client-field-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -216,7 +219,7 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="ownerId"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Owner *</FormLabel>
+                <FormLabel>{t("owner-field-label")}</FormLabel>
                 <FormControl>
                   <ComboSelect
                     value={field.value as number}
@@ -225,13 +228,13 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
                       value: user.id,
                       label: user.name,
                     }))}
-                    selectMessage="Select user"
-                    searchMessage="Search for user"
-                    notFoundMessage="User not found."
+                    selectMessage={t("owner-select-message")}
+                    searchMessage={t("owner-search-message")}
+                    notFoundMessage={t("owner-not-found-message")}
                   />
                 </FormControl>
                 <FormDescription>
-                  Select the user who will be responsible for this project.
+                  {t("owner-field-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -242,12 +245,12 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="description"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Description</FormLabel>
+                <FormLabel>{t("description-field-label")}</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={2} />
                 </FormControl>
                 <FormDescription>
-                  Enter a description of the project.
+                  {t("description-field-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -258,12 +261,12 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
             name="notes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes</FormLabel>
+                <FormLabel>{t("notes-field-label")}</FormLabel>
                 <FormControl>
                   <Textarea {...field} className="resize-none" rows={4} />
                 </FormControl>
                 <FormDescription>
-                  Enter any notes about the project.
+                  {t("notes-field-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>

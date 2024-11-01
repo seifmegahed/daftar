@@ -56,7 +56,7 @@ function ComboSelect({
           )}
         >
           <p className="truncate">{valueLabel ? valueLabel : selectMessage}</p>
-          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+          <ChevronsUpDown className="h-3 w-3 shrink-0 opacity-50 text-secondary-foreground" />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start" >
@@ -78,7 +78,7 @@ function ComboSelect({
                   >
                     <Check
                       className={cn(
-                        "mr-2 h-4 w-4",
+                        "me-2 h-4 w-4",
                         value === option.value ? "opacity-100" : "opacity-0",
                       )}
                     />
