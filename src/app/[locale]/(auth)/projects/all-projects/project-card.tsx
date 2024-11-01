@@ -1,4 +1,4 @@
-import { getStatusLabel } from "@/data/lut";
+import { getLocalizedStatusLabel } from "@/data/lut";
 import ProjectCardContextMenu from "./card-menu";
 import CardWrapper from "@/components/card-wrapper";
 import {
@@ -12,8 +12,9 @@ import {
   CardSection,
   CardSubtitleSection,
 } from "@/components/card-sections";
+import { getTranslations } from "next-intl/server";
 
-const ProjectCard = ({
+const ProjectCard = async ({
   project,
 }: {
   project: {
@@ -25,6 +26,8 @@ const ProjectCard = ({
     createdAt: Date;
   };
 }) => {
+  const statusLabel = await getLocalizedStatusLabel(project.status);
+  const t = await getTranslations("project-card.tips");
   return (
     <CardWrapper>
       <CardIdSection href={`/project/${project.id}`} id={project.id} />
@@ -36,12 +39,12 @@ const ProjectCard = ({
           />
           <CardSubtitleSection
             subtitle={project.clientName}
-            tip="Client"
+            tip={t("client")}
             href={`/client/${project.clientId}`}
           />
         </CardBodyStartContainer>
         <CardBodyEndContainer>
-          <CardSection text={getStatusLabel(project.status)} tip="Status" />
+          <CardSection text={statusLabel} tip={t("status")} />
           <CardCreatedAtSection date={project.createdAt} />
         </CardBodyEndContainer>
       </CardBodyContainer>

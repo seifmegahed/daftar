@@ -1,5 +1,3 @@
-"use client";
-
 import { Link } from "@/i18n/routing";
 import { Menu } from "lucide-react";
 import { BookmarkIcon } from "@/icons";
@@ -7,15 +5,11 @@ import { BookmarkIcon } from "@/icons";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import NavLinks from "../nav-links";
 import { Description, DialogTitle } from "@radix-ui/react-dialog";
-import { useLayoutEffect, useState } from "react";
+import { getLocale } from "next-intl/server";
 
-function MobileNav({ admin }: { admin: boolean }) {
-  const [direction, setDirection] = useState<Direction>("ltr");
-
-  useLayoutEffect(() => {
-    if (!document) return;
-    setDirection(document.dir as Direction);
-  }, []);
+async function MobileNav({ admin }: { admin: boolean }) {
+  const locale = await getLocale();
+  const direction = locale === "ar" ? "rtl" : "ltr";
 
   return (
     <Sheet>

@@ -34,6 +34,15 @@
       "project-comments": "التعليقات المرفقة للمشروع",
       "edit": "تعديل المشروع",
       "delete": "حذف المشروع"
+    },
+    "tips": {
+      "status": "الحالة",
+      "client": "العميل"
     }
+  },
+  "card-tips": {
+    "creation-date": "تاريخ الإنشاء",
+    "id": "المعرف",
+    "description": "الوصف"
   }
 }

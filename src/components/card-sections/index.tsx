@@ -5,6 +5,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { ar, enUS } from "date-fns/locale";
+import { getLocale, getTranslations } from "next-intl/server";
 
 const prefetch = false;
 
@@ -33,22 +35,31 @@ export function CardNameSection({
   );
 }
 
-export function CardCreatedAtSection({ date }: { date: Date }) {
+export async function CardCreatedAtSection({ date }: { date: Date }) {
+  const locales = {
+    ar: ar,
+    en: enUS,
+  } as const;
+  const locale = (await getLocale()) as keyof typeof locales;
+  const t = await getTranslations("card-tips");
   return (
     <div className="w-fit">
       <Tooltip>
         <TooltipTrigger asChild>
-          <p className="text-xs text-muted-foreground">{format(date, "PP")}</p>
+          <p className="text-xs text-muted-foreground">
+            {format(date, "PP", { locale: locales[locale] })}
+          </p>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Creation Date</p>
+          <p>{t("creation-date")}</p>
         </TooltipContent>
       </Tooltip>
     </div>
   );
 }
 
-export function CardIdSection({ id, href }: { id: number; href: string }) {
+export async function CardIdSection({ id, href }: { id: number; href: string }) {
+  const t = await getTranslations("card-tips");
   return (
     <Tooltip>
       <Link href={href} prefetch={prefetch} className="hidden sm:block">
@@ -59,7 +70,7 @@ export function CardIdSection({ id, href }: { id: number; href: string }) {
         </TooltipTrigger>
       </Link>
       <TooltipContent>
-        <p>ID</p>
+        <p>{t("id")}</p>
       </TooltipContent>
     </Tooltip>
   );

@@ -34,6 +34,14 @@
       "project-comments": "Project Comments",
       "edit": "Edit Project",
       "delete": "Delete Project"
+    },
+    "tips": {
+      "status": "Status",
+      "client": "Client"
     }
+  },
+  "card-tips": {
+    "creation-date": "Creation Date",
+    "id": "ID"
   }
 }
