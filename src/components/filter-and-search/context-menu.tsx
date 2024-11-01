@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { Check, Filter } from "lucide-react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter } from "@/i18n/routing";
 
 import { FILTER_TYPE, FILTER_VALUE } from ".";
 import {
@@ -31,9 +32,12 @@ function FilterContextMenu({
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+  const t = useTranslations("filter");
+  const locale = useLocale();
+  const direction = getDirection(locale);
 
   useEffect(() => {
-    if (value === null) {
+    if (value === null && searchParams.has(FILTER_TYPE)) {
       const params = new URLSearchParams(searchParams);
       params.delete(FILTER_TYPE);
       params.delete(FILTER_VALUE);
@@ -41,14 +45,10 @@ function FilterContextMenu({
     }
   });
 
-  const t = useTranslations("filter");
-  const locale = useLocale();
-  const direction = getDirection(locale);
-
   return (
     <DropdownMenu dir={direction}>
       <Tooltip>
-        <TooltipTrigger asChild>
+        <TooltipTrigger>
           <DropdownMenuTrigger asChild>
             <div className="flex size-10 cursor-pointer items-center justify-center rounded-full border text-muted-foreground hover:bg-muted">
               <Filter className="h-4 w-4" />

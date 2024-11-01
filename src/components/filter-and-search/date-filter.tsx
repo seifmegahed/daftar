@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import { useRouter, usePathname } from "@/i18n/routing";
 
 import DatePicker from "@/components/date-picker";
 import { Label } from "@/components/ui/label";
@@ -53,6 +54,7 @@ function DateFilter({
       clearTimeout(debounce);
     };
   }, [fromDate, toDate, pathname, searchParams, router, change, type]);
+
   const t = useTranslations("filter");
   return (
     <div className="flex flex-col gap-5 md:flex-row">

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import SearchBar from "@/components/search-bar";
 import FilterBar from "./filter-bar";
 import FilterContextMenu from "./context-menu";
@@ -57,14 +57,6 @@ function FilterAndSearch({
 
   const t = useTranslations("filter");
   const locale = useLocale() as "en" | "ar";
-  
-  useEffect(() => {
-    const item = getFilterLabel(filterType, filterItems);
-    if (!item) return;
-    setFilterLabel(
-      item.locale ? t("filter-title") + " " + item.locale[locale] : item.label,
-    );
-  }, [filterType, filterItems, t, locale]);
 
   return (
     <>
@@ -72,7 +64,16 @@ function FilterAndSearch({
         <SearchBar />
         <FilterContextMenu
           value={filterType}
-          onChange={setFilterType}
+          onChange={(value) => {
+            setFilterType(value);
+            const item = getFilterLabel(value, filterItems);
+            if (item)
+              setFilterLabel(
+                item.locale
+                  ? t("filter-title") + " " + item.locale[locale]
+                  : item.label,
+              );
+          }}
           filterItems={filterItems}
         />
       </div>
@@ -82,7 +83,10 @@ function FilterAndSearch({
             <h1 className="text-xl font-bold">{filterLabel}</h1>
             <div
               className="flex size-10 cursor-pointer items-center justify-center rounded-full text-muted-foreground"
-              onClick={() => setFilterType(null)}
+              onClick={() => {
+                setFilterType(null);
+                setFilterLabel("");
+              }}
             >
               <div>
                 <X className="h-4 w-4" />

@@ -49,8 +49,7 @@
   },
   "card-tips": {
     "creation-date": "تاريخ الإنشاء",
-    "id": "المعرف",
-    "description": "الوصف"
+    "id": "المعرف"
   },
   "filter": {
     "tip": "التصفية",
