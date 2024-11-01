@@ -1,3 +1,11 @@
 {
-  "direction": "rtl"
+  "direction": "rtl",
+  "topnav": {
+    "Projects": "المشاريع",
+    "Clients": "العملاء",
+    "Suppliers": "الموردين",
+    "Items": "المواد",
+    "Documents": "المستندات",
+    "Admin": "المدير"
+  }
 }

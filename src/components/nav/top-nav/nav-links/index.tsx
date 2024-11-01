@@ -1,8 +1,7 @@
 "use client";
 
-import { Link } from "@/i18n/routing";
-import { usePathname } from "@/i18n/routing";
-import { useEffect, useMemo, useState } from "react";
+import { Link, usePathname } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
 
 const routes = [
   { name: "Projects", href: "/projects", alt: "/project" },
@@ -10,31 +9,30 @@ const routes = [
   { name: "Suppliers", href: "/suppliers", alt: "/supplier" },
   { name: "Items", href: "/items", alt: "/item" },
   { name: "Documents", href: "/documents", alt: "/document" },
-];
+] as const;
 
-const protectedRoutes = [{ name: "Admin", href: "/admin", alt: "/admin" }];
+const protectedRoutes = [
+  { name: "Admin", href: "/admin", alt: "/admin" },
+] as const;
 
 function NavLinks({ admin }: { admin: boolean }) {
-  const data = useMemo(
-    () => (admin ? [...routes, ...protectedRoutes] : routes),
-    [admin],
-  );
   const pathname = "/" + usePathname().split("/")[1];
-  const [activeLinkIndex, setActiveLinkIndex] = useState(-1);
-  useEffect(() => {
-    setActiveLinkIndex(() =>
-      data.findIndex((link) => link.href === pathname || link.alt === pathname),
-    );
-  }, [pathname, data]);
+  const t = useTranslations("topnav");
+  
+  const data = admin ? [...routes, ...protectedRoutes] : routes;
+
+  const selectedIndex = data.findIndex(
+    (link) => link.href === pathname || link.alt === pathname,
+  );
   return (
     <>
       {data.map((link, index) => (
         <Link
           key={link.name}
           href={link.href}
-          className={`transition-colors hover:text-foreground ${activeLinkIndex === index ? "text-foreground" : "text-muted-foreground"}`}
+          className={`transition-colors hover:text-foreground ${selectedIndex === index ? "text-foreground" : "text-muted-foreground"}`}
         >
-          {link.name}
+          {t(link.name)}
         </Link>
       ))}
     </>

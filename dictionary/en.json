@@ -1,3 +1,11 @@
 {
-  "direction": "ltr"
+  "direction": "ltr",
+  "topnav": {
+    "Projects": "Projects",
+    "Clients": "Clients",
+    "Suppliers": "Suppliers",
+    "Items": "Items",
+    "Documents": "Documents",
+    "Admin": "Admin"
+  }
 }
