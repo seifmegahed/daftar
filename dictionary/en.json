@@ -3,6 +3,9 @@
     "title": "Loading Daftar...",
     "title-demo": "Loading Daftar Demo..."
   },
+  "error": {
+    "title": "Oops, something went wrong"
+  },
   "topnav": {
     "Projects": "Projects",
     "Clients": "Clients",
