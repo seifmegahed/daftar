@@ -6,6 +6,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { useLocale } from "next-intl";
 
 const numberOfYears = 100;
 const currentYear = new Date().getFullYear();
@@ -21,6 +22,8 @@ function YearSelect ({
   date?: Date;
   onChange: (date?: Date) => void;
 }) {
+  const locale = useLocale();
+  const direction = locale === "ar" ? "rtl" : "ltr";
   return (
     <Select
       onValueChange={(value) =>
@@ -28,6 +31,7 @@ function YearSelect ({
           new Date(Number(value), date?.getMonth() ?? 0, date?.getDate() ?? 1),
         )
       }
+      dir={direction}
     >
       <SelectTrigger className="font-bold">
         <div className="flex-grow">

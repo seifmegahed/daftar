@@ -1,3 +1,4 @@
+import { ar, enUS } from "date-fns/locale";
 import { between, gte, lte, sql } from "drizzle-orm";
 import type { PgColumn } from "drizzle-orm/pg-core";
 
@@ -93,4 +94,15 @@ export const timestampQueryGenerator = (
   if (!from && to) return lte(column, to);
   if (from && !to) return gte(column, from);
   return between(column, from, to);
+};
+
+export const getDataLocaleFormat = (locale: string) => {
+  switch (locale) {
+    case "ar":
+      return ar;
+    case "en":
+      return enUS;
+    default:
+      return enUS;
+  }
 };

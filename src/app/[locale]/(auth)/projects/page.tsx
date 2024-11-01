@@ -23,17 +23,37 @@ type Props = {
 };
 
 const filterItems: FilterOptionType[] = [
-  { label: "By Status", value: "status" },
-  { label: "By Type", value: "type" },
-  { label: "By Start Date", value: "startDate" },
-  { label: "By End Date", value: "endDate" },
-  { label: "By Creation Date", value: "creationDate" },
-  { label: "By Update Date", value: "updateDate" },
+  {
+    label: "By Status",
+    value: "status",
+    locale: { en: "By Status", ar: "بالحالة" },
+  },
+  { label: "By Type", value: "type", locale: { en: "By Type", ar: "بالنوع" } },
+  {
+    label: "By Start Date",
+    value: "startDate",
+    locale: { en: "By Start Date", ar: "بتاريخ البدء" },
+  },
+  {
+    label: "By End Date",
+    value: "endDate",
+    locale: { en: "By End Date", ar: "بتاريخ الانتهاء" },
+  },
+  {
+    label: "By Creation Date",
+    value: "creationDate",
+    locale: { en: "By Creation Date", ar: "بتاريخ الإنشاء" },
+  },
+  {
+    label: "By Update Date",
+    value: "updateDate",
+    locale: { en: "By Update Date", ar: "بتاريخ التحديث" },
+  },
 ];
 
 async function AllProjects({ searchParams, params }: Props) {
   setLocale(params.locale);
-  
+
   const parsedPage = parseInt(searchParams.page ?? "1");
   const page = isNaN(parsedPage) ? 1 : parsedPage;
   const query = searchParams.query ?? "";

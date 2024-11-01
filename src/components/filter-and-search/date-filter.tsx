@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { FILTER_TYPE, FILTER_VALUE } from ".";
 import type { FilterTypes } from ".";
 import { datesToURLString, parseURLDates } from "@/utils/common";
+import { useTranslations } from "next-intl";
 
 function DateFilter({
   defaultValue,
@@ -52,11 +53,11 @@ function DateFilter({
       clearTimeout(debounce);
     };
   }, [fromDate, toDate, pathname, searchParams, router, change, type]);
-
+  const t = useTranslations("filter");
   return (
     <div className="flex flex-col gap-5 md:flex-row">
       <div className="flex flex-col gap-2">
-        <Label>From</Label>
+        <Label>{t("from")}</Label>
         <DatePicker
           onChange={(value) => {
             setFromDate(value);
@@ -66,7 +67,7 @@ function DateFilter({
         />
       </div>
       <div className="flex flex-col gap-2">
-        <Label>To</Label>
+        <Label>{t("to")}</Label>
         <DatePicker
           onChange={(value) => {
             setToDate(value);

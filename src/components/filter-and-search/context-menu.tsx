@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { Check, Filter } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -16,6 +16,7 @@ import {
 
 import type { FilterTypes } from ".";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
+import { useLocale, useTranslations } from "next-intl";
 
 function FilterContextMenu({
   value,
@@ -26,9 +27,15 @@ function FilterContextMenu({
   onChange: (value: FilterTypes) => void;
   filterItems: { label: string; value: FilterTypes }[];
 }) {
+  const [direction, setDirection] = useState<Direction>("ltr");
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
+
+  useLayoutEffect(() => {
+    if (!document) return;
+    setDirection(document.dir as Direction);
+  }, []);
 
   useEffect(() => {
     if (value === null) {
@@ -39,22 +46,24 @@ function FilterContextMenu({
     }
   });
 
+  const t = useTranslations("filter");
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger>
-        <Tooltip>
-          <TooltipTrigger asChild>
+    <DropdownMenu dir={direction}>
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <DropdownMenuTrigger asChild>
             <div className="flex size-10 cursor-pointer items-center justify-center rounded-full border text-muted-foreground hover:bg-muted">
               <Filter className="h-4 w-4" />
             </div>
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Filter</p>
-          </TooltipContent>
-        </Tooltip>
-      </DropdownMenuTrigger>
+          </DropdownMenuTrigger>
+        </TooltipTrigger>
+        <TooltipContent>
+          <p>{t("tip")}</p>
+        </TooltipContent>
+      </Tooltip>
       <DropdownMenuContent className="w-48" align="end">
-        <DropdownMenuLabel>Filter</DropdownMenuLabel>
+        <DropdownMenuLabel>{t("filter-title")}</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {filterItems.map((item) => (
           <MenuItem
@@ -74,17 +83,21 @@ const MenuItem = ({
   onClick,
   value,
   label,
+  locale,
 }: {
   currentValue: FilterTypes;
   onClick: (value: FilterTypes) => void;
   value: FilterTypes;
   label: string;
+  locale?: { en: string; ar: string };
 }) => {
   const isSelected = value === currentValue;
+  const _locale = useLocale() as "en" | "ar";
+  const localizedLabel = locale ? locale[_locale] : label;
   return (
     <DropdownMenuItem onClick={() => onClick(isSelected ? null : value)}>
       <div className="flex w-full items-center justify-between">
-        <p>{label} </p>
+        <p>{localizedLabel} </p>
         {isSelected && <Check className="h-4 w-4" />}
       </div>
     </DropdownMenuItem>

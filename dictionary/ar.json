@@ -1,4 +1,8 @@
 {
+  "main-loading": {
+    "title": "جاري التحميل...",
+    "title-demo": "جاري التحميل للعرض التجريبي..."
+  },
   "topnav": {
     "Projects": "المشاريع",
     "Clients": "العملاء",
@@ -44,5 +48,18 @@
     "creation-date": "تاريخ الإنشاء",
     "id": "المعرف",
     "description": "الوصف"
+  },
+  "filter": {
+    "tip": "التصفية",
+    "filter-title": "تصفية",
+    "status": "الحالة",
+    "type": "النوع",
+    "select-placeholder": "اختر قيمة",
+    "from": "من",
+    "to": "إلى"
+  },
+  "date-picker": {
+    "select-year": "اختر السنة",
+    "select-date": "اختر التاريخ"
   }
 }

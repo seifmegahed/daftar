@@ -11,6 +11,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FILTER_TYPE, FILTER_VALUE } from ".";
 import { Label } from "@/components/ui/label";
+import { useLocale, useTranslations } from "next-intl";
 
 function SelectFilter({
   defaultValue,
@@ -40,24 +41,32 @@ function SelectFilter({
     }
   }, [filterValue, pathname, searchParams, router, defaultValue, type]);
 
+  const locale = useLocale();
+  const t = useTranslations("filter");
+  const direction = locale === "ar" ? "rtl" : "ltr";
+
   return (
     <div className="flex w-[300px] flex-col gap-2">
       <Label>{label}</Label>
-      <Select onValueChange={setFilterValue} value={filterValue}>
+      <Select
+        onValueChange={setFilterValue}
+        value={filterValue}
+        dir={direction}
+      >
         <SelectTrigger>
           <SelectValue
-            placeholder="Select filter value"
+            placeholder={t("select-placeholder")}
             defaultValue={undefined}
           />
         </SelectTrigger>
         <SelectContent>
-          {options.map((status) => (
+          {options.map((option) => (
             <SelectItem
-              key={status.value}
-              value={String(status.value)}
+              key={option.value}
+              value={String(option.value)}
               className="cursor-pointer"
             >
-              {status.label}
+              {option.label}
             </SelectItem>
           ))}
         </SelectContent>

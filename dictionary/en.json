@@ -1,4 +1,8 @@
 {
+  "main-loading": {
+    "title": "Loading Daftar...",
+    "title-demo": "Loading Daftar Demo..."
+  },
   "topnav": {
     "Projects": "Projects",
     "Clients": "Clients",
@@ -43,5 +47,18 @@
   "card-tips": {
     "creation-date": "Creation Date",
     "id": "ID"
+  },
+  "filter": {
+    "tip": "Filter",
+    "filter-title": "Filter",
+    "status": "Status",
+    "type": "Type",
+    "select-placeholder": "Select value",
+    "from": "From",
+    "to": "To"
+  },
+  "date-picker": {
+    "select-year": "Select Year",
+    "select-date": "Select Date"
   }
 }

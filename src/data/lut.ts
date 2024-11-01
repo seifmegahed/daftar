@@ -44,9 +44,9 @@ export const getCurrencyLabel = (currency: number) =>
   currencyOptions.find((x) => x.value === currency)?.label ?? "Unknown";
 
 export const projectTypes = [
-  { value: 0, label: "Supply" },
-  { value: 1, label: "Service" },
-  { value: 2, label: "Budgetary" },
+  { value: 0, label: "Supply", en: "Supply", ar: "توريد" },
+  { value: 1, label: "Service", en: "Service", ar: "صيانة" },
+  { value: 2, label: "Budgetary", en: "Budgetary", ar: "دراسة مالية" },
 ];
 
 export const getProjectTypeLabel = (type: number) =>
