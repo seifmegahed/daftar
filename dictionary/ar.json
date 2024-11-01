@@ -28,7 +28,9 @@
       "New Project": "مشروع جديد"
     },
     "all-projects-page": {
-      "title": "الصفحة الرئيسية لجميع المشاريع"
+      "title": "الصفحة الرئيسية لجميع المشاريع",
+      "no-projects-found-error-title": "يبدو أنه لا يوجد مشاريع هنا حتى ألان!",
+      "no-projects-found-error-message": "ابدأ بإضافة المشاريع لرؤيتها هنا"
     },
     "new-project-page": {
       "title": "إضافة مشروع",

@@ -28,7 +28,9 @@
       "New Project": "New Project"
     },
     "all-projects-page": {
-      "title": "All Projects Page"
+      "title": "All Projects Page",
+      "no-projects-found-error-title": "There seems to be no projects yet!",
+      "no-projects-found-error-message": "Start adding projects to be able to see them here"
     },
     "new-project-page": {
       "title": "Add Project",
