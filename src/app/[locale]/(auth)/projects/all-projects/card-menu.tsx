@@ -10,16 +10,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { useTranslations } from "next-intl";
-import { getDirection } from "@/utils/common";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 const ProjectCardContextMenu = ({ projectId }: { projectId: number }) => {
   const [direction, setDirection] = useState<Direction>("ltr");
   const t = useTranslations("project-card.menu");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!document) return;
-    setDirection(getDirection(document));
+    setDirection(document.dir as Direction);
   }, []);
   return (
     <DropdownMenu dir={direction}>

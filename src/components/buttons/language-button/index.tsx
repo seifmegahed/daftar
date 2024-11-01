@@ -10,8 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Languages } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useLocale } from "next-intl";
-import { getDirection } from "@/utils/common";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 
 function LanguageButton() {
   const locale = useLocale();
@@ -19,9 +18,9 @@ function LanguageButton() {
   const pathname = usePathname();
   const [direction, setDirection] = useState<Direction>("ltr");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!document) return;
-    setDirection(getDirection(document));
+    setDirection(document.dir as Direction);
   }, []);
 
   const switchLocale = (_locale?: "ar" | "en") => {

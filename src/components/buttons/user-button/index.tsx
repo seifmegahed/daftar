@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useState } from "react";
 import { useTheme } from "next-themes";
 import { toast } from "sonner";
 import { Link } from "@/i18n/routing";
@@ -21,16 +21,15 @@ import Loading from "@/components/loading";
 import { getInitials } from "@/utils/user";
 import { useTranslations } from "next-intl";
 import { LogOut, MoonIcon, SettingsIcon, SunIcon } from "lucide-react";
-import { getDirection } from "@/utils/common";
 
 function UserButton({ user }: { user: { name: string; id: number } }) {
   const [loading, setLoading] = useState(false);
   const { setTheme } = useTheme();
   const [direction, setDirection] = useState<Direction>("ltr");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (!document) return;
-    setDirection(getDirection(document));
+    setDirection(document.dir as Direction);
   }, []);
 
   const initials = getInitials(user.name);

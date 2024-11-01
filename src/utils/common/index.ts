@@ -94,8 +94,3 @@ export const timestampQueryGenerator = (
   if (from && !to) return gte(column, from);
   return between(column, from, to);
 };
-
-export const getDirection = (document: Document | null) => {
-  if (!document) return "ltr";
-  return document.dir as Direction;
-};
