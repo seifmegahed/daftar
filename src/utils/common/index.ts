@@ -106,3 +106,14 @@ export const getDataLocaleFormat = (locale: string) => {
       return enUS;
   }
 };
+
+export const getDirection = (locale: string) => {
+  switch (locale) {
+    case "ar":
+      return "rtl";
+    case "en":
+      return "ltr";
+    default:
+      return "ltr";
+  }
+};

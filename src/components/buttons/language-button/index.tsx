@@ -10,18 +10,12 @@ import { Button } from "@/components/ui/button";
 import { Languages } from "lucide-react";
 import { usePathname, useRouter } from "@/i18n/routing";
 import { useLocale } from "next-intl";
-import { useLayoutEffect, useState } from "react";
+import { getDirection } from "@/utils/common";
 
 function LanguageButton() {
   const locale = useLocale();
   const router = useRouter();
   const pathname = usePathname();
-  const [direction, setDirection] = useState<Direction>("ltr");
-
-  useLayoutEffect(() => {
-    if (!document) return;
-    setDirection(document.dir as Direction);
-  }, []);
 
   const switchLocale = (_locale?: "ar" | "en") => {
     if (!_locale) return;
@@ -32,6 +26,8 @@ function LanguageButton() {
     locale === "en" ? switchLocale() : switchLocale("en");
   const switchToAr = () =>
     locale === "ar" ? switchLocale() : switchLocale("ar");
+
+  const direction = getDirection(locale);
 
   return (
     <DropdownMenu dir={direction}>

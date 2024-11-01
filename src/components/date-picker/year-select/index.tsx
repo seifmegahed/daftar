@@ -6,6 +6,7 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import { getDirection } from "@/utils/common";
 import { useLocale } from "next-intl";
 
 const numberOfYears = 100;
@@ -23,7 +24,7 @@ function YearSelect ({
   onChange: (date?: Date) => void;
 }) {
   const locale = useLocale();
-  const direction = locale === "ar" ? "rtl" : "ltr";
+  const direction = getDirection(locale);
   return (
     <Select
       onValueChange={(value) =>

@@ -4,7 +4,8 @@ import { Popover, PopoverContent } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import YearSelect from "./year-select";
 import TriggerButton from "./trigger-button";
-import { ar } from "date-fns/locale";
+import { getDataLocaleFormat } from "@/utils/common";
+import { useLocale } from "next-intl";
 
 function DatePicker({
   date,
@@ -22,13 +23,15 @@ function DatePicker({
     return date > new Date() || date < new Date("1900-01-01");
   };
 
+  const locale = useLocale();
+
   return (
     <Popover>
       <TriggerButton date={date} className={className} />
       <PopoverContent className="w-auto p-0">
         <YearSelect date={date} onChange={onChange} />
         <Calendar
-          locale={ar}
+          locale={getDataLocaleFormat(locale)}
           mode="single"
           month={date ?? new Date()}
           onMonthChange={(_date) => onChange(_date)}

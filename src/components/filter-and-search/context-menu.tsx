@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect } from "react";
 import { Check, Filter } from "lucide-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
@@ -17,6 +17,7 @@ import {
 import type { FilterTypes } from ".";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useLocale, useTranslations } from "next-intl";
+import { getDirection } from "@/utils/common";
 
 function FilterContextMenu({
   value,
@@ -27,15 +28,9 @@ function FilterContextMenu({
   onChange: (value: FilterTypes) => void;
   filterItems: { label: string; value: FilterTypes }[];
 }) {
-  const [direction, setDirection] = useState<Direction>("ltr");
   const searchParams = useSearchParams();
   const pathname = usePathname();
   const router = useRouter();
-
-  useLayoutEffect(() => {
-    if (!document) return;
-    setDirection(document.dir as Direction);
-  }, []);
 
   useEffect(() => {
     if (value === null) {
@@ -47,6 +42,8 @@ function FilterContextMenu({
   });
 
   const t = useTranslations("filter");
+  const locale = useLocale();
+  const direction = getDirection(locale);
 
   return (
     <DropdownMenu dir={direction}>

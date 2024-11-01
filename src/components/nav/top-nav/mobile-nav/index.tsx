@@ -6,10 +6,11 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import NavLinks from "../nav-links";
 import { Description, DialogTitle } from "@radix-ui/react-dialog";
 import { getLocale } from "next-intl/server";
+import { getDirection } from "@/utils/common";
 
 async function MobileNav({ admin }: { admin: boolean }) {
   const locale = await getLocale();
-  const direction = locale === "ar" ? "rtl" : "ltr";
+  const direction = getDirection(locale);
 
   return (
     <Sheet>

@@ -5,8 +5,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { ar, enUS } from "date-fns/locale";
 import { getLocale, getTranslations } from "next-intl/server";
+import { getDataLocaleFormat } from "@/utils/common";
 
 const prefetch = false;
 
@@ -36,18 +36,14 @@ export function CardNameSection({
 }
 
 export async function CardCreatedAtSection({ date }: { date: Date }) {
-  const locales = {
-    ar: ar,
-    en: enUS,
-  } as const;
-  const locale = (await getLocale()) as keyof typeof locales;
   const t = await getTranslations("card-tips");
+  const locale = await getLocale();
   return (
     <div className="w-fit">
       <Tooltip>
         <TooltipTrigger asChild>
           <p className="text-xs text-muted-foreground">
-            {format(date, "PP", { locale: locales[locale] })}
+            {format(date, "PP", { locale: getDataLocaleFormat(locale) })}
           </p>
         </TooltipTrigger>
         <TooltipContent>
@@ -58,7 +54,13 @@ export async function CardCreatedAtSection({ date }: { date: Date }) {
   );
 }
 
-export async function CardIdSection({ id, href }: { id: number; href: string }) {
+export async function CardIdSection({
+  id,
+  href,
+}: {
+  id: number;
+  href: string;
+}) {
   const t = await getTranslations("card-tips");
   return (
     <Tooltip>

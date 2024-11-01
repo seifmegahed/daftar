@@ -12,6 +12,7 @@ import { useEffect, useState } from "react";
 import { FILTER_TYPE, FILTER_VALUE } from ".";
 import { Label } from "@/components/ui/label";
 import { useLocale, useTranslations } from "next-intl";
+import { getDirection } from "@/utils/common";
 
 function SelectFilter({
   defaultValue,
@@ -43,7 +44,7 @@ function SelectFilter({
 
   const locale = useLocale();
   const t = useTranslations("filter");
-  const direction = locale === "ar" ? "rtl" : "ltr";
+  const direction = getDirection(locale);
 
   return (
     <div className="flex w-[300px] flex-col gap-2">
