@@ -35,7 +35,7 @@ function LanguageButton() {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full border-none text-muted-foreground"
+          className="rounded-full border-none text-muted-foreground hover:text-muted-foreground size-10 duration-300 ease-in-out"
         >
           <Languages className="h-5 w-5" />
         </Button>
