@@ -16,14 +16,24 @@ import InfoPageWrapper from "@/components/info-page-wrapper";
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import ErrorPage from "@/components/error";
 import DataDisplayUnit from "@/components/data-display-unit";
-import { getLocale, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
+import { getDataLocaleFormat } from "@/utils/common";
+import { setLocale } from "@/i18n/set-locale";
 
 import type { SimpDoc } from "@/server/db/tables/document/queries";
-import { getDataLocaleFormat } from "@/utils/common";
+import type { LocaleParams } from "@/i18n/set-locale";
 
-async function ProjectPage({ params }: { params: { id: string } }) {
+async function ProjectPage({
+  params,
+}: {
+  params: { id: string; locale: LocaleParams["locale"] };
+}) {
+  const { locale } = params;
+  setLocale(locale);
+  
+  const t = await getTranslations("project.page");
   const projectId = parseInt(params.id);
-  if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
+  if (isNaN(projectId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [project, error] = await getProjectByIdAction(projectId);
   if (error !== null) return <ErrorPage message={error} />;
@@ -33,8 +43,6 @@ async function ProjectPage({ params }: { params: { id: string } }) {
   if (linkedDocumentsError !== null)
     return <ErrorPage message={linkedDocumentsError} />;
 
-  const t = await getTranslations("project.page");
-  const locale = await getLocale() as "ar" | "en";
   const localeDateFormat = getDataLocaleFormat(locale);
 
   return (
@@ -58,9 +66,7 @@ async function ProjectPage({ params }: { params: { id: string } }) {
       <Section title={t("general-info")}>
         <DataDisplayUnit
           label={t("type")}
-          values={[
-            getLocalizedProjectTypeLabel(project.type, locale),
-          ]}
+          values={[getLocalizedProjectTypeLabel(project.type, locale)]}
         />
         <DataDisplayUnit label={t("owner")} values={[project.owner.name]} />
         <DataDisplayUnit

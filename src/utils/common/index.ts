@@ -117,3 +117,15 @@ export const getDirection = (locale: string) => {
       return "ltr";
   }
 };
+
+const types = {
+  client: { en: "Client", ar: "عميل" },
+  supplier: { en: "Supplier", ar: "مورد" },
+  project: { en: "Project", ar: "مشروع" },
+  item: { en: "Item", ar: "مادة" },
+  document: { en: "Document", ar: "مستند" },
+  user: { en: "User", ar: "مستخدم" },
+};
+
+export const getLocaleType = (type: keyof typeof types, locale: "ar" | "en") =>
+  types[type][locale];

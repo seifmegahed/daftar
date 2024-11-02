@@ -14,10 +14,11 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Textarea } from "@/components/ui/textarea";
 import { notesMaxLength } from "@/data/config";
-import { emptyToUndefined } from "@/utils/common";
+import { emptyToUndefined, getLocaleType } from "@/utils/common";
 import { toast } from "sonner";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import { useLocale, useTranslations } from "next-intl";
 
 const schema = z.object({
   description: z.preprocess(
@@ -47,6 +48,10 @@ function DescriptionForm({
     data: { description: string | undefined },
   ) => Promise<ReturnTuple<number>>;
 }) {
+  const locale = useLocale() as "ar" | "en";
+  const localizedType = getLocaleType(type, locale);
+  const t = useTranslations("description-form");
+
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { description },
@@ -62,17 +67,17 @@ function DescriptionForm({
         toast.error(error);
         return;
       }
-      toast.success("Description updated");
+      toast.success(t("success"));
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating description");
+      toast.error(t("error"));
     }
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold">Description</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <form
         className="flex flex-col gap-4"
@@ -91,11 +96,7 @@ function DescriptionForm({
                 />
                 <FormMessage />
                 <FormDescription>
-                  {`Update ${type} description, this will change the description
-                  of the ${type} across all references. After typing the updated
-                  description press the update button to persist the change.
-                  The ${type} description is one of the fields used to search
-                  ${type}s.`}
+                  {t("description", { type: localizedType })}
                 </FormDescription>
               </FormItem>
             )}
@@ -105,7 +106,7 @@ function DescriptionForm({
               disabled={form.formState.isSubmitting || !form.formState.isDirty}
               loading={form.formState.isSubmitting}
             >
-              Update
+              {t("update")}
             </SubmitButton>
           </div>
         </Form>

@@ -17,6 +17,7 @@ import { updateProjectDatesAction } from "@/server/actions/projects/update";
 import { toast } from "sonner";
 import { useState } from "react";
 import { toDBDate } from "@/utils/common";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
   startDate: z.date().optional(),
@@ -34,6 +35,7 @@ function DatesForm({
   endDate?: Date;
   projectId: number;
 }) {
+  const t = useTranslations("project.edit.dates-form");
   const [defaultValues, setDefaultValues] = useState<{
     startDate?: Date;
     endDate?: Date;
@@ -53,18 +55,18 @@ function DatesForm({
         toast.error(error);
         return;
       }
-      toast.success("Project dates updated");
+      toast.success(t("success"));
       setDefaultValues(data);
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating dates");
+      toast.error(t("error"));
     }
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold">Project Dates</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <form
         className="flex flex-col gap-4"
@@ -77,7 +79,7 @@ function DatesForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
-                  <FormLabel>Start Date</FormLabel>
+                  <FormLabel>{t("start-date")}</FormLabel>
                   <div className="flex flex-col gap-2">
                     <DatePicker
                       onChange={(value) => field.onChange(value ?? undefined)}
@@ -94,7 +96,7 @@ function DatesForm({
               control={form.control}
               render={({ field }) => (
                 <FormItem className="flex items-center justify-between">
-                  <FormLabel>End Date</FormLabel>
+                  <FormLabel>{t("end-date")}</FormLabel>
                   <div className="flex flex-col gap-2">
                     <DatePicker
                       onChange={(value) => field.onChange(value ?? undefined)}
@@ -113,7 +115,7 @@ function DatesForm({
               disabled={form.formState.isSubmitting || !form.formState.isDirty}
               loading={form.formState.isSubmitting}
             >
-              Update
+              {t("update")}
             </SubmitButton>
           </div>
         </Form>

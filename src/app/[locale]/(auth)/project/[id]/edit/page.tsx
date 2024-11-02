@@ -21,10 +21,16 @@ import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteProjectAction } from "@/server/actions/projects/delete";
 import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import ErrorPage from "@/components/error";
+import { getTranslations } from "next-intl/server";
+import { setLocale } from "@/i18n/set-locale";
+import type { LocaleParams } from "@/i18n/set-locale";
 
-async function EditProjectPage({ params }: { params: { id: string } }) {
+async function EditProjectPage({ params }: { params: { id: string, locale: LocaleParams["locale"] } }) {
+  const { locale } = params;
+  setLocale(locale);
+  const t = await getTranslations("project.edit");
   const projectId = parseInt(params.id);
-  if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
+  if (isNaN(projectId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [project, error] = await getProjectBriefByIdAction(projectId);
   if (error !== null) return <ErrorPage message={error} />;
@@ -41,8 +47,8 @@ async function EditProjectPage({ params }: { params: { id: string } }) {
 
   return (
     <InfoPageWrapper
-      title="Edit Project"
-      subtitle={`This is the edit page for the project: ${project.name}. Here you can edit the project details.`}
+      title={t("title")}
+      subtitle={t("subtitle", { projectName: project.name })}
     >
       <StatusForm projectId={project.id} status={project.status} />
       <NameForm

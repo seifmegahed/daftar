@@ -16,6 +16,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { notesMaxLength } from "@/data/config";
 import { emptyToUndefined } from "@/utils/common";
 import { toast } from "sonner";
+import { useLocale, useTranslations } from "next-intl";
+import { getLocaleType } from "@/utils/common";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 const schema = z.object({
@@ -46,6 +48,9 @@ function NotesForm({
     data: { notes: string | undefined },
   ) => Promise<ReturnTuple<number>>;
 }) {
+  const locale = useLocale() as "ar" | "en";
+  const localizedType = getLocaleType(type, locale);
+  const t = useTranslations("notes-form");
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { notes },
@@ -60,11 +65,11 @@ function NotesForm({
         toast.error(error);
         return;
       }
-      toast.success("Notes updated");
+      toast.success(t("success"));
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating notes");
+      toast.error(t("error"));
     }
   };
 
@@ -73,7 +78,7 @@ function NotesForm({
       className="flex flex-col gap-4"
       onSubmit={form.handleSubmit(onSubmit)}
     >
-      <h2 className="text-xl font-bold">Project Notes</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <Form {...form}>
         <FormField
@@ -90,10 +95,7 @@ function NotesForm({
               />
               <FormMessage />
               <FormDescription>
-                {`Update ${type} notes, this will change the notes of the ${type} 
-                across all references and the previous notes will be lost. After
-                typing the updated notes press the update button to
-                persist the change.`}
+                {t("description", { type: localizedType })}
               </FormDescription>
             </FormItem>
           )}
@@ -103,7 +105,7 @@ function NotesForm({
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
             loading={form.formState.isSubmitting}
           >
-            Update
+            {t("update")}
           </SubmitButton>
         </div>
       </Form>

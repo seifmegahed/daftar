@@ -23,6 +23,8 @@ import { toast } from "sonner";
 import { updateProjectOwnerAction } from "@/server/actions/projects/update";
 
 import type { UserBriefType } from "@/server/db/tables/user/queries";
+import { useLocale, useTranslations } from "next-intl";
+import { getDirection } from "@/utils/common";
 
 const schema = z.object({
   ownerId: z.preprocess((value: unknown) => Number(value), z.number()),
@@ -41,6 +43,10 @@ function OwnerForm({
   users: UserBriefType[];
   access: boolean;
 }) {
+  const locale = useLocale() as "ar" | "en";
+  const direction = getDirection(locale);
+  const t = useTranslations("project.edit.owner-form");
+
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { ownerId },
@@ -48,7 +54,7 @@ function OwnerForm({
 
   const onSubmit = async (data: FormDataType) => {
     if (!access) {
-      toast.error("You do not have permission to change the project owner");
+      toast.error(t("unauthorized"));
       form.reset({ ownerId });
       return;
     }
@@ -60,17 +66,17 @@ function OwnerForm({
         toast.error(error);
         return;
       }
-      toast.success("Project owner updated");
+      toast.success(t("success"));
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating the owner");
+      toast.error(t("error"));
     }
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold">Project Owner</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <form
         className="flex flex-col gap-4"
@@ -87,6 +93,7 @@ function OwnerForm({
                   value={String(field.value)}
                   onValueChange={field.onChange}
                   disabled={!access}
+                  dir={direction}
                 >
                   <SelectTrigger
                     className={`${form.formState.isDirty ? "" : "!text-muted-foreground"}`}
@@ -105,10 +112,10 @@ function OwnerForm({
                 </Select>
                 <FormMessage />
                 <FormDescription>
-                  Update project owner. After selecting the desired owner press
-                  the update button to persist the change. <br />
-                  <strong>Note:</strong> Only the owner or an admin can change
-                  the project owner.
+                  {t("description")}
+                  <br />
+                  <strong>{t("note")}</strong>
+                  {t("note-content")}
                 </FormDescription>
               </FormItem>
             )}
@@ -122,7 +129,7 @@ function OwnerForm({
               }
               loading={form.formState.isSubmitting}
             >
-              Update
+              {t("update")}
             </SubmitButton>
           </div>
         </Form>

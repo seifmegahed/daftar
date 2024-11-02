@@ -74,6 +74,7 @@
       "comments": "Comments"
     },
     "page": {
+      "invalid-id": "Invalid project ID",
       "subtitle": "This is the project page for {projectName}. Here you can view all information about the project. You can also view the documents and items linked to this project.",
       "description": "Description",
       "status": "Status",
@@ -94,6 +95,79 @@
       "items-documents": "Items' Documents",
       "suppliers-documents": "Suppliers' Documents",
       "download-all": "Download all"
+    },
+    "edit": {
+      "invalid-id": "Invalid project ID",
+      "title": "Edit Project",
+      "subtitle": "This is the edit page for the project {projectName}. Here you can edit the project details.",
+      "status-form": {
+        "title": "Project Status",
+        "description": "Update project status to reflect the current state of the project. After selecting the desired state press the update button to persist the change.",
+        "success": "Project status updated successfully",
+        "error": "An error occurred while updating the status",
+        "update": "Update"
+      },
+      "dates-form": {
+        "title": "Project Dates",
+        "start-date": "Start Date",
+        "end-date": "End Date",
+        "success": "Project dates updated",
+        "error": "An error occurred while updating dates",
+        "update": "Update"
+      },
+      "owner-form": {
+        "unauthorized": "You do not have permission to change the project owner",
+        "success": "Project owner updated",
+        "error": "An error occurred while updating the owner",
+        "title": "Project Owner",
+        "description": "Update project owner. After selecting the desired owner press the update button to persist the change.",
+        "note": "Note: ",
+        "note-content": "Only the owner or an admin can change the project owner.",
+        "update": "Update"
+      }
+    }
+  },
+  "name-form": {
+    "success": "Name updated",
+    "error": "An error occurred while updating name",
+    "unauthorized": "You do not have permission to change the {type} name",
+    "title": "Name",
+    "description": "Update {type} name, this will change the name of the name of the {type} across all references. After typing the updated name press the update button to persist the change. Name of the {type} must be unique.",
+    "note": "Note: ",
+    "note-with-owner": "Only the owner or an admin can change the {type} name.",
+    "note-without-owner": "Only an admin can change the {type} name.",
+    "update": "Update"
+  },
+  "description-form": {
+    "success": "Description updated",
+    "error": "An error occurred while updating description",
+    "title": "Description",
+    "description": "Update {type} description, this will change the description of the {type} across all references. After typing the updated description press the update button to persist the change. The {type} description is one of the fields used to search {type}s.",
+    "update": "Update"
+  },
+  "notes-form": {
+    "success": "Notes updated",
+    "error": "An error occurred while updating notes",
+    "title": "Notes",
+    "description": "Update {type} notes, this will change the notes of the {type} across all references and the previous notes will be lost. After typing the updated notes press the update button to persist the change.",
+    "update": "Update"
+  },
+  "delete-form": {
+    "required": "Name is required to delete the {type}",
+    "name-must-match": "Name must match",
+    "unauthorized": "You do not have permission to delete the {type}",
+    "success": "{type} deleted",
+    "error": "An error occurred while deleting {type}",
+    "title": "Delete",
+    "description": "Are you sure you want to delete the {type}? This action cannot be undone.",
+    "delete": "Delete",
+    "form-info": {
+      "description": "Please type the name of the {type} to confirm. After typing the name press the delete button to delete the {type}.",
+      "warning": "Warning: ",
+      "warning-content": "Deleting a {type} is permanent, you will not be able to undo this action.",
+      "note": "Note: ",
+      "project-note-content": "Only an admin or an owner can delete a project.",
+      "note-content": "Only an admin can delete a {type}."
     }
   },
   "user-info-section": {

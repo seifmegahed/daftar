@@ -1,26 +1,29 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 function DeleteFormInfo({
   type,
 }: {
-  type: "client" | "project" | "supplier" | "item" | "document";
+  type: string;
 }) {
+  const t = useTranslations("delete-form.form-info");
   return (
     <>
       <span>
-        Please type the name of the {type} to confirm. After typing the name
-        press the delete button to delete the {type}.
+        {t("description", { type })}
       </span>
       <br />
-      <strong>Warning: </strong>
+      <strong>{t("warning")}</strong>
       <br />
       <span>
-        Deleting a {type} is permanent, you will not be able to undo this
-        action.
+        {t("warning-content", {type})}
       </span>
       <br />
-      <strong>Note: </strong>
+      <strong>{t("note")}</strong>
       <br />
       <span>
-        {`Only an admin ${type === "project" ? "or an owner" : ""} can delete a ${type}.`}
+        {type === "project" || "مشروع" ? t("project-note-content") : t("note-content", {type})}
       </span>
     </>
   );

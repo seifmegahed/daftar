@@ -15,8 +15,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
 import { emptyToUndefined } from "@/utils/common";
 import { toast } from "sonner";
+
+import { useLocale, useTranslations } from "next-intl";
+import { getLocaleType } from "@/utils/common";
+
 import type { ReturnTuple } from "@/utils/type-utils";
 import type { ReactNode } from "react";
+import DeleteFormInfo from "./DeleteFormInfo";
 
 function DeleteForm({
   id,
@@ -24,7 +29,6 @@ function DeleteForm({
   access,
   type,
   disabled = false,
-  formInfo,
   onDelete,
 }: {
   id: number;
@@ -32,21 +36,25 @@ function DeleteForm({
   access: boolean;
   disabled?: boolean;
   type: "client" | "project" | "supplier" | "item" | "document";
-  formInfo: ReactNode;
+  formInfo?: ReactNode;
   onDelete: (id: number) => Promise<ReturnTuple<number> | undefined>;
 }) {
+  const locale = useLocale() as "ar" | "en";
+  const localizedType = getLocaleType(type, locale);
+  const t = useTranslations("delete-form");
+
   const schema = z
     .object({
       name: z.preprocess(
         emptyToUndefined,
-        z.string({ message: `Name is required to delete the ${type}` }),
+        z.string({ message: t("required", { type: localizedType }) }),
       ),
     })
     .superRefine((data, ctx) => {
       if (data.name !== name) {
         ctx.addIssue({
           path: ["name"],
-          message: "Name must match",
+          message: t("name-must-match"),
           code: "custom",
         });
         return false;
@@ -62,7 +70,7 @@ function DeleteForm({
 
   const onSubmit = async (_data: FormDataType) => {
     if (!access || disabled) {
-      toast.error(`You do not have permission to delete this ${type}`);
+      toast.error(t("unauthorized", { type: localizedType }));
       return;
     }
     try {
@@ -75,13 +83,13 @@ function DeleteForm({
       }
     } catch (error) {
       console.log(error);
-      toast.error(`An error occurred while deleting ${type}`);
+      toast.error(t("error", { type: localizedType }));
     }
   };
 
   return (
     <div className="flex flex-col gap-4 scroll-smooth" id="delete">
-      <h2 className="text-xl font-bold">Delete</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <form
         className="flex flex-col gap-4"
@@ -97,12 +105,13 @@ function DeleteForm({
                   {...field}
                   className="relative z-[2]"
                   disabled={!access || disabled}
+                  dir="ltr"
                 />
                 <p className="absolute left-[12.5px] top-0 select-none text-sm text-muted-foreground">
                   {name}
                 </p>
                 <FormMessage />
-                <FormDescription>{formInfo}</FormDescription>
+                <FormDescription><DeleteFormInfo type={localizedType} /></FormDescription>
               </FormItem>
             )}
           />
@@ -117,7 +126,7 @@ function DeleteForm({
               loading={form.formState.isSubmitting}
               variant="destructive"
             >
-              Delete
+              {t("delete")}
             </SubmitButton>
           </div>
         </Form>

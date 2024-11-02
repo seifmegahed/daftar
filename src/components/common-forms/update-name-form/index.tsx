@@ -13,9 +13,10 @@ import {
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Input } from "@/components/ui/input";
-import { emptyToUndefined } from "@/utils/common";
+import { emptyToUndefined, getLocaleType } from "@/utils/common";
 import { toast } from "sonner";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { useLocale, useTranslations } from "next-intl";
 
 const schema = z.object({
   name: z.preprocess(
@@ -53,6 +54,11 @@ function NameForm({
     data: { name: string; ownerId: number },
   ) => Promise<ReturnTuple<number>>;
 }) {
+  const t = useTranslations("name-form");
+  const locale = useLocale() as "ar" | "en";
+
+  const localeType = getLocaleType(type, locale);
+
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { name },
@@ -60,7 +66,7 @@ function NameForm({
 
   const onSubmit = async (data: FormDataType) => {
     if (!access) {
-      toast.error(`You do not have permission to change the ${type} name`);
+      toast.error(t("unauthorized", { type: localeType }));
       form.reset({ name });
       return;
     }
@@ -77,18 +83,18 @@ function NameForm({
       if (error !== null) {
         toast.error(error);
       } else {
-        toast.success("Name updated");
+        toast.success(t("success"));
         form.reset(data);
       }
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating name");
+      toast.error(t("error"));
     }
   };
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-xl font-bold">Project Name</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <form
         className="flex flex-col gap-4"
@@ -107,15 +113,12 @@ function NameForm({
                 />
                 <FormMessage />
                 <FormDescription>
-                  {`
-                  Update ${type} name, this will change the name of the ${type} 
-                  across all references. After typing the updated name press the
-                  update button to persist the change. Name of the ${type} 
-                  must be unique.`}
+                  {t("description", { type: localeType })}
                   <br />
-                  <strong>Note:</strong>
-                  {` Only ${ownerId ? "the owner or" : ""} an
-                  admin can change the ${type} name.`}
+                  <strong>{t("note")}</strong>
+                  {ownerId
+                    ? t("note-with-owner", { type: localeType })
+                    : t("note-without-owner", { type: localeType })}
                 </FormDescription>
               </FormItem>
             )}
@@ -129,7 +132,7 @@ function NameForm({
               }
               loading={form.formState.isSubmitting}
             >
-              Update
+              {t("update")}
             </SubmitButton>
           </div>
         </Form>

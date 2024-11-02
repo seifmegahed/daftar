@@ -1,20 +1,24 @@
 import PageLayout from "@/components/page-layout";
+import { setLocale } from "@/i18n/set-locale";
+
 import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 import { getTranslations } from "next-intl/server";
-
+import type { LocaleParams } from "@/i18n/set-locale";
 const basePath = (id: string) => "/project/" + id;
 
-interface SettingsLayoutProps {
+interface ProjectLayoutProps {
   children: React.ReactNode;
-  params: { id: string };
+  params: { id: string, locale: LocaleParams["locale"] };
 }
 
-export default async function SettingsLayout({
+export default async function ProjectLayout({
   children,
   params,
-}: SettingsLayoutProps) {
-  const [userAccess] = await hasAccessToPrivateDataAction();
+}: ProjectLayoutProps) {
+  setLocale(params.locale);
+
   const t = await getTranslations("project.layout");
+  const [userAccess] = await hasAccessToPrivateDataAction();
 
   const sidebarNavItemsGenerator = (id: string) => [
     {
