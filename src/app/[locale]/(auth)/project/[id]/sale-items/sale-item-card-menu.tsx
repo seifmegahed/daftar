@@ -12,6 +12,9 @@ import { Link } from "@/i18n/routing";
 
 import { toast } from "sonner";
 
+import { useLocale, useTranslations } from "next-intl";
+import { getDirection } from "@/utils/common";
+
 const SaleItemCardMenu = ({
   itemId,
   saleItemId,
@@ -19,9 +22,12 @@ const SaleItemCardMenu = ({
   itemId: number;
   saleItemId: number;
 }) => {
+  const locale = useLocale();
+  const t = useTranslations("project.sale-items-page.card.menu");
+  const direction = getDirection(locale);
   const handleDelete = async () => {
     const result = confirm(
-      "Are you sure you want to delete this item from the project?",
+      t("confirm-delete"),
     );
     if (!result) return;
     try {
@@ -30,14 +36,14 @@ const SaleItemCardMenu = ({
         toast.error(error);
         return;
       }
-      toast.success("Item deleted from project");
+      toast.success(t("success"));
     } catch (error) {
       console.log(error);
-      toast.error("Error deleting item");
+      toast.error(t("error"));
     }
   };
   return (
-    <DropdownMenu>
+    <DropdownMenu dir={direction}>
       <DropdownMenuTrigger asChild>
         <div className="flex cursor-pointer items-center justify-center rounded-full p-2 hover:bg-muted">
           <DotsVerticalIcon />
@@ -46,11 +52,11 @@ const SaleItemCardMenu = ({
       <DropdownMenuContent align="end" className="w-56">
         <Link href={`/item/${itemId}`}>
           <DropdownMenuItem className="cursor-pointer">
-            Item Page
+            {t("item-page")}
           </DropdownMenuItem>
         </Link>
         <DropdownMenuItem className="cursor-pointer" onClick={handleDelete}>
-          <p className="text-red-500">Delete</p>
+          <p className="text-red-500">{t("delete")}</p>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

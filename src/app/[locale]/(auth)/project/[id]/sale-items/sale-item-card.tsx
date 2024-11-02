@@ -12,6 +12,7 @@ import {
 } from "@/components/card-sections";
 
 import type { SaleItemType } from "@/server/db/tables/sale-item/queries";
+import { useTranslations } from "next-intl";
 
 function SaleItemCard({
   saleItem,
@@ -20,6 +21,7 @@ function SaleItemCard({
   saleItem: SaleItemType;
   index: number;
 }) {
+  const t = useTranslations("project.sale-items-page.card");
   return (
     <CardWrapper>
       <CardIndexSection index={index + 1} />
@@ -29,18 +31,15 @@ function SaleItemCard({
             name={saleItem.name}
             href={`/item/${saleItem.itemId}`}
           />
-          <CardSubtitleSection subtitle={saleItem.make} tip="Make" />
+          <CardSubtitleSection subtitle={saleItem.make} tip={t("make")} />
         </CardBodyStartContainer>
         <CardBodyEndContainer>
           <div className="sm:w-36 sm:text-end">
             <p className="cursor-pointer text-xs text-muted-foreground">
-              {"PPU: (" +
-                getCurrencyLabel(saleItem.currency) +
-                ") " +
-                saleItem.price}
+              {t("ppu", { currency: getCurrencyLabel(saleItem.currency), price: saleItem.price })}
             </p>
             <p className="cursor-pointer text-xs text-muted-foreground">
-              Quantity: {saleItem.quantity}
+              {t("quantity", { quantity: saleItem.quantity })}
             </p>
           </div>
         </CardBodyEndContainer>
