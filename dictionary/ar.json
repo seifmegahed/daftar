@@ -143,6 +143,26 @@
           "delete": "حذف"
         }
       }
+    },
+    "purchase-items-page": {
+      "invalid-id": "معرف المشروع غير صالح",
+      "no-items-found-error-message": "لا توجد مادة مشترية بها بعد الآن",
+      "title": "مواد المشتريات للمشروع",
+      "subtitle": "هذه صفحة مواد المشتريات المرتبطة بهذا المشروع.",
+      "card": {
+        "make": "المصنع",
+        "supplier": "المورد",
+        "ppu": "سعر القطعة ({currency}) {price}",
+        "quantity": "العدد {quantity}",
+        "menu": {
+          "confirm-delete": "هل أنت متأكد من حذف هذه المادة من المشروع؟",
+          "success": "تم حذف المادة من المشروع",
+          "error": "حدث خطأ أثناء حذف المادة",
+          "item-page": "صفحة المادة",
+          "supplier-page": "صفحة المورد",
+          "delete": "حذف"
+        }
+      }
     }
   },
   "name-form": {

@@ -1,6 +1,6 @@
 import { getCurrencyLabel } from "@/data/lut";
 import type { GetPurchaseItemType } from "@/server/db/tables/purchase-item/queries";
-import ProjectItemCardContextMenu from "./project-item-card-menu";
+import PurchaseItemCardContextMenu from "./project-item-card-menu";
 import CardWrapper from "@/components/card-wrapper";
 import {
   CardBodyContainer,
@@ -12,14 +12,16 @@ import {
   CardSection,
   CardSubtitleSection,
 } from "@/components/card-sections";
+import { getTranslations } from "next-intl/server";
 
-function ProjectItemCard({
+async function PurchaseItemCard({
   projectItem,
   index,
 }: {
   projectItem: GetPurchaseItemType;
   index: number;
 }) {
+  const t = await getTranslations("project.purchase-items-page.card");
   return (
     <CardWrapper>
       <CardIndexSection index={index + 1} />
@@ -29,29 +31,32 @@ function ProjectItemCard({
             name={projectItem.item.name}
             href={`/item/${projectItem.item.id}`}
           />
-          <CardSubtitleSection subtitle={projectItem.item.make} tip="Make" />
+          <CardSubtitleSection
+            subtitle={projectItem.item.make}
+            tip={t("make")}
+          />
         </CardBodyStartContainer>
         <CardBodyEndContainer>
           <CardSection
             text={projectItem.supplier.name}
-            tip="Supplier"
+            tip={t("supplier")}
             href={`/supplier/${projectItem.supplier.id}`}
           />
           <div className="flex gap-3 sm:justify-end">
             <p className="cursor-pointer text-xs text-muted-foreground">
-              {"PPU: (" +
-                getCurrencyLabel(projectItem.currency) +
-                ") " +
-                projectItem.price}
+              {t("ppu", {
+                currency: getCurrencyLabel(projectItem.currency),
+                price: projectItem.price,
+              })}
             </p>
             <p className="cursor-pointer text-xs text-muted-foreground">
-              Quantity: {projectItem.quantity}
+              {t("quantity", { quantity: projectItem.quantity })}
             </p>
           </div>
         </CardBodyEndContainer>
       </CardBodyContainer>
       <CardMenuContainer>
-        <ProjectItemCardContextMenu
+        <PurchaseItemCardContextMenu
           projectItemId={projectItem.id}
           itemId={projectItem.item.id}
           supplierId={projectItem.supplier.id}
@@ -61,4 +66,4 @@ function ProjectItemCard({
   );
 }
 
-export default ProjectItemCard;
+export default PurchaseItemCard;

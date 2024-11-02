@@ -11,6 +11,8 @@ import { DotsVerticalIcon } from "@radix-ui/react-icons";
 import { Link } from "@/i18n/routing";
 
 import { toast } from "sonner";
+import { useTranslations, useLocale } from "next-intl";
+import { getDirection } from "@/utils/common";
 
 const ProjectItemCardContextMenu = ({
   itemId,
@@ -21,8 +23,11 @@ const ProjectItemCardContextMenu = ({
   supplierId: number;
   projectItemId: number;
 }) => {
+  const locale = useLocale();
+  const direction = getDirection(locale);
+  const t = useTranslations("project.purchase-items-page.card.menu");
   const handleDelete = async () => {
-    const result = confirm("Are you sure you want to delete this item from the project?");
+    const result = confirm(t("confirm-delete"));
     if (!result) return;
     try {
       const [, error] = await deletePurchaseItemAction(projectItemId);
@@ -30,14 +35,14 @@ const ProjectItemCardContextMenu = ({
         toast.error(error);
         return;
       }
-      toast.success("Item deleted from project");
+      toast.success(t("success"));
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while deleting the item");
+      toast.error(t("error"));
     }
   };
   return (
-    <DropdownMenu>
+    <DropdownMenu dir={direction}>
       <DropdownMenuTrigger asChild>
         <div className="flex cursor-pointer items-center justify-center rounded-full p-2 hover:bg-muted">
           <DotsVerticalIcon />
@@ -46,16 +51,16 @@ const ProjectItemCardContextMenu = ({
       <DropdownMenuContent align="end" className="w-56">
         <Link href={`/item/${itemId}`}>
           <DropdownMenuItem className="cursor-pointer">
-            Item Page
+            {t("item-page")}
           </DropdownMenuItem>
         </Link>
         <Link href={`/supplier/${supplierId}`}>
           <DropdownMenuItem className="cursor-pointer">
-            Supplier Page
+            {t("supplier-page")}
           </DropdownMenuItem>
         </Link>
         <DropdownMenuItem className="cursor-pointer" onClick={handleDelete}>
-          <p className="text-red-500">Delete</p>
+          <p className="text-red-500">{t("delete")}</p>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
