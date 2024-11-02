@@ -1,4 +1,7 @@
-import { getProjectTypeLabel, getStatusLabel } from "@/data/lut";
+import {
+  getLocalizedProjectTypeLabel,
+  getLocalizedStatusLabel,
+} from "@/data/lut";
 import {
   getProjectByIdAction,
   getProjectLinkedDocumentsAction,
@@ -13,8 +16,10 @@ import InfoPageWrapper from "@/components/info-page-wrapper";
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import ErrorPage from "@/components/error";
 import DataDisplayUnit from "@/components/data-display-unit";
+import { getLocale, getTranslations } from "next-intl/server";
 
 import type { SimpDoc } from "@/server/db/tables/document/queries";
+import { getDataLocaleFormat } from "@/utils/common";
 
 async function ProjectPage({ params }: { params: { id: string } }) {
   const projectId = parseInt(params.id);
@@ -23,62 +28,74 @@ async function ProjectPage({ params }: { params: { id: string } }) {
   const [project, error] = await getProjectByIdAction(projectId);
   if (error !== null) return <ErrorPage message={error} />;
 
-  const [documents, linkedDocumentsError] = await getProjectLinkedDocumentsAction(projectId);
-  if (linkedDocumentsError !== null) return <ErrorPage message={linkedDocumentsError} />;
+  const [documents, linkedDocumentsError] =
+    await getProjectLinkedDocumentsAction(projectId);
+  if (linkedDocumentsError !== null)
+    return <ErrorPage message={linkedDocumentsError} />;
+
+  const t = await getTranslations("project.page");
+  const locale = await getLocale() as "ar" | "en";
+  const localeDateFormat = getDataLocaleFormat(locale);
 
   return (
     <InfoPageWrapper
       title={project.name}
-      subtitle={`This is the project page for ${project.name}. Here you can view all
-        information about the project. You can also view the documents and items
-        linked to this project.`}
+      subtitle={t("subtitle", { projectName: project.name })}
     >
       {project.description && (
-        <Section title="Description">
+        <Section title={t("description")}>
           <p>{project.description}</p>
         </Section>
       )}
-      <Section title="Status">
+      <Section title={t("status")}>
         <div className="flex sm:justify-end">
-          <p>{getStatusLabel(project.status)}</p>
+          <p>{getLocalizedStatusLabel(project.status, locale)}</p>
         </div>
       </Section>
-      <Section title="Client">
+      <Section title={t("client")}>
         <ClientSection data={project.client} type="client" />
       </Section>
-      <Section title="General Info">
+      <Section title={t("general-info")}>
         <DataDisplayUnit
-          label="Type"
-          values={[getProjectTypeLabel(project.type)]}
+          label={t("type")}
+          values={[
+            getLocalizedProjectTypeLabel(project.type, locale),
+          ]}
         />
-        <DataDisplayUnit label="Owner" values={[project.owner.name]} />
+        <DataDisplayUnit label={t("owner")} values={[project.owner.name]} />
         <DataDisplayUnit
-          label="Start Date"
+          label={t("start-date")}
           values={[
             project.startDate
-              ? format(new Date(project.startDate), "PP")
-              : "N/A",
+              ? format(new Date(project.startDate), "PP", {
+                  locale: localeDateFormat,
+                })
+              : t("not-available"),
           ]}
         />
         <DataDisplayUnit
-          label="End Date"
+          label={t("end-date")}
           values={[
-            project.endDate ? format(new Date(project.endDate), "PP") : "N/A",
+            project.endDate
+              ? format(new Date(project.endDate), "PP", {
+                  locale: localeDateFormat,
+                })
+              : t("not-available"),
           ]}
         />
       </Section>
-      <Section title="Other Info">
+      <Section title={t("other-info")}>
         <UserInfoSection data={project} />
       </Section>
       {project.notes && (
-        <Section title="Notes">
+        <Section title={t("notes")}>
           <div>
             <p>{project.notes}</p>
           </div>
         </Section>
       )}
       {documents && (
-        <Section title="Documents">
+        <Section title={t("documents")}>
           <ProjectDocuments id={project.id} documents={documents} />
         </Section>
       )}
@@ -86,7 +103,7 @@ async function ProjectPage({ params }: { params: { id: string } }) {
   );
 }
 
-const ProjectDocuments = ({
+const ProjectDocuments = async ({
   id,
   documents,
 }: {
@@ -98,37 +115,44 @@ const ProjectDocuments = ({
     suppliersDocuments: SimpDoc[];
   };
 }) => {
+  const t = await getTranslations("project.project-documents-section");
   return (
     <div className="flex flex-col gap-y-2 text-muted-foreground">
-      <DownloadAllDocumentsButton id={id} />
+      <DownloadAllDocumentsButton id={id} label={t("download-all")} />
       <DocumentsDisplay
         documents={documents.projectDocuments}
-        title="Project's Documents"
+        title={t("project-documents")}
       />
       <DocumentsDisplay
         documents={documents.clientDocuments}
-        title="Client's Documents"
+        title={t("client-documents")}
       />
       <DocumentsDisplay
         documents={documents.itemsDocuments}
-        title="Items' Documents"
+        title={t("items-documents")}
       />
       <DocumentsDisplay
         documents={documents.suppliersDocuments}
-        title="Suppliers' Documents"
+        title={t("suppliers-documents")}
       />
     </div>
   );
 };
 
-const DownloadAllDocumentsButton = ({ id }: { id: number }) => {
+const DownloadAllDocumentsButton = ({
+  id,
+  label,
+}: {
+  id: number;
+  label: string;
+}) => {
   return (
     <div className="flex justify-end">
       <Link
         href={`/api/project/download/${id}`}
         className="flex cursor-pointer items-center gap-x-2 hover:underline"
       >
-        <p className="ml-2 text-sm text-muted-foreground">Download all</p>
+        <p className="ml-2 text-sm text-muted-foreground">{label}</p>
         <DownloadIcon className="h-4 w-4" />
       </Link>
     </div>

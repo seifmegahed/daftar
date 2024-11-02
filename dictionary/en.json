@@ -72,10 +72,56 @@
       "new-sale-item": "New Sale Item",
       "new-document": "New Document",
       "comments": "Comments"
+    },
+    "page": {
+      "subtitle": "This is the project page for {projectName}. Here you can view all information about the project. You can also view the documents and items linked to this project.",
+      "description": "Description",
+      "status": "Status",
+      "client": "Client",
+      "general-info": "General Info",
+      "type": "Type",
+      "owner": "Owner",
+      "start-date": "Start Date",
+      "end-date": "End Date",
+      "other-info": "Other Info",
+      "notes": "Notes",
+      "documents": "Documents",
+      "not-available": "N/A"
+    },
+    "project-documents-section": {
+      "project-documents": "Project's Documents",
+      "client-documents": "Client's Documents",
+      "items-documents": "Items' Documents",
+      "suppliers-documents": "Suppliers' Documents",
+      "download-all": "Download all"
     }
+  },
+  "user-info-section": {
+    "created-at": "Created At",
+    "created-by": "Created By",
+    "updated-at": "Updated At",
+    "updated-by": "Updated By",
+    "not-available": "N/A"
+  },
+  "company-section": {
+    "name": "Name",
+    "field": "Field of Business",
+    "registration-number": "Registration Number",
+    "website": "Website",
+    "address": "Address",
+    "contact": "Contact"
   },
   "search-bar": {
     "placeholder": "Search"
+  },
+  "document-alt-card": {
+    "menu": {
+      "unlink-success": "Document Unlinked",
+      "unlink-error": "An error occurred while unlinking document",
+      "document-page": "Document Page",
+      "download-document": "Download Document",
+      "unlink-document": "Unlink Document"
+    }
   },
   "project-card": {
     "menu": {

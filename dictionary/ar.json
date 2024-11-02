@@ -72,10 +72,56 @@
       "new-sale-item": "إضافة مبيعات",
       "new-document": "مستند جديد",
       "comments": "التعليقات"
+    },
+    "page": {
+      "subtitle": "هذه صفحة المشروع {projectName}. هنا يمكنك عرض جميع المعلومات حول المشروع. يمكنك أيضا عرض المستندات والمواد المرتبطة بهذا المشروع.",
+      "description": "الوصف",
+      "status": "الحالة",
+      "client": "العميل",
+      "type": "نوع المشروع",
+      "owner": "مدير المشروع",
+      "start-date": "تاريخ البدء",
+      "end-date": "تاريخ الانتهاء",
+      "general-info": "المعلومات العامة",
+      "other-info": "معلومات أخرى",
+      "notes": "الملاحظات",
+      "documents": "المستندات",
+      "not-available": "غير متاح"
+    },
+    "project-documents-section": {
+      "project-documents": "مستندات المشروع",
+      "client-documents": "مستندات العميل",
+      "items-documents": "مستندات المواد",
+      "suppliers-documents": "مستندات الموردين",
+      "download-all": "تحميل الكل"
     }
+  },
+  "user-info-section": {
+    "created-at": "تاريخ الإنشاء",
+    "created-by": "أنشئ بواسطة",
+    "updated-at": "تاريخ التحديث",
+    "updated-by": "تم تحديثه بواسطة",
+    "not-available": "غير متاح"
+  },
+  "company-section": {
+    "name": "الاسم",
+    "field": "مجال العمل",
+    "registration-number": "رقم التسجيل",
+    "website": "الموقع الإلكتروني",
+    "address": "العنوان",
+    "contact": "جهة الاتصال"
   },
   "search-bar": {
     "placeholder": "البحث"
+  },
+  "document-alt-card": {
+    "menu": {
+      "unlink-success": "تم إلغاء ربط المستند",
+      "unlink-error": "حدث خطأ أثناء إلغاء ربط المستند",
+      "document-page": "صفحة المستند",
+      "download-document": "تحميل المستند",
+      "unlink-document": "إلغاء ربط المستند"
+    }
   },
   "project-card": {
     "menu": {

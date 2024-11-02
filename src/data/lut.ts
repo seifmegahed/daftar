@@ -1,5 +1,3 @@
-import { getLocale } from "next-intl/server";
-
 export const statusCodes = [
   { value: 0, label: "Active", en: "Active", ar: "مفعل" },
   { value: 1, label: "Inactive", en: "Inactive", ar: "غير مفعل" },
@@ -23,10 +21,10 @@ export const statusCodes = [
 export const getStatusLabel = (status: number) =>
   statusCodes.find((x) => x.value === status)?.label ?? "Unknown";
 
-export const getLocalizedStatusLabel = async (status: number) => {
-  const locale = (await getLocale()) as "ar" | "en";
-  return statusCodes.find((x) => x.value === status)?.[locale] ?? "Unknown";
-};
+export const getLocalizedStatusLabel = (
+  status: number,
+  locale: "ar" | "en" = "en",
+) => statusCodes.find((x) => x.value === status)?.[locale] ?? "Unknown";
 
 export const currencyOptions = [
   { value: 0, label: "USD" },
@@ -51,6 +49,11 @@ export const projectTypes = [
 
 export const getProjectTypeLabel = (type: number) =>
   projectTypes.find((x) => x.value === type)?.label ?? "Unknown";
+
+export const getLocalizedProjectTypeLabel = (
+  type: number,
+  locale: "ar" | "en",
+) => projectTypes.find((x) => x.value === type)?.[locale] ?? "Unknown";
 
 export const userRoles = {
   admin: "admin",

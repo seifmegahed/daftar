@@ -1,6 +1,7 @@
+import { getTranslations } from "next-intl/server";
 import DataDisplayUnit from "../data-display-unit";
 
-const CompanySection = ({
+const CompanySection = async ({
   data,
 }: {
   data: {
@@ -32,22 +33,23 @@ const CompanySection = ({
     primaryAddress,
     primaryContact,
   } = data;
+  const t = await getTranslations("company-section");
   return (
     <>
-      <DataDisplayUnit label="Name" values={[name]} />
-      {field ? (
-        <DataDisplayUnit label="Field of Business" values={[field]} />
-      ) : null}
+      <DataDisplayUnit label={t("name")} values={[name]} />
+      {field ? <DataDisplayUnit label={t("field")} values={[field]} /> : null}
       {registrationNumber ? (
         <DataDisplayUnit
-          label="Registration Number"
+          label={t("registration-number")}
           values={[registrationNumber]}
         />
       ) : null}
-      {website ? <DataDisplayUnit label="Website" values={[website]} /> : null}
+      {website ? (
+        <DataDisplayUnit label={t("website")} values={[website]} />
+      ) : null}
       {primaryAddress ? (
         <DataDisplayUnit
-          label="Address"
+          label={t("address")}
           values={[
             primaryAddress.addressLine,
             primaryAddress.city
@@ -58,7 +60,7 @@ const CompanySection = ({
       ) : null}
       {primaryContact ? (
         <DataDisplayUnit
-          label="Contact"
+          label={t("contact")}
           values={[
             primaryContact.name,
             primaryContact.email,

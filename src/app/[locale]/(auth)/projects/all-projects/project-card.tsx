@@ -12,7 +12,7 @@ import {
   CardSection,
   CardSubtitleSection,
 } from "@/components/card-sections";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 const ProjectCard = async ({
   project,
@@ -26,8 +26,9 @@ const ProjectCard = async ({
     createdAt: Date;
   };
 }) => {
-  const statusLabel = await getLocalizedStatusLabel(project.status);
+  const locale = (await getLocale()) as "ar" | "en";
   const t = await getTranslations("project-card.tips");
+  const statusLabel = getLocalizedStatusLabel(project.status, locale);
   return (
     <CardWrapper>
       <CardIdSection href={`/project/${project.id}`} id={project.id} />
