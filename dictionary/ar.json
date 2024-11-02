@@ -146,7 +146,7 @@
     },
     "purchase-items-page": {
       "invalid-id": "معرف المشروع غير صالح",
-      "no-items-found-error-message": "لا توجد مادة مشترية بها بعد الآن",
+      "no-items-found-error-message": "لا توجد مادة مشترية بها حتى الآن",
       "title": "مواد المشتريات للمشروع",
       "subtitle": "هذه صفحة مواد المشتريات المرتبطة بهذا المشروع.",
       "card": {
@@ -163,6 +163,12 @@
           "delete": "حذف"
         }
       }
+    },
+    "documents-page": {
+      "invalid-id": "معرف المشروع غير صالح",
+      "no-documents-found-error-message": "لا توجد مستندات بها حتى الآن",
+      "title": "مستندات المشروع",
+      "subtitle": "هذه قائمة المستندات المرتبطة بهذا المشروع."
     }
   },
   "name-form": {

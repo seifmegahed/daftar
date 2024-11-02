@@ -2,22 +2,28 @@ import { getProjectDocumentsAction } from "@/server/actions/document-relations/r
 import DocumentsList from "@/components/documents-list";
 import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
+import { getTranslations } from "next-intl/server";
+import { setLocale } from "@/i18n/set-locale";
+import type { LocaleParams } from "@/i18n/set-locale";
 
-async function ProjectDocumentsPage({ params }: { params: { id: string } }) {
+async function ProjectDocumentsPage({ params }: { params: { id: string; locale:  LocaleParams["locale"] } }) {
+  const { locale } = params;
+  setLocale(locale);
+  const t = await getTranslations("project.documents-page");
   const projectId = parseInt(params.id);
-  if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
+  if (isNaN(projectId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [documents, error] = await getProjectDocumentsAction(projectId);
   if (error !== null) return <ErrorPage message={error} />;
   if (!documents.length)
     return (
-      <ErrorPage title="There seems to be no documents linked to this project yet" />
+      <ErrorPage title={t("no-documents-found-error-message")} />
     );
     
   return (
     <ListPageWrapper
-      title="Project's Documents"
-      subtitle="This is a list of the documents linked to the project."
+      title={t("title")}
+      subtitle={t("subtitle")}
     >
       <div>
         <DocumentsList documents={documents} />

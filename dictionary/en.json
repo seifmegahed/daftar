@@ -163,6 +163,12 @@
           "delete": "Delete"
         }
       }
+    },
+    "documents-page": {
+      "invalid-id": "Invalid project ID",
+      "no-documents-found-error-message": "There seems to be no documents linked to this project yet",
+      "title": "Project's Documents",
+      "subtitle": "This is a list of the documents linked to the project."
     }
   },
   "name-form": {
