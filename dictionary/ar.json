@@ -58,6 +58,22 @@
       "notes-field-description": "أدخل أي ملاحظات عن المشروع."
     }
   },
+  "project": {
+    "layout": {
+      "title": "مشروع",
+      "description": "إدارة المشروع",
+      "project": "المشروع",
+      "edit": "تعديل",
+      "sale-items": "مواد المبيعات",
+      "purchase-items": "مواد المشتريات",
+      "documents": "المستندات",
+      "commercial-offer": "العرض المالي ",
+      "new-purchase-item": "إضافة مشتريات ",
+      "new-sale-item": "إضافة مبيعات",
+      "new-document": "مستند جديد",
+      "comments": "التعليقات"
+    }
+  },
   "search-bar": {
     "placeholder": "البحث"
   },

@@ -58,6 +58,22 @@
       "notes-field-description": "Enter any notes about the project."
     }
   },
+  "project": {
+    "layout": {
+      "title": "Project",
+      "description": "Manage your project",
+      "project": "Project",
+      "edit": "Edit Project",
+      "sale-items": "Sale Items",
+      "purchase-items": "Purchase Items",
+      "documents": "Documents",
+      "commercial-offer": "Commercial Offer",
+      "new-purchase-item": "New Purchase Item",
+      "new-sale-item": "New Sale Item",
+      "new-document": "New Document",
+      "comments": "Comments"
+    }
+  },
   "search-bar": {
     "placeholder": "Search"
   },

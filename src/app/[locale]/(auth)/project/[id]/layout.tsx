@@ -1,5 +1,6 @@
 import PageLayout from "@/components/page-layout";
 import { hasAccessToPrivateDataAction } from "@/server/actions/users";
+import { getTranslations } from "next-intl/server";
 
 const basePath = (id: string) => "/project/" + id;
 
@@ -13,50 +14,51 @@ export default async function SettingsLayout({
   params,
 }: SettingsLayoutProps) {
   const [userAccess] = await hasAccessToPrivateDataAction();
+  const t = await getTranslations("project.layout");
 
   const sidebarNavItemsGenerator = (id: string) => [
     {
-      title: "Project",
+      title: t("project"),
       href: basePath(id),
     },
     {
-      title: "Edit",
+      title: t("edit"),
       href: basePath(id) + "/edit",
     },
     {
-      title: "Sale Items",
+      title: t("sale-items"),
       href: basePath(id) + "/sale-items",
       hidden: !userAccess,
     },
     {
-      title: "Purchase Items",
+      title: t("purchase-items"),
       href: basePath(id) + "/purchase-items",
       hidden: !userAccess,
     },
     {
-      title: "Documents",
+      title: t("documents"),
       href: basePath(id) + "/documents",
     },
     {
-      title: "Commercial Offer",
+      title: t("commercial-offer"),
       href: basePath(id) + "/commercial-offer",
       hidden: !userAccess,
     },
     {
-      title: "New Purchase Item",
+      title: t("new-purchase-item"),
       href: basePath(id) + "/new-purchase-item",
     },
     {
-      title: "New Sale Item",
+      title: t("new-sale-item"),
       href: basePath(id) + "/new-sale-item",
       hidden: !userAccess,
     },
     {
-      title: "New Document",
+      title: t("new-document"),
       href: basePath(id) + "/new-document",
     },
     {
-      title: "Comments",
+      title: t("comments"),
       href: basePath(id) + "/comments",
     },
   ];
@@ -64,8 +66,8 @@ export default async function SettingsLayout({
   const sidebarNavItems = sidebarNavItemsGenerator(params.id);
   return (
     <PageLayout
-      title="Project"
-      description="Manage your project"
+      title={t("title")}
+      description={t("description")}
       navLinks={sidebarNavItems}
     >
       {children}
