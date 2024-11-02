@@ -169,6 +169,41 @@
       "no-documents-found-error-message": "There seems to be no documents linked to this project yet",
       "title": "Project's Documents",
       "subtitle": "This is a list of the documents linked to the project."
+    },
+    "commercial-offer": {
+      "invalid-id": "Invalid project ID",
+      "unauthorized": "You are not authorized to view this page",
+      "form": {
+        "error": "An error occurred while generating the file",
+        "title": "Commercial Offer",
+        "description": "Generate a commercial offer document for the project",
+        "button-text": "Generate",
+        "company-name": "Company Name *",
+        "company-name-description": "Enter the name of your company. This name will be displayed on the commercial offer document.",
+        "address": "Address *",
+        "address-description": "Enter the address of your company. This address will be displayed on the commercial offer document.",
+        "country": "Country *",
+        "country-description": "Enter the city and country of your company. This is the country you will be displayed on the commercial offer document.",
+        "phone-nm-a": "Phone Number (Primary) *",
+        "phone-nm-a-description": "Enter the primary phone number of your company. This is the phone number will be displayed on the commercial offer document.",
+        "phone-nm-b": "Phone Number (Secondary) *",
+        "phone-nm-b-description": "Enter the secondary phone number of your company. This is the phone number will be displayed on the commercial offer document.",
+        "email": "Email *",
+        "email-description": "Enter the email address of your company. This email will be displayed on the commercial offer document.",
+        "offer-validity-in-days": "Offer Validity (in days) *",
+        "offer-validity-in-days-description": "Enter the number of days the offer is valid for. This will be displayed on the commercial offer document terms.",
+        "offer-validity-example": "Example: 7",
+        "payment-advance": "Payment Advance (%) *",
+        "payment-advance-description": "Enter the percentage of the advance payment. This will be displayed on the commercial offer document terms.",
+        "payment-advance-example": "Example: 25",
+        "delivery-period": "Delivery Period",
+        "delivery-period-description": "Enter the delivery period of the project. This will be displayed on the commercial offer document terms.",
+        "delivery-period-example": "Example: 2 - 3 months",
+        "schema": {
+          "offer-validity-number": "Offer Validity must be a number",
+          "payment-advance-number": "Advance Percentage must be a number"
+        }
+      }
     }
   },
   "name-form": {

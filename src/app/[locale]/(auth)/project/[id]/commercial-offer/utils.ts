@@ -1,25 +1,28 @@
-
 import { z } from "zod";
 import { emptyToUndefined } from "@/utils/common";
 
-export const schema = z
-  .object({
-    companyName: z.preprocess(emptyToUndefined, z.string()),
-    companyAddress: z.preprocess(emptyToUndefined, z.string()),
-    companyCountry: z.preprocess(emptyToUndefined, z.string()),
-    companyPhoneNmA: z.preprocess(emptyToUndefined, z.string()),
-    companyPhoneNmB: z.preprocess(emptyToUndefined, z.string()),
-    companyEmail: z.preprocess(emptyToUndefined, z.string().email()),
-    offerValidityInDays: z.preprocess(emptyToUndefined, z.string()),
-    advancePercentage: z.preprocess(emptyToUndefined, z.string()),
-    deliveryPeriod: z.preprocess(emptyToUndefined, z.string()),
-  })
-  .superRefine((data, ctx) => {
+const schema = z.object({
+  companyName: z.preprocess(emptyToUndefined, z.string()),
+  companyAddress: z.preprocess(emptyToUndefined, z.string()),
+  companyCountry: z.preprocess(emptyToUndefined, z.string()),
+  companyPhoneNmA: z.preprocess(emptyToUndefined, z.string()),
+  companyPhoneNmB: z.preprocess(emptyToUndefined, z.string()),
+  companyEmail: z.preprocess(emptyToUndefined, z.string().email()),
+  offerValidityInDays: z.preprocess(emptyToUndefined, z.string()),
+  advancePercentage: z.preprocess(emptyToUndefined, z.string()),
+  deliveryPeriod: z.preprocess(emptyToUndefined, z.string()),
+});
+
+export const refinedSchema = (messages: {
+  offerValidityInDays: string;
+  advancePercentage: string;
+}) =>
+  schema.superRefine((data, ctx) => {
     const { offerValidityInDays, advancePercentage } = data;
     if (isNaN(parseInt(offerValidityInDays))) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Offer Validity must be a number",
+        message: messages.offerValidityInDays,
         path: ["offerValidityInDays"],
       });
       return false;
@@ -27,7 +30,7 @@ export const schema = z
     if (isNaN(parseInt(advancePercentage))) {
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
-        message: "Advance Percentage must be a number",
+        message: messages.advancePercentage,
         path: ["advancePercentage"],
       });
       return false;
@@ -62,7 +65,10 @@ export const getStorageValues = (storage: Storage | null) => {
   return values;
 };
 
-export const setStorageValues = (storage: Storage | null, values: FormSchemaType) => {
+export const setStorageValues = (
+  storage: Storage | null,
+  values: FormSchemaType,
+) => {
   for (const field of fields) {
     storage?.setItem(field, values[field]);
   }

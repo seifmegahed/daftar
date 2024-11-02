@@ -2,15 +2,15 @@
 
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter } from "@/i18n/routing";
 
 import {
-  schema,
   getStorageValues,
   setStorageValues,
   createFormData,
   getFileName,
   createLink,
+  refinedSchema,
 } from "./utils";
 import { toast } from "sonner";
 
@@ -25,13 +25,22 @@ import {
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 import { Input } from "@/components/ui/input";
 
+import { useTranslations } from "next-intl";
+
 import type { FormSchemaType } from "./utils";
 
 function GenerateOfferForm({ projectId }: { projectId: number }) {
+  const t = useTranslations("project.commercial-offer.form");
+
   const navigate = useRouter();
   const storage = typeof window !== "undefined" ? localStorage : null;
 
   const defaultValues = getStorageValues(storage);
+
+  const schema = refinedSchema({
+    offerValidityInDays: t("schema.offer-validity-number"),
+    advancePercentage: t("schema.payment-advance-number"),
+  });
 
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(schema),
@@ -47,7 +56,7 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
       });
       const filename = getFileName(response);
       if (!filename) {
-        toast.error("An error occurred while generating the file");
+        toast.error(t("error"));
         return;
       }
       const blob = await response.blob();
@@ -55,7 +64,7 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
       navigate.replace("documents");
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while generating the file");
+      toast.error(t("error"));
     }
   };
 
@@ -63,9 +72,9 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <Form {...form}>
         <FormWrapperWithSubmit
-          title="Commercial Offer"
-          description="Generate a commercial offer document for the project"
-          buttonText="Generate"
+          title={t("title")}
+          description={t("description")}
+          buttonText={t("button-text")}
           submitting={form.formState.isSubmitting}
           dirty={true}
         >
@@ -74,11 +83,10 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Company Name *</FormLabel>
+                <FormLabel>{t("company-name")}</FormLabel>
                 <Input {...field} placeholder="ACME INC" />
                 <FormDescription>
-                  Enter the name of your company. This name will be displayed on
-                  the commercial offer document.
+                  {t("company-name-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -89,12 +97,9 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Address *</FormLabel>
+                <FormLabel>{t("address")}</FormLabel>
                 <Input {...field} placeholder="51 Rosetta st." />
-                <FormDescription>
-                  Enter the address of your company. This address will be
-                  displayed on the commercial offer document.
-                </FormDescription>
+                <FormDescription>{t("address-description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -104,13 +109,9 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Country *</FormLabel>
+                <FormLabel>{t("country")}</FormLabel>
                 <Input {...field} placeholder="Alexandria, Egypt" />
-                <FormDescription>
-                  Enter the city and country of your company. This is the
-                  country you will be displayed on the commercial offer
-                  document.
-                </FormDescription>
+                <FormDescription>{t("country-description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -120,12 +121,10 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone Number (Primary) *</FormLabel>
+                <FormLabel>{t("phone-nm-a")}</FormLabel>
                 <Input {...field} placeholder="+20 123 456 7890" />
                 <FormDescription>
-                  Enter the primary phone number of your company. This is the
-                  phone number will be displayed on the commercial offer
-                  document.
+                  {t("phone-nm-a-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -136,12 +135,10 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Phone Number (Secondary) *</FormLabel>
+                <FormLabel>{t("phone-nm-b")}</FormLabel>
                 <Input {...field} placeholder="+20 123 456 7890" />
                 <FormDescription>
-                  Enter the secondary phone number of your company. This is the
-                  phone number will be displayed on the commercial offer
-                  document.
+                 {t("phone-nm-b-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -152,11 +149,10 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email *</FormLabel>
+                <FormLabel>{t("email")}</FormLabel>
                 <Input {...field} placeholder="info@acme-inc.com" />
                 <FormDescription>
-                  Enter the email address of your company. This email will be
-                  displayed on the commercial offer document.
+                  {t("email-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -167,13 +163,12 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Offer Validity (in days) *</FormLabel>
+                <FormLabel>{t("offer-validity-in-days")}</FormLabel>
                 <Input {...field} placeholder="7" />
                 <FormDescription>
-                  Enter the number of days the offer is valid for. This will be
-                  displayed on the commercial offer document terms.
+                  {t("offer-validity-in-days-description")}
                   <br />
-                  Example: 7
+                  {t("offer-validity-example")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -184,13 +179,12 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Payment Advance (%) *</FormLabel>
+                <FormLabel>{t("payment-advance")}</FormLabel>
                 <Input {...field} placeholder="25" />
                 <FormDescription>
-                  Enter the percentage of the advance payment. This will be
-                  displayed on the commercial offer document terms.
+                  {t("payment-advance-description")}
                   <br />
-                  Example: 25
+                  {t("payment-advance-example")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -201,13 +195,12 @@ function GenerateOfferForm({ projectId }: { projectId: number }) {
             control={form.control}
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Delivery Period</FormLabel>
+                <FormLabel>{t("delivery-period")}</FormLabel>
                 <Input {...field} placeholder="2 - 3 months" />
                 <FormDescription>
-                  Enter the delivery period of the project. This will be
-                  displayed on the commercial offer document terms.
+                  {t("delivery-period-description")}
                   <br />
-                  Example: 2 - 3 months
+                  {t("delivery-period-example")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
