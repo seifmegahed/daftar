@@ -2,15 +2,24 @@ import { listAllItemsAction } from "@/server/actions/items/read";
 import { listAllSuppliersAction } from "@/server/actions/suppliers/read";
 import NewItemForm from "./form";
 import ErrorPage from "@/components/error";
+import { getTranslations } from "next-intl/server";
+import { setLocale } from "@/i18n/set-locale";
+import type { LocaleParams } from "@/i18n/set-locale";
 
-async function NewItemPage({ params }: { params: { id: string } }) {
+async function NewItemPage({ params }: { params: { id: string, locale: LocaleParams["locale"] } }) {
+  const { locale } = params;
+  setLocale(locale);
+  const t = await getTranslations("project.new-purchase-item-page");
   const [itemsList, itemsError] = await listAllItemsAction();
+  const id = parseInt(params.id);
+  if (isNaN(id)) return <ErrorPage message={t("invalid-id")} />;
+
   if (itemsError !== null) return <ErrorPage message={itemsError} />;
   if (!itemsList.length)
     return (
       <ErrorPage
-        title="You have no items yet"
-        message="Add items to be able to add purchase items."
+        title={t("no-items-found-error-title")}
+        message={t("no-items-found-error-message")}
       />
     );
 
@@ -19,8 +28,8 @@ async function NewItemPage({ params }: { params: { id: string } }) {
   if (!suppliersList.length)
     return (
       <ErrorPage
-        title="You have no suppliers yet"
-        message="Add suppliers to be able to add purchase items."
+        title={t("no-suppliers-found-error-title")}
+        message={t("no-suppliers-found-error-message")}
       />
     );
 
@@ -28,7 +37,7 @@ async function NewItemPage({ params }: { params: { id: string } }) {
     <NewItemForm
       itemsList={itemsList}
       suppliersList={suppliersList}
-      projectId={Number(params.id)}
+      projectId={id}
     />
   );
 }

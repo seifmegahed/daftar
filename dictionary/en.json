@@ -204,6 +204,45 @@
           "payment-advance-number": "Advance Percentage must be a number"
         }
       }
+    },
+    "new-purchase-item-page": {
+      "invalid-id": "Invalid project ID",
+      "no-items-found-error-title": "You have no items yet",
+      "no-items-found-error-message": "Add items to be able to add purchase items.",
+      "no-suppliers-found-error-title": "You have no suppliers yet",
+      "no-suppliers-found-error-message": "Add suppliers to be able to add purchase items.",
+      "title": "Add Purchase Item",
+      "subtitle": "This is the add purchase item page for this project.",
+      "form": {
+        "item-required": "Item is required",
+        "supplier-required": "Supplier is required",
+        "price-required": "Price is required",
+        "currency-required": "Currency is required",
+        "quantity-required": "Quantity is required",
+        "price-number": "Price must be a number",
+        "quantity-number": "Quantity must be a number",
+        "success": "Item added",
+        "error": "An error occurred while adding the item",
+        "title": "Add Purchase Item",
+        "description": "Enter the details of the purchase item you want to add.",
+        "button-text": "Add Item",
+        "item-field-label": "Item *",
+        "item-select-message": "Select item",
+        "item-search-message": "Search for item",
+        "item-not-found-message": "Item not found.",
+        "item-field-description": "Select an item to add to the project. If the item does not exist, you have to create it from the Items tab first.",
+        "supplier-field-label": "Supplier *",
+        "supplier-select-message": "Select supplier",
+        "supplier-search-message": "Search for supplier",
+        "supplier-not-found-message": "Supplier not found.",
+        "supplier-field-description": "Select the supplier to add to the project. If the supplier does not exist, you have to create it from the Suppliers tab first.",
+        "price-field-label": "Price *",
+        "price-field-description": "Enter the price of the item.",
+        "currency-field-label": "Currency *",
+        "currency-field-description": "Select the currency of the price.",
+        "quantity-field-label": "Quantity *",
+        "quantity-field-description": "Enter the quantity of the item."
+      }
     }
   },
   "name-form": {
