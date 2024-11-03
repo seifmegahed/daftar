@@ -508,6 +508,49 @@
     },
     "page": {
       "title": "All Users Page"
+    },
+    "new-user-page": {
+      "form": {
+        "success": "User added",
+        "error": "An error occurred while adding the user",
+        "title": "Add User",
+        "description": "Enter the details of the user you want to add.",
+        "button-text": "Add User",
+        "username-field-label": "Username *",
+        "username-field-description": "User's username must be at least 4 characters long and must be unique. It cannot contain spaces or upper case letters. The user will use this username to login.",
+        "name-field-label": "Name *",
+        "name-field-description": "Enter the name of the user. This is the name you will be using to identify the user in the app. It is preferable to use a first name and a last name separated by a space (e.g. John Doe).",
+        "email-field-label": "Email *",
+        "email-field-description": "Enter the email address of the user. This email will be used in commercial offer document if the user is the project owner/manager.",
+        "phone-number-field-label": "Phone Number *",
+        "phone-number-field-description": "Enter the phone number of the user. This phone number will be used in commercial offer document if the user is the project owner/manager.",
+        "role-field-label": "Role *",
+        "role-field-description": "User's role determines what actions they can perform in the app. Admins can perform all actions, while users can only perform limited actions. Admins can also add and edit users.",
+        "password-field-label": "Password *",
+        "password-field-description": "User's password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, and one number.",
+        "verify-password-field-label": "Verify Password *"
+      },
+      "schema": {
+        "username-required": "Username is required",
+        "username-min-length": "Username must be at least {minLength} characters",
+        "username-max-length": "Username must not be longer than {maxLength} characters",
+        "name-required": "Name is required",
+        "name-min-length": "Name must be at least {minLength} characters",
+        "name-max-length": "Name must not be longer than {maxLength} characters",
+        "email-not-valid": "Email is not valid",
+        "email-max-length": "Email must not be longer than {maxLength} characters",
+        "phone-number-max-length": "Phone number must not be longer than {maxLength} characters",
+        "role-required": "Role is required",
+        "password-required": "Password is required",
+        "password-min-length": "Password must be at least {minLength} characters",
+        "password-max-length": "Password must not be longer than {maxLength} characters",
+        "verify-password-required": "Verify Password is required",
+        "verify-password-min-length": "Verify Password must be at least {minLength} characters",
+        "verify-password-max-length": "Verify Password must not be longer than {maxLength} characters",
+        "username-not-valid": "Username must not contain spaces or Uppercase letters",
+        "password-complexity": "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+        "password-not-match": "Passwords don't match"
+      }
     }
   },
   "name-form": {
