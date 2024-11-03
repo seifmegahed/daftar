@@ -243,6 +243,35 @@
         "quantity-field-label": "الكمية *",
         "quantity-field-description": "أدخل الكمية للمادة ."
       }
+    },
+    "new-sale-item-page": {
+      "invalid-id": "معرف المشروع غير صالح",
+      "no-items-found-error-title": "لا توجد مادة بعد",
+      "no-items-found-error-message": "أضف مادة لتتمكن من إضافة مادة مبيعات .",
+      "form": {
+        "item-required": "يجب اختيار مادة",
+        "price-required": "يجب اختيار سعر",
+        "currency-required": "يجب اختيار العملة",
+        "quantity-required": "يجب اختيار الكمية",
+        "price-number": "يجب أن يكون سعر رقماً",
+        "quantity-number": "يجب أن يكون الكمية رقماً",
+        "success": "تم إضافة المادة",
+        "error": "حدث خطأ أثناء إضافة المادة",
+        "title": "إضافة مادة مبيعات للمشروع",
+        "description": "أدخل تفاصيل المادة التي تريد إضافتها .",
+        "button-text": "إضافة",
+        "item-field-label": "المادة *",
+        "item-select-message": "اختر مادة",
+        "item-search-message": "ابحث عن مادة",
+        "item-not-found-message": "لم يتم العثور على مادة .",
+        "item-field-description": "اختر مادة لإضافتها إلى المشروع . إذا لم تجد المادة التي تبحث عنها ، يجب أن تقوم بإنشاء المادة من صفحة المواد .",
+        "price-field-label": "السعر *",
+        "price-field-description": "أدخل سعر المادة .",
+        "currency-field-label": "العملة *",
+        "currency-field-description": "اختر عملة السعر .",
+        "quantity-field-label": "الكمية *",
+        "quantity-field-description": "أدخل الكمية للمادة ."
+      }
     }
   },
   "name-form": {

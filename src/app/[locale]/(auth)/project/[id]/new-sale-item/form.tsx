@@ -26,23 +26,9 @@ import { toast } from "sonner";
 import { currencyOptions } from "@/data/lut";
 import { createSaleItemAction } from "@/server/actions/sale-items/create";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
-
-const schema = z.object({
-  itemId: z.number({ message: "Item is required" }),
-  price: z.number(),
-  currency: z.number({ message: "Currency is required" }),
-  quantity: z.number(),
-});
-
-const defaultValues = {
-  itemId: undefined,
-  supplierId: undefined,
-  price: 0,
-  currency: undefined,
-  quantity: 0,
-};
-
-type FormSchemaType = z.infer<typeof schema>;
+import { emptyToUndefined } from "@/utils/common";
+import { useTranslations, useLocale } from "next-intl";
+import { getDirection } from "@/utils/common";
 
 function NewSaleItemForm({
   projectId,
@@ -51,6 +37,52 @@ function NewSaleItemForm({
   projectId: number;
   itemsList: { id: number; name: string }[];
 }) {
+  const locale = useLocale();
+  const direction = getDirection(locale);
+  const t = useTranslations("project.new-sale-item-page.form");
+
+  const schema = z
+    .object({
+      itemId: z.number({ message: t("item-required") }),
+      price: z.preprocess(
+        emptyToUndefined,
+        z.string({ message: t("price-required") }),
+      ),
+      currency: z.number({ message: t("currency-required") }),
+      quantity: z.preprocess(
+        emptyToUndefined,
+        z.string({ message: t("quantity-required") }),
+      ),
+    })
+    .superRefine((data, ctx) => {
+      if (isNaN(parseFloat(data.price))) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("price-number"),
+          path: ["price"],
+        });
+        return false;
+      }
+      if (isNaN(parseInt(data.quantity))) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("quantity-number"),
+          path: ["quantity"],
+        });
+        return false;
+      }
+    });
+
+  const defaultValues = {
+    itemId: undefined,
+    supplierId: undefined,
+    price: "",
+    currency: undefined,
+    quantity: "",
+  };
+
+  type FormSchemaType = z.infer<typeof schema>;
+
   const form = useForm<FormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues,
@@ -61,9 +93,9 @@ function NewSaleItemForm({
       const response = await createSaleItemAction({
         projectId,
         itemId: data.itemId,
-        price: String(data.price),
+        price: data.price,
         currency: data.currency,
-        quantity: data.quantity,
+        quantity: parseInt(data.quantity),
       });
       if (!response) return;
       const [, error] = response;
@@ -87,9 +119,9 @@ function NewSaleItemForm({
     >
       <Form {...form}>
         <FormWrapperWithSubmit
-          title="Add Sale Item"
-          description="Enter the details of the sale item you want to add."
-          buttonText="Add Item"
+          title={t("title")}
+          description={t("description")}
+          buttonText={t("button-text")}
           dirty={form.formState.isDirty}
           submitting={form.formState.isSubmitting}
         >
@@ -98,7 +130,7 @@ function NewSaleItemForm({
             name="itemId"
             render={({ field }) => (
               <FormItem className="flex flex-col gap-2">
-                <FormLabel>Item *</FormLabel>
+                <FormLabel>{t("item-field-label")}</FormLabel>
                 <ComboSelect
                   value={field.value ?? null}
                   onChange={field.onChange}
@@ -106,15 +138,11 @@ function NewSaleItemForm({
                     value: item.id,
                     label: item.name,
                   }))}
-                  selectMessage="Select item"
-                  searchMessage="Search for item"
-                  notFoundMessage="Item not found."
+                  selectMessage={t("item-select-message")}
+                  searchMessage={t("item-search-message")}
+                  notFoundMessage={t("item-not-found-message")}
                 />
-                <FormDescription>
-                  Select an item to add to the project&apos;s commercial offer.
-                  If the item does not exist, you have to create it from the
-                  Items tab first.
-                </FormDescription>
+                <FormDescription>{t("item-field-description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -124,15 +152,11 @@ function NewSaleItemForm({
             name="price"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Price *</FormLabel>
-                <Input
-                  {...field}
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
-                <FormDescription>Enter the price of the item.</FormDescription>
+                <FormLabel>{t("price-field-label")}</FormLabel>
+                <Input {...field} />
+                <FormDescription>
+                  {t("price-field-description")}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -142,10 +166,11 @@ function NewSaleItemForm({
             name="currency"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Currency *</FormLabel>
+                <FormLabel>{t("currency-field-label")}</FormLabel>
                 <Select
                   defaultValue={String(field.value) ?? ""}
                   onValueChange={(value) => field.onChange(Number(value))}
+                  dir={direction}
                 >
                   <FormControl>
                     <SelectTrigger>
@@ -164,7 +189,7 @@ function NewSaleItemForm({
                   </SelectContent>
                 </Select>
                 <FormDescription>
-                  Select the currency of the price.
+                  {t("currency-field-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -175,16 +200,10 @@ function NewSaleItemForm({
             name="quantity"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Quantity *</FormLabel>
-                <Input
-                  {...field}
-                  type="number"
-                  step="1"
-                  min="0"
-                  onChange={(e) => field.onChange(Number(e.target.value))}
-                />
+                <FormLabel>{t("quantity-field-label")}</FormLabel>
+                <Input {...field} />
                 <FormDescription>
-                  Enter the quantity of the item.
+                  {t("quantity-field-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
