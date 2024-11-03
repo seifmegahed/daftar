@@ -394,6 +394,38 @@
       "filter-by-updated-date": "بتاريخ التحديث",
       "no-items-found-error-title": "لا يوجد مواد بعد",
       "no-items-found-error-message": "أضف مواد لتتمكن من إضافة مواد الشراء."
+    },
+    "new-item-page": {
+      "form": {
+        "success": "تم إضافة المادة",
+        "error": "حدث خطأ أثناء إضافة المادة",
+        "title": "إضافة مادة",
+        "description": "أدخل تفاصيل المادة التي تريد إضافتها .",
+        "button-text": "إضافة",
+        "name-field-label": "الاسم *",
+        "name-field-description": "أدخل اسم المادة. هذا الاسم سيتم عرضه في قائمة المواد الذي ستستخدمه للبحث والمراجعة عن المادة .",
+        "type-field-label": "النوع *",
+        "type-field-description": "أدخل النوع الذي سيتم استخدامه لتصنيف المواد وتجعلها أسهل للبحث عنها .",
+        "description-field-label": "الوصف",
+        "description-field-description": "أدخل وصف المادة .",
+        "make-field-label": "المصنع",
+        "make-field-description": "أدخل مصنع المادة .",
+        "mpn-field-label": "رقم المنتج",
+        "mpn-field-description": "أدخل رقم المنتج الخاص بالمادة .",
+        "notes-field-label": "ملاحظات",
+        "notes-field-description": "أدخل أي ملاحظات عن المادة ."
+      },
+      "schema": {
+        "name-required": "يجب أدخال الاسم",
+        "name-min-length": "الاسم يجب أن يكون على الأقل {minLength} حرف",
+        "name-max-length": "الاسم يجب أن يكون أقل من {maxLength} حرف",
+        "type-required": "يجب أدخال النوع",
+        "type-max-length": "النوع يجب أن يكون أقل من {maxLength} حرف",
+        "description-max-length": "الوصف يجب أن يكون أقل من {maxLength} حرف",
+        "mpn-max-length": "رقم المنتج يجب أن يكون أقل من {maxLength} حرف",
+        "make-max-length": "المصنع يجب أن يكون أقل من {maxLength} حرف",
+        "notes-max-length": "الملاحظات يجب أن تكون أقل من {maxLength} حرف"
+      }
     }
   },
   "address": {
@@ -407,11 +439,11 @@
       "country-select-message": "اختر البلد",
       "country-search-message": "ابحث عن البلد",
       "country-not-found-message": "لم يتم العثور على البلد",
-      "country-description": "أدخل البلد الخاص بالعنوان.",
+      "country-description": "أدخل البلد الخاص بالعنوان .",
       "city-label": "المدينة",
       "city-description": "أدخل المدينة الخاصة بالعنوان .",
       "address-notes-label": "ملاحظات",
-      "address-notes-description": "أدخل أي ملاحظات عن العنوان."
+      "address-notes-description": "أدخل أي ملاحظات عن العنوان ."
     },
     "schema": {
       "name-required": "الاسم مطلوب",
@@ -514,7 +546,7 @@
     "placeholder": "بحث"
   },
   "drop-zone": {
-    "title": "إضغط هنا لاختيار الملف ",
+    "title": "اضغط هنا لاختيار الملف ",
     "subtitle": "أو اسحب الملف وأفلت",
     "max": "الحجم الأقصى للملف هو {max} ميغابايت",
     "error": "يجب أن يكون حجم الملف أقل من {max} ميغابايت"

@@ -394,6 +394,38 @@
       "filter-by-updated-date": "By Update Date",
       "no-items-found-error-title": "There seems to be no items yet!",
       "no-items-found-error-message": "Start adding items to be able to see them here."
+    },
+    "new-item-page": {
+      "form": {
+        "success": "Item added",
+        "error": "An error occurred while adding the item",
+        "title": "Add Item",
+        "description": "Enter the details of the item you want to add.",
+        "button-text": "Add Item",
+        "name-field-label": "Name *",
+        "name-field-description": "Enter the name of the item. This is the name you will be using to search and refer to the item. It will appear in your projects.",
+        "type-field-label": "Type *",
+        "type-field-description": "Enter the type of the item. This will be used to categorize the item and make it easier to search for them.",
+        "description-field-label": "Description",
+        "description-field-description": "Enter a description of the item.",
+        "make-field-label": "Make",
+        "make-field-description": "Enter the manufacturer of the item.",
+        "mpn-field-label": "MPN",
+        "mpn-field-description": "Enter the manufacturer's part number of the item.",
+        "notes-field-label": "Notes",
+        "notes-field-description": "Enter any notes about the item."
+      },
+      "schema": {
+        "name-required": "Name is required",
+        "name-min-length": "Name must be at least {minLength} characters",
+        "name-max-length": "Name must be at most {maxLength} characters",
+        "type-required": "Type is required",
+        "type-max-length": "Type must be at most {maxLength} characters",
+        "description-max-length": "Description must be at most {maxLength} characters",
+        "mpn-max-length": "MPN must be at most {maxLength} characters",
+        "make-max-length": "Make must be at most {maxLength} characters",
+        "notes-max-length": "Notes must be at most {maxLength} characters"
+      }
     }
   },
   "address": {
@@ -415,16 +447,16 @@
     },
     "schema": {
       "name-required": "Address name is required",
-      "name-min-length": "Name must be at least {count} characters",
-      "name-max-length": "Name must not be longer than {count} characters",
+      "name-min-length": "Name must be at least {minLength} characters",
+      "name-max-length": "Name must not be longer than {maxLength} characters",
       "address-line-required": "Address line is required",
-      "address-line-min-length": "Address line must be at least {count} characters",
-      "address-line-max-length": "Address line must not be longer than {count} characters",
+      "address-line-min-length": "Address line must be at least {minLength} characters",
+      "address-line-max-length": "Address line must not be longer than {maxLength} characters",
       "country-required": "Country is required",
-      "country-min-length": "Country must be at least {count} characters",
-      "country-max-length": "Country must not be longer than {count} characters",
-      "city-max-length": "City must not be longer than {count} characters",
-      "address-notes-max-length": "Address notes must not be longer than {count} characters"
+      "country-min-length": "Country must be at least {minLength} characters",
+      "country-max-length": "Country must not be longer than {maxLength} characters",
+      "city-max-length": "City must not be longer than {maxLength} characters",
+      "address-notes-max-length": "Address notes must not be longer than {maxLength} characters"
     }
   },
   "contact": {
@@ -441,14 +473,14 @@
     },
     "schema": {
       "name-required": "Contact name is required",
-      "name-min-length": "Name must be at least {count} characters",
-      "name-max-length": "Name must not be longer than {count} characters",
-      "phone-number-min-length": "Phone number must be at least {count} characters",
-      "phone-number-max-length": "Phone number must not be longer than {count} characters",
+      "name-min-length": "Name must be at least {minLength} characters",
+      "name-max-length": "Name must not be longer than {maxLength} characters",
+      "phone-number-min-length": "Phone number must be at least {minLength} characters",
+      "phone-number-max-length": "Phone number must not be longer than {maxLength} characters",
       "email-not-valid": "Email is not valid",
-      "email-min-length": "Email must be at least {count} characters",
-      "email-max-length": "Email must not be longer than {count} characters",
-      "notes-max-length": "Contact notes must not be longer than {count} characters",
+      "email-min-length": "Email must be at least {minLength} characters",
+      "email-max-length": "Email must not be longer than {maxLength} characters",
+      "notes-max-length": "Contact notes must not be longer than {maxLength} characters",
       "email-or-phone-required": "An email or a phone number are required"
     }
   },
