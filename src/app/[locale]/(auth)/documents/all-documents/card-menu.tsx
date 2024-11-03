@@ -1,4 +1,4 @@
-"use document";
+"use client";
 
 import { Link } from "@/i18n/routing";
 import { DotsVerticalIcon } from "@radix-ui/react-icons";
@@ -9,10 +9,15 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { useTranslations, useLocale } from "next-intl";
+import { getDirection } from "@/utils/common";
 
 const DocumentCardContextMenu = ({ documentId }: { documentId: number }) => {
+  const locale = useLocale();
+  const direction = getDirection(locale);
+  const t = useTranslations("document-card.menu");
   return (
-    <DropdownMenu>
+    <DropdownMenu dir={direction}>
       <DropdownMenuTrigger asChild>
         <div className="flex cursor-pointer items-center justify-center rounded-full p-2 hover:bg-muted">
           <DotsVerticalIcon />
@@ -20,15 +25,15 @@ const DocumentCardContextMenu = ({ documentId }: { documentId: number }) => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
         <Link href={`/document/${documentId}`}>
-          <DropdownMenuItem>Document Page</DropdownMenuItem>
+          <DropdownMenuItem>{t("document-page")}</DropdownMenuItem>
         </Link>
         <Separator className="my-1" />
         <Link href={`/document/${documentId}/edit`}>
-          <DropdownMenuItem>Edit Document</DropdownMenuItem>
+          <DropdownMenuItem>{t("edit")}</DropdownMenuItem>
         </Link>
         <Link href={`/document/${documentId}/edit#delete`} scroll>
           <DropdownMenuItem>
-            <p className="text-red-500">Delete Document</p>
+            <p className="text-red-500">{t("delete")}</p>
           </DropdownMenuItem>
         </Link>
       </DropdownMenuContent>

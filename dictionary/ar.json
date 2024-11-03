@@ -484,6 +484,20 @@
       "email-or-phone-required": "البريد الإلكتروني أو رقم الهاتف مطلوب"
     }
   },
+  "documents": {
+    "layout": {
+      "title": "المستندات",
+      "description": "إدارة المستندات",
+      "all-documents": "جميع المستندات",
+      "new-document": "إضافة مستند"
+    },
+    "page": {
+      "title": "الصفحة الرئيسية لجميع المستندات",
+      "filter-by-creation-date": "بتاريخ الإنشاء",
+      "no-documents-found-error-title": "لا يوجد مستندات بعد",
+      "no-documents-found-error-message": "أضف مستندات لتتمكن من إضافة مستندات الشراء."
+    }
+  },
   "name-form": {
     "success": "تم تحديث الاسم",
     "error": "حدث خطأ أثناء تحديث الاسم",
@@ -642,6 +656,17 @@
     },
     "tips": {
       "make": "المصنع"
+    }
+  },
+  "document-card": {
+    "menu": {
+      "document-page": "صفحة المستند",
+      "edit": "تعديل المستند",
+      "delete": "حذف المستند"
+    },
+    "tips": {
+      "private": "الخصوصية",
+      "extension": "نوع الملف"
     }
   },
   "card-tips": {

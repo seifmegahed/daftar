@@ -1,6 +1,7 @@
 import { getDocumentsAction } from "@/server/actions/documents/read";
 import DocumentCard from "./document-card";
 import ErrorPage from "@/components/error";
+import { getTranslations } from "next-intl/server";
 import type { FilterArgs } from "@/components/filter-and-search";
 
 async function DocumentsList({
@@ -10,15 +11,17 @@ async function DocumentsList({
 }: {
   page?: number;
   query?: string;
-  filter?: FilterArgs;
+  filter: FilterArgs;
 }) {
+  const t = await getTranslations("documents.page");
+
   const [documents, error] = await getDocumentsAction(page, filter, query);
   if (error !== null) return <ErrorPage message={error} />;
-  if (!documents.length)
+  if (!documents.length && filter.filterType === null)
     return (
       <ErrorPage
-        title="There seems to be no documents yet"
-        message="Start adding documents to be able to see them here"
+        title={t("no-documents-found-error-title")}
+        message={t("no-documents-found-error-message")}
       />
     );
 

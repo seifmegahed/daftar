@@ -8,6 +8,8 @@ import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 
 import { defaultPageLimit } from "@/data/config";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
 import type {
   FilterOptionType,
@@ -19,15 +21,20 @@ const pageLimit = defaultPageLimit;
 
 type Props = {
   searchParams: SearchParamsPropsType;
+  params: { locale: Locale };
 };
 
-const filterItems: FilterOptionType[] = [
-  { label: "By Creation Date", value: "creationDate" },
-];
+async function DocumentsPage({ searchParams, params }: Props) {
+  const { locale } = params;
+  setLocale(locale);
+  const t = await getTranslations("documents.page");
 
-async function DocumentsPage({ searchParams }: Props) {
   const page = Number(searchParams.page) || 1;
   const query = searchParams.query ?? "";
+
+  const filterItems: FilterOptionType[] = [
+    { label: t("filter-by-creation-date"), value: "creationDate" },
+  ];
 
   const filterValues = {
     filterType: (searchParams.ft as FilterTypes) ?? null,
@@ -41,7 +48,7 @@ async function DocumentsPage({ searchParams }: Props) {
 
   return (
     <ListPageWrapper
-      title="All Documents Page"
+      title={t("title")}
       filter={{ filterValues, filterItems }}
       pagination={{ totalPages }}
     >

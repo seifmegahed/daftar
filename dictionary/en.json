@@ -428,6 +428,21 @@
       }
     }
   },
+  "documents": {
+    "layout": {
+      "title": "Documents",
+      "description": "Manage your documents",
+      "all-documents": "All Documents",
+      "new-document": "New Document"
+    },
+    "page": {
+      "title": "All Documents Page",
+      "filter-by-creation-date": "By Creation Date",
+      "filter-by-updated-date": "By Update Date",
+      "no-documents-found-error-title": "There seems to be no documents yet!",
+      "no-documents-found-error-message": "Start adding documents to be able to see them here"
+    }
+  },
   "address": {
     "form": {
       "primary-address-title": "Primary Address",
@@ -642,6 +657,17 @@
     },
     "tips": {
       "make": "Make"
+    }
+  },
+  "document-card": {
+    "menu": {
+      "document-page": "Document Page",
+      "edit": "Edit Document",
+      "delete": "Delete Document"
+    },
+    "tips": {
+      "private": "Privacy",
+      "extension": "Extension"
     }
   },
   "card-tips": {

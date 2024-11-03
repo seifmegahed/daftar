@@ -12,8 +12,10 @@ import {
   CardSection,
   CardSubtitleSection,
 } from "@/components/card-sections";
+import { getTranslations } from "next-intl/server";
 
-const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
+const DocumentCard = async ({ document }: { document: BriefDocumentType }) => {
+  const t = await getTranslations("document-card.tips");
   return (
     <CardWrapper>
       <CardIdSection href={`/document/${document.id}`} id={document.id} />
@@ -25,11 +27,11 @@ const DocumentCard = ({ document }: { document: BriefDocumentType }) => {
           />
           <CardSubtitleSection
             subtitle={document.private ? "Private" : "Public"}
-            tip="Privacy"
+            tip={t("private")}
           />
         </CardBodyStartContainer>
         <CardBodyEndContainer>
-          <CardSection text={document.extension} tip="Extension" />
+          <CardSection text={document.extension} tip={t("extension")} />
           <CardCreatedAtSection date={document.createdAt} />
         </CardBodyEndContainer>
       </CardBodyContainer>
