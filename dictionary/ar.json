@@ -381,6 +381,21 @@
       }
     }
   },
+  "items": {
+    "layout": {
+      "title": "المواد",
+      "description": "إدارة المواد",
+      "all-items": "جميع المواد",
+      "new-item": "إضافة مواد"
+    },
+    "page": {
+      "title": "الصفحة الرئيسية لجميع المواد",
+      "filter-by-creation-date": "بتاريخ الإنشاء",
+      "filter-by-updated-date": "بتاريخ التحديث",
+      "no-items-found-error-title": "لا يوجد مواد بعد",
+      "no-items-found-error-message": "أضف مواد لتتمكن من إضافة مواد الشراء."
+    }
+  },
   "address": {
     "form": {
       "primary-address-title": "العنوان الرئيسي",
@@ -583,6 +598,18 @@
     "tips": {
       "field": "مجال العمل",
       "registration-number": "رقم التسجيل"
+    }
+  },
+  "item-card": {
+    "menu": {
+      "item-page": "صفحة المادة",
+      "item-documents": "مستندات المادة",
+      "item-comments": "تعليقات المادة",
+      "edit": "تعديل المادة",
+      "delete": "حذف المادة"
+    },
+    "tips": {
+      "make": "المصنع"
     }
   },
   "card-tips": {

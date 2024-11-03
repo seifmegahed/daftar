@@ -1,6 +1,8 @@
 import { getItemsAction } from "@/server/actions/items/read";
 import ItemCard from "./item-card";
 import ErrorPage from "@/components/error";
+import { getTranslations } from "next-intl/server";
+
 import type { FilterArgs } from "@/components/filter-and-search";
 
 async function ItemsList({
@@ -10,15 +12,17 @@ async function ItemsList({
 }: {
   page?: number;
   query?: string;
-  filter?: FilterArgs;
+  filter: FilterArgs;
 }) {
+  const t = await getTranslations("items.page");
+
   const [items, error] = await getItemsAction(page, filter, query);
   if (error !== null) return <ErrorPage message={error} />;
-  if (!items.length)
+  if (!items.length && filter.filterType === null)
     return (
       <ErrorPage
-        title="There seems to be no items yet"
-        message="Start adding items to be able to see them here"
+        title={t("no-items-found-error-title")}
+        message={t("no-items-found-error-message")}
       />
     );
 

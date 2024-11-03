@@ -381,6 +381,21 @@
       }
     }
   },
+  "items": {
+    "layout": {
+      "title": "Items",
+      "description": "Manage your items",
+      "all-items": "All Items",
+      "new-item": "New Item"
+    },
+    "page": {
+      "title": "All Items Page",
+      "filter-by-creation-date": "By Creation Date",
+      "filter-by-updated-date": "By Update Date",
+      "no-items-found-error-title": "There seems to be no items yet!",
+      "no-items-found-error-message": "Start adding items to be able to see them here."
+    }
+  },
   "address": {
     "form": {
       "primary-address-title": "Primary Address",
@@ -583,6 +598,18 @@
     "tips": {
       "field": "Field of Business",
       "registration-number": "Registration Number"
+    }
+  },
+  "item-card": {
+    "menu": {
+      "item-page": "Item Page",
+      "item-documents": "Item Documents",
+      "item-comments": "Item Comments",
+      "edit": "Edit Item",
+      "delete": "Delete Item"
+    },
+    "tips": {
+      "make": "Make"
     }
   },
   "card-tips": {

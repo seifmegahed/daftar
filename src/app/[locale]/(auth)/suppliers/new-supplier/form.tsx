@@ -390,9 +390,9 @@ function NewSupplierForm() {
                   value={field.value as string}
                   onChange={field.onChange}
                   options={countries}
-                  selectMessage="Select a country"
-                  searchMessage="Search for a country"
-                  notFoundMessage="Country not found"
+                  selectMessage={addressT("form.country-select-message")}
+                  searchMessage={addressT("form.country-search-message")}
+                  notFoundMessage={addressT("form.country-not-found-message")}
                 />
                 <FormMessage />
               </FormItem>
