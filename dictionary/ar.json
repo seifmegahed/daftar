@@ -27,8 +27,14 @@
       "All Projects": "جميع المشاريع",
       "New Project": "مشروع جديد"
     },
-    "all-projects-page": {
+    "page": {
       "title": "الصفحة الرئيسية لجميع المشاريع",
+      "filter-by-creation-date": "بتاريخ الإنشاء",
+      "filter-by-update-date": "بتاريخ التحديث",
+      "filter-by-status": "بالحالة",
+      "filter-by-type": "بالنوع",
+      "filter-by-start-date": "بتاريخ البدء",
+      "filter-by-end-date": "بتاريخ الانتهاء",
       "no-projects-found-error-title": "يبدو أنه لا يوجد مشاريع هنا حتى ألان!",
       "no-projects-found-error-message": "ابدأ بإضافة المشاريع لرؤيتها هنا"
     },
@@ -283,6 +289,19 @@
       "comment-date": "منذ {time}"
     }
   },
+  "clients": {
+    "layout": {
+      "title": "العملاء",
+      "description": "إدارة العملاء",
+      "all-clients": "جميع العملاء",
+      "new-client": "إضافة عميل"
+    },
+    "page": {
+      "title": "الصفحة الرئيسية لجميع العملاء",
+      "filter-by-creation-date": "بتاريخ الإنشاء",
+      "filter-by-updated-date": "بتاريخ التحديث"
+    }
+  },
   "name-form": {
     "success": "تم تحديث الاسم",
     "error": "حدث خطأ أثناء تحديث الاسم",
@@ -341,7 +360,7 @@
     "contact": "جهة الاتصال"
   },
   "search-bar": {
-    "placeholder": "البحث"
+    "placeholder": "بحث"
   },
   "drop-zone": {
     "title": "إضغط هنا لاختيار الملف ",
@@ -405,6 +424,18 @@
       "client": "العميل"
     }
   },
+  "client-card": {
+    "menu": {
+      "client-page": "صفحة العميل",
+      "client-documents": "مستندات العميل",
+      "client-comments": "تعليقات العميل",
+      "edit": "تعديل العميل",
+      "delete": "حذف العميل"
+    },
+    "tips": {
+      "registration-number": "رقم التسجيل"
+    }
+  },
   "card-tips": {
     "creation-date": "تاريخ الإنشاء",
     "id": "المعرف"
@@ -412,6 +443,7 @@
   "filter": {
     "tip": "التصفية",
     "filter-title": "تصفية",
+    "filter-by": "تصفية {type}",
     "status": "الحالة",
     "type": "النوع",
     "select-placeholder": "اختر قيمة",

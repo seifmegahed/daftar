@@ -5,7 +5,7 @@ import SearchBar from "@/components/search-bar";
 import FilterBar from "./filter-bar";
 import FilterContextMenu from "./context-menu";
 import { X } from "lucide-react";
-import { useLocale, useTranslations } from "next-intl";
+import { useTranslations } from "next-intl";
 
 export const FILTER_VALUE = "fv";
 export const FILTER_TYPE = "ft";
@@ -32,10 +32,6 @@ export const filterDefault: FilterArgs = {
 export type FilterOptionType = {
   label: string;
   value: FilterTypes;
-  locale?: {
-    en: string;
-    ar: string;
-  };
 };
 
 const getFilterLabel = (
@@ -56,7 +52,6 @@ function FilterAndSearch({
   const [filterLabel, setFilterLabel] = useState<string>("");
 
   const t = useTranslations("filter");
-  const locale = useLocale() as "en" | "ar";
 
   return (
     <>
@@ -68,11 +63,7 @@ function FilterAndSearch({
             setFilterType(value);
             const item = getFilterLabel(value, filterItems);
             if (item)
-              setFilterLabel(
-                item.locale
-                  ? t("filter-title") + " " + item.locale[locale]
-                  : item.label,
-              );
+              setFilterLabel(t("filter-by", { type: item.label }));
           }}
           filterItems={filterItems}
         />

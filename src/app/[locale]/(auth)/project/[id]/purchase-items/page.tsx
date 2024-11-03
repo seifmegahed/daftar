@@ -4,9 +4,8 @@ import ListPageWrapper from "@/components/list-page-wrapper";
 import ErrorPage from "@/components/error";
 import { setLocale } from "@/i18n/set-locale";
 import { getTranslations } from "next-intl/server";
-import type { LocaleParams } from "@/i18n/set-locale";
 
-async function ProjectItemsPage({ params }: { params: { id: string; locale:  LocaleParams["locale"] } }) {
+async function ProjectItemsPage({ params }: { params: { id: string; locale:  Locale } }) {
   const { locale } = params;
   setLocale(locale);
   const t = await getTranslations("project.purchase-items-page");

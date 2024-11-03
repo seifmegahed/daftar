@@ -1,4 +1,3 @@
-import { type BriefClientType } from "@/server/db/tables/client/queries";
 import ClientCardContextMenu from "./card-menu";
 import CardWrapper from "@/components/card-wrapper";
 import {
@@ -11,8 +10,12 @@ import {
   CardNameSection,
   CardSection,
 } from "@/components/card-sections";
+import { getTranslations } from "next-intl/server";
 
-const ClientCard = ({ client }: { client: BriefClientType }) => {
+import type { BriefClientType } from "@/server/db/tables/client/queries";
+
+const ClientCard = async ({ client }: { client: BriefClientType }) => {
+  const t = await getTranslations("client-card.tips");
   return (
     <CardWrapper>
       <CardIdSection href={`/client/${client.id}`} id={client.id} />
@@ -23,7 +26,7 @@ const ClientCard = ({ client }: { client: BriefClientType }) => {
         <CardBodyEndContainer>
           <CardSection
             text={client.registrationNumber}
-            tip="Registration Number"
+            tip={t("registration-number")}
           />
           <CardCreatedAtSection date={client.createdAt} />
         </CardBodyEndContainer>

@@ -27,8 +27,14 @@
       "All Projects": "All Projects",
       "New Project": "New Project"
     },
-    "all-projects-page": {
+    "page": {
       "title": "All Projects Page",
+      "filter-by-status": "By Status",
+      "filter-by-type": "By Type",
+      "filter-by-start-date": "By Start Date",
+      "filter-by-end-date": "By End Date",
+      "filter-by-creation-date": "By Creation Date",
+      "filter-by-update-date": "By Update Date",
       "no-projects-found-error-title": "There seems to be no projects yet!",
       "no-projects-found-error-message": "Start adding projects to be able to see them here"
     },
@@ -285,6 +291,21 @@
       "comment-date": "{time} ago"
     }
   },
+  "clients": {
+    "layout": {
+      "title": "Clients",
+      "description": "Manage your clients",
+      "all-clients": "All Clients",
+      "new-client": "New Client"
+    },
+    "page": {
+      "title": "All Clients Page",
+      "filter-by-creation-date": "By Creation Date",
+      "filter-by-updated-date": "By Update Date",
+      "no-clients-error-title": "There seems to be no clients yet!",
+      "no-clients-error-description": "Start adding clients to be able to see them here."
+    }
+  },
   "name-form": {
     "success": "Name updated",
     "error": "An error occurred while updating name",
@@ -408,6 +429,18 @@
       "client": "Client"
     }
   },
+  "client-card": {
+    "menu": {
+      "client-page": "Client Page",
+      "client-documents": "Client Documents",
+      "client-comments": "Client Comments",
+      "edit": "Edit Client",
+      "delete": "Delete Client"
+    },
+    "tips": {
+      "registration-number": "Registration Number"
+    }
+  },
   "card-tips": {
     "creation-date": "Creation Date",
     "id": "ID"
@@ -415,6 +448,7 @@
   "filter": {
     "tip": "Filter",
     "filter-title": "Filter",
+    "filter-by": "Filter {type}",
     "status": "Status",
     "type": "Type",
     "select-placeholder": "Select value",

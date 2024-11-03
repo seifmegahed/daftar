@@ -4,9 +4,8 @@ import NewItemForm from "./form";
 import ErrorPage from "@/components/error";
 import { getTranslations } from "next-intl/server";
 import { setLocale } from "@/i18n/set-locale";
-import type { LocaleParams } from "@/i18n/set-locale";
 
-async function NewItemPage({ params }: { params: { id: string, locale: LocaleParams["locale"] } }) {
+async function NewItemPage({ params }: { params: { id: string, locale: Locale } }) {
   const { locale } = params;
   setLocale(locale);
   const t = await getTranslations("project.new-purchase-item-page");

@@ -2,23 +2,26 @@ import type { FilterArgs } from "@/components/filter-and-search";
 import Client from "./client-card";
 import { getClientsBriefAction } from "@/server/actions/clients/read";
 import ErrorPage from "@/components/error";
+import { getTranslations } from "next-intl/server";
 
 async function ClientsList({
   page = 1,
   query,
   filter,
 }: {
-  page?: number;
+  page: number;
   query?: string;
-  filter?: FilterArgs;
+  filter: FilterArgs;
 }) {
+  const t = await getTranslations("clients.page");
+
   const [clients, error] = await getClientsBriefAction(page, filter, query);
   if (error !== null) return <ErrorPage message={error} />;
-  if (!clients.length)
+  if (!clients.length && filter.filterType === null)
     return (
       <ErrorPage
-        title="There seems to be no clients yet!"
-        message="Start adding clients to be able to see them here"
+        title={t("no-clients-error-title")}
+        message={t("no-clients-error-description")}
       />
     );
 

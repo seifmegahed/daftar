@@ -22,41 +22,40 @@ type Props = {
   params: LocaleParams;
 };
 
-const filterItems: FilterOptionType[] = [
-  {
-    label: "By Status",
-    value: "status",
-    locale: { en: "By Status", ar: "بالحالة" },
-  },
-  { label: "By Type", value: "type", locale: { en: "By Type", ar: "بالنوع" } },
-  {
-    label: "By Start Date",
-    value: "startDate",
-    locale: { en: "By Start Date", ar: "بتاريخ البدء" },
-  },
-  {
-    label: "By End Date",
-    value: "endDate",
-    locale: { en: "By End Date", ar: "بتاريخ الانتهاء" },
-  },
-  {
-    label: "By Creation Date",
-    value: "creationDate",
-    locale: { en: "By Creation Date", ar: "بتاريخ الإنشاء" },
-  },
-  {
-    label: "By Update Date",
-    value: "updateDate",
-    locale: { en: "By Update Date", ar: "بتاريخ التحديث" },
-  },
-];
-
 async function AllProjects({ searchParams, params }: Props) {
   setLocale(params.locale);
 
   const parsedPage = parseInt(searchParams.page ?? "1");
   const page = isNaN(parsedPage) ? 1 : parsedPage;
   const query = searchParams.query ?? "";
+  const t = await getTranslations("projects.page");
+
+  const filterItems: FilterOptionType[] = [
+    {
+      label: t("filter-by-status"),
+      value: "status",
+    },
+    {
+      label: t("filter-by-type"),
+      value: "type",
+    },
+    {
+      label: t("filter-by-start-date"),
+      value: "startDate",
+    },
+    {
+      label: t("filter-by-end-date"),
+      value: "endDate",
+    },
+    {
+      label: t("filter-by-creation-date"),
+      value: "creationDate",
+    },
+    {
+      label: t("filter-by-update-date"),
+      value: "updateDate",
+    },
+  ];
 
   const filterValues = {
     filterType: (searchParams.ft as FilterTypes) ?? null,
@@ -67,8 +66,6 @@ async function AllProjects({ searchParams, params }: Props) {
   if (countError !== null) return <ErrorPage message={countError} />;
 
   const totalPages = Math.ceil(count / pageLimit);
-
-  const t = await getTranslations("projects.all-projects-page");
 
   return (
     <ListPageWrapper

@@ -21,12 +21,11 @@ import { getDateLocaleFormat } from "@/utils/common";
 import { setLocale } from "@/i18n/set-locale";
 
 import type { SimpDoc } from "@/server/db/tables/document/queries";
-import type { LocaleParams } from "@/i18n/set-locale";
 
 async function ProjectPage({
   params,
 }: {
-  params: { id: string; locale: LocaleParams["locale"] };
+  params: { id: string; locale: Locale };
 }) {
   const { locale } = params;
   setLocale(locale);

@@ -3,12 +3,11 @@ import GenerateOfferForm from "./form";
 import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 import { getTranslations } from "next-intl/server";
 import { setLocale } from "@/i18n/set-locale";
-import type { LocaleParams } from "@/i18n/set-locale";
 
 async function CommercialOffer({
   params,
 }: {
-  params: { id: string; locale: LocaleParams["locale"] };
+  params: { id: string; locale: Locale };
 }) {
   const { locale } = params;
   setLocale(locale);

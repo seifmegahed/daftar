@@ -3,12 +3,11 @@ import { setLocale } from "@/i18n/set-locale";
 
 import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 import { getTranslations } from "next-intl/server";
-import type { LocaleParams } from "@/i18n/set-locale";
 const basePath = (id: string) => "/project/" + id;
 
 interface ProjectLayoutProps {
   children: React.ReactNode;
-  params: { id: string, locale: LocaleParams["locale"] };
+  params: { id: string, locale: Locale };
 }
 
 export default async function ProjectLayout({

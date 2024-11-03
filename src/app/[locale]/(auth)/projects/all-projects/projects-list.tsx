@@ -9,15 +9,15 @@ async function ProjectsList({
   query,
   filter,
 }: {
-  page?: number;
+  page: number;
   query?: string;
-  filter?: FilterArgs;
+  filter: FilterArgs;
 }) {
   const [projects, error] = await getProjectsBriefAction(page, filter, query);
-  const t = await getTranslations("projects.all-projects-page");
+  const t = await getTranslations("projects.page");
 
   if (error !== null) return <ErrorPage message={error} />;
-  if (!projects.length)
+  if (!projects.length && filter.filterType === null)
     return (
       <ErrorPage
         title={t("no-projects-found-error-title")}

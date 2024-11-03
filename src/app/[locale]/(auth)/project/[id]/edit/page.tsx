@@ -23,9 +23,8 @@ import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo
 import ErrorPage from "@/components/error";
 import { getTranslations } from "next-intl/server";
 import { setLocale } from "@/i18n/set-locale";
-import type { LocaleParams } from "@/i18n/set-locale";
 
-async function EditProjectPage({ params }: { params: { id: string, locale: LocaleParams["locale"] } }) {
+async function EditProjectPage({ params }: { params: { id: string, locale: Locale } }) {
   const { locale } = params;
   setLocale(locale);
   const t = await getTranslations("project.edit");
