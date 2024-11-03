@@ -3,44 +3,38 @@ import ChangePasswordSection from "./change-password-section";
 import ChangeRoleSection from "./change-role-section";
 import ActivateDeactivateUserSection from "./activate-deactivate-user-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
-import {
-  getCurrentUserAction,
-  getUserByIdAction,
-} from "@/server/actions/users";
+import { getUserByIdAction } from "@/server/actions/users";
 import ErrorPage from "@/components/error";
 import ChangeEmailSection from "./change-email-section";
 import ChangePhoneNumberSection from "./change-phone-number-section";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
-async function EditUserPage({ params }: { params: { id: string } }) {
+async function EditUserPage({
+  params,
+}: {
+  params: { id: string; locale: Locale };
+}) {
+  setLocale(params.locale);
+  const t = await getTranslations("edit-user.page");
+
   const id = parseInt(params.id);
-  if (isNaN(id)) return <ErrorPage message="Invalid user ID" />;
+  if (isNaN(id)) return <ErrorPage message={t("invalid-id")} />;
 
   const [userData, error] = await getUserByIdAction(id);
   if (error !== null) return <ErrorPage message={error} />;
 
-  const [currentUser, currentUserError] = await getCurrentUserAction();
-  if (currentUserError !== null)
-    return (
-      <ErrorPage
-        title="Oops, this page is not accessible"
-        message={currentUserError}
-      />
-    );
-  if (currentUser.role !== "admin")
-    return (
-      <ErrorPage
-        title="Oops, this page is not accessible"
-        message="You are trying to access a private page. You need to be an admin to access this page."
-      />
-    );
-
   return (
     <InfoPageWrapper
-      title="Edit User"
-      subtitle={`This is the edit page for the user: ${userData.name}. Here you can edit the user details.`}
+      title={t("title")}
+      subtitle={t("subtitle", { userName: userData.name })}
     >
       <ChangeNameSection userId={userData.id} name={userData.name} />
-      <ChangeEmailSection userId={userData.id} email={userData.email ?? ""} type="admin" />
+      <ChangeEmailSection
+        userId={userData.id}
+        email={userData.email ?? ""}
+        type="admin"
+      />
       <ChangePhoneNumberSection
         userId={userData.id}
         phoneNumber={userData.phoneNumber ?? ""}

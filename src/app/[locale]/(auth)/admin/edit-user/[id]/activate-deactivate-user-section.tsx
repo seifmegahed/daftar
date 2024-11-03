@@ -7,8 +7,11 @@ import { adminUpdateUserActiveAction } from "@/server/actions/users";
 
 import SubmitButton from "@/components/buttons/submit-button";
 import LabelWrapper from "./label-wrapper";
+import { useTranslations } from "next-intl";
 
 function DeactivateUserSection({ userId }: { userId: number }) {
+  const t = useTranslations("edit-user.deactivate-user-section");
+
   const [loading, setLoading] = useState(false);
   const onsubmit = async () => {
     try {
@@ -21,10 +24,10 @@ function DeactivateUserSection({ userId }: { userId: number }) {
         toast.error(error);
         return;
       }
-      toast.success("User deactivated");
+      toast.success(t("success"));
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while deactivating the user");
+      toast.error(t("error"));
     } finally {
       setLoading(false);
     }
@@ -32,63 +35,65 @@ function DeactivateUserSection({ userId }: { userId: number }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between py-4">
-        <LabelWrapper label="Deactivate User" />
+        <LabelWrapper label={t("title")} />
         <SubmitButton
           variant="destructive"
           loading={loading}
           onClick={onsubmit}
           disabled={loading}
         >
-          Deactivate
+          {t("deactivate")}
         </SubmitButton>
       </div>
       <p className="text-xs text-muted-foreground">
-        Deactivate the user, this will prevent the user from logging in and
-        accessing the Application. Once deactivated the
-        <strong> changes will take effect once the user logs out.</strong> If
-        you want effect to take place immediately, you need to restart the
-        server, better call the IT administrator.<br></br>The user will still
-        appear in the list of users, but will not be able to login or access the
-        application. You can reactivate the user at any time.
+        {t("description-a")}
+        <strong>{t("description-b")}</strong>
+        {t("description-c")}
+        <br></br>
+        {t("description-d")}
       </p>
     </div>
   );
 }
 
 function ActivateUserSection({ userId }: { userId: number }) {
+  const t = useTranslations("edit-user.activate-user-section");
+
   const [loading, setLoading] = useState(false);
   const onsubmit = async () => {
     setLoading(true);
-    const [, error] = await adminUpdateUserActiveAction({
-      id: userId,
-      active: true,
-    });
-    setLoading(false);
-    if (error !== null) {
+    try {
+      const [, error] = await adminUpdateUserActiveAction({
+        id: userId,
+        active: true,
+      });
+      if (error !== null) {
+        toast.error(error);
+        return;
+      }
+      toast.success(t("success"));
+    } catch (error) {
       console.error(error);
-      toast.error("An error occurred while activating the user");
-      return;
+      toast.error(t("error"));
+    } finally {
+      setLoading(false);
     }
-    toast.success("User activated");
   };
   return (
     <div className="flex flex-col gap-2 py-4">
       <div className="flex justify-between py-4">
-        <LabelWrapper label="Activate User" />
+        <LabelWrapper label={t("title")} />
         <SubmitButton
           variant="outline"
           loading={loading}
           onClick={onsubmit}
           disabled={loading}
         >
-          Activate
+          {t("activate")}
         </SubmitButton>
       </div>
       <p className="text-xs text-muted-foreground">
-        This user is currently deactivated, this means that they are unable to
-        access the application using their credentials. Activating the user will
-        re-allow the user to login using their credentials and access the
-        application.
+        {t("description")}
       </p>
     </div>
   );

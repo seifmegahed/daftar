@@ -553,6 +553,90 @@
       }
     }
   },
+  "edit-user": {
+    "page": {
+      "invalid-id": "Invalid user ID",
+      "title": "Edit User",
+      "subtitle": "This is the edit page for the user: {userName}. Here you can edit the user details."
+    },
+    "change-name-section": {
+      "name-required-message": "Name is required",
+      "name-min-length": "Name must be at least {minLength} characters",
+      "name-max-length": "Name must not be longer than {maxLength} characters",
+      "success": "Name updated",
+      "error": "An error occurred while updating the name",
+      "title": "Name",
+      "placeholder": "Name",
+      "description": "Change the name of the user, The avatar initials depend on the name. it is preferable to use a first name and a last name separated by a space.",
+      "update": "Update"
+    },
+    "change-email-section": {
+      "email-required-message": "Email is required",
+      "email-invalid-message": "Email is invalid",
+      "email-max-length": "Email must not be longer than {maxLength} characters",
+      "success": "Email updated",
+      "error": "An error occurred while updating the email",
+      "title": "Email",
+      "placeholder": "Email",
+      "description": "Change the email of the user. This email will be used in the commercial offer documents if the user is the project owner/manager.",
+      "update": "Update"
+    },
+    "change-phone-number-section": {
+      "phone-number-required-message": "Phone Number is required",
+      "phone-number-max-length": "Phone Number must not be longer than {maxLength} characters",
+      "success": "Phone Number updated",
+      "error": "An error occurred while updating the phoneNumber",
+      "title": "Phone Number",
+      "placeholder": "+20 123 456 7890",
+      "description": "Change the phone number of the user. This phone number will be used in the commercial offer documents if the user is the project owner/manager.",
+      "update": "Update"
+    },
+    "change-role-section": {
+      "role-required-message": "Role is required",
+      "success": "Role updated",
+      "error": "An error occurred while updating the role",
+      "title": "Role",
+      "description": "Change role of user, Careful not to change your own role to a lower role which would result in loss of access to the admin panel. Once saved the changes will take effect once the user logs out.",
+      "update": "Update"
+    },
+    "change-password-section": {
+      "password-required-message": "Password is required",
+      "password-min-length": "Password must be at least {minLength} characters",
+      "password-max-length": "Password must not be longer than {maxLength} characters",
+      "verify-password-required-message": "Verify Password is required",
+      "verify-password-min-length": "Verify Password must be at least {minLength} characters",
+      "verify-password-max-length": "Verify Password must not be longer than {maxLength} characters",
+      "password-not-complex": "Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number and one special character.",
+      "password-not-match": "Passwords do not match",
+      "success": "Password updated",
+      "error": "An error occurred while updating the password",
+      "title": "Password",
+      "password-title": "New Password",
+      "verify-password-title": "Verify Password",
+      "description": "Change the password of the user, Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number and one special character.",
+      "note": "Note: ",
+      "note-revoke": "If you want to revoke the user's access you can deactivate their account below.",
+      "note-settings": "Use this feature only if the user forgets their password. If the user just wants to change their password, they can do so from their user's settings page while logged in. They can find the settings page by clicking on their avatar in the top right corner of the application.",
+      "update": "Update"
+    },
+    "deactivate-user-section": {
+      "success": "User deactivated",
+      "error": "An error occurred while deactivating the user",
+      "title": "Deactivate User",
+      "deactivate": "Deactivate",
+      "description-a": "Deactivate the user, this will prevent the user from logging in and accessing the Application. Once deactivated the",
+      "description-b": " changes will take effect after the user logs out.",
+      "description-c": "If you want the changes to take effect immediately, you need to restart the server, better call the IT administrator.",
+      "description-d": "The user will still appear in the list of users, but will not be able to login or access the application. You can reactivate the user at any time."
+    },
+    "activate-user-section": {
+      "success": "User activated",
+      "error": "An error occurred while activating the user",
+      "title": "Activate User",
+      "activate": "Activate",
+      "description": "This user is currently deactivated, this means that they are unable to access the application using their credentials. Activating the user will re-allow the user to login using their credentials and access the application."
+    }
+  },
   "name-form": {
     "success": "Name updated",
     "error": "An error occurred while updating name",

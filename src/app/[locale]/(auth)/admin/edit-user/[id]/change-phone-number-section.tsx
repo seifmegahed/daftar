@@ -1,21 +1,19 @@
 "use client";
 
+import { z } from "zod";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { UserSchema } from "@/server/db/tables/user/schema";
 import {
   adminUpdateUserPhoneNumberAction,
   userUpdateUserPhoneNumberAction,
 } from "@/server/actions/users";
+import { emptyToUndefined } from "@/utils/common";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/buttons/submit-button";
 
 import LabelWrapper from "./label-wrapper";
-
-const schema = UserSchema.pick({
-  phoneNumber: true,
-});
 
 function ChangePhoneNumberSection({
   userId,
@@ -26,6 +24,15 @@ function ChangePhoneNumberSection({
   phoneNumber: string;
   type: "admin" | "user";
 }) {
+  const t = useTranslations("edit-user.change-phone-number-section");
+
+  const schema = z.preprocess(
+    emptyToUndefined,
+    z
+      .string({ required_error: t("phone-number-required-message") })
+      .max(64, { message: t("phone-number-max-length", { maxLength: 64 }) }),
+  );
+
   const [newPhoneNumber, setNewPhoneNumber] = useState(phoneNumber);
   const [errorMessage, setErrorMessage] = useState("");
   const [change, setChange] = useState(false);
@@ -41,7 +48,7 @@ function ChangePhoneNumberSection({
     setLoading(true);
     const isValid = schema.safeParse({ phoneNumber: newPhoneNumber });
     if (!isValid.success) {
-      setErrorMessage("Phone Number is invalid");
+      setErrorMessage(isValid.error.message);
       setLoading(false);
       return;
     } else setErrorMessage("");
@@ -61,20 +68,21 @@ function ChangePhoneNumberSection({
         toast.error(error);
         return;
       }
-      toast.success("Phone Number updated");
+      toast.success(t("success"));
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while updating the phoneNumber");
+      toast.error(t("error"));
     }
   };
 
   return (
     <div className="flex flex-col gap-2">
-      <LabelWrapper htmlFor="new-phoneNumber" label="Phone Number" />
+      <LabelWrapper htmlFor="new-phoneNumber" label={t("title")} />
       <Input
         id="new-phoneNumber"
-        placeholder="+20 123 456 7890"
+        placeholder={t("placeholder")}
         type="text"
+        dir="ltr"
         value={newPhoneNumber}
         autoComplete="none"
         onChange={(event) => setNewPhoneNumber(event.target.value)}
@@ -83,17 +91,14 @@ function ChangePhoneNumberSection({
       {errorMessage !== "" ? (
         <p className="text-xs text-red-500">{errorMessage}</p>
       ) : null}
-      <p className="text-xs text-muted-foreground">
-        Change the phone number of the user. This phone number will be used in
-        the commercial offer documents if the user is the project owner/manager.
-      </p>
+      <p className="text-xs text-muted-foreground">{t("description")}</p>
       <div className="flex justify-end py-4">
         <SubmitButton
           disabled={!change || loading}
           loading={loading}
           onClick={onsubmit}
         >
-          Save
+          {t("update")}
         </SubmitButton>
       </div>
     </div>

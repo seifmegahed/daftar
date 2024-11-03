@@ -3,19 +3,17 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { UserSchema } from "@/server/db/tables/user/schema";
 import {
   adminUpdateUserEmailAction,
   userUpdateUserEmailAction,
 } from "@/server/actions/users";
+import { useTranslations } from "next-intl";
 import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/buttons/submit-button";
 
 import LabelWrapper from "./label-wrapper";
-
-const schema = UserSchema.pick({
-  email: true,
-});
+import { z } from "zod";
+import { emptyToUndefined } from "@/utils/common";
 
 function ChangeEmailSection({
   userId,
@@ -26,6 +24,17 @@ function ChangeEmailSection({
   email: string;
   type: "admin" | "user";
 }) {
+  const t = useTranslations("edit-user.change-email-section");
+
+  const schema = z.preprocess(
+    emptyToUndefined,
+    z
+      .string({ required_error: t("email-required-message") })
+      .email({ message: t("email-invalid-message") }).max(64, {
+        message: t("email-max-length", { maxLength: 64 }),
+      }),
+  );
+
   const [newEmail, setNewEmail] = useState(email);
   const [errorMessage, setErrorMessage] = useState("");
   const [change, setChange] = useState(false);
@@ -39,7 +48,7 @@ function ChangeEmailSection({
     setLoading(true);
     const isValid = schema.safeParse({ email: newEmail });
     if (!isValid.success) {
-      setErrorMessage("Email must be at least 4 characters long");
+      setErrorMessage(isValid.error.message);
       setLoading(false);
       return;
     } else setErrorMessage("");
@@ -59,20 +68,21 @@ function ChangeEmailSection({
         toast.error(error);
         return;
       }
-      toast.success("Email updated");
+      toast.success(t("success"));
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while updating the email");
+      toast.error(t("error"));
     }
   };
 
   return (
     <div className="flex flex-col gap-2">
-      <LabelWrapper htmlFor="new-email" label="Email" />
+      <LabelWrapper htmlFor="new-email" label={t("title")} />
       <Input
         id="new-email"
-        placeholder="Email"
+        placeholder={t("placeholder")}
         type="text"
+        dir="ltr"
         value={newEmail}
         autoComplete="none"
         onChange={(event) => setNewEmail(event.target.value)}
@@ -82,8 +92,7 @@ function ChangeEmailSection({
         <p className="text-xs text-red-500">{errorMessage}</p>
       ) : null}
       <p className="text-xs text-muted-foreground">
-        Change the email of the user. This email will be used in the commercial
-        offer documents if the user is the project owner/manager.
+        {t("description")}
       </p>
       <div className="flex justify-end py-4">
         <SubmitButton
@@ -91,7 +100,7 @@ function ChangeEmailSection({
           loading={loading}
           onClick={onsubmit}
         >
-          Save
+          {t("update")}
         </SubmitButton>
       </div>
     </div>

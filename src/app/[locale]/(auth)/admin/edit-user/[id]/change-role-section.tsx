@@ -14,25 +14,32 @@ import {
 } from "@/components/ui/select";
 import SubmitButton from "@/components/buttons/submit-button";
 import LabelWrapper from "./label-wrapper";
+import { useLocale, useTranslations } from "next-intl";
+import { getDirection } from "@/utils/common";
 
 const roleItems = [
   {
-    label: "Admin",
+    label: { en: "Admin", ar: "مدير" },
     value: "admin",
-    description: "Has all privileges",
+    description: { en: "Has all privileges", ar: "لديه كافة الصلاحيات" },
   },
   {
-    label: "Super User",
+    label: { en: "Super User", ar: "مستخدم مميز" },
     value: "s-user",
-    description:
-      "Same privileges as a regular user, but has access to all private data",
+    description: {
+      en: "Has same privileges as user, but can see private data",
+      ar: "لديه نفس الصلاحيات من المستخدم، ولكن يمكن رؤية البيانات الخاصة",
+    },
   },
   {
-    label: "User",
+    label: { en: "User", ar: "مستخدم" },
     value: "user",
-    description: "Regular user",
+    description: {
+      en: "Regular user.",
+      ar: "مستخدم عادي.",
+    },
   },
-];
+] as const;
 
 function ChangeRoleSection({
   userId,
@@ -41,6 +48,10 @@ function ChangeRoleSection({
   userId: number;
   userRole: string;
 }) {
+  const locale = useLocale() as Locale;
+  const direction = getDirection(locale);
+  const t = useTranslations("edit-user.change-role-section");
+  
   const [role, setRole] = useState(userRole);
   const [change, setChange] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -60,10 +71,10 @@ function ChangeRoleSection({
         toast.error(error);
         return;
       }
-      toast.success("Role updated");
+      toast.success(t("success"));
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while updating the role");
+      toast.error(t("error"));
     } finally {
       setLoading(false);
     }
@@ -71,28 +82,26 @@ function ChangeRoleSection({
 
   return (
     <div className="flex flex-col gap-2">
-      <LabelWrapper htmlFor="role" label="Role" />
-      <Select onValueChange={setRole} value={role}>
+      <LabelWrapper htmlFor="role" label={t("title")} />
+      <Select onValueChange={setRole} value={role} dir={direction}>
         <SelectTrigger>
           <SelectValue>
-            {roleItems.find((item) => item.value === role)?.label}
+            {roleItems.find((item) => item.value === role)?.label[locale]}
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
           {roleItems.map((item) => (
             <SelectItem value={item.value} key={item.value}>
-              <span>{item.label}</span>
+              <span>{item.label[locale]}</span>
               <p className="text-xs text-muted-foreground">
-                {item.description}
+                {item.description[locale]}
               </p>
             </SelectItem>
           ))}
         </SelectContent>
       </Select>
       <p className="text-xs text-muted-foreground">
-        Change role of user, Careful not to change your own role to a lower role
-        which would result in loss of access to the admin panel. Once saved the
-        changes will take effect once the user logs out.
+        {t("description")}
       </p>
       <div className="flex justify-end py-4">
         <SubmitButton
@@ -102,7 +111,7 @@ function ChangeRoleSection({
           loading={loading}
           onClick={handleSubmit}
         >
-          Save
+          {t("update")}
         </SubmitButton>
       </div>
     </div>
