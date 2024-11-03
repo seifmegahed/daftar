@@ -1,6 +1,8 @@
 import PageLayout from "@/components/page-layout";
 import { setLocale } from "@/i18n/set-locale";
+import { isCurrentUserAdminAction } from "@/server/actions/users";
 import { getTranslations } from "next-intl/server";
+import { notFound } from "next/navigation";
 
 async function AdminLayout({
   children,
@@ -11,6 +13,9 @@ async function AdminLayout({
 }) {
   setLocale(params.locale);
   const t = await getTranslations("admin.layout");
+
+  const [admin] = await isCurrentUserAdminAction();
+  if (!admin) notFound();
 
   const links = [
     { title: t("users"), href: "/admin" },
