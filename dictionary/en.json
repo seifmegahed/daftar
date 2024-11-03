@@ -266,8 +266,6 @@
       "invalid-id": "Invalid project ID",
       "no-items-found-error-title": "You have no items yet",
       "no-items-found-error-message": "Add items to be able to add sale items.",
-      "title": "Add Sale Item",
-      "subtitle": "This is the add sale item page for this project.",
       "form": {
         "item-required": "Item is required",
         "price-required": "Price is required",

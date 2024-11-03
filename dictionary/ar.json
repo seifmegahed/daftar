@@ -310,7 +310,9 @@
     "page": {
       "title": "الصفحة الرئيسية لجميع العملاء",
       "filter-by-creation-date": "بتاريخ الإنشاء",
-      "filter-by-updated-date": "بتاريخ التحديث"
+      "filter-by-updated-date": "بتاريخ التحديث",
+      "no-clients-found-error-title": "لا يوجد عملاء بعد",
+      "no-clients-found-error-description": "ابدأ بإضافة العملاء لرؤيتهم هنا"
     },
     "new-client-page": {
       "title": "إضافة عميل",
@@ -446,23 +448,6 @@
     "note-without-owner": "لا يمكن تغيير إسم ال{type} إلى عن طريق مدير .",
     "update": "تحديث"
   },
-  "delete-form": {
-    "required": "الاسم مطلوب لحذف ال{type}",
-    "name-must-match": "يجب أن يتطابق الاسم",
-    "unauthorized": "ليس لديك صلاحية لحذف ال{type}",
-    "success": "تم حذف ال {type}",
-    "error": "حدث خطأ أثناء حذف ال{type}",
-    "title": "حذف",
-    "delete": "حذف",
-    "form-info": {
-      "description": "الرجاء إدخال اسم ال{type} للتأكيد . بعد إدخال اسم ال{type} اضغط زر حذف لحذف ال{type} .",
-      "warning": "تحذير: ",
-      "warning-content": "حذف ال{type} دائم ، لن تكون قادر على التراجع عن هذا الإجراء .",
-      "note": "ملاحظة: ",
-      "project-note-content": "يمكن للمدير أو مدير المشروع فقط حذف المشروع .",
-      "note-content": "يمكن للمدير فقط حذف ال{type} ."
-    }
-  },
   "description-form": {
     "success": "تم تحديث الوصف",
     "error": "حدث خطأ أثناء تحديث الوصف",
@@ -476,6 +461,24 @@
     "title": "الملاحظات",
     "description": "تحديث ملاحظات ال{type} . هذا التحديث سوف يغير ملاحظات ال{type} في جميع الأماكن . بعد تحديد الملاحظات المرغوب اضغط زر تحديث لحفظ التغيير .",
     "update": "تحديث"
+  },
+  "delete-form": {
+    "required": "الاسم مطلوب لحذف ال{type}",
+    "name-must-match": "يجب أن يتطابق الاسم",
+    "unauthorized": "ليس لديك صلاحية لحذف ال{type}",
+    "success": "تم حذف ال {type}",
+    "error": "حدث خطأ أثناء حذف ال{type}",
+    "title": "حذف",
+    "description": "هل أنت متأكد من حذف ال{type} ؟ هذا الإجراء لا يمكن التراجع عنه .",
+    "delete": "حذف",
+    "form-info": {
+      "description": "الرجاء إدخال اسم ال{type} للتأكيد . بعد إدخال اسم ال{type} اضغط زر حذف لحذف ال{type} .",
+      "warning": "تحذير: ",
+      "warning-content": "حذف ال{type} دائم ، لن تكون قادر على التراجع عن هذا الإجراء .",
+      "note": "ملاحظة: ",
+      "project-note-content": "يمكن للمدير أو مدير المشروع فقط حذف المشروع .",
+      "note-content": "يمكن للمدير فقط حذف ال{type} ."
+    }
   },
   "user-info-section": {
     "created-at": "تاريخ الإنشاء",
