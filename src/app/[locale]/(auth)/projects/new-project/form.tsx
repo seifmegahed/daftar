@@ -33,36 +33,7 @@ import { notesMaxLength } from "@/data/config";
 
 import type { UserBriefType } from "@/server/db/tables/user/queries";
 import { useLocale, useTranslations } from "next-intl";
-import { getDirection } from "@/utils/common";
-
-const schema = z.object({
-  name: z
-    .string({ required_error: "Name is required" })
-    .min(4, { message: "Name must be at least 4 characters" })
-    .max(64, { message: "Name must not be longer than 64 characters" }),
-  type: z.number({ required_error: "Type is required" }),
-  status: z.number({ required_error: "Status is required" }),
-  description: z.string().max(notesMaxLength, {
-    message: `Description must not be longer than ${notesMaxLength} characters`,
-  }),
-  notes: z.string().max(notesMaxLength, {
-    message: `Notes must not be longer than ${notesMaxLength} characters`,
-  }),
-  clientId: z.number({ required_error: "Client is required" }),
-  ownerId: z.number({ required_error: "Owner is required" }),
-});
-
-type ProjectFormSchemaType = z.infer<typeof schema>;
-
-const defaultValues = {
-  name: "",
-  status: 0,
-  description: "",
-  notes: "",
-
-  clientId: undefined,
-  ownerId: undefined,
-};
+import { emptyToUndefined, getDirection } from "@/utils/common";
 
 type NewProjectFormProps = {
   userList: UserBriefType[];
@@ -73,6 +44,52 @@ function NewProjectForm({ userList, clientList }: NewProjectFormProps) {
   const t = useTranslations("projects.new-project-page");
   const locale = useLocale() as "en" | "ar";
   const direction = getDirection(locale);
+
+  const schema = z.object({
+    name: z.preprocess(
+      emptyToUndefined,
+      z
+        .string({ required_error: t("schema.name-required") })
+        .min(4, { message: t("schema.name-min-length", { minLength: 4 }) })
+        .max(64, { message: t("schema.name-max-length", { maxLength: 64 }) }),
+    ),
+    type: z.number({ required_error: t("schema.type-required") }),
+    status: z.number({ required_error: t("schema.status-required") }),
+    clientId: z.number({ required_error: t("schema.client-required") }),
+    ownerId: z.number({ required_error: t("schema.owner-required") }),
+    description: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(notesMaxLength, {
+          message: t("schema.description-max-length", {
+            maxLength: notesMaxLength,
+          }),
+        })
+        .optional(),
+    ),
+    notes: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(notesMaxLength, {
+          message: t("schema.notes-max-length", { maxLength: notesMaxLength }),
+        })
+        .optional(),
+    ),
+  });
+
+  type ProjectFormSchemaType = z.infer<typeof schema>;
+
+  const defaultValues = {
+    name: "",
+    status: 0,
+    description: "",
+    notes: "",
+
+    clientId: undefined,
+    ownerId: undefined,
+  };
 
   const form = useForm<ProjectFormSchemaType>({
     resolver: zodResolver(schema),

@@ -61,7 +61,18 @@
       "description-field-label": "الوصف",
       "description-field-description": "أدخل وصف المشروع .",
       "notes-field-label": "الملاحظات",
-      "notes-field-description": "أدخل أي ملاحظات عن المشروع ."
+      "notes-field-description": "أدخل أي ملاحظات عن المشروع .",
+      "schema": {
+        "name-required": "يجب اختيار اسم",
+        "name-min-length": "يجب أن يكون الاسم على الأقل {minLength} حرف",
+        "name-max-length": "يجب أن يكون الاسم أقل من {maxLength} حرف",
+        "type-required": "يجب اختيار النوع",
+        "status-required": "يجب اختيار الحالة",
+        "client-required": "يجب اختيار العميل",
+        "owner-required": "يجب اختيار مدير المشروع",
+        "description-max-length": "يجب أن يكون الوصف أقل من {maxLength} حرف",
+        "notes-max-length": "يجب أن يكون الملاحظات أقل من {maxLength} حرف"
+      }
     }
   },
   "project": {
@@ -300,6 +311,85 @@
       "title": "الصفحة الرئيسية لجميع العملاء",
       "filter-by-creation-date": "بتاريخ الإنشاء",
       "filter-by-updated-date": "بتاريخ التحديث"
+    },
+    "new-client-page": {
+      "title": "إضافة عميل",
+      "description": "أدخل التفاصيل الخاصة بالعميل الذي تريد إضافته",
+      "button-text": "إضافة",
+      "name-field-label": "الاسم *",
+      "name-field-description": "أدخل اسم العميل. هذا الاسم سيتم عرضه في قائمة العملاء الذي ستستخدمه للبحث والمراجعة عن العميل.",
+      "registration-number-field-label": "رقم التسجيل",
+      "registration-number-field-description": "أدخل رقم التسجيل الخاص بالعميل. سيتم عرض هذا الرقم في قائمة العملاء الذي ستستخدمه للبحث والمراجعة عن العميل.",
+      "website-field-label": "الموقع الإلكتروني",
+      "website-field-description": "أدخل الموقع الإلكتروني للعميل.",
+      "notes-field-label": "ملاحظات",
+      "notes-field-description": "أدخل أي ملاحظات عن العميل.",
+      "success": "تم إضافة العميل",
+      "error": "حدث خطأ أثناء إضافة العميل",
+      "schema": {
+        "name-required": "يجب اختيار اسم",
+        "name-min-length": "يجب أن يكون الاسم على الأقل {minLength} حرف",
+        "name-max-length": "يجب أن يكون الاسم أقل من {maxLength} حرف",
+        "registration-number-max-length": "يجب أن يكون رقم التسجيل أقل من {maxLength} حرف",
+        "website-max-length": "يجب أن يكون الموقع الإلكتروني أقل من {maxLength} حرف",
+        "notes-max-length": "يجب أن يكون الملاحظات أقل من {maxLength} حرف"
+      }
+    }
+  },
+  "address": {
+    "form": {
+      "primary-address-title": "العنوان الرئيسي",
+      "address-name-label": "اسم العنوان *",
+      "address-name-description": "أدخل الاسم التعريفي للعنوان. مثال: المكتب الرئيسي",
+      "address-line-label": "العنوان *",
+      "address-line-description": "أدخل إسم الشارع و رقم العنوان",
+      "country-label": "البلد *",
+      "country-select-message": "اختر البلد",
+      "country-search-message": "ابحث عن البلد",
+      "country-not-found-message": "لم يتم العثور على البلد",
+      "country-description": "أدخل البلد الخاص بالعنوان.",
+      "city-label": "المدينة",
+      "city-description": "أدخل المدينة الخاصة بالعنوان .",
+      "address-notes-label": "ملاحظات",
+      "address-notes-description": "أدخل أي ملاحظات عن العنوان."
+    },
+    "schema": {
+      "name-required": "الاسم مطلوب",
+      "name-min-length": "يجب أن يكون الاسم على الأقل {minLength} حرف",
+      "name-max-length": "يجب أن يكون الاسم أقل من {maxLength} حرف",
+      "address-line-required": "العنوان مطلوب",
+      "address-line-min-length": "يجب أن يكون العنوان على الأقل {minLength} حرف",
+      "address-line-max-length": "يجب أن يكون العنوان أقل من {maxLength} حرف",
+      "country-required": "البلد مطلوب",
+      "country-min-length": "يجب أن يكون البلد على الأقل {minLength} حرف",
+      "country-max-length": "يجب أن يكون البلد أقل من {maxLength} حرف",
+      "city-max-length": "يجب أن كون المدينة أقل من {maxLength} حرف",
+      "address-notes-max-length": "يجب أن يكون الملاحظات أقل من {maxLength} حرف"
+    }
+  },
+  "contact": {
+    "form": {
+      "primary-contact-label": "الجهة الاتصال الرئيسية",
+      "contact-name-label": "اسم الجهة الاتصال *",
+      "contact-name-description": "أدخل اسم الجهة الاتصال. مثال: ا. أحمد محمد",
+      "phone-number-label": "رقم الهاتف *",
+      "phone-number-description": "أدخل رقم الهاتف الخاص بجهة الاتصال.",
+      "email-label": "البريد الإلكتروني",
+      "email-description": "أدخل عنوان البريد الإلكتروني للجهة الاتصال.",
+      "notes-label": "ملاحظات",
+      "notes-description": "أدخل أي ملاحظات عن جهة الاتصال."
+    },
+    "schema": {
+      "name-required": "الاسم مطلوب",
+      "name-min-length": "يجب أن يكون الاسم على الأقل {minLength} حرف",
+      "name-max-length": "يجب أن يكون الاسم أقل من {maxLength} حرف",
+      "phone-number-min-length": "يجب أن يكون رقم الهاتف على الأقل {minLength} حرف",
+      "phone-number-max-length": "يجب أن يكون رقم الهاتف أقل من {maxLength} حرف",
+      "email-not-valid": "البريد الإلكتروني غير صالح",
+      "email-min-length": "يجب أن يكون البريد الإلكتروني على الأقل {minLength} حرف",
+      "email-max-length": "يجب أن يكون البريد الإلكتروني أقل من {maxLength} حرف",
+      "notes-max-length": "يجب أن يكون الملاحظات أقل من {maxLength} حرف",
+      "email-or-phone-required": "البريد الإلكتروني أو رقم الهاتف مطلوب"
     }
   },
   "name-form": {

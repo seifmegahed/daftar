@@ -61,7 +61,18 @@
       "description-field-label": "Description",
       "description-field-description": "Enter a description of the project.",
       "notes-field-label": "Notes",
-      "notes-field-description": "Enter any notes about the project."
+      "notes-field-description": "Enter any notes about the project.",
+      "schema": {
+        "name-required": "Name is required",
+        "name-min-length": "Name must be at least {minLength} characters",
+        "name-max-length": "Name must not be longer than {maxLength} characters",
+        "type-required": "Type is required",
+        "status-required": "Status is required",
+        "client-required": "Client is required",
+        "owner-required": "Owner is required",
+        "description-max-length": "Description must not be longer than {maxLength} characters",
+        "notes-max-length": "Notes must not be longer than {maxLength} characters"
+      }
     }
   },
   "project": {
@@ -304,6 +315,85 @@
       "filter-by-updated-date": "By Update Date",
       "no-clients-error-title": "There seems to be no clients yet!",
       "no-clients-error-description": "Start adding clients to be able to see them here."
+    },
+    "new-client-page": {
+      "title": "Add Client",
+      "description": "Enter the details of the client you want to add.",
+      "button-text": "Add Client",
+      "name-field-label": "Name *",
+      "name-field-description": "Enter the name of the client. This is the name you will be using to search and refer to the client. It will appear in your projects.",
+      "registration-number-field-label": "Registration Number",
+      "registration-number-field-description": "Enter the registration number of the client. Registration number will appear in the card of the client.",
+      "website-field-label": "Website",
+      "website-field-description": "Enter the website of the client.",
+      "notes-field-label": "Notes",
+      "notes-field-description": "Enter any notes about the client.",
+      "success": "Client added",
+      "error": "An error occurred while adding the client",
+      "schema": {
+        "name-required": "Name is required",
+        "name-min-length": "Name must be at least {minLength} characters",
+        "name-max-length": "Name must not be longer than {maxLength} characters",
+        "registration-number-max-length": "Registration number must not be longer than {maxLength} characters",
+        "website-max-length": "Website must not be longer than {maxLength} characters",
+        "notes-max-length": "Notes must not be longer than {maxLength} characters"
+      }
+    }
+  },
+  "address": {
+    "form": {
+      "primary-address-title": "Primary Address",
+      "address-name-label": "Address Name *",
+      "address-name-description": "Enter the name or title of the address. Example: Main Office",
+      "address-line-label": "Address Line *",
+      "address-line-description": "Enter the address street and number.",
+      "country-label": "Country *",
+      "country-select-message": "Select a country",
+      "country-search-message": "Search for a country",
+      "country-not-found-message": "Country not found",
+      "country-description": "Enter the country of the address.",
+      "city-label": "City",
+      "city-description": "Enter the city of the address.",
+      "address-notes-label": "Notes",
+      "address-notes-description": "Enter any notes about the address."
+    },
+    "schema": {
+      "name-required": "Address name is required",
+      "name-min-length": "Name must be at least {count} characters",
+      "name-max-length": "Name must not be longer than {count} characters",
+      "address-line-required": "Address line is required",
+      "address-line-min-length": "Address line must be at least {count} characters",
+      "address-line-max-length": "Address line must not be longer than {count} characters",
+      "country-required": "Country is required",
+      "country-min-length": "Country must be at least {count} characters",
+      "country-max-length": "Country must not be longer than {count} characters",
+      "city-max-length": "City must not be longer than {count} characters",
+      "address-notes-max-length": "Address notes must not be longer than {count} characters"
+    }
+  },
+  "contact": {
+    "form": {
+      "primary-contact-label": "Primary Contact",
+      "contact-name-label": "Contact Name *",
+      "contact-name-description": "Enter the name of the contact.",
+      "phone-number-label": "Phone Number *",
+      "phone-number-description": "Enter the phone number of the contact.",
+      "email-label": "Email",
+      "email-description": "Enter the email address of the contact.",
+      "notes-label": "Notes",
+      "notes-description": "Enter any notes about the contact."
+    },
+    "schema": {
+      "name-required": "Contact name is required",
+      "name-min-length": "Name must be at least {count} characters",
+      "name-max-length": "Name must not be longer than {count} characters",
+      "phone-number-min-length": "Phone number must be at least {count} characters",
+      "phone-number-max-length": "Phone number must not be longer than {count} characters",
+      "email-not-valid": "Email is not valid",
+      "email-min-length": "Email must be at least {count} characters",
+      "email-max-length": "Email must not be longer than {count} characters",
+      "notes-max-length": "Contact notes must not be longer than {count} characters",
+      "email-or-phone-required": "An email or a phone number are required"
     }
   },
   "name-form": {
