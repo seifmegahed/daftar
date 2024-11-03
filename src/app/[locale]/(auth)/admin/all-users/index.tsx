@@ -1,9 +1,11 @@
 import CardWrapper from "@/components/card-wrapper";
-import { getUserRoleLabel } from "@/data/lut";
+import { getLocalizedUserRoleLabel } from "@/data/lut";
 import type { GetPartialUserType } from "@/server/db/tables/user/queries";
 import { format } from "date-fns";
 import { Edit } from "lucide-react";
 import { Link } from "@/i18n/routing";
+import { getTranslations, getLocale } from "next-intl/server";
+import { getDateLocaleFormat } from "@/utils/common";
 
 function AllUsersList({ users }: { users: GetPartialUserType[] }) {
   return (
@@ -15,7 +17,10 @@ function AllUsersList({ users }: { users: GetPartialUserType[] }) {
   );
 }
 
-function UserCard({ user }: { user: GetPartialUserType }) {
+async function UserCard({ user }: { user: GetPartialUserType }) {
+  const locale = await getLocale() as Locale;
+  const dateLocaleFormat = getDateLocaleFormat(locale);
+  const t = await getTranslations("user-card");
   return (
     <CardWrapper>
       <div className="flex w-full flex-col gap-3 sm:flex-row sm:justify-between sm:gap-0">
@@ -25,16 +30,20 @@ function UserCard({ user }: { user: GetPartialUserType }) {
         </div>
         <div className="flex min-w-48 flex-col gap-1">
           <div className="flex justify-between gap-2 text-sm text-muted-foreground">
-            <div>Role:</div>
-            <div>{getUserRoleLabel(user.role)}</div>
+            <div>{t("role")}</div>
+            <div>{getLocalizedUserRoleLabel(user.role, locale)}</div>
           </div>
           <div className="flex justify-between gap-6 text-sm text-muted-foreground">
-            <div>Active:</div>
-            <div>{user.active ? "Yes" : "No"}</div>
+            <div>{t("active")}</div>
+            <div>{user.active ? t("yes") : t("no")}</div>
           </div>
           <div className="flex justify-between gap-6 text-sm text-muted-foreground">
-            <div>Last Login:</div>
-            <div>{user.lastActive ? format(user.lastActive, "PP") : "-"}</div>
+            <div>{t("last-login")}</div>
+            <div>
+              {user.lastActive
+                ? format(user.lastActive, "PP", { locale: dateLocaleFormat })
+                : "-"}
+            </div>
           </div>
         </div>
       </div>

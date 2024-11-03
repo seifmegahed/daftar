@@ -23,7 +23,7 @@ export const getStatusLabel = (status: number) =>
 
 export const getLocalizedStatusLabel = (
   status: number,
-  locale: "ar" | "en" = "en",
+  locale: Locale = "en",
 ) => statusCodes.find((x) => x.value === status)?.[locale] ?? "Unknown";
 
 export const currencyOptions = [
@@ -52,7 +52,7 @@ export const getProjectTypeLabel = (type: number) =>
 
 export const getLocalizedProjectTypeLabel = (
   type: number,
-  locale: "ar" | "en",
+  locale: Locale,
 ) => projectTypes.find((x) => x.value === type)?.[locale] ?? "Unknown";
 
 export const userRoles = {
@@ -62,10 +62,13 @@ export const userRoles = {
 };
 
 export const userRolesList = [
-  { value: "admin", label: "Admin" },
-  { value: "s-user", label: "Super User" },
-  { value: "user", label: "User" },
+  { value: "admin", label: "Admin", en: "Admin", ar: "مدير" },
+  { value: "s-user", label: "Super User", en: "Super User", ar: "مستخدم مميز" },
+  { value: "user", label: "User", en: "User", ar: "مستخدم" },
 ];
 
 export const getUserRoleLabel = (role: string) =>
   userRolesList.find((x) => x.value === role)?.label ?? "Unknown";
+
+export const getLocalizedUserRoleLabel = (role: string, locale: Locale) =>
+  userRolesList.find((x) => x.value === role)?.[locale] ?? "Unknown";

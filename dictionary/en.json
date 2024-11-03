@@ -499,6 +499,17 @@
       "email-or-phone-required": "An email or a phone number are required"
     }
   },
+  "admin": {
+    "layout": {
+      "title": "Admin",
+      "description": "Manage users",
+      "users": "Users",
+      "new-user": "New User"
+    },
+    "page": {
+      "title": "All Users Page"
+    }
+  },
   "name-form": {
     "success": "Name updated",
     "error": "An error occurred while updating name",
@@ -669,6 +680,13 @@
       "private": "Privacy",
       "extension": "Extension"
     }
+  },
+  "user-card": {
+    "role": "Role:",
+    "active": "Active:",
+    "last-login": "Last Login:",
+    "yes": "Yes",
+    "no": "No"
   },
   "card-tips": {
     "creation-date": "Creation Date",

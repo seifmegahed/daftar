@@ -498,6 +498,17 @@
       "no-documents-found-error-message": "أضف مستندات لتتمكن من إضافة مستندات الشراء."
     }
   },
+  "admin": {
+    "layout": {
+      "title": "المدير",
+      "description": "إدارة المستخدمين",
+      "users": "المستخدمين",
+      "new-user": "إضافة مستخدم"
+    },
+    "page": {
+      "title": "الصفحة الرئيسية للمستخدمين"
+    }
+  },
   "name-form": {
     "success": "تم تحديث الاسم",
     "error": "حدث خطأ أثناء تحديث الاسم",
@@ -668,6 +679,13 @@
       "private": "الخصوصية",
       "extension": "نوع الملف"
     }
+  },
+  "user-card": {
+    "role": "الدور",
+    "active": "نشط",
+    "last-login": "آخر تسجيل الدخول",
+    "yes": "نعم",
+    "no": "لا"
   },
   "card-tips": {
     "creation-date": "تاريخ الإنشاء",
