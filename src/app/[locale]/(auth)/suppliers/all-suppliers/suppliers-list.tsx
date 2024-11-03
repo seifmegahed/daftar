@@ -2,6 +2,7 @@ import SupplierCard from "./supplier-card";
 import { getSuppliersBriefAction } from "@/server/actions/suppliers/read";
 import ErrorPage from "@/components/error";
 import type { FilterArgs } from "@/components/filter-and-search";
+import { getTranslations } from "next-intl/server";
 
 async function SuppliersList({
   page = 1,
@@ -10,15 +11,17 @@ async function SuppliersList({
 }: {
   page?: number;
   query?: string;
-  filter?: FilterArgs;
+  filter: FilterArgs;
 }) {
+  const t = await getTranslations("suppliers.page");
+
   const [suppliers, error] = await getSuppliersBriefAction(page, filter, query);
   if (error !== null) return <ErrorPage message={error} />;
-  if (!suppliers.length)
+  if (!suppliers.length && filter.filterType === null)
     return (
       <ErrorPage
-        title="There seems to be no suppliers yet"
-        message="Start adding suppliers to be able to see them here"
+        title={t("no-suppliers-found-error-title")}
+        message={t("no-suppliers-found-error-message")}
       />
     );
 

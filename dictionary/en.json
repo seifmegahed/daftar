@@ -340,6 +340,49 @@
       }
     }
   },
+  "suppliers": {
+    "layout": {
+      "title": "Suppliers",
+      "description": "Manage your suppliers",
+      "all-suppliers": "All Suppliers",
+      "new-supplier": "New Supplier"
+    },
+    "page": {
+      "title": "All Suppliers Page",
+      "filter-by-creation-date": "By Creation Date",
+      "filter-by-updated-date": "By Update Date",
+      "no-suppliers-found-error-title": "There seems to be no suppliers yet!",
+      "no-suppliers-found-error-message": "Start adding suppliers to be able to see them here."
+    },
+    "new-supplier-page": {
+      "title": "Add Supplier",
+      "description": "Enter the details of the supplier you want to add.",
+      "button-text": "Add Supplier",
+      "name-field-label": "Name *",
+      "name-field-description": "Enter the name of the supplier. This is the name you will be using to search and refer to the supplier. It will appear in your projects.",
+      "field-field-label": "Field of Business *",
+      "field-field-description": "Enter the supplier's field of business. This will be used to categorize the supplier and make it easier to search for them.",
+      "registration-number-field-label": "Registration Number",
+      "registration-number-field-description": "Enter the registration number of the supplier. Registration number will appear in the card of the supplier.",
+      "website-field-label": "Website",
+      "website-field-description": "Enter the website of the supplier.",
+      "notes-field-label": "Notes",
+      "notes-field-description": "Enter any notes about the supplier.",
+      "success": "Supplier added",
+      "error": "An error occurred while adding the supplier",
+      "schema": {
+        "name-required": "Name is required",
+        "name-min-length": "Name must be at least {minLength} characters",
+        "name-max-length": "Name must not be longer than {maxLength} characters",
+        "field-required": "Field of Business is required",
+        "field-min-length": "Field of Business must be at least {minLength} characters",
+        "field-max-length": "Field of Business must not be longer than {maxLength} characters",
+        "registration-number-max-length": "Registration number must not be longer than {maxLength} characters",
+        "website-max-length": "Website must not be longer than {maxLength} characters",
+        "notes-max-length": "Notes must not be longer than {maxLength} characters"
+      }
+    }
+  },
   "address": {
     "form": {
       "primary-address-title": "Primary Address",
@@ -376,7 +419,7 @@
       "primary-contact-label": "Primary Contact",
       "contact-name-label": "Contact Name *",
       "contact-name-description": "Enter the name of the contact.",
-      "phone-number-label": "Phone Number *",
+      "phone-number-label": "Phone Number",
       "phone-number-description": "Enter the phone number of the contact.",
       "email-label": "Email",
       "email-description": "Enter the email address of the contact.",
@@ -528,6 +571,19 @@
       "delete": "Delete Client"
     },
     "tips": {
+      "registration-number": "Registration Number"
+    }
+  },
+  "supplier-card": {
+    "menu": {
+      "supplier-page": "Supplier Page",
+      "supplier-documents": "Supplier Documents",
+      "supplier-comments": "Supplier Comments",
+      "edit": "Edit Supplier",
+      "delete": "Delete Supplier"
+    },
+    "tips": {
+      "field": "Field of Business",
       "registration-number": "Registration Number"
     }
   },

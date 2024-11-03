@@ -1,27 +1,33 @@
 import PageLayout from "@/components/page-layout";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
+  params: { locale: Locale };
 }
-
-const sidebarNavItems = [
-  {
-    title: "All Suppliers",
-    href: "/suppliers",
-  },
-  {
-    title: "New Supplier",
-    href: "/suppliers/new-supplier",
-  },
-];
 
 export default async function SettingsLayout({
   children,
+  params,
 }: SettingsLayoutProps) {
+  setLocale(params.locale);
+  const t = await getTranslations("suppliers.layout");
+  
+  const sidebarNavItems = [
+    {
+      title: t("all-suppliers"),
+      href: "/suppliers",
+    },
+    {
+      title: t("new-supplier"),
+      href: "/suppliers/new-supplier",
+    },
+  ];
   return (
     <PageLayout
-      title="Suppliers"
-      description="Manage your suppliers"
+      title={t("title")}
+      description={t("description")}
       navLinks={sidebarNavItems}
     >
       {children}

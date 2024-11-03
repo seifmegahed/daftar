@@ -13,8 +13,10 @@ import {
 } from "@/components/card-sections";
 
 import type { BriefSupplierType } from "@/server/db/tables/supplier/queries";
+import { getTranslations } from "next-intl/server";
 
-const SupplierCard = ({ supplier }: { supplier: BriefSupplierType }) => {
+const SupplierCard = async ({ supplier }: { supplier: BriefSupplierType }) => {
+  const t = await getTranslations("supplier-card.tips");
   return (
     <CardWrapper>
       <CardIdSection href={`/supplier/${supplier.id}`} id={supplier.id} />
@@ -24,12 +26,12 @@ const SupplierCard = ({ supplier }: { supplier: BriefSupplierType }) => {
             name={supplier.name}
             href={`/supplier/${supplier.id}`}
           />
-          <CardSubtitleSection subtitle={supplier.field} tip="Field" />
+          <CardSubtitleSection subtitle={supplier.field} tip={t("field")} />
         </CardBodyStartContainer>
         <CardBodyEndContainer>
           <CardSection
             text={supplier.registrationNumber}
-            tip="Registration Number"
+            tip={t("registration-number")}
           />
           <CardCreatedAtSection date={supplier.createdAt} />
         </CardBodyEndContainer>

@@ -12,23 +12,26 @@ import type {
   FilterOptionType,
   FilterTypes,
 } from "@/components/filter-and-search";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
 const pageLimit = defaultPageLimit;
 
-;
-
 type Props = {
+  params: { locale: Locale };
   searchParams: SearchParamsPropsType;
 };
 
-const filterItems: FilterOptionType[] = [
-  { label: "By Creation Date", value: "creationDate" },
-  { label: "By Update Date", value: "updateDate" },
-];
-
-async function SuppliersPage({ searchParams }: Props) {
+async function SuppliersPage({ params, searchParams }: Props) {
   const page = parseInt(searchParams.page ?? "1");
   const query = searchParams.query ?? "";
+  setLocale(params.locale);
+  const t = await getTranslations("suppliers.page");
+
+  const filterItems: FilterOptionType[] = [
+    { label: t("filter-by-creation-date"), value: "creationDate" },
+    { label: t("filter-by-updated-date"), value: "updateDate" },
+  ];
 
   const filterValues = {
     filterType: (searchParams.ft as FilterTypes) ?? null,
@@ -42,7 +45,7 @@ async function SuppliersPage({ searchParams }: Props) {
 
   return (
     <ListPageWrapper
-      title="All Suppliers Page"
+      title={t("title")}
       filter={{ filterItems, filterValues }}
       pagination={{ totalPages }}
     >

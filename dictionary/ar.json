@@ -336,6 +336,49 @@
       }
     }
   },
+  "suppliers": {
+    "layout": {
+      "title": "الموردين",
+      "description": "إدارة الموردين",
+      "all-suppliers": "جميع الموردين",
+      "new-supplier": "إضافة مورد"
+    },
+    "page": {
+      "title": "الصفحة الرئيسية لجميع الموردين",
+      "filter-by-creation-date": "بتاريخ الإنشاء",
+      "filter-by-updated-date": "بتاريخ التحديث",
+      "no-suppliers-found-error-title": "لا يوجد موردين بعد",
+      "no-suppliers-found-error-message": "أضف موردين لتتمكن من إضافة موردين الذين تريدهم."
+    },
+    "new-supplier-page": {
+      "title": "إضافة مورد",
+      "description": "أدخل التفاصيل الخاصة بالمورد الذي تريد إضافته",
+      "button-text": "إضافة",
+      "name-field-label": "الاسم *",
+      "name-field-description": "أدخل اسم المورد. هذا الاسم سيتم عرضه في قائمة الموردين الذي ستستخدمه للبحث والمراجعة عن المورد.",
+      "field-field-label": "مجال العمل *",
+      "field-field-description": "أدخل مجال العمل الخاص بالمورد. سيتم عرض المجال في قائمة الموردين الذي ستستخدمه للبحث والمراجعة عن المورد.",
+      "registration-number-field-label": "رقم التسجيل",
+      "registration-number-field-description": "أدخل رقم التسجيل الخاص بالمورد. سيتم عرض هذا الرقم في قائمة الموردين الذي ستستخدمه للبحث والمراجعة عن المورد.",
+      "website-field-label": "الموقع الإلكتروني",
+      "website-field-description": "أدخل الموقع الإلكتروني للمورد.",
+      "notes-field-label": "ملاحظات",
+      "notes-field-description": "أدخل أي ملاحظات عن المورد.",
+      "success": "تم إضافة المورد",
+      "error": "حدث خطأ أثناء إضافة المورد",
+      "schema": {
+        "name-required": "يجب اختيار اسم",
+        "name-min-length": "يجب أن يكون الاسم على الأقل {minLength} حرف",
+        "name-max-length": "يجب أن يكون الاسم أقل من {maxLength} حرف",
+        "field-required": "يجب اختيار مجال العمل",
+        "field-min-length": "يجب أن يكون مجال العمل على الأقل {minLength} حرف",
+        "field-max-length": "يجب أن يكون مجال العمل أقل من {maxLength} حرف",
+        "registration-number-max-length": "يجب أن يكون رقم التسجيل أقل من {maxLength} حرف",
+        "website-max-length": "يجب أن يكون الموقع الإلكتروني أقل من {maxLength} حرف",
+        "notes-max-length": "يجب أن يكون الملاحظات أقل من {maxLength} حرف"
+      }
+    }
+  },
   "address": {
     "form": {
       "primary-address-title": "العنوان الرئيسي",
@@ -372,7 +415,7 @@
       "primary-contact-label": "الجهة الاتصال الرئيسية",
       "contact-name-label": "اسم الجهة الاتصال *",
       "contact-name-description": "أدخل اسم الجهة الاتصال. مثال: ا. أحمد محمد",
-      "phone-number-label": "رقم الهاتف *",
+      "phone-number-label": "رقم الهاتف",
       "phone-number-description": "أدخل رقم الهاتف الخاص بجهة الاتصال.",
       "email-label": "البريد الإلكتروني",
       "email-description": "أدخل عنوان البريد الإلكتروني للجهة الاتصال.",
@@ -523,6 +566,19 @@
       "delete": "حذف العميل"
     },
     "tips": {
+      "registration-number": "رقم التسجيل"
+    }
+  },
+  "supplier-card": {
+    "menu": {
+      "supplier-page": "صفحة المورد",
+      "supplier-documents": "مستندات المورد",
+      "supplier-comments": "تعليقات المورد",
+      "edit": "تعديل المورد",
+      "delete": "حذف المورد"
+    },
+    "tips": {
+      "field": "مجال العمل",
       "registration-number": "رقم التسجيل"
     }
   },
