@@ -6,7 +6,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { getLocale, getTranslations } from "next-intl/server";
-import { getDataLocaleFormat } from "@/utils/common";
+import { getDateLocaleFormat } from "@/utils/common";
 
 const prefetch = false;
 
@@ -43,7 +43,7 @@ export async function CardCreatedAtSection({ date }: { date: Date }) {
       <Tooltip>
         <TooltipTrigger asChild>
           <p className="text-xs text-muted-foreground">
-            {format(date, "PP", { locale: getDataLocaleFormat(locale) })}
+            {format(date, "PP", { locale: getDateLocaleFormat(locale) })}
           </p>
         </TooltipTrigger>
         <TooltipContent>

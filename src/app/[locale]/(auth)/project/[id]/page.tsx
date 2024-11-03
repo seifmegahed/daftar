@@ -17,7 +17,7 @@ import UserInfoSection from "@/components/common-sections/user-info-section";
 import ErrorPage from "@/components/error";
 import DataDisplayUnit from "@/components/data-display-unit";
 import { getTranslations } from "next-intl/server";
-import { getDataLocaleFormat } from "@/utils/common";
+import { getDateLocaleFormat } from "@/utils/common";
 import { setLocale } from "@/i18n/set-locale";
 
 import type { SimpDoc } from "@/server/db/tables/document/queries";
@@ -43,7 +43,7 @@ async function ProjectPage({
   if (linkedDocumentsError !== null)
     return <ErrorPage message={linkedDocumentsError} />;
 
-  const localeDateFormat = getDataLocaleFormat(locale);
+  const localeDateFormat = getDateLocaleFormat(locale);
 
   return (
     <InfoPageWrapper

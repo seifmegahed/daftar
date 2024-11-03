@@ -273,6 +273,14 @@
         "quantity-field-label": "الكمية *",
         "quantity-field-description": "أدخل الكمية للمادة ."
       }
+    },
+    "comments-page": {
+      "invalid-id": "معرف المشروع غير صالح",
+      "comment-max": "يجب أن يكون التعليق أقل من {max} حرف",
+      "error": "حدث خطأ أثناء إضافة التعليق",
+      "placeholder": "أضف تعليق...",
+      "delete-error": "حدث خطأ أثناء حذف التعليق",
+      "comment-date": "منذ {time}"
     }
   },
   "name-form": {

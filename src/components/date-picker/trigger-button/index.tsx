@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/button";
 import { PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
 import { useLocale, useTranslations } from "next-intl";
-import { getDataLocaleFormat } from "@/utils/common";
+import { getDateLocaleFormat } from "@/utils/common";
 
 function TriggerButton({
   date,
@@ -28,7 +28,7 @@ function TriggerButton({
         )}
       >
         {date
-          ? format(date, "PPP", { locale: getDataLocaleFormat(locale) })
+          ? format(date, "PPP", { locale: getDateLocaleFormat(locale) })
           : t("select-date")}
         <CalendarIcon className="ms-auto h-4 w-4 text-muted-foreground" />
       </Button>

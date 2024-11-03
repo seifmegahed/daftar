@@ -11,16 +11,23 @@ import { Suspense } from "react";
 import { CommentsListSkeleton } from "@/components/skeletons/comment-skeletons";
 import CommentsList from "./comments-list";
 import ErrorPage from "@/components/error";
+import { getTranslations } from "next-intl/server";
+import { setLocale } from "@/i18n/set-locale";
+import type { LocaleParams } from "@/i18n/set-locale";
 
 async function ProjectCommentsPage({
   params,
   searchParams,
 }: {
-  params: { id: string };
+  params: { id: string; locale: LocaleParams["locale"] };
   searchParams: { page: string };
 }) {
+  const { locale } = params;
+  setLocale(locale);
+  const t = await getTranslations("project.comments-page");
   const projectId = parseInt(params.id);
-  if (isNaN(projectId)) return <ErrorPage message="Invalid project ID" />;
+  
+  if (isNaN(projectId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [currentUser, currentUserError] = await getCurrentUserAction();
   if (currentUserError !== null)

@@ -96,7 +96,7 @@ export const timestampQueryGenerator = (
   return between(column, from, to);
 };
 
-export const getDataLocaleFormat = (locale: string) => {
+export const getDateLocaleFormat = (locale: string) => {
   switch (locale) {
     case "ar":
       return ar;

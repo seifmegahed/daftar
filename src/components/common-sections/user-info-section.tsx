@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import DataDisplayUnit from "../data-display-unit";
 import { getLocale, getTranslations } from "next-intl/server";
-import { getDataLocaleFormat } from "@/utils/common";
+import { getDateLocaleFormat } from "@/utils/common";
 
 const UserInfoSection = async ({
   data,
@@ -16,7 +16,7 @@ const UserInfoSection = async ({
   const { createdAt, updatedAt, creator, updater } = data;
   const t = await getTranslations("user-info-section");
   const locale = await getLocale();
-  const localeDateFormat = getDataLocaleFormat(locale);
+  const localeDateFormat = getDateLocaleFormat(locale);
   return (
     <div className="flex flex-col gap-y-2">
       <DataDisplayUnit

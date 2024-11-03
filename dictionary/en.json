@@ -275,6 +275,14 @@
         "quantity-field-label": "Quantity *",
         "quantity-field-description": "Enter the quantity of the item."
       }
+    },
+    "comments-page": {
+      "invalid-id": "Invalid project ID",
+      "comment-max": "Comment must be less than {max} characters",
+      "error": "An error occurred while adding the comment",
+      "placeholder": "Add a comment...",
+      "delete-error": "An error occurred while deleting the comment",
+      "comment-date": "{time} ago"
     }
   },
   "name-form": {

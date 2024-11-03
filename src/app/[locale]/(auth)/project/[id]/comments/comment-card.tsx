@@ -12,6 +12,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { getDateLocaleFormat } from "@/utils/common";
+import { useTranslations, useLocale } from "next-intl";
 
 function ProjectCommentCard({
   comment,
@@ -22,6 +24,10 @@ function ProjectCommentCard({
   userId: number;
   projectId: number;
 }) {
+  const locale = useLocale();
+  const t = useTranslations("project.comments-page");
+  const localeDateFormat = getDateLocaleFormat(locale);
+
   const sameUser = comment.userId === userId;
 
   const handleDelete = async () => {
@@ -34,7 +40,7 @@ function ProjectCommentCard({
       }
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while deleting the comment");
+      toast.error(t("delete-error"));
     }
   };
   return (
@@ -47,12 +53,10 @@ function ProjectCommentCard({
           <p>{comment.userName}</p>
         </TooltipContent>
       </Tooltip>
-      <div className="flex w-full flex-col gap-2 rounded-lg bg-muted p-4 max-w-full">
+      <div className="flex w-full max-w-full flex-col gap-2 rounded-lg bg-muted p-4">
         <div className="flex w-full items-start justify-between">
-          <div className="flex-shrink w-full max-w-[80%]">
-            <p className="">
-              {comment.text}
-            </p>
+          <div className="w-full max-w-[80%] flex-shrink">
+            <p className="">{comment.text}</p>
           </div>
           {sameUser && (
             <div className="-me-2 -mt-2">
@@ -67,7 +71,11 @@ function ProjectCommentCard({
         </div>
         <div className="flex justify-end">
           <p className="text-xs text-muted-foreground">
-            {formatDistanceToNow(comment.createdAt) + " ago"}
+            {t("comment-date", {
+              time: formatDistanceToNow(comment.createdAt, {
+                locale: localeDateFormat,
+              }),
+            })}
           </p>
         </div>
       </div>
