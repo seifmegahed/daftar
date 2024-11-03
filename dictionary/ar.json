@@ -59,6 +59,7 @@
     }
   },
   "project": {
+    "invalid-id": "معرف المشروع غير صالح",
     "layout": {
       "title": "مشروع",
       "description": "إدارة المشروع",
@@ -333,6 +334,46 @@
   },
   "search-bar": {
     "placeholder": "البحث"
+  },
+  "drop-zone": {
+    "title": "إضغط هنا لاختيار الملف ",
+    "subtitle": "أو اسحب الملف وأفلت",
+    "max": "الحجم الأقصى للملف هو {max} ميغابايت",
+    "error": "يجب أن يكون حجم الملف أقل من {max} ميغابايت"
+  },
+  "document-form": {
+    "existing-document": "مستند موجود",
+    "new-document": "مستند جديد",
+    "invalid-relation": "العلاقة غير صالحة",
+    "new-document-form": {
+      "name-required": "يجب اختيار اسم",
+      "name-min-length": "يجب أن يكون الاسم على الأقل {minLength} حرف",
+      "name-max-length": "يجب أن يكون الاسم أقل من {maxLength} حرف",
+      "notes-max-length": "يجب أن يكون الملاحظات أقل من {maxLength} حرف",
+      "success": "تم إضافة المستند بنجاح",
+      "error": "حدث خطأ أثناء إضافة المستند",
+      "title": "إضافة مستند",
+      "description": "رفع مستند جديد",
+      "button-text": "إضافة",
+      "name-field-label": "الاسم *",
+      "name-field-description": "أدخل اسم المستند. هذا هو اسم المستند الذي ستستخدمه للبحث والمراجعة عن المستند.",
+      "private-field-label": "خاص",
+      "private-field-description": "اختر هذا الخانة إذا كنت تريد إنشاء المستند خاص. سيتم عرض هذا المستند للمستخدمين فقط مع صلاحيات المستخدم المطلوبة.",
+      "notes-field-label": "ملاحظات",
+      "notes-field-description": "أدخل أي ملاحظات عن المستند."
+    },
+    "existing-document-form": {
+      "success": "تم إضافة المستند",
+      "error": "حدث خطأ أثناء إضافة المستند",
+      "title": "إضافة مستند موجود",
+      "description": "اختر مستند للربط",
+      "button-text": "إضافة",
+      "id-field-label": "المستند *",
+      "select-message": "اختر مستند",
+      "search-message": "ابحث عن مستند",
+      "not-found-message": "لم يتم العثور على مستند",
+      "id-field-description": "اختر المستند الذي تريد ربطه. بعد تحديد المستند اضغط زر إضافة لربط المستند."
+    }
   },
   "document-alt-card": {
     "menu": {

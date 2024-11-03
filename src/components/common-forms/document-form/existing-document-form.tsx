@@ -15,6 +15,7 @@ import ComboSelect from "@/components/combo-select-obj";
 import { addDocumentRelationAction } from "@/server/actions/document-relations/create";
 import { toast } from "sonner";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
+import { useTranslations } from "next-intl";
 
 const schema = z.object({
   id: z.number(),
@@ -31,6 +32,8 @@ function ExistingDocumentForm({
   generatedRelation: GeneratedRelationType;
   relationData: RelationDataType;
 }) {
+  const t = useTranslations("document-form.existing-document-form");
+
   const documentOptions = documents.map((document) => ({
     label: document.name + ` (.${document.extension})`,
     value: document.id,
@@ -56,10 +59,10 @@ function ExistingDocumentForm({
         toast.error(error);
         return;
       }
-      toast.success("Document added");
+      toast.success(t("success"));
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while adding document");
+      toast.error(t("error"));
     }
   };
 
@@ -67,9 +70,9 @@ function ExistingDocumentForm({
     <form onSubmit={form.handleSubmit(onSubmit)}>
       <Form {...form}>
         <FormWrapperWithSubmit
-          title="Add Existing Document"
-          description="Add an existing document to the project"
-          buttonText="Add Document"
+          title={t("title")}
+          description={t("description")}
+          buttonText={t("button-text")}
           submitting={form.formState.isSubmitting}
           dirty={form.formState.isDirty}
         >
@@ -82,11 +85,11 @@ function ExistingDocumentForm({
                   options={documentOptions}
                   onChange={field.onChange}
                   value={field.value}
+                  selectMessage={t("select-message")}
+                  searchMessage={t("search-message")}
+                  notFoundMessage={t("not-found-message")}
                 />
-                <FormDescription>
-                  Search and select the document you want to link. After
-                  selecting the document, press submit to link the document.
-                </FormDescription>
+                <FormDescription>{t("id-field-description")}</FormDescription>
               </FormItem>
             )}
           />

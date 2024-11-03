@@ -2,12 +2,22 @@
 
 import { FileIcon, UploadCloud } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslations } from "next-intl";
 
-function Dropzone({ onUpload, file }: { onUpload: (file: File) => void; file: File | undefined | null }) {
+const MAX_FILE_SIZE_MB = 25;
+
+function Dropzone({
+  onUpload,
+  file,
+}: {
+  onUpload: (file: File) => void;
+  file: File | undefined | null;
+}) {
+  const t = useTranslations("drop-zone");
   const handleUpload = (file: File | undefined | null) => {
     if (!file) return;
-    if (file.size > 1024 * 1024 * 25) {
-      toast.error("File size must be less than 25MB");
+    if (file.size > 1024 * 1024 * MAX_FILE_SIZE_MB) {
+      toast.error(`File size must be less than ${MAX_FILE_SIZE_MB} MB`);
       return;
     }
     onUpload(file);
@@ -41,13 +51,15 @@ function Dropzone({ onUpload, file }: { onUpload: (file: File) => void; file: Fi
             <>
               <UploadCloud />
               <p className="mb-2 text-sm">
-                <span className="font-semibold">Click to upload </span>
-                <span>or drag and drop</span>
+                <span className="font-semibold">{t("title")}</span>
+                <span>{t("subtitle")}</span>
               </p>
               <p className="text-xs text-muted-foreground">
                 CSV | PDF | DOCX | XLSX | PPTX | TXT | JPG | PNG
               </p>
-              <p className="text-xs text-muted-foreground">(MAX. 25MB)</p>
+              <p className="text-xs text-muted-foreground">
+                {t("max", { max: MAX_FILE_SIZE_MB })}
+              </p>
             </>
           )}
         </div>

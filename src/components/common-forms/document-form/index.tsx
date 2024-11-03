@@ -2,6 +2,9 @@ import { Tabs, TabsTrigger, TabsList, TabsContent } from "@/components/ui/tabs";
 import NewDocumentForm from "./new-document-form";
 import ExistingDocumentForm from "./existing-document-form";
 import { getDocumentOptionsAction } from "@/server/actions/documents/read";
+import { getTranslations, getLocale } from "next-intl/server";
+import { getDirection } from "@/utils/common";
+import ErrorPage from "@/components/error";
 
 export type RelationDataType = {
   relationTo: "client" | "supplier" | "project" | "item";
@@ -34,7 +37,7 @@ export type GeneratedRelationType =
       itemId: number;
     };
 
-function generateRelation(relation: RelationDataType) {
+function generateRelation(relation: RelationDataType, errorMessage: string) {
   const { relationTo, relationId } = relation;
   switch (relationTo) {
     case "client":
@@ -66,7 +69,7 @@ function generateRelation(relation: RelationDataType) {
         projectId: null,
       };
     default:
-      throw new Error("Invalid relation type");
+      throw new Error(errorMessage);
   }
 }
 
@@ -75,20 +78,32 @@ async function DocumentForm({
 }: {
   relationData?: RelationDataType;
 }) {
+  const locale = await getLocale();
+  const direction = getDirection(locale);
+  const t = await getTranslations("document-form");
+
   if (!relationData) return <NewDocumentForm />;
 
-  const relation = generateRelation(relationData);
+  let relation: GeneratedRelationType;
+  try {
+    relation = generateRelation(relationData, t("invalid-relation"));
+  } catch (error) {
+    console.log(error);
+    return <ErrorPage message={t("invalid-relation")} />;
+  }
+
   const [documents, documentsError] = await getDocumentOptionsAction();
-  if (documentsError !== null) return <NewDocumentForm />;
+  if (documentsError !== null)
+    return <NewDocumentForm generatedRelation={relation} />;
 
   return (
-    <Tabs defaultValue="existing" dir="ltr">
+    <Tabs defaultValue="existing" dir={direction}>
       <TabsList className="h-12">
         <TabsTrigger value="existing" className="h-10 w-48">
-          Existing Document
+          {t("existing-document")}
         </TabsTrigger>
         <TabsTrigger value="new" className="h-10 w-48">
-          New Document
+          {t("new-document")}
         </TabsTrigger>
       </TabsList>
       <div className="p-2">

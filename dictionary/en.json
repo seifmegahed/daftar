@@ -59,6 +59,7 @@
     }
   },
   "project": {
+    "invalid-id": "Invalid project ID",
     "layout": {
       "title": "Project",
       "description": "Manage your project",
@@ -336,6 +337,46 @@
   },
   "search-bar": {
     "placeholder": "Search"
+  },
+  "drop-zone": {
+    "title": "Click to upload ",
+    "subtitle": "or drag and drop",
+    "max": "Maximum file size is {max} MB",
+    "error": "File size must be less than {max} MB"
+  },
+  "document-form": {
+    "existing-document": "Existing Document",
+    "new-document": "New Document",
+    "invalid-relation": "Invalid relation",
+    "new-document-form": {
+      "name-required": "Name is required",
+      "name-min-length": "Name must be at least {minLength} characters",
+      "name-max-length": "Name must not be longer than {maxLength} characters",
+      "notes-max-length": "Notes must not be longer than {maxLength} characters",
+      "success": "Document added successfully",
+      "error": "An error occurred while adding document",
+      "title": "Add Document",
+      "description": "Upload a new document",
+      "button-text": "Add Document",
+      "name-field-label": "Name *",
+      "name-field-description": "Enter the name of the document. This is the name you will be using to search and refer to the document.",
+      "private-field-label": "Private",
+      "private-field-description": "Check this box if you want to make the document private. Only users with the appropriate permissions will be able to access the document.",
+      "notes-field-label": "Notes",
+      "notes-field-description": "Enter any notes about the document."
+    },
+    "existing-document-form": {
+      "success": "Document added",
+      "error": "An error occurred while adding document",
+      "title": "Add Existing Document",
+      "description": "Select a document to link",
+      "button-text": "Add Document",
+      "id-field-label": "Document *",
+      "select-message": "Select document",
+      "search-message": "Search for document",
+      "not-found-message": "Document not found",
+      "id-field-description": "Select the document you want to link. After selecting the document, press submit to link the document."
+    }
   },
   "document-alt-card": {
     "menu": {
