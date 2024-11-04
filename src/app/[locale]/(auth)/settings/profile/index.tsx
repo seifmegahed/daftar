@@ -5,12 +5,19 @@ import InfoPageWrapper from "@/components/info-page-wrapper";
 import { getCurrentUserAction } from "@/server/actions/users";
 import { getInitials } from "@/utils/user";
 import { format } from "date-fns";
+import { getTranslations, getLocale } from "next-intl/server";
+import { getDateLocaleFormat } from "@/utils/common";
+import { getLocalizedUserRoleLabel } from "@/data/lut";
 
 async function SettingsProfilePage() {
+  const locale = await getLocale() as Locale;
+  const t = await getTranslations("settings.profile");
+  const dateLocaleFormat = getDateLocaleFormat(locale);
+
   const [user, error] = await getCurrentUserAction();
   if (error !== null) return <ErrorPage message={error} />;
   return (
-    <InfoPageWrapper title="Profile" subtitle="">
+    <InfoPageWrapper title={t("title")} subtitle={t("subtitle")}>
       <div className="flex items-center gap-2">
         <AvatarContainer className="size-16 text-2xl">
           {getInitials(user.name)}
@@ -20,33 +27,36 @@ async function SettingsProfilePage() {
       <div className="flex items-center gap-2 text-muted-foreground">
         <DataDisplayTable
           data={[
-            { name: "Name:", value: user.name },
-            { name: "username:", value: user.username },
-            { name: "Role:", value: user.role.toUpperCase() },
-            { name: "Created At:", value: format(user.createdAt, "PP") },
+            { name: t("name"), value: user.name },
+            { name: t("username"), value: user.username },
+            { name: t("role"), value: getLocalizedUserRoleLabel(user.role, locale) },
             {
-              name: "Updated At:",
-              value: user.updatedAt ? format(user.updatedAt, "PP") : "N/A",
+              name: t("created-at"),
+              value: format(user.createdAt, "PP", { locale: dateLocaleFormat }),
             },
             {
-              name: "Last Login:",
-              value: user.lastActive ? format(user.lastActive, "PP") : "N/A",
+              name: t("updated-at"),
+              value: user.updatedAt
+                ? format(user.updatedAt, "PP", { locale: dateLocaleFormat })
+                : t("not-available"),
+            },
+            {
+              name: t("last-login"),
+              value: user.lastActive
+                ? format(user.lastActive, "PP", { locale: dateLocaleFormat })
+                : t("not-available"),
             },
           ]}
         />
       </div>
       <p className="max-w-xl text-xs text-muted-foreground">
-        Your username cannot be changed, however you can change your display
-        name. By changing your display name, your avatar will be updated to
-        reflect your new name. You can also change your password.
+        {t("description-a")}
         <br></br>
         <br></br>
-        To change your name or password, navigate to the {'"Account"'} tab on
-        the left sidebar.
+        {t("description-b")}
         <br></br>
         <br></br>
-        Your user role can only be changed by an administrator. If you think
-        your role is incorrect, please contact an administrator.
+        {t("description-c")}
       </p>
     </InfoPageWrapper>
   );

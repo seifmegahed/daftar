@@ -570,7 +570,7 @@
       "invalid-id": "Invalid item ID",
       "title": "Edit Item",
       "subtitle": "This is the edit page for the item: {itemName}. Here you can edit the item details.",
-      "delete-form-info":"You cannot delete this item because it is linked to {count, plural, one {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it."
+      "delete-form-info": "You cannot delete this item because it is linked to {count, plural, one {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it."
     },
     "projects": {
       "title": "Item's Projects",
@@ -783,6 +783,33 @@
       }
     }
   },
+  "settings": {
+    "layout": {
+      "title": "Settings",
+      "description": "Manage your settings",
+      "profile": "Profile",
+      "edit": "Edit",
+      "preferences": "Preferences"
+    },
+    "profile": {
+      "title": "Profile",
+      "subtitle": "",
+      "name": "Name",
+      "username": "Username",
+      "role": "Role",
+      "created-at": "Created At",
+      "updated-at": "Updated At",
+      "last-login": "Last Login",
+      "not-available": "N/A",
+      "description-a": "Your username cannot be changed, however you can change your display name. By changing your display name, your avatar will be updated to reflect your new name. You can also change your password.",
+      "description-b": "To change your name or password, navigate to the 'Account' tab on the left sidebar.",
+      "description-c": "Your user role can only be changed by an administrator. If you think your role is incorrect, please contact an administrator."
+    },
+    "edit": {
+      "title": "Edit User",
+      "subtitle": "Edit your account details"
+    }
+  },
   "edit-user": {
     "page": {
       "invalid-id": "Invalid user ID",
@@ -830,19 +857,27 @@
       "update": "Update"
     },
     "change-password-section": {
-      "password-required-message": "Password is required",
+      "old-password-required-message": "Old Password is required",
+      "old-password-min-length": "Password must be at least {minLength} characters",
+      "old-password-max-length": "Password must not be longer than {maxLength} characters",
+      "password-required-message": "New Password is required",
       "password-min-length": "Password must be at least {minLength} characters",
       "password-max-length": "Password must not be longer than {maxLength} characters",
       "verify-password-required-message": "Verify Password is required",
-      "verify-password-min-length": "Verify Password must be at least {minLength} characters",
-      "verify-password-max-length": "Verify Password must not be longer than {maxLength} characters",
+      "verify-password-min-length": "Password must be at least {minLength} characters",
+      "verify-password-max-length": "Password must not be longer than {maxLength} characters",
       "password-not-complex": "Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number and one special character.",
       "password-not-match": "Passwords do not match",
+      "password-match": "You cannot use the same password",
       "success": "Password updated",
       "error": "An error occurred while updating the password",
       "title": "Password",
+      "old-password-title": "Old Password",
+      "old-password-description": "Enter your old password to confirm your identity.",
       "password-title": "New Password",
+      "new-password-description": "Enter your new password. Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number and one special character.",
       "verify-password-title": "Verify Password",
+      "verify-password-description": "Enter the same password you entered above to verify it.",
       "description": "Change the password of the user, Password must be at least 8 characters long and must contain at least one uppercase letter, one lowercase letter, one number and one special character.",
       "note": "Note: ",
       "note-revoke": "If you want to revoke the user's access you can deactivate their account below.",

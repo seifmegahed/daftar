@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { UserSchema } from "@/server/db/tables/user/schema";
-import { adminUpdateUserDisplayNameAction } from "@/server/actions/users";
+import {
+  adminUpdateUserDisplayNameAction,
+  userUpdateUserDisplayNameAction,
+} from "@/server/actions/users";
 import { Input } from "@/components/ui/input";
 import SubmitButton from "@/components/buttons/submit-button";
 
@@ -13,7 +15,13 @@ import { useTranslations } from "next-intl";
 import { z } from "zod";
 import { emptyToUndefined } from "@/utils/common";
 
-function ChangeNameSection({ userId, name }: { userId: number; name: string }) {
+function ChangeNameSection({
+  userId,
+  name,
+}: {
+  userId?: number;
+  name: string;
+}) {
   const t = useTranslations("edit-user.change-name-section");
 
   const changeNameSchema = z.preprocess(
@@ -42,10 +50,14 @@ function ChangeNameSection({ userId, name }: { userId: number; name: string }) {
       return;
     } else setErrorMessage("");
     try {
-      const [, error] = await adminUpdateUserDisplayNameAction({
-        id: userId,
-        name: newName,
-      });
+      const [, error] = userId
+        ? await adminUpdateUserDisplayNameAction({
+            id: userId,
+            name: newName,
+          })
+        : await userUpdateUserDisplayNameAction({
+            name: newName,
+          });
       setLoading(false);
       if (error !== null) {
         toast.error(error);

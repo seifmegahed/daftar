@@ -18,55 +18,90 @@ import SubmitButton from "@/components/buttons/submit-button";
 import { checkPasswordComplexity } from "@/utils/password-complexity";
 import { userUpdateUserPasswordAction } from "@/server/actions/users";
 import { toast } from "sonner";
-
-const schema = z
-  .object({
-    oldPassword: z.string().min(8).max(64),
-    newPassword: z.string().min(8).max(64),
-    verifyPassword: z.string().min(8).max(64),
-  })
-  .superRefine((data, ctx) => {
-    if (!checkPasswordComplexity(data.oldPassword)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-        path: ["oldPassword"],
-      });
-    }
-    if (!checkPasswordComplexity(data.newPassword)) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message:
-          "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-        path: ["newPassword"],
-      });
-    }
-    if (data.oldPassword === data.newPassword) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Passwords cannot be the same",
-        path: ["newPassword"],
-      });
-    }
-    if (data.newPassword !== data.verifyPassword) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: "Passwords do not match",
-        path: ["verifyPassword"],
-      });
-    }
-  });
-
-type ChangePasswordFormType = z.infer<typeof schema>;
-
-const defaultValues: ChangePasswordFormType = {
-  oldPassword: "",
-  newPassword: "",
-  verifyPassword: "",
-};
+import { emptyToUndefined } from "@/utils/common";
+import { useTranslations } from "next-intl";
 
 function ChangePasswordForm() {
+  const t = useTranslations("edit-user.change-password-section");
+
+  const schema = z
+    .object({
+      oldPassword: z.preprocess(
+        emptyToUndefined,
+        z
+          .string({ required_error: t("old-password-required-message") })
+          .min(8, { message: t("old-password-min-length", { minLength: 8 }) })
+          .max(64, {
+            message: t("old-password-max-length", { maxLength: 64 }),
+          }),
+      ),
+      newPassword: z.preprocess(
+        emptyToUndefined,
+        z
+          .string({ required_error: t("password-required-message") })
+          .min(8, { message: t("password-min-length", { minLength: 8 }) })
+          .max(64, { message: t("password-max-length", { maxLength: 64 }) }),
+      ),
+      verifyPassword: z.preprocess(
+        emptyToUndefined,
+        z
+          .string({ required_error: t("verify-password-required-message") })
+          .min(8, {
+            message: t("verify-password-min-length", { minLength: 8 }),
+          })
+          .max(64, {
+            message: t("verify-password-max-length", { maxLength: 64 }),
+          }),
+      ),
+    })
+    .superRefine((data, ctx) => {
+      if (!checkPasswordComplexity(data.oldPassword)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("password-not-complex"),
+          path: ["oldPassword"],
+        });
+        return false;
+      }
+      if (!checkPasswordComplexity(data.newPassword)) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("password-not-complex"),
+          path: ["newPassword"],
+        });
+        return false;
+      }
+      if (data.oldPassword === data.newPassword) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("password-match"),
+          path: ["newPassword"],
+        });
+        return false;
+      }
+      if (data.newPassword !== data.verifyPassword) {
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: "Passwords do not match",
+          path: ["newPassword"],
+        });
+        ctx.addIssue({
+          code: z.ZodIssueCode.custom,
+          message: t("password-not-match"),
+          path: ["verifyPassword"],
+        });
+        return false;
+      }
+    });
+
+  type ChangePasswordFormType = z.infer<typeof schema>;
+
+  const defaultValues: ChangePasswordFormType = {
+    oldPassword: "",
+    newPassword: "",
+    verifyPassword: "",
+  };
+
   const form = useForm<ChangePasswordFormType>({
     resolver: zodResolver(schema),
     defaultValues,
@@ -79,11 +114,11 @@ function ChangePasswordForm() {
         toast.error(error);
         return;
       }
-      toast.success("Password updated");
+      toast.success(t("success"));
       form.reset();
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while updating the password");
+      toast.error(t("error"));
     }
   };
 
@@ -99,17 +134,11 @@ function ChangePasswordForm() {
           name="oldPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Old Password</FormLabel>
+              <FormLabel>{t("old-password-title")}</FormLabel>
               <FormControl>
-                <PasswordInput
-                  placeholder="Old Password"
-                  autoComplete="old-password"
-                  {...field}
-                />
+                <PasswordInput autoComplete="old-password" {...field} />
               </FormControl>
-              <FormDescription>
-                Enter your old password to confirm your identity.
-              </FormDescription>
+              <FormDescription>{t("old-password-description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -119,19 +148,11 @@ function ChangePasswordForm() {
           name="newPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>New Password</FormLabel>
+              <FormLabel>{t("password-title")}</FormLabel>
               <FormControl>
-                <PasswordInput
-                  placeholder="New Password"
-                  autoComplete="new-password"
-                  {...field}
-                />
+                <PasswordInput autoComplete="new-password" {...field} />
               </FormControl>
-              <FormDescription>
-                Enter your new password. Password must be at least 8 characters
-                long and must contain at least one uppercase letter, one
-                lowercase letter, and one number.
-              </FormDescription>
+              <FormDescription>{t("new-password-description")}</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -141,16 +162,12 @@ function ChangePasswordForm() {
           name="verifyPassword"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Verify Password</FormLabel>
+              <FormLabel>{t("verify-password-title")}</FormLabel>
               <FormControl>
-                <PasswordInput
-                  placeholder="Verify Password"
-                  autoComplete="confirm-new-password"
-                  {...field}
-                />
+                <PasswordInput autoComplete="confirm-new-password" {...field} />
               </FormControl>
               <FormDescription>
-                Enter the same password you entered above to verify it.
+                {t("verify-password-description")}
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -162,7 +179,7 @@ function ChangePasswordForm() {
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
             loading={form.formState.isSubmitting}
           >
-            Update Password
+            {t("update")}
           </SubmitButton>
         </div>
       </Form>

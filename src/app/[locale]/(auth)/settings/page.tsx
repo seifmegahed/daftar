@@ -1,7 +1,9 @@
 import SettingsProfilePage from "./profile";
+import { setLocale } from "@/i18n/set-locale";
 
-export default function SettingsPage() {
-  return (
-    <SettingsProfilePage />
-  )
+function SettingsPage({ params }: { params: { locale: Locale } }) {
+  setLocale(params.locale);
+  return <SettingsProfilePage />;
 }
+
+export default SettingsPage;
