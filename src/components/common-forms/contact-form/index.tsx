@@ -10,6 +10,8 @@ import { emptyToUndefined } from "@/utils/common";
 
 import {
   Form,
+  FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -18,34 +20,8 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
-import { notesFormSchema } from "@/utils/schemas";
-
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(4, { message: "Name must be at least 4 characters" })
-    .max(64, { message: "Name must not be longer than 64 characters" }),
-  phoneNumber: z.preprocess(
-    emptyToUndefined,
-    z
-      .string()
-      .max(64, {
-        message: "Phone number must not be longer than 64 characters",
-      })
-      .optional(),
-  ),
-  email: z.preprocess(
-    emptyToUndefined,
-    z
-      .string()
-      .email({ message: "Email is not valid" })
-      .max(64, { message: "Email must not be longer than 64 characters" })
-      .optional(),
-  ),
-  notes: notesFormSchema,
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
+import { useTranslations } from "next-intl";
+import { notesMaxLength } from "@/data/config";
 
 function NewContactForm({
   id,
@@ -54,8 +30,54 @@ function NewContactForm({
   id: number;
   type: "supplier" | "client";
 }) {
+  const t = useTranslations("contact");
+
+  const schema = z.object({
+    name: z.preprocess(
+      emptyToUndefined,
+      z
+        .string({ required_error: t("schema.name-required") })
+        .min(4, { message: t("schema.name-min-length", { minLength: 4 }) })
+        .max(64, {
+          message: t("schema.name-max-length", { maxLength: 64 }),
+        }),
+    ),
+    phoneNumber: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(64, {
+          message: t("schema.phone-number-max-length", { maxLength: 64 }),
+        })
+        .optional(),
+    ),
+    email: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .email({ message: t("schema.email-not-valid") })
+        .max(64, {
+          message: t("schema.email-max-length", { maxLength: 64 }),
+        })
+        .optional(),
+    ),
+    notes: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(notesMaxLength, {
+          message: t("schema.notes-max-length", {
+            maxLength: notesMaxLength,
+          }),
+        })
+        .optional(),
+    ),
+  });
+
+  type FormSchemaType = z.infer<typeof schema>;
+
   const form = useForm<FormSchemaType>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: "",
       phoneNumber: "",
@@ -81,10 +103,10 @@ function NewContactForm({
         return;
       }
       form.reset();
-      toast.success("Contact Added");
+      toast.success(t("success"));
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while adding the contact");
+      toast.error(t("error"));
     }
   };
 
@@ -95,48 +117,72 @@ function NewContactForm({
     >
       <Form {...form}>
         <FormWrapperWithSubmit
-          title="Add Contact"
-          description="Enter the details of the contact you want to add."
-          buttonText="Add Contact"
+          title={t("title")}
+          description={t("description")}
+          buttonText={t("button-text")}
           dirty={form.formState.isDirty}
           submitting={form.formState.isSubmitting}
         >
           <FormField
+            control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Name *</FormLabel>
-                <Input {...field} />
+                <FormLabel>{t("form.contact-name-label")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>
+                  {t("form.contact-name-description")}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Phone Number</FormLabel>
-                <Input {...field} />
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
+            control={form.control}
             name="email"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Email</FormLabel>
-                <Input {...field} />
+                <FormLabel>{t("form.email-label")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>
+                  {t("form.email-description")}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{t("form.phone-number-label")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>
+                  {t("form.phone-number-description")}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
             name="notes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes</FormLabel>
-                <Textarea {...field} rows={3} className="resize-none" />
+                <FormLabel>{t("form.notes-label")}</FormLabel>
+                <FormControl>
+                  <Textarea {...field} className="resize-none" rows={4} />
+                </FormControl>
+                <FormDescription>
+                  {t("form.notes-description")}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}

@@ -534,6 +534,11 @@
     }
   },
   "contact": {
+    "success": "Contact added",
+    "error": "An error occurred while adding the contact",
+    "title": "Add Contact",
+    "description": "Enter the details of the contact you want to add.",
+    "button-text": "Add Contact",
     "form": {
       "primary-contact-label": "Primary Contact",
       "contact-name-label": "Contact Name *",
