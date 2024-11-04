@@ -13,12 +13,20 @@ import RegistrationNumberForm from "@/components/common-forms/update-registratio
 import WebsiteForm from "@/components/common-forms/update-website-form";
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteClientAction } from "@/server/actions/clients/delete";
-import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import ErrorPage from "@/components/error";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
-async function EditClientPage({ params }: { params: { id: string } }) {
+async function EditClientPage({
+  params,
+}: {
+  params: { id: string; locale: Locale };
+}) {
+  setLocale(params.locale);
+  const t = await getTranslations("client.edit");
+
   const clientId = parseInt(params.id);
-  if (isNaN(clientId)) return <ErrorPage message="Invalid client ID" />;
+  if (isNaN(clientId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [client, error] = await getClientFullByIdAction(clientId);
   if (error !== null) return <ErrorPage message={error} />;
@@ -31,19 +39,21 @@ async function EditClientPage({ params }: { params: { id: string } }) {
   if (clientProjectsError !== null)
     return <ErrorPage message={clientProjectsError} />;
 
-  const deleteFormInfo =
-    clientProjects > 0 ? (
+  const hasProjects = clientProjects > 0;
+
+  const DeleteFormInfoSelector = () =>
+    hasProjects ? (
       <>
-        {`You cannot delete a client that is linked to ${clientProjects > 1 ? `${clientProjects} projects` : "a project"}.`}
+        {t("delete-form-info", {
+          count: clientProjects,
+        })}
       </>
-    ) : (
-      <DeleteFormInfo type="client" />
-    );
+    ) : undefined;
 
   return (
     <InfoPageWrapper
-      title="Edit Client"
-      subtitle={`This is the edit page for the client: ${client.name}. Here you can edit the client details.`}
+      title={t("title")}
+      subtitle={t("subtitle", { clientName: client.name })}
     >
       <RegistrationNumberForm
         id={clientId}
@@ -72,8 +82,8 @@ async function EditClientPage({ params }: { params: { id: string } }) {
           type="client"
           id={clientId}
           onDelete={deleteClientAction}
-          disabled={clientProjects > 0}
-          formInfo={deleteFormInfo}
+          disabled={hasProjects}
+          FormInfo={<DeleteFormInfoSelector />}
         />
       )}
     </InfoPageWrapper>

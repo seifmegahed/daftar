@@ -358,6 +358,12 @@
       "general-info": "General Info",
       "other-info": "Other Info",
       "notes": "Notes"
+    },
+    "edit": {
+      "delete-form-info": "You cannot delete this client because it is linked to {count, plural, =1 {a project} other {{count} projects}}. You first need to unlink it from the projects it is referenced in before you can delete it.",
+      "invalid-id": "Invalid client ID",
+      "title": "Edit Client",
+      "subtitle": "This is the edit page for the client: {clientName}. Here you can edit the client details."
     }
   },
   "suppliers": {
@@ -700,6 +706,22 @@
       "project-note-content": "Only an admin or an owner can delete a project.",
       "note-content": "Only an admin can delete a {type}."
     }
+  },
+  "registration-number-form": {
+    "max-length-message": "Registration number must not exceed {maxLength} characters",
+    "success": "Registration number updated",
+    "error": "An error occurred while updating registration number",
+    "title": "Registration Number",
+    "description": "Update {type} registration number, this will change the registration number of the {type} across all references. After typing the updated registration number press the update button to persist the change.",
+    "update": "Update"
+  },
+  "website-form": {
+    "max-length-message": "Website must not exceed {maxLength} characters",
+    "success": "Website updated",
+    "error": "An error occurred while updating website",
+    "title": "Website",
+    "description": "Update {type} website, this will change the website of the {type} across all references. After typing the updated website press the update button to persist the change.",
+    "update": "Update"
   },
   "user-info-section": {
     "created-at": "Created At",

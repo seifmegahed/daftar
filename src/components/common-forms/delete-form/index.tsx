@@ -29,6 +29,7 @@ function DeleteForm({
   access,
   type,
   disabled = false,
+  FormInfo,
   onDelete,
 }: {
   id: number;
@@ -36,7 +37,7 @@ function DeleteForm({
   access: boolean;
   disabled?: boolean;
   type: "client" | "project" | "supplier" | "item" | "document";
-  formInfo?: ReactNode;
+  FormInfo?: ReactNode;
   onDelete: (id: number) => Promise<ReturnTuple<number> | undefined>;
 }) {
   const locale = useLocale() as "ar" | "en";
@@ -111,7 +112,13 @@ function DeleteForm({
                   {name}
                 </p>
                 <FormMessage />
-                <FormDescription><DeleteFormInfo type={localizedType} /></FormDescription>
+                <FormDescription>
+                  {FormInfo ? (
+                    FormInfo
+                  ) : (
+                    <DeleteFormInfo type={localizedType} />
+                  )}
+                </FormDescription>
               </FormItem>
             )}
           />

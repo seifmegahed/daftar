@@ -14,29 +14,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SubmitButton from "@/components/buttons/submit-button";
 import { toast } from "sonner";
-import { emptyToUndefined } from "@/utils/common";
+import { emptyToUndefined, getLocaleType } from "@/utils/common";
+import { useTranslations, useLocale } from "next-intl";
 import type { ReturnTuple } from "@/utils/type-utils";
 
-const schema = z.object({
-  registrationNumber: z.preprocess(
-    emptyToUndefined,
-    z
-      .string()
-      .max(256, {
-        message: "Registration number must not exceed 256 characters",
-      })
-      .optional(),
-  ),
-});
-
-type FormDataType = z.infer<typeof schema>;
-
-const RegistrationNumberForm = ({
-  id,
-  type,
-  updateRegistrationNumberCallbackAction,
-  registrationNumber,
-}: {
+type RegistrationNumberFormProps = {
   id: number;
   type: "client" | "supplier";
   updateRegistrationNumberCallbackAction: (
@@ -44,7 +26,32 @@ const RegistrationNumberForm = ({
     data: { registrationNumber: string | undefined },
   ) => Promise<ReturnTuple<number>>;
   registrationNumber: string;
-}) => {
+};
+
+const RegistrationNumberForm = ({
+  id,
+  type,
+  updateRegistrationNumberCallbackAction,
+  registrationNumber,
+}: RegistrationNumberFormProps) => {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("registration-number-form");
+  const localizedType = getLocaleType(type, locale);
+
+  const schema = z.object({
+    registrationNumber: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(256, {
+          message: t("max-length-message", { maxLength: 256 }),
+        })
+        .optional(),
+    ),
+  });
+
+  type FormDataType = z.infer<typeof schema>;
+
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { registrationNumber },
@@ -59,11 +66,11 @@ const RegistrationNumberForm = ({
         toast.error(error);
         return;
       }
-      toast.success("Registration number updated");
+      toast.success(t("success"));
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating registration number");
+      toast.error(t("error"));
     }
   };
   return (
@@ -71,7 +78,7 @@ const RegistrationNumberForm = ({
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      <h2 className="text-xl font-bold">Registration Number</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <Form {...form}>
         <FormField
@@ -85,10 +92,7 @@ const RegistrationNumberForm = ({
               />
               <FormMessage />
               <FormDescription>
-                Update {type} registration number, this will change the
-                registration number of the {type} across all references. After
-                typing the updated registration number press the update button
-                to persist the change.
+                {t("description", { type: localizedType })}
               </FormDescription>
             </FormItem>
           )}
@@ -98,7 +102,7 @@ const RegistrationNumberForm = ({
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
             loading={form.formState.isSubmitting}
           >
-            Update
+            {t("update")}
           </SubmitButton>
         </div>
       </Form>

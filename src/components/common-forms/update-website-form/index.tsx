@@ -15,28 +15,11 @@ import { z } from "zod";
 import SubmitButton from "@/components/buttons/submit-button";
 import { toast } from "sonner";
 import { emptyToUndefined } from "@/utils/common";
+import { useTranslations, useLocale } from "next-intl";
+import { getLocaleType } from "@/utils/common";
 import type { ReturnTuple } from "@/utils/type-utils";
 
-const websiteSchema = z.object({
-  website: z.preprocess(
-    emptyToUndefined,
-    z
-      .string()
-      .max(256, {
-        message: "Website must not exceed 256 characters",
-      })
-      .optional(),
-  ),
-});
-
-type FormDataType = z.infer<typeof websiteSchema>;
-
-const WebsiteForm = ({
-  id,
-  updateWebsiteCallbackAction,
-  website,
-  type,
-}: {
+type WebsiteFormProps = {
   id: number;
   updateWebsiteCallbackAction: (
     id: number,
@@ -44,7 +27,32 @@ const WebsiteForm = ({
   ) => Promise<ReturnTuple<number>>;
   website: string;
   type: "client" | "supplier";
-}) => {
+};
+
+const WebsiteForm = ({
+  id,
+  updateWebsiteCallbackAction,
+  website,
+  type,
+}: WebsiteFormProps) => {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("website-form");
+  const localizedType = getLocaleType(type, locale);
+
+  const websiteSchema = z.object({
+    website: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(256, {
+          message: t("max-length-message", { maxLength: 256 }),
+        })
+        .optional(),
+    ),
+  });
+
+  type FormDataType = z.infer<typeof websiteSchema>;
+
   const form = useForm<FormDataType>({
     resolver: zodResolver(websiteSchema),
     defaultValues: { website },
@@ -59,11 +67,11 @@ const WebsiteForm = ({
         toast.error(error);
         return;
       }
-      toast.success("Website updated successfully");
+      toast.success(t("success"));
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating website");
+      toast.error(t("error"));
     }
   };
   return (
@@ -71,7 +79,7 @@ const WebsiteForm = ({
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      <h2 className="text-xl font-bold">Website</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <Form {...form}>
         <FormField
@@ -85,9 +93,7 @@ const WebsiteForm = ({
               />
               <FormMessage />
               <FormDescription>
-                Update website, this will change the website of the {type}
-                across all references. After typing the updated website press
-                the update button to persist the change.
+                {t("description", { type: localizedType })}
               </FormDescription>
             </FormItem>
           )}
@@ -97,7 +103,7 @@ const WebsiteForm = ({
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
             loading={form.formState.isSubmitting}
           >
-            Update
+            {t("update")}
           </SubmitButton>
         </div>
       </Form>
