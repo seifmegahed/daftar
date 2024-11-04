@@ -14,22 +14,26 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import SubmitButton from "@/components/buttons/submit-button";
 import { toast } from "sonner";
-import { emptyToUndefined } from "@/utils/common";
+import { emptyToUndefined, getLocaleType } from "@/utils/common";
 import { updateSupplierFieldAction } from "@/server/actions/suppliers/update";
-
-const schema = z.object({
-  field: z.preprocess(
-    emptyToUndefined,
-    z
-      .string({ required_error: "Field is required" })
-      .min(4, { message: "Field must be at least 4 characters" })
-      .max(64, { message: "Field must not be longer than 64 characters" }),
-  ),
-});
-
-type FormDataType = z.infer<typeof schema>;
+import { useLocale, useTranslations } from "next-intl";
 
 const FieldUpdateForm = ({ id, field }: { id: number; field: string }) => {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("field-update-form");
+
+  const schema = z.object({
+    field: z.preprocess(
+      emptyToUndefined,
+      z
+        .string({ required_error: t("field-required-message") })
+        .min(4, { message: t("field-min-length-message", { minLength: 4 }) })
+        .max(64, { message: t("field-max-length-message", { maxLength: 64 }) }),
+    ),
+  });
+  
+  type FormDataType = z.infer<typeof schema>;
+
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { field },
@@ -44,11 +48,11 @@ const FieldUpdateForm = ({ id, field }: { id: number; field: string }) => {
         toast.error(error);
         return;
       }
-      toast.success("Field updated");
+      toast.success(t("success"));
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating field");
+      toast.error(t("error"));
     }
   };
   return (
@@ -56,7 +60,7 @@ const FieldUpdateForm = ({ id, field }: { id: number; field: string }) => {
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      <h2 className="text-xl font-bold">Field of Business</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <Form {...form}>
         <FormField
@@ -70,10 +74,7 @@ const FieldUpdateForm = ({ id, field }: { id: number; field: string }) => {
               />
               <FormMessage />
               <FormDescription>
-                Update supplier field of business, this will change the field of
-                business of the supplier across all references. After typing the
-                updated field of business press the update button to persist the
-                change.
+                {t("description", { type: getLocaleType("supplier", locale) })}
               </FormDescription>
             </FormItem>
           )}
@@ -83,7 +84,7 @@ const FieldUpdateForm = ({ id, field }: { id: number; field: string }) => {
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
             loading={form.formState.isSubmitting}
           >
-            Update
+            {t("update")}
           </SubmitButton>
         </div>
       </Form>

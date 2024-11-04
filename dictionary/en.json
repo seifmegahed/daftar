@@ -457,6 +457,12 @@
       "general-info": "General Info",
       "other-info": "Other Info",
       "notes": "Notes"
+    },
+    "edit": {
+      "delete-form-info": "You cannot delete this supplier because it is referenced in {count, plural, =1 {a project} other {{count} projects}}. You first need to unlink it from the projects it is referenced in before you can delete it.",
+      "invalid-id": "Invalid supplier ID",
+      "title": "Edit Supplier",
+      "subtitle": "This is the edit page for the supplier: {supplierName}. Here you can edit the supplier details."
     }
   },
   "items": {
@@ -781,6 +787,16 @@
     "error": "An error occurred while updating website",
     "title": "Website",
     "description": "Update {type} website, this will change the website of the {type} across all references. After typing the updated website press the update button to persist the change.",
+    "update": "Update"
+  },
+  "field-update-form": {
+    "field-required-message": "Field of Business is required",
+    "field-min-length-message": "Field of Business must be at least {minLength} characters",
+    "field-max-length-message": "Field of Business must not exceed {maxLength} characters",
+    "success": "Field updated",
+    "error": "An error occurred while updating field",
+    "title": "Field of Business",
+    "description": "Update {type} field of business, this will change the field of business of the {type} across all references. After typing the updated field of business press the update button to persist the change.",
     "update": "Update"
   },
   "user-info-section": {

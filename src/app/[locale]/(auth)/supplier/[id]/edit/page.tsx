@@ -11,14 +11,22 @@ import {
 import { getSupplierFullByIdAction } from "@/server/actions/suppliers/read";
 import FieldUpdateForm from "./update-field-form";
 import { getSupplierProjectsCountAction } from "@/server/actions/purchase-items/read";
-import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteSupplierAction } from "@/server/actions/suppliers/delete";
 import ErrorPage from "@/components/error";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
-async function EditSupplierPage({ params }: { params: { id: string } }) {
+async function EditSupplierPage({
+  params,
+}: {
+  params: { id: string; locale: Locale };
+}) {
+  setLocale(params.locale);
+  const t = await getTranslations("supplier.edit");
+
   const supplierId = parseInt(params.id);
-  if (isNaN(supplierId)) return <ErrorPage message="Invalid supplier ID" />;
+  if (isNaN(supplierId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [supplier, error] = await getSupplierFullByIdAction(supplierId);
   if (error !== null) return <ErrorPage message={error} />;
@@ -31,19 +39,21 @@ async function EditSupplierPage({ params }: { params: { id: string } }) {
   if (supplierProjectsError !== null)
     return <ErrorPage message={supplierProjectsError} />;
 
-  const deleteFormInfo =
-    supplierProjects > 0 ? (
+  const hasProjects = supplierProjects > 0;
+
+  const DeleteFormInfoSelector = () =>
+    hasProjects ? (
       <>
-        {`You cannot delete a supplier that is referenced in ${supplierProjects > 1 ? `${supplierProjects} projects` : "a project"}.`}
+        {t("delete-form-info", {
+          count: supplierProjects,
+        })}
       </>
-    ) : (
-      <DeleteFormInfo type="supplier" />
-    );
+    ) : undefined;
 
   return (
     <InfoPageWrapper
-      title="Edit Supplier"
-      subtitle={`This is the edit page for the supplier: ${supplier.name}. Here you can edit the supplier details.`}
+      title={t("title")}
+      subtitle={t("subtitle", { supplierName: supplier.name })}
     >
       <FieldUpdateForm id={supplierId} field={supplier.field ?? ""} />
       <RegistrationNumberForm
@@ -74,7 +84,7 @@ async function EditSupplierPage({ params }: { params: { id: string } }) {
           id={supplierId}
           disabled={supplierProjects > 0}
           onDelete={deleteSupplierAction}
-          formInfo={deleteFormInfo}
+          FormInfo={<DeleteFormInfoSelector />}
         />
       )}
     </InfoPageWrapper>
