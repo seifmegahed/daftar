@@ -571,6 +571,24 @@
       "title": "Edit Item",
       "subtitle": "This is the edit page for the item: {itemName}. Here you can edit the item details.",
       "delete-form-info":"You cannot delete this item because it is linked to {count, plural, one {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it."
+    },
+    "projects": {
+      "title": "Item's Projects",
+      "subtitle": "This is a list of the item's projects.",
+      "invalid-id": "Invalid item ID",
+      "no-projects-found-error-message": "There seems to be no projects linked to this item yet"
+    },
+    "suppliers": {
+      "title": "Item's Suppliers",
+      "subtitle": "This is a list of the item's suppliers.",
+      "invalid-id": "Invalid item ID",
+      "no-suppliers-found-error-message": "There seems to be no suppliers linked to this item yet"
+    },
+    "documents": {
+      "title": "Item's Documents",
+      "subtitle": "This is a list of the item's documents.",
+      "invalid-id": "Invalid item ID",
+      "no-documents-found-error-message": "There seems to be no documents linked to this item yet"
     }
   },
   "documents": {

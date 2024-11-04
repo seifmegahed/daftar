@@ -571,6 +571,24 @@
       "title": "تعديل المادة",
       "subtitle": "هذه هي صفحة تعديل المادة: {itemName}. هنا يمكنك تعديل تفاصيل المادة.",
       "delete-form-info": "لا يمكنك حذف هذه المادة لأنها مرتبطة بـ {count, plural, one {مشروع} few {{count} مشاريع} other {{count} مشروع}}. يجب فك الربط بينه وبين {count, plural, one {المشروع} other {المشاريع}} أولاً قبل الحذف."
+    },
+    "projects": {
+      "title": "مشاريع المادة",
+      "subtitle": "هذه قائمة مشاريع المادة.",
+      "invalid-id": "معرف المادة غير صالح",
+      "no-projects-found-error-message": "لا يوجد مشاريع مرتبطة بهذه المادة حتى الآن"
+    },
+    "suppliers": {
+      "title": "موردين المادة",
+      "subtitle": "هذه قائمة الموردين المرتبطين بالمادة.",
+      "invalid-id": "معرف المادة غير صالح",
+      "no-suppliers-found-error-message": "لا يوجد موردين مرتبطين بهذه المادة حتى الآن"
+    },
+    "documents": {
+      "title": "مستندات المادة",
+      "subtitle": "هذه قائمة مستندات المادة.",
+      "invalid-id": "معرف المادة غير صالح",
+      "no-documents-found-error-message": "لا يوجد مستندات مرتبطة بهذه المادة حتى الآن"
     }
   },
   "documents": {
