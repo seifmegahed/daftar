@@ -18,12 +18,19 @@ import MakeForm from "./make-form";
 import MpnForm from "./mpn-form";
 import DeleteForm from "@/components/common-forms/delete-form";
 
-import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import ErrorPage from "@/components/error";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
-async function EditItemPage({ params }: { params: { id: string } }) {
+async function EditItemPage({
+  params,
+}: {
+  params: { id: string; locale: Locale };
+}) {
+  setLocale(params.locale);
+  const t = await getTranslations("item.edit");
   const itemId = parseInt(params.id);
-  if (isNaN(itemId)) return <ErrorPage message="Invalid item ID" />;
+  if (isNaN(itemId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [item, error] = await getItemDetailsAction(itemId);
   if (error !== null) return <ErrorPage message={error} />;
@@ -36,19 +43,17 @@ async function EditItemPage({ params }: { params: { id: string } }) {
   if (itemReferencesError !== null)
     return <ErrorPage message={itemReferencesError} />;
 
-  const deleteFormInfo =
-    itemReferences > 0 ? (
-      <>
-        {`You cannot delete an item that is referenced in ${itemReferences > 1 ? `${itemReferences} projects` : "a project"}. If you want to delete this item, you must first unlink it from all its references.`}
-      </>
-    ) : (
-      <DeleteFormInfo type="item" />
-    );
+  const hasReferences = itemReferences > 0;
+
+  const DeleteFormInfoSelector = () =>
+    hasReferences ? (
+      <>{t("delete-form-info", { count: itemReferences })}</>
+    ) : undefined;
 
   return (
     <InfoPageWrapper
-      title="Edit Item"
-      subtitle={`This is the edit page for the item: ${item.name}. Here you can edit the item details.`}
+      title={t("title")}
+      subtitle={t("subtitle", { itemName: item.name })}
     >
       <NameForm
         id={itemId}
@@ -78,9 +83,9 @@ async function EditItemPage({ params }: { params: { id: string } }) {
           access={hasFullAccess}
           type="item"
           id={itemId}
-          disabled={itemReferences > 0}
+          disabled={hasReferences}
           onDelete={deleteItemAction}
-          formInfo={deleteFormInfo}
+          FormInfo={<DeleteFormInfoSelector />}
         />
       )}
     </InfoPageWrapper>

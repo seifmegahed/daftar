@@ -12,30 +12,36 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { emptyToUndefined } from "@/utils/common";
+import { emptyToUndefined, getLocaleType } from "@/utils/common";
 import { updateItemMpnAction } from "@/server/actions/items/update";
 import SubmitButton from "@/components/buttons/submit-button";
 import { toast } from "sonner";
-
-const typeSchema = z.object({
-  mpn: z.preprocess(
-    emptyToUndefined,
-    z
-      .string()
-      .max(64, { message: "MPN must not be longer than 64 characters" })
-      .optional(),
-  ),
-});
-
-type FormDataType = z.infer<typeof typeSchema>;
+import { useTranslations, useLocale } from "next-intl";
 
 const MpnForm = ({
   id,
   defaultValue,
+  type = "item",
 }: {
   id: number;
   defaultValue: string;
+  type?: "item";
 }) => {
+  const locale = useLocale() as Locale;
+  const localizedType = getLocaleType(type, locale);
+  const t = useTranslations("mpn-update-form");
+
+  const typeSchema = z.object({
+    mpn: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(64, { message: t("mpn-max-length-message", { maxLength: 64 }) })
+        .optional(),
+    ),
+  });
+
+  type FormDataType = z.infer<typeof typeSchema>;
   const form = useForm<FormDataType>({
     resolver: zodResolver(typeSchema),
     defaultValues: { mpn: defaultValue },
@@ -48,11 +54,11 @@ const MpnForm = ({
         toast.error(error);
         return;
       }
-      toast.success("Website updated successfully");
+      toast.success(t("success"));
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating the MPN");
+      toast.error(t("error"));
     }
   };
   return (
@@ -60,7 +66,7 @@ const MpnForm = ({
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      <h2 className="text-xl font-bold">Manufacturer Part Number</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <Form {...form}>
         <FormField
@@ -74,9 +80,9 @@ const MpnForm = ({
               />
               <FormMessage />
               <FormDescription>
-                Update item&apos;s MPN, this will change the MPN of the item
-                across all references. After typing the updated MPN press the
-                update button to persist the change.
+                {t("description", {
+                  type: localizedType,
+                })}
               </FormDescription>
             </FormItem>
           )}
@@ -86,7 +92,7 @@ const MpnForm = ({
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
             loading={form.formState.isSubmitting}
           >
-            Update
+            {t("update")}
           </SubmitButton>
         </div>
       </Form>

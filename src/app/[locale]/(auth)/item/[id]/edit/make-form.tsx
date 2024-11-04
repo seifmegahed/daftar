@@ -12,32 +12,38 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { emptyToUndefined } from "@/utils/common";
+import { emptyToUndefined, getLocaleType } from "@/utils/common";
 import { updateItemMakeAction } from "@/server/actions/items/update";
 import SubmitButton from "@/components/buttons/submit-button";
 import { toast } from "sonner";
-
-const makeSchema = z.object({
-  make: z.preprocess(
-    emptyToUndefined,
-    z
-      .string()
-      .max(64, { message: "Type must not be longer than 64 characters" })
-      .optional(),
-  ),
-});
-
-type FormDataType = z.infer<typeof makeSchema>;
+import { useTranslations, useLocale } from "next-intl";
 
 const MakeForm = ({
   id,
   defaultValue,
+  type = "item",
 }: {
   id: number;
   defaultValue: string;
+  type?: "item";
 }) => {
+  const locale = useLocale() as Locale;
+  const localizedType = getLocaleType(type, locale);
+  const t = useTranslations("make-update-form");
+
+  const schema = z.object({
+    make: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(64, { message: t("make-max-length-message", { maxLength: 64 }) })
+        .optional(),
+    ),
+  });
+
+  type FormDataType = z.infer<typeof schema>;
   const form = useForm<FormDataType>({
-    resolver: zodResolver(makeSchema),
+    resolver: zodResolver(schema),
     defaultValues: { make: defaultValue },
   });
 
@@ -48,11 +54,11 @@ const MakeForm = ({
         toast.error(error);
         return;
       }
-      toast.success("Make updated");
+      toast.success(t("success"));
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating the make");
+      toast.error(t("error"));
     }
   };
   return (
@@ -60,7 +66,7 @@ const MakeForm = ({
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      <h2 className="text-xl font-bold">Make</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <Form {...form}>
         <FormField
@@ -74,9 +80,9 @@ const MakeForm = ({
               />
               <FormMessage />
               <FormDescription>
-                Update item make, this will change the make of the item across
-                all references. After typing the updated make press the update
-                button to persist the change.
+                {t("description", {
+                  type: localizedType,
+                })}
               </FormDescription>
             </FormItem>
           )}
@@ -86,7 +92,7 @@ const MakeForm = ({
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
             loading={form.formState.isSubmitting}
           >
-            Update
+            {t("update")}
           </SubmitButton>
         </div>
       </Form>

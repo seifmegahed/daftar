@@ -12,30 +12,36 @@ import { Input } from "@/components/ui/input";
 import { Separator } from "@/components/ui/separator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { emptyToUndefined } from "@/utils/common";
+import { emptyToUndefined, getLocaleType } from "@/utils/common";
 import { updateItemTypeAction } from "@/server/actions/items/update";
 import SubmitButton from "@/components/buttons/submit-button";
 import { toast } from "sonner";
-
-const typeSchema = z.object({
-  type: z.preprocess(
-    emptyToUndefined,
-    z
-      .string()
-      .max(64, { message: "Type must not be longer than 64 characters" })
-      .optional(),
-  ),
-});
-
-type FormDataType = z.infer<typeof typeSchema>;
+import { useTranslations, useLocale } from "next-intl";
 
 const TypeForm = ({
   id,
   defaultValue,
+  type = "item",
 }: {
   id: number;
   defaultValue: string;
+  type?: "item";
 }) => {
+  const locale = useLocale() as Locale;
+  const t = useTranslations("type-update-form");
+  const localizedType = getLocaleType(type, locale);
+
+  const typeSchema = z.object({
+    type: z.preprocess(
+      emptyToUndefined,
+      z
+        .string({ required_error: t("type-required-message") })
+        .min(4, { message: t("type-min-length-message", { min: 4 }) })
+        .max(64, { message: t("type-max-length-message", { max: 64 }) }),
+    ),
+  });
+
+  type FormDataType = z.infer<typeof typeSchema>;
   const form = useForm<FormDataType>({
     resolver: zodResolver(typeSchema),
     defaultValues: { type: defaultValue },
@@ -50,11 +56,11 @@ const TypeForm = ({
         toast.error(error);
         return;
       }
-      toast.success("Website updated successfully");
+      toast.success(t("success"));
       form.reset(data);
     } catch (error) {
       console.log(error);
-      toast.error("an error occurred while updating the website");
+      toast.error(t("error"));
     }
   };
   return (
@@ -62,7 +68,7 @@ const TypeForm = ({
       onSubmit={form.handleSubmit(onSubmit)}
       className="flex flex-col gap-4"
     >
-      <h2 className="text-xl font-bold">Type</h2>
+      <h2 className="text-xl font-bold">{t("title")}</h2>
       <Separator />
       <Form {...form}>
         <FormField
@@ -76,9 +82,7 @@ const TypeForm = ({
               />
               <FormMessage />
               <FormDescription>
-                Update item type, this will change the type of the item across
-                all references. After typing the updated item press the update
-                button to persist the change.
+                {t("description", { type: localizedType })}
               </FormDescription>
             </FormItem>
           )}
@@ -88,7 +92,7 @@ const TypeForm = ({
             disabled={form.formState.isSubmitting || !form.formState.isDirty}
             loading={form.formState.isSubmitting}
           >
-            Update
+            {t("update")}
           </SubmitButton>
         </div>
       </Form>

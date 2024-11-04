@@ -363,7 +363,7 @@
       "notes": "Notes"
     },
     "edit": {
-      "delete-form-info": "You cannot delete this client because it is linked to {count, plural, =1 {a project} other {{count} projects}}. You first need to unlink it from the projects it is referenced in before you can delete it.",
+      "delete-form-info": "You cannot delete this client because it is linked to {count, plural, =1 {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it.",
       "invalid-id": "Invalid client ID",
       "title": "Edit Client",
       "subtitle": "This is the edit page for the client: {clientName}. Here you can edit the client details."
@@ -459,7 +459,7 @@
       "notes": "Notes"
     },
     "edit": {
-      "delete-form-info": "You cannot delete this supplier because it is referenced in {count, plural, =1 {a project} other {{count} projects}}. You first need to unlink it from the projects it is referenced in before you can delete it.",
+      "delete-form-info": "You cannot delete this supplier because it is referenced in {count, plural, =1 {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it.",
       "invalid-id": "Invalid supplier ID",
       "title": "Edit Supplier",
       "subtitle": "This is the edit page for the supplier: {supplierName}. Here you can edit the supplier details."
@@ -565,6 +565,12 @@
         "mpn": "MPN",
         "make": "Make"
       }
+    },
+    "edit": {
+      "invalid-id": "Invalid item ID",
+      "title": "Edit Item",
+      "subtitle": "This is the edit page for the item: {itemName}. Here you can edit the item details.",
+      "delete-form-info":"You cannot delete this item because it is linked to {count, plural, one {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it."
     }
   },
   "documents": {
@@ -852,6 +858,32 @@
     "error": "An error occurred while updating field",
     "title": "Field of Business",
     "description": "Update {type} field of business, this will change the field of business of the {type} across all references. After typing the updated field of business press the update button to persist the change.",
+    "update": "Update"
+  },
+  "type-update-form": {
+    "type-required-message": "Type is required",
+    "type-min-length-message": "Type must be at least {minLength} characters",
+    "type-max-length-message": "Type must not exceed {maxLength} characters",
+    "success": "Type updated",
+    "error": "An error occurred while updating type",
+    "title": "Type",
+    "description": "Update {type} type, this will change the type of the {type} across all references. After typing the updated type press the update button to persist the change.",
+    "update": "Update"
+  },
+  "make-update-form": {
+    "make-max-length-message": "Make must not exceed {maxLength} characters",
+    "success": "Make updated",
+    "error": "An error occurred while updating the make",
+    "title": "Make",
+    "description": "Update {type} make, this will change the make of the {type} across all references. After typing the updated make press the update button to persist the change.",
+    "update": "Update"
+  },
+  "mpn-update-form": {
+    "mpn-max-length-message": "MPN must not exceed {maxLength} characters",
+    "success": "MPN updated",
+    "error": "An error occurred while updating the MPN",
+    "title": "Manufacturer Part Number",
+    "description": "Update {type}'s MPN, this will change the MPN of the {type} across all references. After typing the updated MPN press the update button to persist the change.",
     "update": "Update"
   },
   "user-info-section": {
