@@ -605,6 +605,63 @@
       "no-documents-found-error-message": "Start adding documents to be able to see them here"
     }
   },
+  "document": {
+    "layout": {
+      "title": "Document",
+      "description": "Manage your document",
+      "document": "Document",
+      "edit": "Edit Document",
+      "projects": "Projects",
+      "clients": "Clients",
+      "suppliers": "Suppliers",
+      "items": "Items",
+      "new-document": "New Document"
+    },
+    "page": {
+      "invalid-id": "Invalid document ID",
+      "subtitle": "This is the page for the document: {documentName}. Here you can view all information about the document.",
+      "general-info": "General Info",
+      "other-info": "Other Info",
+      "notes": "Notes",
+      "download": "Download",
+      "general-info-section": {
+        "extension": "Extension",
+        "private": "Private",
+        "public": "Public",
+        "yes": "Yes",
+        "no": "No"
+      }
+    },
+    "edit": {
+      "invalid-id": "Invalid document ID",
+      "title": "Edit Document",
+      "subtitle": "This is the edit page for the document: {documentName}. Here you can edit the document details."
+    },
+    "projects": {
+      "title": "Document's Projects",
+      "subtitle": "This is a list of the document's projects.",
+      "invalid-id": "Invalid document ID",
+      "no-projects-found-error-message": "There seems to be no projects linked to this document yet"
+    },
+    "clients": {
+      "title": "Document's Clients",
+      "subtitle": "This is a list of the document's clients.",
+      "invalid-id": "Invalid document ID",
+      "no-clients-found-error-message": "There seems to be no clients linked to this document yet"
+    },
+    "suppliers": {
+      "title": "Document's Suppliers",
+      "subtitle": "This is a list of the document's suppliers.",
+      "invalid-id": "Invalid document ID",
+      "no-suppliers-found-error-message": "There seems to be no suppliers linked to this document yet"
+    },
+    "items": {
+      "title": "Document's Items",
+      "subtitle": "This is a list of the document's items.",
+      "invalid-id": "Invalid document ID",
+      "no-items-found-error-message": "There seems to be no items linked to this document yet"
+    }
+  },
   "address": {
     "success": "Address added",
     "error": "An error occurred while adding the address",

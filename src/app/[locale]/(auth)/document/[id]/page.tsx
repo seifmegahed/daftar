@@ -6,39 +6,55 @@ import Section from "@/components/info-section";
 import { getDocumentByIdAction } from "@/server/actions/documents/read";
 import { DownloadIcon } from "lucide-react";
 import Link from "next/link";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
-async function ItemPage({ params }: { params: { id: string } }) {
+async function ItemPage({
+  params,
+}: {
+  params: { id: string; locale: Locale };
+}) {
+  setLocale(params.locale);
+  const t = await getTranslations("document.page");
+
   const documentId = parseInt(params.id);
-  if (isNaN(documentId)) return <ErrorPage message="Invalid document Id" />;
+  if (isNaN(documentId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [document, error] = await getDocumentByIdAction(documentId);
   if (error !== null) return <ErrorPage message={error} />;
 
+  const infoData = [
+    { label: t("general-info-section.extension"), value: document.extension },
+    {
+      label: t("general-info-section.private"),
+      value: document.private
+        ? t("general-info-section.yes")
+        : t("general-info-section.no"),
+    },
+  ];
+
   return (
     <InfoPageWrapper
-      title="Document"
-      subtitle={`This is the page for the document: ${document.name}. Here you can view all information about the document.`}
+      title={document.name}
+      subtitle={t("subtitle", { documentName: document.name })}
     >
-      <Section title="General Info">
-        <DataDisplayUnit label="Name" values={[document.name]} />
-        <DataDisplayUnit label="Extension" values={[document.extension]} />
-        <DataDisplayUnit
-          label="Private"
-          values={[document.private ? "Yes" : "No"]}
-        />
+      <Section title={t("general-info")}>
+        {infoData.map(({ label, value }) => (
+          <DataDisplayUnit key={value} label={label} values={[value]} />
+        ))}
         <div className="flex sm:justify-end">
           <Link href={`/api/download-document/${document.id}`}>
             <div className="flex cursor-pointer items-center gap-x-2 sm:text-right">
-              <p className="hover:underline">Download</p>
+              <p className="hover:underline">{t("download")}</p>
               <DownloadIcon className="mb-1 h-4 w-4" />
             </div>
           </Link>
         </div>
       </Section>
-      <Section title="Other Info">
+      <Section title={t("other-info")}>
         <UserInfoSection data={document} />
       </Section>
-      <Section title="Notes">
+      <Section title={t("notes")}>
         <div>
           <p>{document.notes}</p>
         </div>

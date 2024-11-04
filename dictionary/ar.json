@@ -605,6 +605,63 @@
       "no-documents-found-error-message": "أضف مستندات لتتمكن من إضافة مستندات الشراء."
     }
   },
+  "document": {
+    "layout": {
+      "title": "مستند",
+      "description": "إدارة مستندك",
+      "document": "مستند",
+      "edit": "تعديل مستند",
+      "projects": "المشاريع",
+      "clients": "العملاء",
+      "suppliers": "الموردين",
+      "items": "المواد",
+      "new-document": "إضافة مستند"
+    },
+    "page": {
+      "invalid-id": "معرف المستند غير صالح",
+      "subtitle": "هذه هي صفحة المستند: {documentName}. هنا يمكنك عرض جميع المعلومات حول المستند.",
+      "general-info": "معلومات عامة",
+      "other-info": "معلومات أخرى",
+      "notes": "ملاحظات",
+      "download": "تحميل",
+      "general-info-section": {
+        "extension": "نوع الملف",
+        "private": "خاص",
+        "public": "عام",
+        "yes": "نعم",
+        "no": "لا"
+      }
+    },
+    "edit": {
+      "invalid-id": "معرف المستند غير صالح",
+      "title": "تعديل المستند",
+      "subtitle": "هذه هي صفحة تعديل المستند: {documentName}. هنا يمكنك تعديل تفاصيل المستند."
+    },
+    "projects": {
+      "title": "مشاريع المستند",
+      "subtitle": "هذه قائمة مشاريع المستند.",
+      "invalid-id": "معرف المستند غير صالح",
+      "no-projects-found-error-message": "لا يوجد مشاريع مرتبطة بهذه المستند حتى الآن"
+    },
+    "clients": {
+      "title": "عملاء المستند",
+      "subtitle": "هذه قائمة عملاء المستند.",
+      "invalid-id": "معرف المستند غير صالح",
+      "no-clients-found-error-message": "لا يوجد عملاء مرتبطين بهذه المستند حتى الآن"
+    },
+    "suppliers": {
+      "title": "موردين المستند",
+      "subtitle": "هذه قائمة موردين المستند.",
+      "invalid-id": "معرف المستند غير صالح",
+      "no-suppliers-found-error-message": "لا يوجد موردين مرتبطين بهذه المستند حتى الآن"
+    },
+    "items": {
+      "title": "مواد المستند",
+      "subtitle": "هذه قائمة مواد المستند.",
+      "invalid-id": "معرف المستند غير صالح",
+      "no-items-found-error-message": "لا يوجد مواد مرتبطة بهذه المستند حتى الآن"
+    }
+  },
   "address": {
     "success": "تم إضافة العنوان",
     "error": "حدث خطأ أثناء إضافة العنوان",
