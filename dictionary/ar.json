@@ -376,6 +376,18 @@
       "subtitle": "هذه قائمة المستندات المرتبطة بهذا العميل.",
       "invalid-id": "معرف العميل غير صالح",
       "no-documents-found-error-message": "لا يوجد مستندات مرتبطة بهذا العميل حتى الآن"
+    },
+    "addresses": {
+      "title": "عناوين العميل",
+      "subtitle": "هذه قائمة عناوين العميل.",
+      "invalid-id": "معرف العميل غير صالح",
+      "no-addresses-found-error-message": "لا يوجد عناوين مرتبطة بهذا العميل حتى الآن"
+    },
+    "contacts": {
+      "title": "جهات اتصال العميل",
+      "subtitle": "هذه قائمة جهات الاتصال المرتبطة بهذا العميل.",
+      "invalid-id": "معرف العميل غير صالح",
+      "no-contacts-found-error-message": "لا يوجد جهات الاتصال مرتبطة بهذا العميل حتى الآن"
     }
   },
   "suppliers": {
@@ -869,6 +881,45 @@
     "last-login": "آخر تسجيل الدخول",
     "yes": "نعم",
     "no": "لا"
+  },
+  "address-card": {
+    "address-line": "العنوان",
+    "country": "الدولة",
+    "city": "المدينة",
+    "created-by": "أنشئ بواسطة",
+    "created-at": "تاريخ الإنشاء",
+    "updated-by": "تم التحديث بواسطة",
+    "updated-at": "تاريخ التحديث",
+    "notes": "ملاحظات",
+    "action-buttons": {
+      "primary": "الرئيسي",
+      "set-primary": "تعيين كرئيسي",
+      "delete": "حذف",
+      "success": "تم تحديث العنوان الرئيسي",
+      "error": "حدث خطأ أثناء تحديث العنوان الرئيسي",
+      "delete-success": "تم حذف العنوان",
+      "delete-error": "حدث خطأ أثناء حذف العنوان",
+      "confirm-delete": "هل أنت متأكد أنك تريد حذف هذا العنوان؟"
+    }
+  },
+  "contact-card": {
+    "phone-number": "رقم الهاتف",
+    "email": "البريد الإلكتروني",
+    "created-by": "أنشئ بواسطة",
+    "created-at": "تاريخ الإنشاء",
+    "updated-by": "تم التحديث بواسطة",
+    "updated-at": "تاريخ التحديث",
+    "notes": "ملاحظات",
+    "action-buttons": {
+      "primary": "الرئيسي",
+      "set-primary": "تعيين كرئيسي",
+      "delete": "حذف",
+      "success": "تم حذف جهة الاتصال",
+      "error": "حدث خطأ أثناء حذف جهة الاتصال",
+      "delete-success": "تم حذف جهة الاتصال",
+      "delete-error": "حدث خطأ أثناء حذف جهة الاتصال",
+      "confirm-delete": "هل أنت متأكد أنك تريد حذف جهة الاتصال هذه؟"
+    }
   },
   "card-tips": {
     "creation-date": "تاريخ الإنشاء",

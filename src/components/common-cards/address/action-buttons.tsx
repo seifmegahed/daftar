@@ -7,19 +7,24 @@ import { deleteAddressAction } from "@/server/actions/addresses";
 import { updateClientPrimaryAddressAction } from "@/server/actions/clients/update";
 import { updateSupplierPrimaryAddressAction } from "@/server/actions/suppliers/update";
 import { toast } from "sonner";
-import { usePathname } from "next/navigation";
+import { usePathname } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
+
+type AddressActionButtonsProps = {
+  isPrimary: boolean;
+  addressId: number;
+  referenceId: number;
+  referenceType: "client" | "supplier";
+};
 
 const AddressActionButtons = ({
   isPrimary,
   addressId,
   referenceId,
   referenceType,
-}: {
-  isPrimary: boolean;
-  addressId: number;
-  referenceId: number;
-  referenceType: "client" | "supplier";
-}) => {
+}: AddressActionButtonsProps) => {
+  const t = useTranslations("address-card.action-buttons");
+  
   const pathname = usePathname();
   const [primaryLoading, setPrimaryLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
@@ -35,17 +40,17 @@ const AddressActionButtons = ({
         toast.error(error);
         return;
       }
-      toast.success("Primary address updated");
+      toast.success(t("success"));
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while updating primary address");
+      toast.error(t("error"));
     } finally {
       setPrimaryLoading(false);
     }
   };
 
   const handleDelete = async () => {
-    const result = confirm("Are you sure you want to delete this address?");
+    const result = confirm(t("confirm-delete"));
     if (!result) return;
     setDeleteLoading(true);
     try {
@@ -54,10 +59,10 @@ const AddressActionButtons = ({
         toast.error(error);
         return;
       }
-      toast.success("Address deleted");
+      toast.success(t("delete-success"));
     } catch (error) {
       console.log(error);
-      toast.error("An error occurred while deleting address");
+      toast.error(t("delete-error"));
     } finally {
       setDeleteLoading(false);
     }
@@ -71,7 +76,7 @@ const AddressActionButtons = ({
     <div className="flex gap-2">
       {isPrimary ? (
         <div className="flex h-8 w-24 select-none items-center justify-center rounded-full bg-green-200 px-3 py-1 text-xs dark:bg-green-600 sm:w-32">
-          <p>Primary</p>
+          <p>{t("primary")}</p>
         </div>
       ) : (
         <Button
@@ -83,7 +88,7 @@ const AddressActionButtons = ({
           {primaryLoading ? (
             <Loading className="h-4 w-4" />
           ) : (
-            <p>Set Primary</p>
+            <p>{t("set-primary")}</p>
           )}
         </Button>
       )}
@@ -93,7 +98,7 @@ const AddressActionButtons = ({
         disabled={isPrimary || deleteLoading}
         onClick={handleDelete}
       >
-        {deleteLoading ? <Loading className="h-4 w-4" /> : <p>Delete</p>}
+        {deleteLoading ? <Loading className="h-4 w-4" /> : <p>{t("delete")}</p>}
       </Button>
     </div>
   );
