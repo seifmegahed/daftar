@@ -495,10 +495,15 @@
     }
   },
   "address": {
+    "success": "تم إضافة العنوان",
+    "error": "حدث خطأ أثناء إضافة العنوان",
+    "title": "إضافة عنوان",
+    "description": "أدخل التفاصيل الخاصة بالعنوان الذي تريد إضافته .",
+    "button-text": "إضافة",
     "form": {
       "primary-address-title": "العنوان الرئيسي",
       "address-name-label": "اسم العنوان *",
-      "address-name-description": "أدخل الاسم التعريفي للعنوان. مثال: المكتب الرئيسي",
+      "address-name-description": "أدخل الاسم التعريفي للعنوان . مثال: المكتب الرئيسي",
       "address-line-label": "العنوان *",
       "address-line-description": "أدخل إسم الشارع و رقم العنوان",
       "country-label": "البلد *",

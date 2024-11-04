@@ -6,6 +6,9 @@
   "error": {
     "title": "Oops, something went wrong"
   },
+  "invalid-type-id": {
+    "message": "Invalid {type} ID"
+  },
   "topnav": {
     "Projects": "Projects",
     "Clients": "Clients",
@@ -495,6 +498,11 @@
     }
   },
   "address": {
+    "success": "Address added",
+    "error": "An error occurred while adding the address",
+    "title": "Add Address",
+    "description": "Enter the details of the address you want to add.",
+    "button-text": "Add Address",
     "form": {
       "primary-address-title": "Primary Address",
       "address-name-label": "Address Name *",

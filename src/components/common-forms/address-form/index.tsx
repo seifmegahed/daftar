@@ -10,6 +10,7 @@ import { addNewAddressAction } from "@/server/actions/addresses";
 import ComboSelect from "@/components/combo-select";
 import {
   Form,
+  FormControl,
   FormDescription,
   FormField,
   FormItem,
@@ -22,31 +23,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { countries } from "@/lib/countries";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 import { emptyToUndefined } from "@/utils/common";
-import { notesFormSchema } from "@/utils/schemas";
-
-const formSchema = z.object({
-  name: z
-    .string()
-    .min(4, { message: "Name must be at least 4 characters" })
-    .max(64, { message: "Name must not be longer than 64 characters" }),
-  addressLine: z.preprocess(
-    emptyToUndefined,
-    z.string().max(256, {
-      message: "Address line must not be longer than 256 characters",
-    }),
-  ),
-  country: z.enum(countries, { message: "Country is required" }),
-  city: z.preprocess(
-    emptyToUndefined,
-    z
-      .string()
-      .max(64, { message: "City must not be longer than 64 characters" })
-      .optional(),
-  ),
-  notes: notesFormSchema,
-});
-
-type FormSchemaType = z.infer<typeof formSchema>;
+import { notesMaxLength } from "@/data/config";
+import { useTranslations } from "next-intl";
 
 function NewAddressForm({
   id,
@@ -55,8 +33,58 @@ function NewAddressForm({
   id: number;
   type: "supplier" | "client";
 }) {
+  const t = useTranslations("address");
+
+  const schema = z.object({
+    name: z.preprocess(
+      emptyToUndefined,
+      z
+        .string({ required_error: t("schema.name-required") })
+        .min(4, { message: t("schema.name-min-length", { minLength: 4 }) })
+        .max(64, {
+          message: t("schema.name-max-length", { maxLength: 64 }),
+        }),
+    ),
+    addressLine: z.preprocess(
+      emptyToUndefined,
+      z
+        .string({ required_error: t("schema.address-line-required") })
+        .min(5, {
+          message: t("schema.address-line-min-length", { minLength: 5 }),
+        })
+        .max(256, {
+          message: t("schema.address-line-max-length", { maxLength: 256 }),
+        }),
+    ),
+    country: z.enum(countries, {
+      required_error: t("schema.country-required"),
+    }),
+    city: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(256, {
+          message: t("schema.city-max-length", { maxLength: 256 }),
+        })
+        .optional(),
+    ),
+    notes: z.preprocess(
+      emptyToUndefined,
+      z
+        .string()
+        .max(notesMaxLength, {
+          message: t("schema.address-notes-max-length", {
+            maxLength: notesMaxLength,
+          }),
+        })
+        .optional(),
+    ),
+  });
+
+  type FormSchemaType = z.infer<typeof schema>;
+
   const form = useForm<FormSchemaType>({
-    resolver: zodResolver(formSchema),
+    resolver: zodResolver(schema),
     defaultValues: {
       name: "",
       addressLine: "",
@@ -83,10 +111,10 @@ function NewAddressForm({
         return;
       }
       form.reset();
-      toast.success("Address added");
+      toast.success(t("success"));
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while adding the address");
+      toast.error(t("error"));
     }
   };
 
@@ -97,73 +125,90 @@ function NewAddressForm({
     >
       <Form {...form}>
         <FormWrapperWithSubmit
-          title="Add Address"
-          description="Enter the details of the address you want to add."
-          buttonText="Add Address"
+          title={t("title")}
+          description={t("description")}
+          buttonText={t("button-text")}
           dirty={form.formState.isDirty}
           submitting={form.formState.isSubmitting}
         >
           <FormField
+            control={form.control}
             name="name"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Title *</FormLabel>
-                <Input {...field} data-testid="title" />
+                <FormLabel>{t("form.address-name-label")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
                 <FormDescription>
-                  Title of the address, e.g. Main Office, Warehouse, etc.
+                  {t("form.address-name-description")}
                 </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
+            control={form.control}
             name="addressLine"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Address *</FormLabel>
-                <Input {...field} data-testid="address-line" />
+                <FormLabel>{t("form.address-line-label")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>
+                  {t("form.address-line-description")}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
+            control={form.control}
             name="country"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Country *</FormLabel>
+                <FormLabel>{t("form.country-label")}</FormLabel>
                 <ComboSelect
                   value={field.value as string}
                   onChange={field.onChange}
                   options={countries}
-                  selectMessage="Select a country"
-                  searchMessage="Search for a country"
-                  notFoundMessage="Country not found"
+                  selectMessage={t("form.country-select-message")}
+                  searchMessage={t("form.country-search-message")}
+                  notFoundMessage={t("form.country-not-found-message")}
                 />
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
+            control={form.control}
             name="city"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>City</FormLabel>
-                <Input {...field} />
+                <FormLabel>{t("form.city-label")}</FormLabel>
+                <FormControl>
+                  <Input {...field} />
+                </FormControl>
+                <FormDescription>
+                  {t("form.city-description")}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
           <FormField
+            control={form.control}
             name="notes"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Notes</FormLabel>
-                <Textarea
-                  {...field}
-                  rows={3}
-                  className="resize-none"
-                  data-testid="notes-field"
-                />
+                <FormLabel>{t("form.address-notes-label")}</FormLabel>
+                <FormControl>
+                  <Textarea {...field} className="resize-none" rows={4} />
+                </FormControl>
+                <FormDescription>
+                  {t("form.address-notes-description")}
+                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
