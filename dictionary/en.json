@@ -542,6 +542,31 @@
       }
     }
   },
+  "item": {
+    "layout": {
+      "title": "Item",
+      "description": "Manage your items",
+      "item": "Item",
+      "edit": "Edit Item",
+      "projects": "Projects",
+      "suppliers": "Suppliers",
+      "documents": "Documents",
+      "new-document": "New Document"
+    },
+    "page": {
+      "invalid-id": "Invalid item ID",
+      "subtitle": "This is the item page for {itemName}. Here you can view all information about the item.",
+      "general-info": "General Info",
+      "other-info": "Other Info",
+      "notes": "Notes",
+      "general-info-section": {
+        "type": "Type",
+        "description": "Description",
+        "mpn": "MPN",
+        "make": "Make"
+      }
+    }
+  },
   "documents": {
     "layout": {
       "title": "Documents",

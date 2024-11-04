@@ -1,48 +1,53 @@
 import PageLayout from "@/components/page-layout";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
 const basePath = (id: string) => "/item/" + id;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
-  params: { id: string };
+  params: { id: string; locale: Locale };
 }
 
-const sidebarNavItemsGenerator = (id: string) => [
-  {
-    title: "Item",
-    href: basePath(id),
-  },
-  {
-    title: "Edit",
-    href: basePath(id) + "/edit",
-  },
-  {
-    title: "Projects",
-    href: basePath(id) + "/projects",
-  },
-  {
-    title: "Suppliers",
-    href: basePath(id) + "/suppliers",
-  },
-  {
-    title: "Documents",
-    href: basePath(id) + "/documents",
-  },
-  {
-    title: "New Document",
-    href: basePath(id) + "/new-document",
-  },
-];
 
 export default async function SettingsLayout({
   children,
   params,
 }: SettingsLayoutProps) {
+  setLocale(params.locale);
+  const t = await getTranslations("item.layout");
+  
+  const sidebarNavItemsGenerator = (id: string) => [
+    {
+      title: t("item"),
+      href: basePath(id),
+    },
+    {
+      title: t("edit"),
+      href: basePath(id) + "/edit",
+    },
+    {
+      title: t("projects"),
+      href: basePath(id) + "/projects",
+    },
+    {
+      title: t("suppliers"),
+      href: basePath(id) + "/suppliers",
+    },
+    {
+      title: t("documents"),
+      href: basePath(id) + "/documents",
+    },
+    {
+      title: t("new-document"),
+      href: basePath(id) + "/new-document",
+    },
+  ];
   const sidebarNavItems = sidebarNavItemsGenerator(params.id);
   return (
     <PageLayout
-      title="Item"
-      description="Manage your item"
+      title={t("title")}
+      description={t("description")}
       navLinks={sidebarNavItems}
     >
       {children}

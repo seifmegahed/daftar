@@ -542,6 +542,31 @@
       }
     }
   },
+  "item": {
+    "layout": {
+      "title": "المادة",
+      "description": "إدارة المادة",
+      "item": "المادة",
+      "edit": "تعديل المادة",
+      "projects": "المشاريع",
+      "suppliers": "الموردين",
+      "documents": "المستندات",
+      "new-document": "إضافة مستند"
+    },
+    "page": {
+      "invalid-id": "معرف المادة غير صالح",
+      "subtitle": "هذه هي صفحة المادة {itemName}. هنا يمكنك عرض جميع المعلومات المتعلقة بالمادة.",
+      "general-info": "معلومات عامة",
+      "other-info": "معلومات أخرى",
+      "notes": "ملاحظات",
+      "general-info-section": {
+        "type": "النوع",
+        "description": "الوصف",
+        "mpn": "رقم المنتج",
+        "make": "الصناعة"
+      }
+    }
+  },
   "documents": {
     "layout": {
       "title": "المستندات",
