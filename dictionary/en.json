@@ -808,6 +808,15 @@
     "edit": {
       "title": "Edit User",
       "subtitle": "Edit your account details"
+    },
+    "preferences": {
+      "title": "Preferences",
+      "description": "Manage your preferences",
+      "theme-title": "Theme",
+      "theme-description": "Change the theme of the application. Note: Dark mode is better for your eyes.",
+      "light-mode-title": "Light Mode",
+      "dark-mode-title": "Dark Mode",
+      "update": "Update"
     }
   },
   "edit-user": {

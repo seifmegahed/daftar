@@ -16,16 +16,17 @@ import {
 } from "@/components/ui/form";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import SubmitButton from "@/components/buttons/submit-button";
+import { useTranslations } from "next-intl";
 
 const appearanceFormSchema = z.object({
-  theme: z.enum(["light", "dark"], {
-    required_error: "Please select a theme.",
-  }),
+  theme: z.enum(["light", "dark"]),
 });
 
 type AppearanceFormValues = z.infer<typeof appearanceFormSchema>;
 
 export function AppearanceForm() {
+  const t = useTranslations("settings.preferences");
+
   const theme = useTheme();
   const form = useForm<AppearanceFormValues>({
     resolver: zodResolver(appearanceFormSchema),
@@ -47,10 +48,8 @@ export function AppearanceForm() {
           name="theme"
           render={({ field }) => (
             <FormItem className="space-y-1">
-              <FormLabel>Theme</FormLabel>
-              <FormDescription>
-                Select the theme for the dashboard.
-              </FormDescription>
+              <FormLabel>{t("theme-title")}</FormLabel>
+              <FormDescription>{t("theme-description")}</FormDescription>
               <FormMessage />
               <RadioGroup
                 onValueChange={field.onChange}
@@ -79,7 +78,7 @@ export function AppearanceForm() {
                       </div>
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
-                      Light
+                      {t("light-mode-title")}
                     </span>
                   </FormLabel>
                 </FormItem>
@@ -105,7 +104,7 @@ export function AppearanceForm() {
                       </div>
                     </div>
                     <span className="block w-full p-2 text-center font-normal">
-                      Dark
+                      {t("dark-mode-title")}
                     </span>
                   </FormLabel>
                 </FormItem>
@@ -117,7 +116,7 @@ export function AppearanceForm() {
           loading={form.formState.isSubmitting}
           disabled={form.formState.isSubmitting || !form.formState.isDirty}
         >
-          Update preferences
+          {t("update")}
         </SubmitButton>
       </form>
     </Form>

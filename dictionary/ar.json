@@ -808,6 +808,15 @@
     "edit": {
       "title": "تعديل المستخدم",
       "subtitle": "تعديل تفاصيل المستخدم"
+    },
+    "preferences": {
+      "title": "تفضيلات",
+      "description": "إدارة تفضيلاتك",
+      "theme-title": "المظهر",
+      "theme-description": "تعديل المظهر للتطبيق. معلومة : الوضع المظلم أفضل على عينيك .",
+      "light-mode-title": "الوضع العادي",
+      "dark-mode-title": "الوضع المظلم",
+      "update": "تحديث"
     }
   },
   "edit-user": {
