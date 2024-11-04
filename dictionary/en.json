@@ -364,6 +364,12 @@
       "invalid-id": "Invalid client ID",
       "title": "Edit Client",
       "subtitle": "This is the edit page for the client: {clientName}. Here you can edit the client details."
+    },
+    "projects": {
+      "title": "Client's Projects",
+      "subtitle": "This is a list of the client's projects.",
+      "invalid-id": "Invalid client ID",
+      "no-projects-found-error-message": "There seems to be no projects linked to this client yet"
     }
   },
   "suppliers": {
