@@ -82,7 +82,7 @@ async function EditSupplierPage({
           access={hasFullAccess}
           type="supplier"
           id={supplierId}
-          disabled={supplierProjects > 0}
+          disabled={hasProjects}
           onDelete={deleteSupplierAction}
           FormInfo={<DeleteFormInfoSelector />}
         />

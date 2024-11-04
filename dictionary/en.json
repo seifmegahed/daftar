@@ -463,6 +463,36 @@
       "invalid-id": "Invalid supplier ID",
       "title": "Edit Supplier",
       "subtitle": "This is the edit page for the supplier: {supplierName}. Here you can edit the supplier details."
+    },
+    "items": {
+      "title": "Supplier's Items",
+      "subtitle": "This is a list of the supplier's items.",
+      "invalid-id": "Invalid supplier ID",
+      "no-items-found-error-message": "There seems to be no items linked to this supplier yet"
+    },
+    "projects": {
+      "title": "Supplier's Projects",
+      "subtitle": "This is a list of the supplier's projects.",
+      "invalid-id": "Invalid supplier ID",
+      "no-projects-found-error-message": "There seems to be no projects linked to this supplier yet"
+    },
+    "documents": {
+      "title": "Supplier's Documents",
+      "subtitle": "This is a list of the supplier's documents.",
+      "invalid-id": "Invalid supplier ID",
+      "no-documents-found-error-message": "There seems to be no documents linked to this supplier yet"
+    },
+    "addresses": {
+      "title": "Supplier's Addresses",
+      "subtitle": "This is a list of the supplier's addresses.",
+      "invalid-id": "Invalid supplier ID",
+      "no-addresses-found-error-message": "There seems to be no addresses linked to this supplier yet"
+    },
+    "contacts": {
+      "title": "Supplier's Contacts",
+      "subtitle": "This is a list of the supplier's contacts.",
+      "invalid-id": "Invalid supplier ID",
+      "no-contacts-found-error-message": "There seems to be no contacts linked to this supplier yet"
     }
   },
   "items": {
