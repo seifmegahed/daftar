@@ -10,15 +10,24 @@ import { getCurrentUserAction } from "@/server/actions/users";
 import { getDocumentRelationsCountAction } from "@/server/actions/document-relations/read";
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteDocumentAction } from "@/server/actions/documents/delete";
-import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import ErrorPage from "@/components/error";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
-async function EditDocumentPage({ params }: { params: { id: string } }) {
-  const documentId = Number(params.id);
-  if (isNaN(documentId)) return <p>Error: Document ID is not a number</p>;
+async function EditDocumentPage({
+  params,
+}: {
+  params: { id: string; locale: Locale };
+}) {
+  const { locale } = params;
+  setLocale(locale);
+  const t = await getTranslations("document.edit");
+
+  const documentId = parseInt(params.id);
+  if (isNaN(documentId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [document, error] = await getDocumentByIdAction(documentId);
-  if (error !== null) return <p>Error: {error}</p>;
+  if (error !== null) return <ErrorPage message={error} />;
 
   const [currentUser] = await getCurrentUserAction();
   const hasFullAccess = currentUser?.role === "admin";
@@ -28,21 +37,20 @@ async function EditDocumentPage({ params }: { params: { id: string } }) {
   if (numberOfReferencesError !== null)
     return <ErrorPage message={numberOfReferencesError} />;
 
-  const deleteFormInfo =
-    numberOfReferences > 0 ? (
+  const hasReferences = numberOfReferences > 0;
+
+  const DeleteFormInfoSelector = () =>
+    hasReferences ? (
       <span>
-        {`You cannot delete a document that is referenced in other
-        database entries. This document is linked to 
-        ${numberOfReferences} 
-        ${numberOfReferences > 1 ? "entries" : "entry"}. If you want to delete this document, you must first unlink it from all its references.`}
+        {t("delete-form-info", {
+          count: numberOfReferences,
+        })}
       </span>
-    ) : (
-      <DeleteFormInfo type="document" />
-    );
+    ) : undefined;
   return (
     <InfoPageWrapper
-      title="Edit Document"
-      subtitle={`This is the edit page for the document: ${document.name}. Here you can edit the document details.`}
+      title={t("title")}
+      subtitle={t("subtitle", { documentName: document.name })}
     >
       <NameForm
         id={documentId}
@@ -63,9 +71,9 @@ async function EditDocumentPage({ params }: { params: { id: string } }) {
           access={hasFullAccess}
           type="document"
           id={documentId}
-          disabled={numberOfReferences > 0}
+          disabled={hasReferences}
           onDelete={deleteDocumentAction}
-          formInfo={deleteFormInfo}
+          FormInfo={<DeleteFormInfoSelector />}
         />
       )}
     </InfoPageWrapper>

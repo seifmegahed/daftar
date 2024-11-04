@@ -635,7 +635,8 @@
     "edit": {
       "invalid-id": "Invalid document ID",
       "title": "Edit Document",
-      "subtitle": "This is the edit page for the document: {documentName}. Here you can edit the document details."
+      "subtitle": "This is the edit page for the document: {documentName}. Here you can edit the document details.",
+      "delete-form-info": "You cannot delete this document because it is linked to {count, plural, one {a database entry} other {{count} database entries}}. You first need to unlink it from the {count, plural, one {entry} other {entries} it is referenced in before you can delete it."
     },
     "projects": {
       "title": "Document's Projects",
@@ -888,6 +889,7 @@
     "success": "Notes updated",
     "error": "An error occurred while updating notes",
     "title": "Notes",
+    "placeholder": "Add a note...",
     "description": "Update {type} notes, this will change the notes of the {type} across all references and the previous notes will be lost. After typing the updated notes press the update button to persist the change.",
     "update": "Update"
   },

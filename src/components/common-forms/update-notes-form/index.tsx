@@ -51,6 +51,7 @@ function NotesForm({
   const locale = useLocale() as "ar" | "en";
   const localizedType = getLocaleType(type, locale);
   const t = useTranslations("notes-form");
+
   const form = useForm<FormDataType>({
     resolver: zodResolver(schema),
     defaultValues: { notes },
@@ -89,7 +90,7 @@ function NotesForm({
               <Textarea
                 {...field}
                 value={field.value ?? ""}
-                placeholder="Notes"
+                placeholder={t("placeholder")}
                 className={`resize-none ${form.formState.isDirty ? "" : "!text-muted-foreground"}`}
                 rows={4}
               />
