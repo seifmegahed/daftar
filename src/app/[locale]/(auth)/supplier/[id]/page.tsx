@@ -4,10 +4,15 @@ import Section from "@/components/info-section";
 import { getSupplierFullByIdAction } from "@/server/actions/suppliers/read";
 import SupplierSection from "@/components/common-sections/company-section";
 import ErrorPage from "@/components/error";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
-async function SupplierPage({ params }: { params: { id: string } }) {
+async function SupplierPage({ params }: { params: { id: string; locale: Locale } }) {
+  setLocale(params.locale);
+  const t = await getTranslations("supplier.page");
+
   const supplierId = parseInt(params.id);
-  if (isNaN(supplierId)) return <ErrorPage message="Invalid supplier ID" />;
+    if (isNaN(supplierId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [supplier, error] = await getSupplierFullByIdAction(supplierId);
   if (error !== null) return <ErrorPage message={error} />;
@@ -15,16 +20,15 @@ async function SupplierPage({ params }: { params: { id: string } }) {
   return (
     <InfoPageWrapper
       title={supplier.name}
-      subtitle={`This is the page for the supplier: ${supplier.name}. Here you can view all
-        information about the supplier.`}
+      subtitle={t("subtitle", { supplierName: supplier.name })}
     >
-      <Section title="General Info">
+      <Section title={t("general-info")}>
         <SupplierSection data={supplier} type="supplier" />
       </Section>
-      <Section title="Other Info">
+      <Section title={t("other-info")}>
         <UserInfoSection data={supplier} />
       </Section>
-      <Section title="Notes">
+      <Section title={t("notes")}>
         <div>
           <p>{supplier.notes}</p>
         </div>

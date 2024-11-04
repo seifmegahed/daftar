@@ -1,59 +1,64 @@
 import PageLayout from "@/components/page-layout";
 import { hasAccessToPrivateDataAction } from "@/server/actions/users";
+import { getTranslations } from "next-intl/server";
+import { setLocale } from "@/i18n/set-locale";
 
 const basePath = (id: string) => "/supplier/" + id;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
-  params: { id: string };
+  params: { id: string, locale: Locale };
 }
 
 export default async function SettingsLayout({
   children,
   params,
 }: SettingsLayoutProps) {
+  setLocale(params.locale);
+  const t = await getTranslations("supplier.layout");
+
   const [access] = await hasAccessToPrivateDataAction();
 
   const sidebarNavItemsGenerator = (id: string) => [
     {
-      title: "Supplier",
+      title: t("supplier"),
       href: basePath(id),
     },
     {
-      title: "Edit",
+      title: t("edit"),
       href: basePath(id) + "/edit",
     },
     {
-      title: "Items",
+      title: t("items"),
       href: basePath(id) + "/items",
       hidden: !access,
     },
     {
-      title: "Projects",
+      title: t("projects"),
       href: basePath(id) + "/projects",
     },
     {
-      title: "Documents",
+      title: t("documents"),
       href: basePath(id) + "/documents",
     },
     {
-      title: "Addresses",
+      title: t("addresses"),
       href: basePath(id) + "/addresses",
     },
     {
-      title: "Contacts",
+      title: t("contacts"),
       href: basePath(id) + "/contacts",
     },
     {
-      title: "New Address",
+      title: t("new-address"),
       href: basePath(id) + "/new-address",
     },
     {
-      title: "New Contact",
+      title: t("new-contact"),
       href: basePath(id) + "/new-contact",
     },
     {
-      title: "New Document",
+      title: t("new-document"),
       href: basePath(id) + "/new-document",
     },
   ];
@@ -61,8 +66,8 @@ export default async function SettingsLayout({
 
   return (
     <PageLayout
-      title="Supplier"
-      description="Manage your supplier"
+      title={t("title")}
+      description={t("description")}
       navLinks={sidebarNavItems}
     >
       {children}

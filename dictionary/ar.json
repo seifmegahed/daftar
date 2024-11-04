@@ -436,6 +436,29 @@
       }
     }
   },
+  "supplier": {
+    "layout": {
+      "title": "المورد",
+      "description": "إدارة حساب المورد",
+      "supplier": "المورد",
+      "edit": "تعديل",
+      "items": "المواد",
+      "projects": "المشاريع",
+      "documents": "المستندات",
+      "addresses": "العناوين",
+      "contacts": "جهات الاتصال",
+      "new-address": "إضافة عنوان",
+      "new-contact": "إضافة جهة اتصال",
+      "new-document": "إضافة مستند"
+    },
+    "page": {
+      "invalid-id": "معرف المورد غير صالح",
+      "subtitle": "هذه صفحة المورد: {supplierName}. هنا يمكنك عرض جميع المعلومات حول المورد.",
+      "general-info": "معلومات عامة",
+      "other-info": "معلومات أخرى",
+      "notes": "ملاحظات"
+    }
+  },
   "items": {
     "layout": {
       "title": "المواد",

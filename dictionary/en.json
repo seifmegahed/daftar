@@ -436,6 +436,29 @@
       }
     }
   },
+  "supplier": {
+    "layout": {
+      "title": "Supplier",
+      "description": "Manage your supplier account",
+      "supplier": "Supplier",
+      "edit": "Edit",
+      "items": "Items",
+      "projects": "Projects",
+      "documents": "Documents",
+      "addresses": "Addresses",
+      "contacts": "Contacts",
+      "new-address": "New Address",
+      "new-contact": "New Contact",
+      "new-document": "New Document"
+    },
+    "page": {
+      "invalid-id": "Invalid supplier ID",
+      "subtitle": "This is the page for the supplier: {supplierName}. Here you can view all information about the supplier.",
+      "general-info": "General Info",
+      "other-info": "Other Info",
+      "notes": "Notes"
+    }
+  },
   "items": {
     "layout": {
       "title": "Items",
