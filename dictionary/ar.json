@@ -6,6 +6,9 @@
   "error": {
     "title": "عفواً، حدث خطأ ما"
   },
+  "invalid-type-id": {
+    "message": "معرف ال{type} غير صالح"
+  },
   "topnav": {
     "Projects": "المشاريع",
     "Clients": "العملاء",
