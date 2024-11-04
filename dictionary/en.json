@@ -338,6 +338,28 @@
       }
     }
   },
+  "client": {
+    "layout": {
+      "title": "Client",
+      "description": "Manage your client account",
+      "client": "Client",
+      "edit": "Edit",
+      "projects": "Projects",
+      "documents": "Documents",
+      "addresses": "Addresses",
+      "contacts": "Contacts",
+      "new-address": "New Address",
+      "new-contact": "New Contact",
+      "new-document": "New Document"
+    },
+    "page": {
+      "invalid-id": "Invalid client ID",
+      "subtitle": "This is the page for the client: {clientName}. Here you can view all information about the client.",
+      "general-info": "General Info",
+      "other-info": "Other Info",
+      "notes": "Notes"
+    }
+  },
   "suppliers": {
     "layout": {
       "title": "Suppliers",
@@ -438,7 +460,6 @@
     "page": {
       "title": "All Documents Page",
       "filter-by-creation-date": "By Creation Date",
-      "filter-by-updated-date": "By Update Date",
       "no-documents-found-error-title": "There seems to be no documents yet!",
       "no-documents-found-error-message": "Start adding documents to be able to see them here"
     }

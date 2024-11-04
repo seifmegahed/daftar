@@ -4,10 +4,16 @@ import ClientSection from "@/components/common-sections/company-section";
 import UserInfoSection from "@/components/common-sections/user-info-section";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import ErrorPage from "@/components/error";
+import { setLocale } from "@/i18n/set-locale";
+import { getTranslations } from "next-intl/server";
 
-async function ClientPage({ params }: { params: { id: string } }) {
+async function ClientPage({ params }: { params: { id: string, locale: Locale } }) {
+  const { locale } = params;
+  setLocale(locale);
+  const t = await getTranslations("client.page");
+  
   const clientId = parseInt(params.id);
-  if (isNaN(clientId)) return <ErrorPage message="Invalid Client ID" />;
+  if (isNaN(clientId)) return <ErrorPage message={t("invalid-id")} />;
 
   const [client, error] = await getClientFullByIdAction(clientId);
   if (error !== null) return <ErrorPage message={error} />;
@@ -15,16 +21,15 @@ async function ClientPage({ params }: { params: { id: string } }) {
   return (
     <InfoPageWrapper
       title={client.name}
-      subtitle={`This is the page for the client: ${client.name}. Here you can view all
-        information about the client.`}
+      subtitle={t("subtitle", { clientName: client.name })}
     >
-      <Section title="General Info">
+      <Section title={t("general-info")}>
         <ClientSection data={client} type="client" />
       </Section>
-      <Section title="Other Info">
+      <Section title={t("other-info")}>
         <UserInfoSection data={client} />
       </Section>
-      <Section title="Notes">
+      <Section title={t("notes")}>
         <div>
           <p>{client.notes}</p>
         </div>

@@ -338,6 +338,28 @@
       }
     }
   },
+  "client": {
+    "layout": {
+      "title": "العميل",
+      "description": "إدارة حساب العميل",
+      "client": "العميل",
+      "edit": "تعديل",
+      "projects": "المشاريع",
+      "documents": "المستندات",
+      "addresses": "العناوين",
+      "contacts": "جهات الاتصال",
+      "new-address": "إضافة عنوان",
+      "new-contact": "إضافة جهة اتصال",
+      "new-document": "إضافة مستند"
+    },
+    "page": {
+      "invalid-id": "معرف العميل غير صالح",
+      "subtitle": "هذه صفحة العميل: {clientName}. هنا يمكنك عرض جميع المعلومات حول العميل.",
+      "general-info": "معلومات عامة",
+      "other-info": "معلومات أخرى",
+      "notes": "ملاحظات"
+    }
+  },
   "suppliers": {
     "layout": {
       "title": "الموردين",
@@ -428,6 +450,20 @@
       }
     }
   },
+  "documents": {
+    "layout": {
+      "title": "المستندات",
+      "description": "إدارة المستندات",
+      "all-documents": "جميع المستندات",
+      "new-document": "إضافة مستند"
+    },
+    "page": {
+      "title": "الصفحة الرئيسية لجميع المستندات",
+      "filter-by-creation-date": "بتاريخ الإنشاء",
+      "no-documents-found-error-title": "لا يوجد مستندات بعد",
+      "no-documents-found-error-message": "أضف مستندات لتتمكن من إضافة مستندات الشراء."
+    }
+  },
   "address": {
     "form": {
       "primary-address-title": "العنوان الرئيسي",
@@ -482,20 +518,6 @@
       "email-max-length": "يجب أن يكون البريد الإلكتروني أقل من {maxLength} حرف",
       "notes-max-length": "يجب أن يكون الملاحظات أقل من {maxLength} حرف",
       "email-or-phone-required": "البريد الإلكتروني أو رقم الهاتف مطلوب"
-    }
-  },
-  "documents": {
-    "layout": {
-      "title": "المستندات",
-      "description": "إدارة المستندات",
-      "all-documents": "جميع المستندات",
-      "new-document": "إضافة مستند"
-    },
-    "page": {
-      "title": "الصفحة الرئيسية لجميع المستندات",
-      "filter-by-creation-date": "بتاريخ الإنشاء",
-      "no-documents-found-error-title": "لا يوجد مستندات بعد",
-      "no-documents-found-error-message": "أضف مستندات لتتمكن من إضافة مستندات الشراء."
     }
   },
   "admin": {
@@ -562,6 +584,8 @@
       "name-required-message": "يجب اختيار اسم",
       "name-min-length": "يجب أن يكون اسم المستخدم على الأقل {minLength} حرف",
       "name-max-length": "يجب أن يكون اسم المستخدم أقل من {maxLength} حرف",
+      "success": "تم تحديث اسم المستخدم بنجاح",
+      "error": "حدث خطأ أثناء تحديث اسم المستخدم",
       "title": "الاسم",
       "placeholder": "الاسم",
       "description": "تحديث اسم المستخدم الذي سيكون مرادفا في جميع الأماكن. بعد تحديث الاسم اضغط زر تحديث لحفظ التغيير .",
@@ -571,6 +595,8 @@
       "email-required-message": "يجب اختيار البريد الإلكتروني",
       "email-invalid-message": "البريد الإلكتروني غير صالح",
       "email-max-length": "يجب أن يكون البريد الإلكتروني أقل من {maxLength} حرف",
+      "success": "تم تحديث البريد الإلكتروني بنجاح",
+      "error": "حدث خطأ أثناء تحديث البريد الإلكتروني",
       "title": "البريد الإلكتروني",
       "placeholder": "john.doe@gmail.com",
       "description": "تحديث البريد الإلكتروني الخاص بالمستخدم. سيتم عرض هذا البريد الإلكتروني في مستندات العرض المالي إذا كان المستخدم مالك المشروع أو مدير.",

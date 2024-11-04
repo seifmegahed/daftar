@@ -1,59 +1,64 @@
 import PageLayout from "@/components/page-layout";
+import { getTranslations } from "next-intl/server";
+import { setLocale } from "@/i18n/set-locale";
 
 const basePath = (id: string) => "/client/" + id;
 
 interface SettingsLayoutProps {
   children: React.ReactNode;
-  params: { id: string };
+  params: { id: string; locale: Locale };
 }
-
-const sidebarNavItemsGenerator = (id: string) => [
-  {
-    title: "Client",
-    href: basePath(id),
-  },
-  { title: "Edit", href: basePath(id) + "/edit" },
-  {
-    title: "Projects",
-    href: basePath(id) + "/projects",
-  },
-  {
-    title: "Documents",
-    href: basePath(id) + "/documents",
-  },
-  {
-    title: "Addresses",
-    href: basePath(id) + "/addresses",
-  },
-  {
-    title: "Contacts",
-    href: basePath(id) + "/contacts",
-  },
-  {
-    title: "New Address",
-    href: basePath(id) + "/new-address",
-  },
-  {
-    title: "New Contact",
-    href: basePath(id) + "/new-contact",
-  },
-  {
-    title: "New Document",
-    href: basePath(id) + "/new-document",
-  },
-];
 
 export default async function SettingsLayout({
   children,
   params,
 }: SettingsLayoutProps) {
+  setLocale(params.locale);
+  const t = await getTranslations("client.layout");
+
+  const sidebarNavItemsGenerator = (id: string) => [
+    {
+      title: t("client"),
+      href: basePath(id),
+    },
+    { title: t("edit"), href: basePath(id) + "/edit" },
+    {
+      title: t("projects"),
+      href: basePath(id) + "/projects",
+    },
+    {
+      title: t("documents"),
+      href: basePath(id) + "/documents",
+    },
+    {
+      title: t("addresses"),
+      href: basePath(id) + "/addresses",
+    },
+    {
+      title: t("contacts"),
+      href: basePath(id) + "/contacts",
+    },
+    {
+      title: t("new-address"),
+      href: basePath(id) + "/new-address",
+    },
+    {
+      title: t("new-contact"),
+      href: basePath(id) + "/new-contact",
+    },
+    {
+      title: t("new-document"),
+      href: basePath(id) + "/new-document",
+    },
+  ];
+
   const sidebarNavItems = sidebarNavItemsGenerator(params.id);
 
   return (
     <PageLayout
       navLinks={sidebarNavItems}
-      title="Client"
-      description="Manage your client account"
+      title={t("title")}
+      description={t("description")}
     >
       {children}
     </PageLayout>
