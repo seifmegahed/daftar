@@ -29,6 +29,7 @@ import { ChevronDown } from "lucide-react";
 import { emptyToUndefined } from "@/utils/common";
 import { useLocale, useTranslations } from "next-intl";
 import React, { useRef } from "react";
+import { LanguageButton } from "@/components/buttons";
 
 export default function LoginForm() {
   const t = useTranslations("login");
@@ -159,6 +160,9 @@ function LoginInfoSection({ onScroll }: { onScroll?: () => void }) {
   const notArabic = locale !== "ar";
   return (
     <div className="flex h-screen w-full items-center justify-center bg-muted lg:h-full">
+      <div className="absolute end-6 top-6">
+        <LanguageButton />
+      </div>
       <div className="flex h-full w-full max-w-lg flex-col items-center justify-between gap-4 text-center text-sm text-muted-foreground lg:h-screen lg:justify-center">
         <div className="flex h-full w-full flex-grow flex-col items-center justify-center gap-4">
           <BookmarkIcon className="h-16 w-16 stroke-secondary-foreground dark:fill-secondary-foreground dark:stroke-none" />
