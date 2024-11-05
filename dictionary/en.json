@@ -23,6 +23,34 @@
     "settings": "Settings",
     "logout": "Logout"
   },
+  "login": {
+    "form": {
+      "title": "Sign in to {demo, select, true {Daftar Demo} other {Daftar}}",
+      "subtitle": "Enter your credentials to access the application",
+      "success": "Logged in",
+      "error": "An error occurred while logging in",
+      "username-title": "Username",
+      "password-title": "Password",
+      "button-text": "Sign In"
+    },
+    "schema": {
+      "username-required": "Username is required",
+      "password-required": "Password is required",
+      "username-min-length": "Username must be at least {minLength} characters",
+      "username-max-length": "Username must not exceed {maxLength} characters",
+      "password-min-length": "Password must be at least {minLength} characters",
+      "password-max-length": "Password must not exceed {maxLength} characters"
+    },
+    "info": {
+      "title": "Welcome to Daftar {demo, select, true {Demo} other {}}",
+      "description": "Daftar is an application that allows you to manage your contracting company's data in one place.",
+      "etymology": "The word Daftar <italic>/daf.tar/</italic> in arabic means<italic><break></break>A folder of records, A book of accounts, or a ledger</italic>",
+      "sign-in-section-title-desktop": "Sign in to your account to continue",
+      "sign-in-section-title-mobile": "Sign in to your account below to continue",
+      "sign-in-section-description": "If you don't have an account, you should ask an admin to create one for you. If you forgot your password, you have to ask an admin to reset your password",
+      "demo-sign-in-section-description": "If you don't have an account, you can ask for a demo account by sending and email to seifmegahed at me dot com"
+    }
+  },
   "projects": {
     "layout": {
       "title": "Projects",

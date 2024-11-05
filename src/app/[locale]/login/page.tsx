@@ -27,22 +27,35 @@ import DaftarArabicIcon from "@/icons/daftar-arabic-icon";
 import { ChevronDown } from "lucide-react";
 
 import { emptyToUndefined } from "@/utils/common";
+import { useLocale, useTranslations } from "next-intl";
+import React, { useRef } from "react";
 
 export default function LoginForm() {
+  const t = useTranslations("login");
+  const ref = useRef<HTMLDivElement>(null);
+
   const schema = z.object({
     username: z.preprocess(
       emptyToUndefined,
       z
-        .string({ required_error: "Username is required" })
-        .min(4, { message: "Username must be at least {minLength} characters" })
-        .max(64, { message: "Username must not exceed {maxLength} characters" }),
+        .string({ required_error: t("schema.username-required") })
+        .min(4, {
+          message: t("schema.username-min-length", { minLength: 4 }),
+        })
+        .max(64, {
+          message: t("schema.username-max-length", { maxLength: 64 }),
+        }),
     ),
     password: z.preprocess(
       emptyToUndefined,
       z
-        .string({ required_error: "Password is required" })
-        .min(8, { message: "Password must be at least {minLength} characters" })
-        .max(64, { message: "Password must not exceed {maxLength} characters" }),
+        .string({ required_error: t("schema.password-required") })
+        .min(8, {
+          message: t("schema.password-min-length", { minLength: 8 }),
+        })
+        .max(64, {
+          message: t("schema.password-max-length", { maxLength: 64 }),
+        }),
     ),
   });
 
@@ -68,27 +81,30 @@ export default function LoginForm() {
         return;
       }
       form.reset();
-      toast.success("Logged in");
+      toast.success(t("form.success"));
     } catch (error) {
       console.error(error);
-      toast.error("An error occurred while logging in");
+      toast.error(t("form.error"));
     }
   };
 
   return (
-    <div className="grid h-screen w-screen scroll-smooth lg:grid-cols-2">
-      <LoginInfoSection />
-      <div className="flex h-screen w-full items-center justify-center bg-background lg:h-full">
+    <div className="grid h-screen w-screen snap-y snap-mandatory overflow-y-scroll scroll-smooth lg:grid-cols-2">
+      <div className="snap-center snap-always">
+        <LoginInfoSection onScroll={() => ref.current?.scrollIntoView()} />
+      </div>
+      <div
+        className="flex h-screen w-full snap-center snap-always items-center justify-center bg-background lg:h-full"
+        ref={ref}
+      >
         <div className="relative w-full max-w-md overflow-hidden py-8">
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <Form {...form}>
               <CardHeader>
                 <CardTitle className="text-2xl">
-                  Sign In to {env.NEXT_PUBLIC_VERCEL ? "Daftar Demo" : "Daftar"}
+                  {t("form.title", { demo: env.NEXT_PUBLIC_VERCEL })}
                 </CardTitle>
-                <CardDescription>
-                  Enter your username and password below to sign in.
-                </CardDescription>
+                <CardDescription>{t("form.subtitle")}</CardDescription>
               </CardHeader>
               <CardContent className="flex flex-col gap-4">
                 <FormField
@@ -96,7 +112,9 @@ export default function LoginForm() {
                   name="username"
                   render={({ field }) => (
                     <FormItem>
-                      <Label htmlFor="username">Username</Label>
+                      <Label htmlFor="username">
+                        {t("form.username-title")}
+                      </Label>
                       <Input id="username" type="username" {...field} />
                       <FormMessage />
                     </FormItem>
@@ -107,7 +125,9 @@ export default function LoginForm() {
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <Label htmlFor="password">Password</Label>
+                      <Label htmlFor="password">
+                        {t("form.password-title")}
+                      </Label>
                       <PasswordInput id="password" {...field} />
                       <FormMessage />
                     </FormItem>
@@ -121,7 +141,7 @@ export default function LoginForm() {
                   {form.formState.isSubmitting ? (
                     <Loading className="h-5 w-5" />
                   ) : (
-                    "Sign in"
+                    t("form.button-text")
                   )}
                 </Button>
               </CardContent>
@@ -133,7 +153,10 @@ export default function LoginForm() {
   );
 }
 
-function LoginInfoSection() {
+function LoginInfoSection({ onScroll }: { onScroll?: () => void }) {
+  const locale = useLocale();
+  const t = useTranslations("login.info");
+  const notArabic = locale !== "ar";
   return (
     <div className="flex h-screen w-full items-center justify-center bg-muted lg:h-full">
       <div className="flex h-full w-full max-w-lg flex-col items-center justify-between gap-4 text-center text-sm text-muted-foreground lg:h-screen lg:justify-center">
@@ -141,44 +164,39 @@ function LoginInfoSection() {
           <BookmarkIcon className="h-16 w-16 stroke-secondary-foreground dark:fill-secondary-foreground dark:stroke-none" />
           <DaftarArabicIcon className="stroke-secondary-foreground" />
           <h1 className="mb-4 text-center text-4xl font-bold text-secondary-foreground">
-            {`Welcome to Daftar ${env.NEXT_PUBLIC_VERCEL ? "Demo" : ""}`}
+            {t("title", { demo: env.NEXT_PUBLIC_VERCEL })}
           </h1>
           <p>
-            <Balancer>
-              Daftar is an application that allows you to manage your
-              contracting company&apos;s data in one place. The word Daftar{" "}
-              <i>/daf.tar/</i> in arabic means{" "}
-              <i>A folder of records, A book of accounts, or a ledger</i>
-            </Balancer>
+            <span>
+              <Balancer>{t("description")}</Balancer>
+            </span>
+            {notArabic && (
+              <span>
+                <Balancer>
+                  {t.rich("etymology", {
+                    italic: (chunks: unknown) => <i>{chunks as string}</i>,
+                    break: () => <br />,
+                  })}
+                </Balancer>
+              </span>
+            )}
           </p>
-          <p className="hidden lg:block">Sign in to your account to continue</p>
-          <p className="block lg:hidden">
-            Sign in to your account below to continue
+          <p className="hidden lg:block">
+            {t("sign-in-section-title-desktop")}
           </p>
+          <p className="block lg:hidden">{t("sign-in-section-title-mobile")}</p>
           {env.NEXT_PUBLIC_VERCEL ? (
             <p>
-              <Balancer>
-                If you don&apos;t have an account, you can ask for a demo
-                account by sending and email to seifmegahed at me dot com
-              </Balancer>
+              <Balancer>{t("demo-sign-in-section-description")}</Balancer>
             </p>
           ) : (
-            <>
-              <p>
-                <Balancer>
-                  If you don&apos;t have an account, you should ask an admin to
-                  create one for you. If you forgot your password, you have to
-                  ask an admin to reset your password
-                </Balancer>
-              </p>
-            </>
+            <p>
+              <Balancer>{t("sign-in-section-description")}</Balancer>
+            </p>
           )}
         </div>
         <div className="flex items-end pb-16 lg:hidden">
-          <div
-            onClick={() => window.scrollTo(0, window.innerHeight)}
-            className="animate-pulse cursor-pointer"
-          >
+          <div onClick={onScroll} className="animate-pulse cursor-pointer">
             <ChevronDown className="h-24 w-24" />
           </div>
         </div>

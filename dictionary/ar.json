@@ -23,6 +23,34 @@
     "settings": "الإعدادات",
     "logout": "تسجيل الخروج"
   },
+  "login": {
+    "form": {
+      "title": "تسجيل الدخول إلى {demo, select, true {تطبيق دفتر التجريبي} other {تطبيق دفتر}}",
+      "subtitle": "أدخل بيانات الاعتماد الخاصة بك للوصول إلى التطبيق",
+      "success": "تم تسجيل الدخول",
+      "error": "حدث خطأ أثناء تسجيل الدخول",
+      "username-title": "اسم المستخدم",
+      "password-title": "كلمة المرور",
+      "button-text": "تسجيل الدخول"
+    },
+    "schema": {
+      "username-required": "اسم المستخدم مطلوب",
+      "password-required": "كلمة المرور مطلوبة",
+      "username-min-length": "يجب أن يكون اسم المستخدم على الأقل {minLength} أحرف",
+      "username-max-length": "يجب ألا يتجاوز اسم المستخدم {maxLength} أحرف",
+      "password-min-length": "يجب أن تكون كلمة المرور على الأقل {minLength} أحرف",
+      "password-max-length": "يجب ألا تتجاوز كلمة المرور {maxLength} أحرف"
+    },
+    "info": {
+      "title": "مرحبًا بك في تطبيق دفتر {demo, select, true {التجريبي} other {}}",
+      "description": "دفتر هو تطبيق يسمح لك بإدارة بيانات شركة المقاولات الهندسية الخاصة بك في مكان واحد.",
+      "etymology": "",
+      "sign-in-section-title-desktop": "سجّل الدخول إلى حسابك للمتابعة",
+      "sign-in-section-title-mobile": "سجّل الدخول إلى حسابك أدناه للمتابعة",
+      "sign-in-section-description": "إذا لم يكن لديك حساب، يجب أن تطلب من المسؤول إنشاء حساب لك. إذا نسيت كلمة المرور الخاصة بك، يجب أن تطلب من المسؤول إعادة تعيينها.",
+      "demo-sign-in-section-description": "إذا لم يكن لديك حساب، يمكنك طلب حساب تجريبي عن طريق إرسال بريد إلكتروني إلى seifmegahed at me dot com"
+    }
+  },
   "projects": {
     "layout": {
       "title": "المشاريع",
