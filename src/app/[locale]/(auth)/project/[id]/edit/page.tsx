@@ -19,15 +19,19 @@ import DescriptionForm from "@/components/common-forms/update-description-form";
 import InfoPageWrapper from "@/components/info-page-wrapper";
 import DeleteForm from "@/components/common-forms/delete-form";
 import { deleteProjectAction } from "@/server/actions/projects/delete";
-import DeleteFormInfo from "@/components/common-forms/delete-form/DeleteFormInfo";
 import ErrorPage from "@/components/error";
 import { getTranslations } from "next-intl/server";
 import { setLocale } from "@/i18n/set-locale";
 
-async function EditProjectPage({ params }: { params: { id: string, locale: Locale } }) {
+async function EditProjectPage({
+  params,
+}: {
+  params: { id: string; locale: Locale };
+}) {
   const { locale } = params;
   setLocale(locale);
   const t = await getTranslations("project.edit");
+  
   const projectId = parseInt(params.id);
   if (isNaN(projectId)) return <ErrorPage message={t("invalid-id")} />;
 
@@ -89,7 +93,6 @@ async function EditProjectPage({ params }: { params: { id: string, locale: Local
         type="project"
         id={project.id}
         onDelete={deleteProjectAction}
-        formInfo={<DeleteFormInfo type="project" />}
       />
     </InfoPageWrapper>
   );

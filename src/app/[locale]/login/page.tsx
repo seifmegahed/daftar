@@ -1,12 +1,12 @@
 "use client";
 
+import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 import { loginAction } from "@/server/actions/auth/login";
 import { toast } from "sonner";
 import { env } from "@/env";
-import { defaultValues, schema,} from "./schema";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -26,15 +26,39 @@ import { BookmarkIcon } from "@/icons";
 import DaftarArabicIcon from "@/icons/daftar-arabic-icon";
 import { ChevronDown } from "lucide-react";
 
-import type { LoginFormType } from "./schema";
+import { emptyToUndefined } from "@/utils/common";
 
 export default function LoginForm() {
-  const form = useForm<LoginFormType>({
+  const schema = z.object({
+    username: z.preprocess(
+      emptyToUndefined,
+      z
+        .string({ required_error: "Username is required" })
+        .min(4, { message: "Username must be at least {minLength} characters" })
+        .max(64, { message: "Username must not exceed {maxLength} characters" }),
+    ),
+    password: z.preprocess(
+      emptyToUndefined,
+      z
+        .string({ required_error: "Password is required" })
+        .min(8, { message: "Password must be at least {minLength} characters" })
+        .max(64, { message: "Password must not exceed {maxLength} characters" }),
+    ),
+  });
+
+  type LoginFormSchemaType = z.infer<typeof schema>;
+
+  const defaultValues: LoginFormSchemaType = {
+    username: "",
+    password: "",
+  };
+
+  const form = useForm<LoginFormSchemaType>({
     resolver: zodResolver(schema),
     defaultValues: defaultValues,
   });
 
-  const onSubmit = async (data: LoginFormType) => {
+  const onSubmit = async (data: LoginFormSchemaType) => {
     try {
       const response = await loginAction(data);
       if (!response) return;
