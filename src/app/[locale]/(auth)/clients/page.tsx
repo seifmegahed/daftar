@@ -14,14 +14,14 @@ import type {
 } from "@/components/filter-and-search";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
 import type { LocaleParams } from "@/i18n/set-locale";
+import { listAllUsersAction } from "@/server/actions/users";
 
 const pageLimit = defaultPageLimit;
 
 type Props = {
-  params: LocaleParams
+  params: LocaleParams;
   searchParams: SearchParamsPropsType;
 };
-
 
 async function ClientsPage({ searchParams, params }: Props) {
   const { locale } = params;
@@ -31,8 +31,15 @@ async function ClientsPage({ searchParams, params }: Props) {
   const pageParam = parseInt(searchParams.page ?? "1");
   const page = isNaN(pageParam) ? 1 : pageParam;
   const query = searchParams.query ?? "";
-  
+
+  const [users] = await listAllUsersAction();
+  const userOptions = users?.map((user) => ({
+    label: user.name,
+    value: user.id,
+  }));
+
   const filterItems: FilterOptionType[] = [
+    { label: t("filter-by-created-by"), value: "createdBy", options: userOptions },
     { label: t("filter-by-creation-date"), value: "creationDate" },
     { label: t("filter-by-updated-date"), value: "updateDate" },
   ];

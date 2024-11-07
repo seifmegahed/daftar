@@ -14,6 +14,7 @@ import type {
 } from "@/components/filter-and-search";
 import { setLocale } from "@/i18n/set-locale";
 import { getTranslations } from "next-intl/server";
+import { listAllUsersAction } from "@/server/actions/users";
 
 const pageLimit = defaultPageLimit;
 
@@ -28,7 +29,15 @@ async function SuppliersPage({ params, searchParams }: Props) {
   setLocale(params.locale);
   const t = await getTranslations("suppliers.page");
 
+  const [users] = await listAllUsersAction();
+
+  const userOptions = users?.map((user) => ({
+    label: user.name,
+    value: user.id,
+  }));
+
   const filterItems: FilterOptionType[] = [
+    { label: t("filter-by-created-by"), value: "createdBy", options: userOptions },
     { label: t("filter-by-creation-date"), value: "creationDate" },
     { label: t("filter-by-updated-date"), value: "updateDate" },
   ];

@@ -13,6 +13,7 @@ import type {
   FilterOptionType,
   FilterTypes,
 } from "@/components/filter-and-search";
+import { listAllUsersAction } from "@/server/actions/users";
 
 const pageLimit = defaultPageLimit;
 
@@ -30,7 +31,19 @@ async function ItemsPage({ searchParams, params }: Props) {
   const page = isNaN(pageParam) ? 1 : pageParam;
   const query = searchParams.query ?? "";
 
+  const [users] = await listAllUsersAction();
+
+  const userOptions = users?.map((user) => ({
+    label: user.name,
+    value: user.id,
+  }));
+
   const filterItems: FilterOptionType[] = [
+    {
+      label: t("filter-by-created-by"),
+      value: "createdBy",
+      options: userOptions,
+    },
     { label: t("filter-by-creation-date"), value: "creationDate" },
     { label: t("filter-by-updated-date"), value: "updateDate" },
   ];

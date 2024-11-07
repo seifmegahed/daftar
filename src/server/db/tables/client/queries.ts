@@ -223,6 +223,8 @@ export const listAllClients = async (): Promise<
 
 const clientFilterQuery = (filter: FilterArgs) => {
   switch (filter.filterType) {
+    case "createdBy":
+      return sql`${clientsTable.createdBy} = ${filter.filterValue}`;
     case "creationDate":
       return timestampQueryGenerator(
         clientsTable.createdAt,

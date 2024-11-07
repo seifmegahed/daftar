@@ -70,6 +70,8 @@ export const getSupplierPrimaryContactId = async (
 
 const supplierFilterQuery = (filter: FilterArgs) => {
   switch (filter.filterType) {
+    case "createdBy":
+      return sql`${suppliersTable.createdBy} = ${filter.filterValue}`;
     case "creationDate":
       return timestampQueryGenerator(
         suppliersTable.createdAt,

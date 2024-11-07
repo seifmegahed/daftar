@@ -16,6 +16,7 @@ import type {
   FilterTypes,
 } from "@/components/filter-and-search";
 import type { SearchParamsPropsType } from "@/utils/type-utils";
+import { listAllUsersAction } from "@/server/actions/users";
 
 const pageLimit = defaultPageLimit;
 
@@ -32,7 +33,19 @@ async function DocumentsPage({ searchParams, params }: Props) {
   const page = Number(searchParams.page) || 1;
   const query = searchParams.query ?? "";
 
+  const [users] = await listAllUsersAction();
+
+  const userOptions = users?.map((user) => ({
+    label: user.name,
+    value: user.id,
+  }));
+
   const filterItems: FilterOptionType[] = [
+    {
+      label: t("filter-by-created-by"),
+      value: "createdBy",
+      options: userOptions,
+    },
     { label: t("filter-by-creation-date"), value: "creationDate" },
   ];
 

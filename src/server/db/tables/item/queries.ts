@@ -33,6 +33,8 @@ const logError = errorLogger(errorMessages.mainTitle);
 
 const itemFilterQuery = (filter: FilterArgs) => {
   switch (filter.filterType) {
+    case "createdBy":
+      return sql`${itemsTable.createdBy} = ${filter.filterValue}`;
     case "creationDate":
       return timestampQueryGenerator(itemsTable.createdAt, filter.filterValue);
     case "updateDate":

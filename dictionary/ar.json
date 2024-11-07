@@ -342,6 +342,7 @@
     },
     "page": {
       "title": "الصفحة الرئيسية لجميع العملاء",
+      "filter-by-created-by": "بالمنشئ",
       "filter-by-creation-date": "بتاريخ الإنشاء",
       "filter-by-updated-date": "بتاريخ التحديث",
       "no-clients-found-error-title": "لا يوجد عملاء بعد",
@@ -432,6 +433,7 @@
     },
     "page": {
       "title": "الصفحة الرئيسية لجميع الموردين",
+      "filter-by-created-by": "بالمنشئ",
       "filter-by-creation-date": "بتاريخ الإنشاء",
       "filter-by-updated-date": "بتاريخ التحديث",
       "no-suppliers-found-error-title": "لا يوجد موردين بعد",
@@ -534,6 +536,7 @@
     },
     "page": {
       "title": "الصفحة الرئيسية لجميع المواد",
+      "filter-by-created-by": "بالمنشئ",
       "filter-by-creation-date": "بتاريخ الإنشاء",
       "filter-by-updated-date": "بتاريخ التحديث",
       "no-items-found-error-title": "لا يوجد مواد بعد",
@@ -630,6 +633,7 @@
     },
     "page": {
       "title": "الصفحة الرئيسية لجميع المستندات",
+      "filter-by-created-by": "بالمنشئ",
       "filter-by-creation-date": "بتاريخ الإنشاء",
       "no-documents-found-error-title": "لا يوجد مستندات بعد",
       "no-documents-found-error-message": "أضف مستندات لتتمكن من إضافة مستندات الشراء."

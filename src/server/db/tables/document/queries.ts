@@ -37,6 +37,8 @@ export type SimpDoc = {
 
 const documentFilterQuery = (filter: FilterArgs) => {
   switch (filter.filterType) {
+    case "createdBy":
+      return sql`${documentsTable.createdBy} = ${filter.filterValue}`;
     case "creationDate":
       return timestampQueryGenerator(
         documentsTable.createdAt,

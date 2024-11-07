@@ -63,7 +63,7 @@
       "filter-by-status": "By Status",
       "filter-by-type": "By Type",
       "filter-by-owner": "By Owner",
-      "filter-by-created-by": "By Created By",
+      "filter-by-created-by": "By Creator",
       "filter-by-start-date": "By Start Date",
       "filter-by-end-date": "By End Date",
       "filter-by-creation-date": "By Creation Date",
@@ -342,6 +342,7 @@
     },
     "page": {
       "title": "All Clients Page",
+      "filter-by-created-by": "By Creator",
       "filter-by-creation-date": "By Creation Date",
       "filter-by-updated-date": "By Update Date",
       "no-clients-error-title": "There seems to be no clients yet!",
@@ -432,6 +433,7 @@
     },
     "page": {
       "title": "All Suppliers Page",
+      "filter-by-created-by": "By Creator",
       "filter-by-creation-date": "By Creation Date",
       "filter-by-updated-date": "By Update Date",
       "no-suppliers-found-error-title": "There seems to be no suppliers yet!",
@@ -534,6 +536,7 @@
     },
     "page": {
       "title": "All Items Page",
+      "filter-by-created-by": "By Creator",
       "filter-by-creation-date": "By Creation Date",
       "filter-by-updated-date": "By Update Date",
       "no-items-found-error-title": "There seems to be no items yet!",
@@ -630,6 +633,7 @@
     },
     "page": {
       "title": "All Documents Page",
+      "filter-by-created-by": "By User",
       "filter-by-creation-date": "By Creation Date",
       "no-documents-found-error-title": "There seems to be no documents yet!",
       "no-documents-found-error-message": "Start adding documents to be able to see them here"
