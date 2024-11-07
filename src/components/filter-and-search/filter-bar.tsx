@@ -1,20 +1,21 @@
-"use client";
-
 import { projectTypes, statusCodes } from "@/data/lut";
-import type { FilterTypes } from ".";
 import DateFilter from "./date-filter";
 import SelectFilter from "./select-filter";
+
+import type { FilterTypes } from ".";
 import { useLocale, useTranslations } from "next-intl";
 
 function FilterBar({
   type,
   defaultValue,
+  options = [],
 }: {
   type: FilterTypes;
   defaultValue?: string;
+  options?: { label: string; value: number }[];
 }) {
   const t = useTranslations("filter");
-  const locale = useLocale() as "en" | "ar";
+  const locale = useLocale() as Locale;
   const statusOptions = statusCodes.map((x) => ({
     label: x[locale],
     value: x.value,
@@ -24,6 +25,7 @@ function FilterBar({
     label: x[locale],
     value: x.value,
   }));
+
   switch (type) {
     case "status":
       return (
@@ -41,6 +43,24 @@ function FilterBar({
           options={projectTypeOptions}
           type={"type"}
           label={t("type")}
+        />
+      );
+    case "owner":
+      return (
+        <SelectFilter
+          defaultValue={defaultValue}
+          options={options}
+          type={"owner"}
+          label={t("owner")}
+        />
+      );
+    case "createdBy":
+      return (
+        <SelectFilter
+          defaultValue={defaultValue}
+          options={options}
+          type={"createdBy"}
+          label={t("createdBy")}
         />
       );
     case "startDate":

@@ -94,6 +94,10 @@ const projectFilterQuery = (filter: FilterArgs) => {
       return sql`status = ${filter.filterValue}`;
     case "type":
       return sql`type = ${filter.filterValue}`;
+    case "owner":
+      return sql`${projectsTable.ownerId} = ${filter.filterValue}`;
+    case "createdBy":
+      return sql`${projectsTable.createdBy} = ${filter.filterValue}`;
     case "startDate":
       return dateQueryGenerator(projectsTable.startDate, filter.filterValue);
     case "endDate":
@@ -288,7 +292,9 @@ export const getProjectLinkedDocuments = async (
   const timer = new performanceTimer("getProjectLinkedDocuments");
   try {
     timer.start();
-    const result = await projectLinkedDocumentsQuery(pathIncluded).execute({ id });
+    const result = await projectLinkedDocumentsQuery(pathIncluded).execute({
+      id,
+    });
     timer.end();
 
     if (!result) return [null, errorMessage];

@@ -13,6 +13,8 @@ export const FILTER_TYPE = "ft";
 export type FilterTypes =
   | "status"
   | "type"
+  | "owner"
+  | "createdBy"
   | "startDate"
   | "endDate"
   | "creationDate"
@@ -32,6 +34,7 @@ export const filterDefault: FilterArgs = {
 export type FilterOptionType = {
   label: string;
   value: FilterTypes;
+  options?: { value: number; label: string }[];
 };
 
 const getFilterLabel = (
@@ -62,8 +65,7 @@ function FilterAndSearch({
           onChange={(value) => {
             setFilterType(value);
             const item = getFilterLabel(value, filterItems);
-            if (item)
-              setFilterLabel(t("filter-by", { type: item.label }));
+            if (item) setFilterLabel(t("filter-by", { type: item.label }));
           }}
           filterItems={filterItems}
         />
@@ -88,6 +90,9 @@ function FilterAndSearch({
             <FilterBar
               type={filterType}
               defaultValue={defaults.filterValue ?? undefined}
+              options={
+                filterItems.find((item) => item.value === filterType)?.options
+              }
             />
           </div>
         </div>

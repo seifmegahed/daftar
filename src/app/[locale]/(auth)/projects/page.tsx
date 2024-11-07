@@ -14,6 +14,7 @@ import type {
   FilterTypes,
 } from "@/components/filter-and-search";
 import { setLocale, type LocaleParams } from "@/i18n/set-locale";
+import { listAllUsersAction } from "@/server/actions/users";
 
 const pageLimit = defaultPageLimit;
 
@@ -30,6 +31,13 @@ async function AllProjects({ searchParams, params }: Props) {
   const query = searchParams.query ?? "";
   const t = await getTranslations("projects.page");
 
+  const [users] = await listAllUsersAction();
+
+  const userOptions = users?.map((user) => ({
+    label: user.name,
+    value: user.id,
+  }));
+
   const filterItems: FilterOptionType[] = [
     {
       label: t("filter-by-status"),
@@ -38,6 +46,16 @@ async function AllProjects({ searchParams, params }: Props) {
     {
       label: t("filter-by-type"),
       value: "type",
+    },
+    {
+      label: t("filter-by-owner"),
+      value: "owner",
+      options: userOptions,
+    },
+    {
+      label: t("filter-by-created-by"),
+      value: "createdBy",
+      options: userOptions,
     },
     {
       label: t("filter-by-start-date"),

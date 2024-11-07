@@ -16,7 +16,10 @@ function ListPageWrapper({
   children: ReactNode;
   title: string;
   subtitle?: string;
-  filter?: { filterValues: FilterArgs; filterItems: FilterOptionType[] };
+  filter?: {
+    filterValues: FilterArgs;
+    filterItems: FilterOptionType[];
+  };
   pagination?: { totalPages: number };
 }) {
   return (
