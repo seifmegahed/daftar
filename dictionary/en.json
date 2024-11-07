@@ -1232,5 +1232,86 @@
   "date-picker": {
     "select-year": "Select Year",
     "select-date": "Select Date"
+  },
+  "home-page": {
+    "intro": {
+      "title": "Daftar Guide",
+      "description": "Daftar is a data management tool for engineering contractors.",
+      "subtitle": "The main purpose of Daftar is to keep track of all the projects you work on."
+    },
+    "utils": {
+      "notes": "Notes"
+    },
+    "definitions": {
+      "title": "Definitions",
+      "users": {
+        "title": "User",
+        "description": "A user is an individual who uses Daftar usually a company employee. Users can be of different roles, such as Admin, Super User, or User. Every user can edit their own profile and view their own data including display name, email, phone number, and password.",
+        "roles": {
+          "admin": {
+            "title": "Admin",
+            "description": "Admin users have full access to all the features of daftar including access to the admin dashboard where they can create, edit, and deactivate users."
+          },
+          "super-user": {
+            "title": "Super User",
+            "description": "Admin users have full access to all the features of daftar including access to the admin dashboard where they can create, edit, and deactivate users."
+          },
+          "user": {
+            "title": "User",
+            "description": "Super users have full access to all the features of Daftar including access to private data except they don't have access to the admin dashboard."
+          }
+        }
+      },
+      "document": {
+        "title": "Document",
+        "description": "A document is simply a file that you upload to Daftar and attach to multiple entities. For example, you can upload a contract agreement pdf file and attach it to a project. Or you can upload a service manual pdf file and attach it to an Item. Documents may be referenced by one or more entities or they can be used as standalone documents.",
+        "notes": {
+          "note-1": "Documents can be of any type, pdf, word, excel, etc.",
+          "note-2": "Documents can be private or public. Private documents are only visible to Admin level users and Super User level users."
+        }
+      },
+      "item": {
+        "title": "Item",
+        "description": "An item is a physical or digital asset that your company supplies to a client within the scope of a project. Items are project, client, supplier, and price agnostic. You create an item and then you can define its context within a specific scope. As mentioned above, you can attach multiple documents to an item."
+      },
+      "client": {
+        "title": "Client",
+        "description": "A client is a company or an individual that you conduct business with. Clients can have multiple contacts and multiple addresses, but there always has to be at least one contact and one address. You can define the client's primary contact and address which will then be attached the the client in all references. A client can be referenced by one or more projects. You can attach multiple documents to a client."
+      },
+      "supplier": {
+        "title": "Supplier",
+        "description": "A supplier is a company or an individual that you purchase products or services from. Suppliers can have multiple contacts and multiple addresses, but there always has to be at least one contact and one address. You can define the supplier's primary contact and address which will then be attached the the supplier in all references. A supplier can be referenced by one or more projects. You can attach multiple documents to a supplier."
+      },
+      "project": {
+        "title": "Project",
+        "description": "A project is a transactional unit of work between your company and a client. The project is the end goal of the work you are doing. This is where you combine all the data you have created in one place. The project has multiple properties that you can define.",
+        "project-properties": {
+          "project-owner": {
+            "title": "Project Owner/Manager",
+            "description": "The user who is responsible for the project. You can select a user from the list of existing users of the application."
+          },
+          "client": {
+            "title": "Client",
+            "description": "The client the project is for. You can select a client from the list of clients you have created."
+          },
+          "purchase-items": {
+            "title": "Purchase Items",
+            "description": "Purchase items are items that you purchase from a supplier for this project. Purchase items are used to track the cost of the project. You can add multiple purchase items to a project. Purchase items have a supplier, price, currency, and quantity attributes."
+          },
+          "sale-items": {
+            "title": "Sale Items",
+            "description": "Sale items are items that you sell to the client of this project. Sale items are used to track the revenue of the project. You can add multiple sale items to a project. Sale items have a price, currency, and quantity attributes. Sale items are used to generate commercial offers."
+          },
+          "commercial-offer": {
+            "title": "Commercial Offer",
+            "description": "Commercial offers are pdf offer documents that you present to the client of this project. Commercial offers are generated from the client data and the sale items of the project. Commercial offers get downloaded and then saved as document attachments to the project for later use."
+          },
+          "comments": {
+            "title": "Comments",
+            "description": "Comments are journal notes to keep track of the project progress, issues, and tasks."
+          }
+        }
+      }
+    }
   }
 }
