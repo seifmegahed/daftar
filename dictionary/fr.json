@@ -841,7 +841,7 @@
     },
     "edit": {
       "title": "Modifier l'utilisateur",
-      "subtitle": "Ceci est la page de modification de l'utilisateur: {userName}. Ici, vous pouvez modifier les détails de l'utilisateur."
+      "subtitle": "Modifiez vos données utilisateur"
     },
     "preferences": {
       "title": "Préférences",

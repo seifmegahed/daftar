@@ -841,7 +841,7 @@
     },
     "edit": {
       "title": "Editar usuario",
-      "subtitle": "Esta es la página de edición del usuario: {userName}. Aquí puedes editar los detalles del usuario."
+      "subtitle": "Modifica tus datos de usuario"
     },
     "preferences": {
       "title": "Preferencias",

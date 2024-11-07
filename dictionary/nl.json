@@ -841,7 +841,7 @@
     },
     "edit": {
       "title": "Bewerk gebruiker",
-      "subtitle": "Deze is de bewerkingspagina voor het gebruiker: {userName}. Hier kunt u de details van het gebruiker bewerken."
+      "subtitle": "Wijzig uw gebruikersgegevens"
     },
     "preferences": {
       "title": "Voorkeuren",

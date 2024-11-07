@@ -10,7 +10,7 @@ export default function Page({ params }: { params: { locale: Locale } }) {
   return (
     <div className="mx-auto mb-36 max-w-5xl space-y-4 lg:pe-56">
       <Intro />
-      {!env.NEXT_PUBLIC_VERCEL && <DemoNote />}
+      {env.NEXT_PUBLIC_VERCEL && <DemoNote />}
       <Definitions />
       <GettingStarted />
     </div>
