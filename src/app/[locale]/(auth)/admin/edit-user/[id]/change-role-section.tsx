@@ -16,27 +16,64 @@ import SubmitButton from "@/components/buttons/submit-button";
 import LabelWrapper from "./label-wrapper";
 import { useLocale, useTranslations } from "next-intl";
 import { getDirection } from "@/utils/common";
+import { es } from "date-fns/locale";
 
 const roleItems = [
   {
-    label: { en: "Admin", ar: "مدير" },
+    label: {
+      en: "Admin",
+      ar: "مدير",
+      nl: "Beheerder",
+      fr: "Administrateur",
+      de: "Administrator",
+      es: "Administrador",
+    },
     value: "admin",
-    description: { en: "Has all privileges", ar: "لديه كافة الصلاحيات" },
+    description: {
+      en: "Has all privileges",
+      ar: "لديه كافة الصلاحيات",
+      nl: "Heeft alle rechten",
+      fr: "A tous les privilèges",
+      de: "Hat alle Rechte",
+      es: "Tiene todos los privilegios",
+    },
   },
   {
-    label: { en: "Super User", ar: "مستخدم مميز" },
+    label: {
+      en: "Super User",
+      ar: "مستخدم مميز",
+      nl: "Supergebruiker",
+      fr: "Superutilisateur",
+      de: "Superbenutzer",
+      es: "Superusuario",
+    },
     value: "s-user",
     description: {
       en: "Has same privileges as user, but can see private data",
       ar: "لديه نفس الصلاحيات من المستخدم، ولكن يمكن رؤية البيانات الخاصة",
+      nl: "Heeft dezelfde rechten als gebruiker, maar kan privégegevens zien",
+      fr: "A les mêmes privilèges que l'utilisateur, mais peut voir les données privées",
+      de: "Hat die gleichen Rechte wie der Benutzer, aber kann private Daten sehen",
+      es: "Tiene los mismos privilegios que el usuario, pero puede ver los datos privados",
     },
   },
   {
-    label: { en: "User", ar: "مستخدم" },
+    label: {
+      en: "User",
+      ar: "مستخدم",
+      nl: "Gebruiker",
+      fr: "Utilisateur",
+      de: "Benutzer",
+      es: "Usuario",
+    },
     value: "user",
     description: {
       en: "Regular user.",
       ar: "مستخدم عادي.",
+      nl: "Gebruiker.",
+      fr: "Utilisateur normal.",
+      de: "Normaler Benutzer.",
+      es: "Usuario normal.",
     },
   },
 ] as const;
@@ -51,7 +88,7 @@ function ChangeRoleSection({
   const locale = useLocale() as Locale;
   const direction = getDirection(locale);
   const t = useTranslations("edit-user.change-role-section");
-  
+
   const [role, setRole] = useState(userRole);
   const [change, setChange] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -100,9 +137,7 @@ function ChangeRoleSection({
           ))}
         </SelectContent>
       </Select>
-      <p className="text-xs text-muted-foreground">
-        {t("description")}
-      </p>
+      <p className="text-xs text-muted-foreground">{t("description")}</p>
       <div className="flex justify-end py-4">
         <SubmitButton
           variant="outline"
