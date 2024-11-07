@@ -1,4 +1,4 @@
-import { ar, enUS } from "date-fns/locale";
+import { ar, enUS, es, nl } from "date-fns/locale";
 import { between, gte, lte, sql } from "drizzle-orm";
 import type { PgColumn } from "drizzle-orm/pg-core";
 
@@ -100,32 +100,27 @@ export const getDateLocaleFormat = (locale: string) => {
   switch (locale) {
     case "ar":
       return ar;
+    case "es":
+      return es;
     case "en":
       return enUS;
+    case "nl":
+      return nl;
     default:
       return enUS;
   }
 };
 
-export const getDirection = (locale: string) => {
-  switch (locale) {
-    case "ar":
-      return "rtl";
-    case "en":
-      return "ltr";
-    default:
-      return "ltr";
-  }
-};
+export const getDirection = (locale: string) => locale === "ar" ? "rtl" : "ltr";
 
 const types = {
-  client: { en: "Client", ar: "عميل" },
-  supplier: { en: "Supplier", ar: "مورد" },
-  project: { en: "Project", ar: "مشروع" },
-  item: { en: "Item", ar: "مادة" },
-  document: { en: "Document", ar: "مستند" },
-  user: { en: "User", ar: "مستخدم" },
+  client: { en: "Client", ar: "عميل", es: "Cliente", nl: "Klant" },
+  supplier: { en: "Supplier", ar: "مورد", es: "Proveedor", nl: "Leverancier" },
+  project: { en: "Project", ar: "مشروع", es: "Proyecto", nl: "Project" },
+  item: { en: "Item", ar: "مادة", es: "Artículo", nl: "Item" },
+  document: { en: "Document", ar: "مستند", es: "Documento", nl: "Document" },
+  user: { en: "User", ar: "مستخدم", es: "Usuario", nl: "Gebruiker" },
 };
 
-export const getLocaleType = (type: keyof typeof types, locale: "ar" | "en") =>
+export const getLocaleType = (type: keyof typeof types, locale: Locale) =>
   types[type][locale];

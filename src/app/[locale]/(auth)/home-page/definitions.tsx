@@ -1,5 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { MainListItem, Notes, SubList } from "./utils";
+import { Separator } from "@/components/ui/separator";
 
 async function Definitions() {
   const t = await getTranslations("home-page.definitions");
@@ -81,6 +82,7 @@ async function Definitions() {
   return (
     <div>
       <h2 className="text-2xl font-bold">{t("title")}</h2>
+      <Separator className="my-2" />
       <ul className="ms-4 list-disc space-y-8">
         {definitionSections.map((item) => (
           <MainListItem

@@ -12,14 +12,16 @@ export type SubListItemType = {
   text: string;
 };
 
-export function MainListItem({ title, description, children = null }: SectionType) {
+export function MainListItem({
+  title,
+  description,
+  children = null,
+}: SectionType) {
   return (
     <li>
       <h4 className="my-2 text-xl font-bold">{title}</h4>
-      <p>
-        <span>{description}</span>
-        {children}
-      </p>
+      <span>{description}</span>
+      {children}
     </li>
   );
 }

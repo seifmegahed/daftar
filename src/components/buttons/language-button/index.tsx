@@ -17,7 +17,7 @@ function LanguageButton() {
   const router = useRouter();
   const pathname = usePathname();
 
-  const switchLocale = (_locale?: "ar" | "en") => {
+  const switchLocale = (_locale?: Locale) => {
     if (!_locale) return;
     router.push(pathname, { locale: _locale });
   };
@@ -26,6 +26,10 @@ function LanguageButton() {
     locale === "en" ? switchLocale() : switchLocale("en");
   const switchToAr = () =>
     locale === "ar" ? switchLocale() : switchLocale("ar");
+  const switchToEs = () =>
+    locale === "es" ? switchLocale() : switchLocale("es");
+  const switchToNl = () =>
+    locale === "nl" ? switchLocale() : switchLocale("nl");
 
   const direction = getDirection(locale);
 
@@ -35,7 +39,7 @@ function LanguageButton() {
         <Button
           variant="outline"
           size="icon"
-          className="rounded-full border-none text-muted-foreground hover:text-muted-foreground size-10 duration-300 ease-in-out"
+          className="size-10 rounded-full border-none text-muted-foreground duration-300 ease-in-out hover:text-muted-foreground"
         >
           <Languages className="h-5 w-5" />
         </Button>
@@ -46,6 +50,18 @@ function LanguageButton() {
           onClick={switchToEn}
         >
           <p className="w-full">English</p>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer text-left"
+          onClick={switchToEs}
+        >
+          <p className="w-full">Español</p>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer text-left"
+          onClick={switchToNl}
+        >
+          <p className="w-full">Nederlands</p>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer text-right"

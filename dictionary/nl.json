@@ -1,0 +1,1342 @@
+{
+  "main-loading": {
+    "title": "Laden Daftar...",
+    "title-demo": "Laden Daftar Demo..."
+  },
+  "error": {
+    "title": "Oeps, iets ging fout"
+  },
+  "invalid-type-id": {
+    "message": "Ongeldige {type} ID"
+  },
+  "topnav": {
+    "Projects": "Projecten",
+    "Clients": "Klanten",
+    "Suppliers": "Leveranciers",
+    "Items": "Items",
+    "Documents": "Documenten",
+    "Admin": "Admin"
+  },
+  "user-button": {
+    "light-mode": "Licht Modus",
+    "dark-mode": "Donker Modus",
+    "settings": "Instellingen",
+    "logout": "Uitloggen"
+  },
+  "login": {
+    "form": {
+      "title": "Inloggen op {demo, select, true {Daftar Demo} other {Daftar}}",
+      "subtitle": "Voer je inloggegevens in om toegang te krijgen tot de applicatie",
+      "success": "Inloggen gelukt",
+      "error": "Er is een fout opgetreden tijdens het inloggen",
+      "username-title": "Gebruikersnaam",
+      "password-title": "Wachtwoord",
+      "button-text": "Inloggen"
+    },
+    "schema": {
+      "username-required": "Gebruikersnaam is vereist",
+      "password-required": "Wachtwoord is vereist",
+      "username-min-length": "Gebruikersnaam moet ten minste {minLength} tekens lang zijn",
+      "username-max-length": "Gebruikersnaam mag niet langer zijn dan {maxLength} tekens",
+      "password-min-length": "Wachtwoord moet ten minste {minLength} tekens lang zijn",
+      "password-max-length": "Wachtwoord mag niet langer zijn dan {maxLength} tekens"
+    },
+    "info": {
+      "title": "Welkom bij Daftar {demo, select, true {Demo} other {}}",
+      "description": "Daftar is een applicatie die je in één plek kunt beheren voor je contractontwerp.",
+      "etymology": "De woord Daftar <italic>/daf.tar/</italic> in het Arabisch betekent <italic><break></break>Een map met records, een boek met rekeningen, of een boek</italic>",
+      "sign-in-section-title-desktop": "Log in op je account om verder te gaan",
+      "sign-in-section-title-mobile": "Log in op je account om verder te gaan",
+      "sign-in-section-description": "Als je geen account hebt, moet je een beheerder toevoegen om een account aan te maken. Als je je wachtwoord vergeet, moet je een beheerder je wachtwoord opnieuw instellen.",
+      "demo-sign-in-section-description": "Als je geen account hebt, kan je een demo account aanvragen door een e-mail te sturen naar seifmegahed at me dot com"
+    }
+  },
+  "projects": {
+    "layout": {
+      "title": "Projecten",
+      "description": "Beheer je projecten",
+      "All Projects": "Alle Projecten",
+      "New Project": "Nieuw Project"
+    },
+    "page": {
+      "title": "Alle Projecten Pagina",
+      "filter-by-status": "Op basis van status",
+      "filter-by-type": "Op basis van type",
+      "filter-by-owner": "Op basis van eigenaar",
+      "filter-by-created-by": "Op basis van maker",
+      "filter-by-start-date": "Op basis van startdatum",
+      "filter-by-end-date": "Op basis van einddatum",
+      "filter-by-creation-date": "Op basis van creatiedatum",
+      "filter-by-update-date": "Op basis van updatedatum",
+      "no-projects-found-error-title": "Het lijkt erop dat er nog geen projecten zijn!",
+      "no-projects-found-error-message": "Start met het toevoegen van projecten om ze te zien hier"
+    },
+    "new-project-page": {
+      "title": "Voeg project toe",
+      "description": "Voer de details van het project in dat je wilt toevoegen",
+      "button-text": "Voeg project toe",
+      "name-field-label": "Naam *",
+      "name-field-description": "Voer de naam van het project in. Dit is de naam die wordt gebruikt om het project te zoeken en te refereren. Het wordt weergegeven op de projecten.",
+      "type-field-label": "Type *",
+      "type-field-description": "Selecteer het type van het project.",
+      "status-field-label": "Status *",
+      "status-field-description": "Selecteer het status van het project.",
+      "client-field-label": "Klant *",
+      "client-select-message": "Selecteer een klant",
+      "client-search-message": "Zoek een klant",
+      "client-not-found-message": "Klant niet gevonden.",
+      "client-field-description": "Selecteer de klant die dit project is voor.",
+      "owner-field-label": "Eigenaar *",
+      "owner-select-message": "Selecteer een gebruiker",
+      "owner-search-message": "Zoek een gebruiker",
+      "owner-not-found-message": "Gebruiker niet gevonden.",
+      "owner-field-description": "Selecteer de gebruiker die de eigenaar van dit project is. U kunt een gebruiker van de lijst van gebruikers kiezen die in de applicatie is.",
+      "description-field-label": "Beschrijving",
+      "description-field-description": "Voer een beschrijving van het project in.",
+      "notes-field-label": "Notities",
+      "notes-field-description": "Voer een notitie in over het project.",
+      "schema": {
+        "name-required": "Naam is vereist",
+        "name-min-length": "Naam moet ten minste {minLength} tekens lang zijn",
+        "name-max-length": "Naam mag niet langer zijn dan {maxLength} tekens",
+        "type-required": "Type is vereist",
+        "status-required": "Status is vereist",
+        "client-required": "Klant is vereist",
+        "owner-required": "Eigenaar is vereist",
+        "description-max-length": "Beschrijving mag niet langer zijn dan {maxLength} tekens",
+        "notes-max-length": "Notities mag niet langer zijn dan {maxLength} tekens"
+      }
+    }
+  },
+  "project": {
+    "invalid-id": "Ongeldige project ID",
+    "layout": {
+      "title": "Project",
+      "description": "Beheer je project",
+      "project": "Project",
+      "edit": "Bewerk project",
+      "sale-items": "Verkoop Items",
+      "purchase-items": "Inkoop Items",
+      "documents": "Documenten",
+      "commercial-offer": "Commerciële offerte",
+      "new-purchase-item": "Nieuwe inkoop item",
+      "new-sale-item": "Nieuwe verkoop item",
+      "new-document": "Nieuw document",
+      "comments": "Commentaren"
+    },
+    "page": {
+      "invalid-id": "Ongeldige project ID",
+      "subtitle": "Dit is de project pagina voor {projectName}. Hier kunt u alle informatie over het project bekijken. U kunt ook alle documenten bekijken die gekoppeld zijn aan dit project.",
+      "description": "Beschrijving",
+      "status": "Status",
+      "client": "Klant",
+      "general-info": "Algemene informatie",
+      "type": "Type",
+      "owner": "Eigenaar",
+      "start-date": "Startdatum",
+      "end-date": "Einddatum",
+      "other-info": "Overige informatie",
+      "notes": "Notities",
+      "documents": "Documenten",
+      "not-available": "N/A"
+    },
+    "project-documents-section": {
+      "project-documents": "Project Documenten",
+      "client-documents": "Klant Documenten",
+      "items-documents": "Items Documenten",
+      "suppliers-documents": "Leveranciers Documenten",
+      "download-all": "Download alles"
+    },
+    "edit": {
+      "invalid-id": "Ongeldige project ID",
+      "title": "Bewerk project",
+      "subtitle": "Dit is de bewerkingspagina voor het project {projectName}. Hier kunt u de details van het project bewerken.",
+      "status-form": {
+        "title": "Project Status",
+        "description": "Update project status om het huidige status van het project te veranderen. Nadat u het gewenste status heeft geselecteerd, drukt u op de update knop om de wijzigingen op te slaan.",
+        "success": "Project status bijgewerkt",
+        "error": "Er is een fout opgetreden tijdens het bijwerken van de status",
+        "update": "Update"
+      },
+      "dates-form": {
+        "title": "Project Dates",
+        "start-date": "Startdatum",
+        "end-date": "Einddatum",
+        "success": "Project dates bijgewerkt",
+        "error": "Er is een fout opgetreden tijdens het bijwerken van de dates",
+        "update": "Update"
+      },
+      "owner-form": {
+        "unauthorized": "U heeft geen toestemming om de eigenaar van het project te wijzigen",
+        "success": "Project eigenaar bijgewerkt",
+        "error": "Er is een fout opgetreden tijdens het bijwerken van de eigenaar",
+        "title": "Project Eigenaar",
+        "description": "Update project eigenaar. Nadat u het gewenste eigenaar heeft geselecteerd, drukt u op de update knop om de wijzigingen op te slaan.",
+        "note": "Opmerking: ",
+        "note-content": "Alleen de eigenaar of een beheerder kan een project eigenaar wijzigen.",
+        "update": "Update"
+      }
+    },
+    "sale-items-page": {
+      "invalid-id": "Ongeldige project ID",
+      "no-items-found-error-message": "Er zijn geen inkooporders gevonden voor dit project nog",
+      "title": "Inkooporders van het project",
+      "subtitle": "Deze pagina toont de inkooporders van het project.",
+      "card": {
+        "make": "Make",
+        "ppu": "PPU ({currency}) {price}",
+        "quantity": "Hoeveelheid {quantity}",
+        "menu": {
+          "confirm-delete": "Weet u zeker dat u deze item uit het project wilt verwijderen?",
+          "success": "Item verwijderd uit project",
+          "error": "Fout bij het verwijderen van het item",
+          "item-page": "Item Pagina",
+          "delete": "Verwijder"
+        }
+      }
+    },
+    "purchase-items-page": {
+      "invalid-id": "Ongeldige project ID",
+      "no-items-found-error-message": "Er zijn geen inkooporders gevonden voor dit project nog",
+      "title": "Inkooporders van het project",
+      "subtitle": "Deze pagina toont de inkooporders van het project.",
+      "card": {
+        "make": "Make",
+        "supplier": "Leverancier",
+        "ppu": "PPU ({currency}) {price}",
+        "quantity": "Hoeveelheid {quantity}",
+        "menu": {
+          "confirm-delete": "Weet u zeker dat u deze item uit het project wilt verwijderen?",
+          "success": "Item verwijderd uit project",
+          "error": "Fout bij het verwijderen van het item",
+          "item-page": "Item Pagina",
+          "supplier-page": "Leverancier Pagina",
+          "delete": "Verwijder"
+        }
+      }
+    },
+    "documents-page": {
+      "invalid-id": "Ongeldige project ID",
+      "no-documents-found-error-message": "Er zijn geen documenten gekoppeld aan dit project nog",
+      "title": "Documenten van het project",
+      "subtitle": "Deze lijst toont de documenten van het project."
+    },
+    "commercial-offer": {
+      "invalid-id": "Ongeldige project ID",
+      "unauthorized": "U heeft geen toestemming om deze pagina te bekijken",
+      "form": {
+        "error": "Er is een fout opgetreden tijdens het genereren van het document",
+        "title": "Commerciële offerte",
+        "description": "Genereer een commerciële offerte document voor het project",
+        "button-text": "Genereer",
+        "company-name": "Bedrijfsnaam *",
+        "company-name-description": "Voer de naam van uw bedrijf in. Dit is de naam die wordt gebruikt om het commerciële offerte document te genereren.",
+        "address": "Adres *",
+        "address-description": "Voer het adres van uw bedrijf in. Dit is het adres dat wordt gebruikt om het commerciële offerte document te genereren.",
+        "country": "Land *",
+        "country-description": "Voer het land en de regio van uw bedrijf in. Dit is het land dat wordt gebruikt om het commerciële offerte document te genereren.",
+        "phone-nm-a": "Telefoonnummer (Primaire) *",
+        "phone-nm-a-description": "Voer het primaire telefoonnummer van uw bedrijf in. Dit is het telefoonnummer dat wordt gebruikt om het commerciële offerte document te genereren.",
+        "phone-nm-b": "Telefoonnummer (Secundaire) *",
+        "phone-nm-b-description": "Voer het secundaire telefoonnummer van uw bedrijf in. Dit is het telefoonnummer dat wordt gebruikt om het commerciële offerte document te genereren.",
+        "email": "E-mail *",
+        "email-description": "Voer het e-mailadres van uw bedrijf in. Dit is het e-mailadres dat wordt gebruikt om het commerciële offerte document te genereren.",
+        "offer-validity-in-days": "Offerte geldigheid (in dagen) *",
+        "offer-validity-in-days-description": "Voer het aantal dagen dat de offerte geldig is. Dit is het aantal dagen dat de offerte geldig is voor. De offerte wordt weergegeven op de commerciële offerte notities.",
+        "offer-validity-example": "Voorbeeld: 7",
+        "payment-advance": "Betalingsoverschrijving (%) *",
+        "payment-advance-description": "Voer het percentage van de betalingsoverschrijving. Dit is het percentage dat wordt gebruikt om de commerciële offerte betalingsoverschrijving te genereren.",
+        "payment-advance-example": "Voorbeeld: 25",
+        "delivery-period": "Leveringsperiode",
+        "delivery-period-description": "Voer de leveringsperiode van het project. Dit is het leveringsperiode dat wordt gebruikt om het commerciële offerte document te genereren.",
+        "delivery-period-example": "Voorbeeld: 2 - 3 maanden",
+        "schema": {
+          "offer-validity-number": "Offerte geldigheid moet een nummer zijn",
+          "payment-advance-number": "Betalingsoverschrijving moet een nummer zijn"
+        }
+      }
+    },
+    "new-purchase-item-page": {
+      "invalid-id": "Ongeldige project ID",
+      "no-items-found-error-title": "U heeft geen items meer",
+      "no-items-found-error-message": "Voeg items toe om items te kunnen toevoegen aan dit project.",
+      "no-suppliers-found-error-title": "U heeft geen leveranciers meer",
+      "no-suppliers-found-error-message": "Voeg leveranciers toe om items te kunnen toevoegen aan dit project.",
+      "title": "Voeg inkoop item toe",
+      "subtitle": "Deze pagina voegt een inkoop item toe aan dit project.",
+      "form": {
+        "item-required": "Item is vereist",
+        "supplier-required": "Leverancier is vereist",
+        "price-required": "Prijs is vereist",
+        "currency-required": "Valuta is vereist",
+        "quantity-required": "Hoeveelheid is vereist",
+        "price-number": "Prijs moet een nummer zijn",
+        "quantity-number": "Hoeveelheid moet een nummer zijn",
+        "success": "Item toegevoegd",
+        "error": "Er is een fout opgetreden tijdens het toevoegen van het item",
+        "title": "Voeg inkoop item toe",
+        "description": "Voer de details van het item in dat u wilt toevoegen.",
+        "button-text": "Voeg item toe",
+        "item-field-label": "Item *",
+        "item-select-message": "Selecteer het item",
+        "item-search-message": "Zoek een item",
+        "item-not-found-message": "Item niet gevonden.",
+        "item-field-description": "Selecteer een item om het toe te voegen aan het project. Als het item niet bestaat, moet u het aanmaken in het project type tab.",
+        "supplier-field-label": "Leverancier *",
+        "supplier-select-message": "Selecteer een leverancier",
+        "supplier-search-message": "Zoek een leverancier",
+        "supplier-not-found-message": "Leverancier niet gevonden.",
+        "supplier-field-description": "Selecteer de leverancier die het item moet leveren aan dit project. Als de leverancier niet bestaat, moet u hem aanmaken in het leveranciers tab.",
+        "price-field-label": "Prijs *",
+        "price-field-description": "Voer het prijs van het item in.",
+        "currency-field-label": "Valuta *",
+        "currency-field-description": "Selecteer de valuta van het prijs.",
+        "quantity-field-label": "Hoeveelheid *",
+        "quantity-field-description": "Voer de hoeveelheid van het item in."
+      }
+    },
+    "new-sale-item-page": {
+      "invalid-id": "Ongeldige project ID",
+      "no-items-found-error-title": "U heeft geen items meer",
+      "no-items-found-error-message": "Voeg items toe om items te kunnen toevoegen aan dit project.",
+      "form": {
+        "item-required": "Item is vereist",
+        "price-required": "Prijs is vereist",
+        "currency-required": "Valuta is vereist",
+        "quantity-required": "Hoeveelheid is vereist",
+        "price-number": "Prijs moet een nummer zijn",
+        "quantity-number": "Hoeveelheid moet een nummer zijn",
+        "success": "Item toegevoegd",
+        "error": "Er is een fout opgetreden tijdens het toevoegen van het item",
+        "title": "Voeg verkoop item toe",
+        "description": "Voer de details van het item in dat u wilt toevoegen.",
+        "button-text": "Voeg item toe",
+        "item-field-label": "Item *",
+        "item-select-message": "Selecteer het item",
+        "item-search-message": "Zoek een item",
+        "item-not-found-message": "Item niet gevonden.",
+        "item-field-description": "Selecteer een item om het toe te voegen aan het project. Als het item niet bestaat, moet u het aanmaken in het project type tab.",
+        "price-field-label": "Prijs *",
+        "price-field-description": "Voer het prijs van het item in.",
+        "currency-field-label": "Valuta *",
+        "currency-field-description": "Selecteer de valuta van het prijs.",
+        "quantity-field-label": "Hoeveelheid *",
+        "quantity-field-description": "Voer de hoeveelheid van het item in."
+      }
+    },
+    "comments-page": {
+      "invalid-id": "Ongeldige project ID",
+      "comment-max": "Commentaar mag niet langer zijn dan {max} tekens",
+      "error": "Er is een fout opgetreden tijdens het toevoegen van het commentaar",
+      "placeholder": "Voeg een commentaar toe...",
+      "delete-error": "Er is een fout opgetreden tijdens het verwijderen van het commentaar",
+      "comment-date": "{time} geleden"
+    }
+  },
+  "clients": {
+    "layout": {
+      "title": "Klanten",
+      "description": "Beheer je klanten",
+      "all-clients": "Alle Klanten",
+      "new-client": "Nieuwe klant"
+    },
+    "page": {
+      "title": "Alle Klanten Pagina",
+      "filter-by-created-by": "Op basis van maker",
+      "filter-by-creation-date": "Op basis van creatiedatum",
+      "filter-by-updated-date": "Op basis van updatedatum",
+      "no-clients-found-error-title": "Het lijkt erop dat er nog geen klanten zijn!",
+      "no-clients-found-error-description": "Start met het toevoegen van klanten om ze te zien hier."
+    },
+    "new-client-page": {
+      "title": "Voeg klant toe",
+      "description": "Voer de details van het klant in dat u wilt toevoegen.",
+      "button-text": "Voeg klant toe",
+      "name-field-label": "Naam *",
+      "name-field-description": "Voer de naam van het klant in. Dit is de naam die wordt gebruikt om het klant te zoeken en te refereren. Het wordt weergegeven op de klanten.",
+      "registration-number-field-label": "Registratienummer",
+      "registration-number-field-description": "Voer het registratienummer van het klant in. Het registratienummer wordt weergegeven op de klant card.",
+      "website-field-label": "Website",
+      "website-field-description": "Voer de website van het klant in.",
+      "notes-field-label": "Notities",
+      "notes-field-description": "Voer een notitie in over het klant.",
+      "success": "Klant toegevoegd",
+      "error": "Er is een fout opgetreden tijdens het toevoegen van het klant",
+      "schema": {
+        "name-required": "Naam is vereist",
+        "name-min-length": "Naam moet ten minste {minLength} tekens lang zijn",
+        "name-max-length": "Naam mag niet langer zijn dan {maxLength} tekens",
+        "registration-number-max-length": "Registratienummer mag niet langer zijn dan {maxLength} tekens",
+        "website-max-length": "Website mag niet langer zijn dan {maxLength} tekens",
+        "notes-max-length": "Notities mag niet langer zijn dan {maxLength} tekens"
+      }
+    }
+  },
+  "client": {
+    "layout": {
+      "title": "Klant",
+      "description": "Beheer je klant account",
+      "client": "Klant",
+      "edit": "Bewerk klant",
+      "projects": "Projecten",
+      "documents": "Documenten",
+      "addresses": "Adressen",
+      "contacts": "Contacten",
+      "new-address": "Nieuwe adres",
+      "new-contact": "Nieuwe contact",
+      "new-document": "Nieuw document"
+    },
+    "page": {
+      "invalid-id": "Ongeldige klant ID",
+      "subtitle": "Deze is de klant pagina voor {clientName}. Hier kunt u alle informatie over het klant bekijken.",
+      "general-info": "Algemene informatie",
+      "other-info": "Overige informatie",
+      "notes": "Notities"
+    },
+    "edit": {
+      "delete-form-info": "U kunt dit klant niet verwijderen omdat het is gekoppeld aan {count, plural, one {een project} other {{count} projecten}}. U moet eerst deze projecten verwijderen voordat u het klant kunt verwijderen.",
+      "invalid-id": "Ongeldige klant ID",
+      "title": "Bewerk klant",
+      "subtitle": "Deze is de bewerkingspagina voor het klant: {clientName}. Hier kunt u de details van het klant bewerken."
+    },
+    "projects": {
+      "title": "Klantprojecten",
+      "subtitle": "Deze is een lijst van de klantprojecten.",
+      "invalid-id": "Ongeldige klant ID",
+      "no-projects-found-error-message": "Er zijn geen projecten gekoppeld aan dit klant nog"
+    },
+    "documents": {
+      "title": "Klantdocumenten",
+      "subtitle": "Deze is een lijst van de klantdocumenten.",
+      "invalid-id": "Ongeldige klant ID",
+      "no-documents-found-error-message": "Er zijn geen documenten gekoppeld aan dit klant nog"
+    },
+    "addresses": {
+      "title": "Klantadressen",
+      "subtitle": "Deze is een lijst van de klantadressen.",
+      "invalid-id": "Ongeldige klant ID",
+      "no-addresses-found-error-message": "Er zijn geen adressen gekoppeld aan dit klant nog"
+    },
+    "contacts": {
+      "title": "Klantcontacten",
+      "subtitle": "Deze is een lijst van de klantcontacten.",
+      "invalid-id": "Ongeldige klant ID",
+      "no-contacts-found-error-message": "Er zijn geen contacten gekoppeld aan dit klant nog"
+    }
+  },
+  "suppliers": {
+    "layout": {
+      "title": "Leveranciers",
+      "description": "Beheer uw leveranciers",
+      "all-suppliers": "Alle leveranciers",
+      "new-supplier": "Nieuw leverancier"
+    },
+    "page": {
+      "title": "Alle leveranciers Pagina",
+      "filter-by-created-by": "Op basis van maker",
+      "filter-by-creation-date": "Op basis van creatiedatum",
+      "filter-by-updated-date": "Op basis van updatedatum",
+      "no-suppliers-found-error-title": "Er lijkt erop dat er geen leveranciers meer zijn!",
+      "no-suppliers-found-error-message": "Start met het toevoegen van leveranciers om ze te zien hier."
+    },
+    "new-supplier-page": {
+      "title": "Voeg leverancier toe",
+      "description": "Voer de details van het leverancier in dat u wilt toevoegen.",
+      "button-text": "Voeg leverancier toe",
+      "name-field-label": "Naam *",
+      "name-field-description": "Voer de naam van het leverancier in. Dit is de naam die wordt gebruikt om het leverancier te zoeken en te refereren. Het wordt weergegeven op de leveranciers.",
+      "field-field-label": "Veld van onderneming *",
+      "field-field-description": "Voer het veld van onderneming van het leverancier in. Dit wordt gebruikt om het leverancier te categoriseren en het te maken makkelijker te zoeken.",
+      "registration-number-field-label": "Registratienummer",
+      "registration-number-field-description": "Voer het registratienummer van het leverancier in. Het registratienummer wordt weergegeven op de leverancier card.",
+      "website-field-label": "Website",
+      "website-field-description": "Voer de website van het leverancier in.",
+      "notes-field-label": "Notities",
+      "notes-field-description": "Voer een notitie in over het leverancier.",
+      "success": "Leverancier toegevoegd",
+      "error": "Er is een fout opgetreden tijdens het toevoegen van het leverancier",
+      "schema": {
+        "name-required": "Naam is vereist",
+        "name-min-length": "Naam moet ten minste {minLength} tekens lang zijn",
+        "name-max-length": "Naam mag niet langer zijn dan {maxLength} tekens",
+        "field-required": "Veld van onderneming is vereist",
+        "field-min-length": "Veld van onderneming moet ten minste {minLength} tekens lang zijn",
+        "field-max-length": "Veld van onderneming mag niet langer zijn dan {maxLength} tekens",
+        "registration-number-max-length": "Registratienummer mag niet langer zijn dan {maxLength} tekens",
+        "website-max-length": "Website mag niet langer zijn dan {maxLength} tekens",
+        "notes-max-length": "Notities mag niet langer zijn dan {maxLength} tekens"
+      }
+    }
+  },
+  "supplier": {
+    "layout": {
+      "title": "Leverancier",
+      "description": "Beheer je leverancier account",
+      "supplier": "Leverancier",
+      "edit": "Bewerk leverancier",
+      "items": "Items",
+      "projects": "Projecten",
+      "documents": "Documenten",
+      "addresses": "Adressen",
+      "contacts": "Contacten",
+      "new-address": "Nieuwe adres",
+      "new-contact": "Nieuwe contact",
+      "new-document": "Nieuw document"
+    },
+    "page": {
+      "invalid-id": "Ongeldige leverancier ID",
+      "subtitle": "Deze is de leverancier pagina voor {supplierName}. Hier kunt u alle informatie over het leverancier bekijken.",
+      "general-info": "Algemene informatie",
+      "other-info": "Overige informatie",
+      "notes": "Notities"
+    },
+    "edit": {
+      "delete-form-info": "U kunt dit leverancier niet verwijderen omdat het is gekoppeld aan {count, plural, one {een project} other {{count} projecten}}. U moet eerst deze projecten verwijderen voordat u het leverancier kunt verwijderen.",
+      "invalid-id": "Ongeldige leverancier ID",
+      "title": "Bewerk leverancier",
+      "subtitle": "Deze is de bewerkingspagina voor het leverancier: {supplierName}. Hier kunt u de details van het leverancier bewerken."
+    },
+    "items": {
+      "title": "Leverancieritems",
+      "subtitle": "Deze is een lijst van de leverancieritems.",
+      "invalid-id": "Ongeldige leverancier ID",
+      "no-items-found-error-message": "Er zijn geen items gekoppeld aan dit leverancier nog"
+    },
+    "projects": {
+      "title": "Leverancierprojecten",
+      "subtitle": "Deze is een lijst van de leverancierprojecten.",
+      "invalid-id": "Ongeldige leverancier ID",
+      "no-projects-found-error-message": "Er zijn geen projecten gekoppeld aan dit leverancier nog"
+    },
+    "documents": {
+      "title": "Leverancierdocumenten",
+      "subtitle": "Deze is een lijst van de leverancierdocumenten.",
+      "invalid-id": "Ongeldige leverancier ID",
+      "no-documents-found-error-message": "Er zijn geen documenten gekoppeld aan dit leverancier nog"
+    },
+    "addresses": {
+      "title": "Leverancieradressen",
+      "subtitle": "Deze is een lijst van de leverancieradressen.",
+      "invalid-id": "Ongeldige leverancier ID",
+      "no-addresses-found-error-message": "Er zijn geen adressen gekoppeld aan dit leverancier nog"
+    },
+    "contacts": {
+      "title": "Leveranciercontacten",
+      "subtitle": "Deze is een lijst van de leveranciercontacten.",
+      "invalid-id": "Ongeldige leverancier ID",
+      "no-contacts-found-error-message": "Er zijn geen contacten gekoppeld aan dit leverancier nog"
+    }
+  },
+  "items": {
+    "layout": {
+      "title": "Items",
+      "description": "Beheer uw items",
+      "all-items": "Alle items",
+      "new-item": "Nieuw item"
+    },
+    "page": {
+      "title": "Alle items Pagina",
+      "filter-by-created-by": "Op basis van maker",
+      "filter-by-creation-date": "Op basis van creatiedatum",
+      "filter-by-updated-date": "Op basis van updatedatum",
+      "no-items-found-error-title": "Er lijkt erop dat er geen items meer zijn!",
+      "no-items-found-error-message": "Start met het toevoegen van items om ze te zien hier."
+    },
+    "new-item-page": {
+      "form": {
+        "success": "Item toegevoegd",
+        "error": "Er is een fout opgetreden tijdens het toevoegen van het item",
+        "title": "Voeg item toe",
+        "description": "Voer de details van het item in dat u wilt toevoegen.",
+        "button-text": "Voeg item toe",
+        "name-field-label": "Naam *",
+        "name-field-description": "Voer de naam van het item in. Dit is de naam die wordt gebruikt om het item te zoeken en te refereren. Het wordt weergegeven op de items.",
+        "type-field-label": "Type *",
+        "type-field-description": "Selecteer het type van het item.",
+        "description-field-label": "Beschrijving",
+        "description-field-description": "Voer een beschrijving van het item in.",
+        "make-field-label": "Make",
+        "make-field-description": "Voer de make van het item in.",
+        "mpn-field-label": "MPN",
+        "mpn-field-description": "Voer het MPN van het item in.",
+        "notes-field-label": "Notities",
+        "notes-field-description": "Voer een notitie in over het item."
+      },
+      "schema": {
+        "name-required": "Naam is vereist",
+        "name-min-length": "Naam moet ten minste {minLength} tekens lang zijn",
+        "name-max-length": "Naam mag niet langer zijn dan {maxLength} tekens",
+        "type-required": "Type is vereist",
+        "type-max-length": "Type mag niet langer zijn dan {maxLength} tekens",
+        "description-max-length": "Beschrijving mag niet langer zijn dan {maxLength} tekens",
+        "mpn-max-length": "MPN mag niet langer zijn dan {maxLength} tekens",
+        "make-max-length": "Make mag niet langer zijn dan {maxLength} tekens",
+        "notes-max-length": "Notities mag niet langer zijn dan {maxLength} tekens"
+      }
+    }
+  },
+  "item": {
+    "layout": {
+      "title": "Item",
+      "description": "Beheer uw item",
+      "item": "Item",
+      "edit": "Bewerk item",
+      "projects": "Projecten",
+      "suppliers": "Leveranciers",
+      "documents": "Documenten",
+      "new-document": "Nieuw document"
+    },
+    "page": {
+      "invalid-id": "Ongeldige item ID",
+      "subtitle": "Deze is de item pagina voor {itemName}. Hier kunt u alle informatie over het item bekijken.",
+      "general-info": "Algemene informatie",
+      "other-info": "Overige informatie",
+      "notes": "Notities",
+      "general-info-section": {
+        "type": "Type",
+        "description": "Beschrijving",
+        "mpn": "MPN",
+        "make": "Make"
+      }
+    },
+    "edit": {
+      "invalid-id": "Ongeldige item ID",
+      "title": "Bewerk item",
+      "subtitle": "Deze is de bewerkingspagina voor het item: {itemName}. Hier kunt u de details van het item bewerken.",
+      "delete-form-info": "U kunt dit item niet verwijderen omdat het is gekoppeld aan {count, plural, one {een project} other {{count} projecten}}. U moet eerst deze projecten verwijderen voordat u het item kunt verwijderen."
+    },
+    "projects": {
+      "title": "Itemprojecten",
+      "subtitle": "Deze is een lijst van de itemprojecten.",
+      "invalid-id": "Ongeldige item ID",
+      "no-projects-found-error-message": "Er zijn geen projecten gekoppeld aan dit item nog"
+    },
+    "suppliers": {
+      "title": "Itemleveranciers",
+      "subtitle": "Deze is een lijst van de itemleveranciers.",
+      "invalid-id": "Ongeldige item ID",
+      "no-suppliers-found-error-message": "Er zijn geen leveranciers gekoppeld aan dit item nog"
+    },
+    "documents": {
+      "title": "Itemdocumenten",
+      "subtitle": "Deze is een lijst van de itemdocumenten.",
+      "invalid-id": "Ongeldige item ID",
+      "no-documents-found-error-message": "Er zijn geen documenten gekoppeld aan dit item nog"
+    }
+  },
+  "documents": {
+    "layout": {
+      "title": "Documenten",
+      "description": "Beheer uw documenten",
+      "all-documents": "Alle documenten",
+      "new-document": "Nieuw document"
+    },
+    "page": {
+      "title": "Alle documenten Pagina",
+      "filter-by-created-by": "Op basis van maker",
+      "filter-by-creation-date": "Op basis van creatiedatum",
+      "no-documents-found-error-title": "Er lijkt erop dat er geen documenten meer zijn!",
+      "no-documents-found-error-message": "Start met het toevoegen van documenten om ze te zien hier"
+    }
+  },
+  "document": {
+    "layout": {
+      "title": "Document",
+      "description": "Beheer uw document",
+      "document": "Document",
+      "edit": "Bewerk document",
+      "projects": "Projecten",
+      "clients": "Klanten",
+      "suppliers": "Leveranciers",
+      "items": "Items",
+      "new-document": "Nieuw document"
+    },
+    "page": {
+      "invalid-id": "Ongeldige document ID",
+      "subtitle": "Deze is de document pagina voor {documentName}. Hier kunt u alle informatie over het document bekijken.",
+      "general-info": "Algemene informatie",
+      "other-info": "Overige informatie",
+      "notes": "Notities",
+      "download": "Download",
+      "general-info-section": {
+        "extension": "Extensie",
+        "private": "Privé",
+        "public": "Publiek",
+        "yes": "Ja",
+        "no": "Nee"
+      }
+    },
+    "edit": {
+      "invalid-id": "Ongeldige document ID",
+      "title": "Bewerk document",
+      "subtitle": "Deze is de bewerkingspagina voor het document: {documentName}. Hier kunt u de details van het document bewerken.",
+      "delete-form-info": "U kunt dit document niet verwijderen omdat het is gekoppeld aan {count, plural, one {een project} other {{count} projecten}}. U moet eerst deze projecten verwijderen voordat u het document kunt verwijderen."
+    },
+    "projects": {
+      "title": "Documentprojecten",
+      "subtitle": "Deze is een lijst van de documentprojecten.",
+      "invalid-id": "Ongeldige document ID",
+      "no-projects-found-error-message": "Er zijn geen projecten gekoppeld aan dit document nog"
+    },
+    "clients": {
+      "title": "Documentklanten",
+      "subtitle": "Deze is een lijst van de documentklanten.",
+      "invalid-id": "Ongeldige document ID",
+      "no-clients-found-error-message": "Er zijn geen klanten gekoppeld aan dit document nog"
+    },
+    "suppliers": {
+      "title": "Documentleveranciers",
+      "subtitle": "Deze is een lijst van de documentleveranciers.",
+      "invalid-id": "Ongeldige document ID",
+      "no-suppliers-found-error-message": "Er zijn geen leveranciers gekoppeld aan dit document nog"
+    },
+    "items": {
+      "title": "Documentitems",
+      "subtitle": "Deze is een lijst van de documentitems.",
+      "invalid-id": "Ongeldige document ID",
+      "no-items-found-error-message": "Er zijn geen items gekoppeld aan dit document nog"
+    }
+  },
+  "address": {
+    "success": "Adres toegevoegd",
+    "error": "Er is een fout opgetreden tijdens het toevoegen van het adres",
+    "title": "Voeg adres toe",
+    "description": "Voer de details van het adres in dat u wilt toevoegen.",
+    "button-text": "Voeg adres toe",
+    "form": {
+      "primary-address-title": "Primaire adres",
+      "address-name-label": "Adresnaam *",
+      "address-name-description": "Voer de naam of de titel van het adres in. Bijvoorbeeld: Hoofdadres",
+      "address-line-label": "Adres *",
+      "address-line-description": "Voer het adres van het adres in.",
+      "country-label": "Land *",
+      "country-select-message": "Selecteer een land",
+      "country-search-message": "Zoek een land",
+      "country-not-found-message": "Land niet gevonden",
+      "country-description": "Voer het land van het adres in.",
+      "city-label": "Stad",
+      "city-description": "Voer de stad van het adres in.",
+      "address-notes-label": "Notities",
+      "address-notes-description": "Voer een notitie in over het adres."
+    },
+    "schema": {
+      "name-required": "Adresnaam is vereist",
+      "name-min-length": "Naam moet ten minste {minLength} tekens lang zijn",
+      "name-max-length": "Naam mag niet langer zijn dan {maxLength} tekens",
+      "address-line-required": "Adres is vereist",
+      "address-line-min-length": "Adres moet ten minste {minLength} tekens lang zijn",
+      "address-line-max-length": "Adres mag niet langer zijn dan {maxLength} tekens",
+      "country-required": "Land is vereist",
+      "country-min-length": "Land moet ten minste {minLength} tekens lang zijn",
+      "country-max-length": "Land mag niet langer zijn dan {maxLength} tekens",
+      "city-max-length": "Stad mag niet langer zijn dan {maxLength} tekens",
+      "address-notes-max-length": "Notities mag niet langer zijn dan {maxLength} tekens"
+    }
+  },
+  "contact": {
+    "success": "Contact toegevoegd",
+    "error": "Er is een fout opgetreden tijdens het toevoegen van het contact",
+    "title": "Voeg contact toe",
+    "description": "Voer de details van het contact in dat u wilt toevoegen.",
+    "button-text": "Voeg contact toe",
+    "form": {
+      "primary-contact-label": "Primaire contact",
+      "contact-name-label": "Contactnaam *",
+      "contact-name-description": "Voer de naam van het contact in.",
+      "phone-number-label": "Telefoonnummer",
+      "phone-number-description": "Voer het telefoonnummer van het contact in.",
+      "email-label": "E-mail",
+      "email-description": "Voer het e-mailadres van het contact in.",
+      "notes-label": "Notities",
+      "notes-description": "Voer een notitie in over het contact."
+    },
+    "schema": {
+      "name-required": "Contactnaam is vereist",
+      "name-min-length": "Naam moet ten minste {minLength} tekens lang zijn",
+      "name-max-length": "Naam mag niet langer zijn dan {maxLength} tekens",
+      "phone-number-min-length": "Telefoonnummer moet ten minste {minLength} tekens lang zijn",
+      "phone-number-max-length": "Telefoonnummer mag niet langer zijn dan {maxLength} tekens",
+      "email-not-valid": "E-mail is ongeldig",
+      "email-min-length": "E-mail moet ten minste {minLength} tekens lang zijn",
+      "email-max-length": "E-mail mag niet langer zijn dan {maxLength} tekens",
+      "notes-max-length": "Notities mag niet langer zijn dan {maxLength} tekens",
+      "email-or-phone-required": "E-mail of telefoonnummer is vereist"
+      }
+  },
+  "admin": {
+    "layout": {
+      "title": "Admin",
+      "description": "Beheer gebruikers",
+      "users": "Gebruikers",
+      "new-user": "Nieuwe gebruiker"
+    },
+    "page": {
+      "title": "Alle gebruikers Pagina"
+    },
+    "new-user-page": {
+      "form": {
+        "success": "Gebruiker toegevoegd",
+        "error": "Er is een fout opgetreden tijdens het toevoegen van het gebruiker",
+        "title": "Voeg gebruiker toe",
+        "description": "Voer de details van het gebruiker in dat u wilt toevoegen",
+        "button-text": "Voeg gebruiker toe",
+        "username-field-label": "Gebruikersnaam *",
+        "username-field-description": "Gebruikersnaam moet ten minste 4 tekens lang zijn en mag alleen uit letters, cijfers en speciale tekens bestaan. Gebruikersnaam moet uniek zijn. U kunt de gebruikersnaam wijzigen door het gebruikersnaam te wijzigen in het gebruikers paneel.",
+        "name-field-label": "Naam *",
+        "name-field-description": "Voer de naam van het gebruiker in. Dit is de naam die wordt gebruikt om het gebruiker te identificeren in de applicatie.",
+        "email-field-label": "E-mail *",
+        "email-field-description": "Voer het e-mailadres van het gebruiker in. Dit e-mailadres wordt gebruikt voor de commerciële offerte document als de gebruiker de eigenaar is van het project of de beheerder is.",
+        "phone-number-field-label": "Telefoonnummer *",
+        "phone-number-field-description": "Voer het telefoonnummer van het gebruiker in. Dit telefoonnummer wordt gebruikt voor de commerciële offerte document als de gebruiker de eigenaar is van het project of de beheerder is.",
+        "role-field-label": "Rol *",
+        "role-field-description": "Rol van de gebruiker bepaalt wat acties de gebruiker kan uitvoeren in de applicatie. Admins kunnen alle acties uitvoeren, terwijl gebruikers alleen bepaalde acties kunnen uitvoeren. Admins kunnen ook gebruikers toevoegen en bewerken.",
+        "password-field-label": "Wachtwoord *",
+        "password-field-description": "Wachtwoord van de gebruiker moet ten minste 8 tekens lang zijn en moet ten minste één hoofdletter, één kleine letter en één cijfer bevatten.",
+        "verify-password-field-label": "Verifieer wachtwoord *"
+      },
+      "schema": {
+        "username-required": "Gebruikersnaam is vereist",
+        "username-min-length": "Gebruikersnaam moet ten minste {minLength} tekens lang zijn",
+        "username-max-length": "Gebruikersnaam mag niet langer zijn dan {maxLength} tekens",
+        "name-required": "Naam is vereist",
+        "name-min-length": "Naam moet ten minste {minLength} tekens lang zijn",
+        "name-max-length": "Naam mag niet langer zijn dan {maxLength} tekens",
+        "email-not-valid": "E-mailadres is ongeldig",
+        "email-max-length": "E-mailadres mag niet langer zijn dan {maxLength} tekens",
+        "phone-number-max-length": "Telefoonnummer mag niet langer zijn dan {maxLength} tekens",
+        "role-required": "Rol is vereist",
+        "password-required": "Wachtwoord is vereist",
+        "password-min-length": "Wachtwoord moet ten minste {minLength} tekens lang zijn",
+        "password-max-length": "Wachtwoord mag niet langer zijn dan {maxLength} tekens",
+        "verify-password-required": "Verifieer wachtwoord is vereist",
+        "verify-password-min-length": "Verifieer wachtwoord moet ten minste {minLength} tekens lang zijn",
+        "verify-password-max-length": "Verifieer wachtwoord mag niet langer zijn dan {maxLength} tekens",
+        "username-not-valid": "Gebruikersnaam mag geen spaties of hoofdletters bevatten",
+        "password-complexity": "Wachtwoord moet ten minste één hoofdletter, één kleine letter en één cijfer bevatten",
+        "password-not-match": "Wachtwoorden komen niet overeen"
+      }
+    }
+  },
+  "settings": {
+    "layout": {
+      "title": "Instellingen",
+      "description": "Beheer uw instellingen",
+      "profile": "Profiel",
+      "edit": "Bewerk",
+      "preferences": "Voorkeuren"
+    },
+    "profile": {
+      "title": "Profiel",
+      "subtitle": "",
+      "name": "Naam",
+      "username": "Gebruikersnaam",
+      "role": "Rol",
+      "created-at": "Aangemaakt op",
+      "updated-at": "Bijgewerkt op",
+      "last-login": "Laatste login",
+      "not-available": "N/A",
+      "description-a": "U kunt de gebruikersnaam niet wijzigen, maar u kunt uw naam wijzigen. Door uw naam te wijzigen, wordt uw avatar bijgewerkt om de naam te vermelden. U kunt uw wachtwoord wijzigen.",
+      "description-b": "Om uw naam of wachtwoord te wijzigen, ga naar het 'Account' paneel op de linkerkant van de balk.",
+      "description-c": "Het rol kan alleen worden gewijzigd door een beheerder. Als u denkt dat het rol onjuist is, neem dan contact op met een beheerder."
+    },
+    "edit": {
+      "title": "Bewerk gebruiker",
+      "subtitle": "Deze is de bewerkingspagina voor het gebruiker: {userName}. Hier kunt u de details van het gebruiker bewerken."
+    },
+    "preferences": {
+      "title": "Voorkeuren",
+      "description": "Beheer uw voorkeuren",
+      "theme-title": "Thema",
+      "theme-description": "Wijzig het thema van de applicatie. Let op: donkere modus is beter voor uw ogen.",
+      "light-mode-title": "Licht modus",
+      "dark-mode-title": "Donker modus",
+      "update": "Update"
+    }
+  },
+  "edit-user": {
+    "page": {
+      "invalid-id": "Ongeldige gebruikers ID",
+      "title": "Bewerk gebruiker",
+      "subtitle": "Deze is de bewerkingspagina voor het gebruiker: {userName}. Hier kunt u de details van het gebruiker bewerken."
+    },
+    "change-name-section": {
+      "name-required-message": "Naam is vereist",
+      "name-min-length": "Naam moet ten minste {minLength} tekens lang zijn",
+      "name-max-length": "Naam mag niet langer zijn dan {maxLength} tekens",
+      "success": "Naam bijgewerkt",
+      "error": "Er is een fout opgetreden tijdens het bijwerken van de naam",
+      "title": "Naam",
+      "placeholder": "Naam",
+      "description": "Wijzig de naam van de gebruiker, de avatar initieel gerelateerd aan de naam. Nadat u de naam hebt gewijzigd, wordt de avatar bijgewerkt om de naam te vermelden. U kunt uw wachtwoord wijzigen.",
+      "update": "Update"
+    },
+    "change-email-section": {
+      "email-required-message": "E-mailadres is vereist",
+      "email-invalid-message": "E-mailadres is ongeldig",
+      "email-max-length": "E-mailadres mag niet langer zijn dan {maxLength} tekens",
+      "success": "E-mailadres bijgewerkt",
+      "error": "Er is een fout opgetreden tijdens het bijwerken van het e-mailadres",
+      "title": "E-mailadres",
+      "placeholder": "E-mailadres",
+      "description": "Wijzig het e-mailadres van de gebruiker. Dit e-mailadres wordt gebruikt voor de commerciële offerte document als de gebruiker de eigenaar is van het project of de beheerder is.",
+      "update": "Update"
+    },
+    "change-phone-number-section": {
+      "phone-number-required-message": "Telefoonnummer is vereist",
+      "phone-number-max-length": "Telefoonnummer mag niet langer zijn dan {maxLength} tekens",
+      "success": "Telefoonnummer bijgewerkt",
+      "error": "Er is een fout opgetreden tijdens het bijwerken van het telefoonnummer",
+      "title": "Telefoonnummer",
+      "placeholder": "+20 123 456 7890",
+      "description": "Wijzig het telefoonnummer van de gebruiker. Dit telefoonnummer wordt gebruikt voor de commerciële offerte document als de gebruiker de eigenaar is van het project of de beheerder is.",
+      "update": "Update"
+    },
+    "change-role-section": {
+      "role-required-message": "Rol is vereist",
+      "success": "Rol bijgewerkt",
+      "error": "Er is een fout opgetreden tijdens het bijwerken van het rol",
+      "title": "Rol",
+      "description": "Wijzig de rol van de gebruiker, ga ervan uit dat u de eigenaar bent van het project. Nadat u het rol hebt gewijzigd, wordt de wijziging doorgevoerd zodra de gebruiker uitlogt.",
+      "update": "Update"
+    },
+    "change-password-section": {
+      "old-password-required-message": "Oud wachtwoord is vereist",
+      "old-password-min-length": "Wachtwoord moet ten minste {minLength} tekens lang zijn",
+      "old-password-max-length": "Wachtwoord mag niet langer zijn dan {maxLength} tekens",
+      "password-required-message": "Nieuw wachtwoord is vereist",
+      "password-min-length": "Wachtwoord moet ten minste {minLength} tekens lang zijn",
+      "password-max-length": "Wachtwoord mag niet langer zijn dan {maxLength} tekens",
+      "verify-password-required-message": "Verifieer wachtwoord is vereist",
+      "verify-password-min-length": "Verifieer wachtwoord moet ten minste {minLength} tekens lang zijn",
+      "verify-password-max-length": "Verifieer wachtwoord mag niet langer zijn dan {maxLength} tekens",
+      "password-not-complex": "Wachtwoord moet ten minste één hoofdletter, één kleine letter en één cijfer bevatten",
+      "password-not-match": "Wachtwoorden komen niet overeen",
+      "password-match": "U kunt hetzelfde wachtwoord niet gebruiken",
+      "success": "Wachtwoord bijgewerkt",
+      "error": "Er is een fout opgetreden tijdens het bijwerken van het wachtwoord",
+      "title": "Wachtwoord",
+      "old-password-title": "Oud wachtwoord",
+      "old-password-description": "Voer het oude wachtwoord in om te bevestigen dat u het heeft.",
+      "password-title": "Nieuw wachtwoord",
+      "new-password-description": "Voer het nieuwe wachtwoord in. Wachtwoord moet ten minste 8 tekens lang zijn en moet ten minste één hoofdletter, één kleine letter en één cijfer bevatten.",
+      "verify-password-title": "Verifieer wachtwoord",
+      "verify-password-description": "Voer hetzelfde wachtwoord in dat u hebt ingevoerd bovenaan om te bevestigen dat het juist is ingevoerd.",
+      "description": "Wijzig het wachtwoord van de gebruiker, wachtwoord moet ten minste 8 tekens lang zijn en moet ten minste één hoofdletter, één kleine letter en één cijfer bevatten.",
+      "note": "Opmerking: ",
+      "note-revoke": "Als u wilt de toegang tot de gebruiker wilt intrekken, kunt u de account hier verwijderen.",
+      "note-settings": "Gebruik deze functie alleen als u uw wachtwoord vergeten. Als u wilt uw wachtwoord wijzigen, moet u uw gebruiker opnieuw instellen.",
+      "update": "Update"
+    },
+    "deactivate-user-section": {
+      "success": "Gebruiker gedeactiveerd",
+      "error": "Er is een fout opgetreden tijdens het deactiveren van de gebruiker",
+      "title": "Deactiveer gebruiker",
+      "deactivate": "Deactiveer",
+      "description-a": "Deactiveer de gebruiker, dit zal voorkomen dat de gebruiker inlogt en toegang heeft tot de applicatie. Nadat de gebruiker is gedeactiveerd, worden de",
+      "description-b": "wijzigingen doorgevoerd nadat de gebruiker uitlogt.",
+      "description-c": "Als u de wijzigingen wilt onmiddellijk doen, moet u de server herstarten, beter een IT administrator contacteren.",
+      "description-d": "De gebruiker blijft in de lijst met gebruikers, maar kan niet inloggen of toegang hebben tot de applicatie. U kunt de gebruiker weer activeren op elk gewenst moment."
+    },
+    "activate-user-section": {
+      "success": "Gebruiker geactiveerd",
+      "error": "Er is een fout opgetreden tijdens het activeren van de gebruiker",
+      "title": "Activeer gebruiker",
+      "activate": "Activeer",
+      "description": "Deze gebruiker is gedeactiveerd, dit betekent dat deze gebruiker niet kan inloggen en toegang heeft tot de applicatie. Activeer de gebruiker om deze gebruiker weer in te loggen en toegang te krijgen tot de applicatie."
+      }
+  },
+  "name-form": {
+    "success": "Naam bijgewerkt",
+    "error": "Er is een fout opgetreden tijdens het bijwerken van de naam",
+    "unauthorized": "U heeft geen toestemming om de naam van {type} te wijzigen",
+    "title": "Naam",
+    "description": "Wijzig de naam van {type}, dit zal de naam van {type} van alle referenties veranderen. Nadat u de naam hebt gewijzigd, wordt de naam bijgewerkt voor alle referenties. Naam moet uniek zijn.",
+    "note": "Opmerking: ",
+    "note-with-owner": "Alleen de eigenaar of een beheerder kan de naam van {type} wijzigen.",
+    "note-without-owner": "Alleen een beheerder kan de naam van {type} wijzigen.",
+    "update": "Update"
+  },
+  "description-form": {
+    "success": "Beschrijving bijgewerkt",
+    "error": "Er is een fout opgetreden tijdens het bijwerken van de beschrijving",
+    "title": "Beschrijving",
+    "description": "Wijzig de beschrijving van {type}, dit zal de beschrijving van {type} van alle referenties veranderen. Nadat u de beschrijving hebt gewijzigd, wordt de beschrijving bijgewerkt voor alle referenties. De beschrijving is een van de velden die gebruikt worden om {type}s te zoeken.",
+    "update": "Update"
+  },
+  "notes-form": {
+    "success": "Notities bijgewerkt",
+    "error": "Er is een fout opgetreden tijdens het bijwerken van de notities",
+    "title": "Notities",
+    "placeholder": "Voeg een notitie toe...",
+    "description": "Wijzig de notities van {type}, dit zal de notities van {type} van alle referenties veranderen en de vorige notities worden verwijderd. Nadat u de notities hebt gewijzigd, worden de notities bijgewerkt voor alle referenties.",
+    "update": "Update"
+  },
+  "delete-form": {
+    "required": "Naam is vereist om {type} te verwijderen",
+    "name-must-match": "Naam moet overeenkomen",
+    "unauthorized": "U heeft geen toestemming om {type} te verwijderen",
+    "success": "{type} verwijderd",
+    "error": "Er is een fout opgetreden tijdens het verwijderen van {type}",
+    "title": "Verwijder",
+    "description": "Weet u zeker dat u {type} wilt verwijderen? Dit kan niet ongedaan worden gemaakt.",
+    "delete": "Verwijder",
+    "form-info": {
+      "description": "Typ de naam van {type} om te bevestigen. Nadat u de naam hebt ingevoerd, drukt u op de update knop om {type} te verwijderen.",
+      "warning": "Waarschuwing: ",
+      "warning-content": "Het verwijderen van {type} is permanent, u kunt het niet ongedaan maken.",
+      "note": "Opmerking: ",
+      "project-note-content": "Alleen een beheerder of een eigenaar kan een project verwijderen.",
+      "note-content": "Alleen een beheerder kan een {type} verwijderen."
+    }
+  },
+  "registration-number-form": {
+    "max-length-message": "Registratienummer mag niet langer zijn dan {maxLength} tekens",
+    "success": "Registratienummer bijgewerkt",
+    "error": "Er is een fout opgetreden tijdens het bijwerken van het registratienummer",
+    "title": "Registratienummer",
+    "description": "Wijzig het registratienummer van {type}, dit zal het registratienummer van {type} in alle referenties veranderen. Nadat u het registratienummer hebt ingevoerd, drukt u op de update knop om het registratienummer te wijzigen.",
+    "update": "Update"
+  },
+  "website-form": {
+    "max-length-message": "Website mag niet langer zijn dan {maxLength} tekens",
+    "success": "Website bijgewerkt",
+    "error": "Er is een fout opgetreden tijdens het bijwerken van de website",
+    "title": "Website",
+    "description": "Wijzig de website van {type}, dit zal de website van {type} in alle referenties veranderen. Nadat u de website hebt ingevoerd, drukt u op de update knop om de website te wijzigen.",
+    "update": "Update"
+  },
+  "field-update-form": {
+    "field-required-message": "Veld van onderneming is vereist",
+    "field-min-length-message": "Veld van onderneming moet ten minste {minLength} tekens lang zijn",
+    "field-max-length-message": "Veld van onderneming mag niet langer zijn dan {maxLength} tekens",
+    "success": "Veld bijgewerkt",
+    "error": "Er is een fout opgetreden tijdens het bijwerken van het veld",
+    "title": "Veld van onderneming",
+    "description": "Wijzig het veld van onderneming van {type}, dit zal het veld van onderneming van {type} in alle referenties veranderen. Nadat u het veld van onderneming hebt ingevoerd, drukt u op de update knop om het veld van onderneming te wijzigen.",
+    "update": "Update"
+  },
+  "type-update-form": {
+    "type-required-message": "Type is vereist",
+    "type-min-length-message": "Type moet ten minste {minLength} tekens lang zijn",
+    "type-max-length-message": "Type mag niet langer zijn dan {maxLength} tekens",
+    "success": "Type bijgewerkt",
+    "error": "Er is een fout opgetreden tijdens het bijwerken van het type",
+    "title": "Type",
+    "description": "Wijzig het type van {type}, dit zal het type van {type} in alle referenties veranderen. Nadat u het type hebt ingevoerd, drukt u op de update knop om het type te wijzigen.",
+    "update": "Update"
+  },
+  "make-update-form": {
+    "make-max-length-message": "Maken mag niet langer zijn dan {maxLength} tekens",
+    "success": "Maken bijgewerkt",
+    "error": "Er is een fout opgetreden tijdens het bijwerken van de maken",
+    "title": "Maken",
+    "description": "Wijzig de maken van {type}, dit zal de maken van {type} in alle referenties veranderen. Nadat u de maken hebt ingevoerd, drukt u op de update knop om de maken te wijzigen.",
+    "update": "Update"
+  },
+  "mpn-update-form": {
+    "mpn-max-length-message": "MPN mag niet langer zijn dan {maxLength} tekens",
+    "success": "MPN bijgewerkt",
+    "error": "Er is een fout opgetreden tijdens het bijwerken van het MPN",
+    "title": "MPN",
+    "description": "Wijzig het MPN van {type}, dit zal het MPN van {type} in alle referenties veranderen. Nadat u het MPN hebt ingevoerd, drukt u op de update knop om het MPN te wijzigen.",
+    "update": "Update"
+  },
+  "user-info-section": {
+    "created-at": "Aangemaakt op",
+    "created-by": "Aangemaakt door",
+    "updated-at": "Bijgewerkt op",
+    "updated-by": "Bijgewerkt door",
+    "not-available": "N/A"
+  },
+  "company-section": {
+    "name": "Naam",
+    "field": "Veld van onderneming",
+    "registration-number": "Registratienummer",
+    "website": "Website",
+    "address": "Adres",
+    "contact": "Contact"
+  },
+  "search-bar": {
+    "placeholder": "Zoeken"
+  },
+  "drop-zone": {
+    "title": "Klik om te uploaden ",
+    "subtitle": "of sleep en sleep",
+    "max": "Maximum bestandsgrootte is {max} MB",
+    "error": "Bestandsgrootte moet kleiner zijn dan {max} MB"
+  },
+  "document-form": {
+    "existing-document": "Bestaand document",
+    "new-document": "Nieuw document",
+    "invalid-relation": "Ongeldige relatie",
+    "new-document-form": {
+      "name-required": "Naam is vereist",
+      "name-min-length": "Naam moet ten minste {minLength} tekens lang zijn",
+      "name-max-length": "Naam mag niet langer zijn dan {maxLength} tekens",
+      "notes-max-length": "Notities mag niet langer zijn dan {maxLength} tekens",
+      "success": "Document toegevoegd",
+      "error": "Er is een fout opgetreden tijdens het toevoegen van het document",
+      "title": "Voeg document toe",
+      "description": "Sublees een nieuw document",
+      "button-text": "Voeg document toe",
+      "name-field-label": "Naam *",
+      "name-field-description": "Voer de naam van het document in. Dit is de naam die wordt gebruikt om het document te zoeken en te refereren.",
+      "private-field-label": "Privé",
+      "private-field-description": "Vink dit vakje aan als u het document privé wilt maken. Alleen de eigenaars van het document kunnen het zien.",
+      "notes-field-label": "Notities",
+      "notes-field-description": "Voer een notitie in over het document."
+    },
+    "existing-document-form": {
+      "success": "Document toegevoegd",
+      "error": "Er is een fout opgetreden tijdens het toevoegen van het document",
+      "title": "Voeg bestaand document toe",
+      "description": "Selecteer een document om het te koppelen",
+      "button-text": "Voeg document toe",
+      "id-field-label": "Document *",
+      "select-message": "Selecteer het document",
+      "search-message": "Zoek een document",
+      "not-found-message": "Document niet gevonden",
+      "id-field-description": "Selecteer het document dat u wilt koppelen. Nadat u het document hebt gekoppeld, drukt u op de update knop om het document te koppelen."
+    }
+  },
+  "document-alt-card": {
+    "menu": {
+      "unlink-success": "Document verwijderd",
+      "unlink-error": "Er is een fout opgetreden tijdens het verwijderen van het document",
+      "document-page": "Document Pagina",
+      "download-document": "Download document",
+      "unlink-document": "Verwijder document"
+    }
+  },
+  "project-card": {
+    "menu": {
+      "project-page": "Project Pagina",
+      "project-documents": "Project Documenten",
+      "project-comments": "Project Commentaren",
+      "edit": "Bewerk project",
+      "delete": "Verwijder project"
+    },
+    "tips": {
+      "status": "Status",
+      "client": "Klant"
+    }
+  },
+  "client-card": {
+    "menu": {
+      "client-page": "Klant Pagina",
+      "client-documents": "Klant Documenten",
+      "client-comments": "Klant Commentaren",
+      "edit": "Bewerk klant",
+      "delete": "Verwijder klant"
+    },
+    "tips": {
+      "registration-number": "Registratienummer"
+    }
+  },
+  "supplier-card": {
+    "menu": {
+      "supplier-page": "Leverancier Pagina",
+      "supplier-documents": "Leverancier Documenten",
+      "supplier-comments": "Leverancier Commentaren",
+      "edit": "Bewerk leverancier",
+      "delete": "Verwijder leverancier"
+    },
+    "tips": {
+      "field": "Veld van onderneming",
+      "registration-number": "Registratienummer"
+    }
+  },
+  "item-card": {
+    "menu": {
+      "item-page": "Item Pagina",
+      "item-documents": "Item Documenten",
+      "item-comments": "Item Commentaren",
+      "edit": "Bewerk item",
+      "delete": "Verwijder item"
+    },
+    "tips": {
+      "make": "Maken"
+    }
+  },
+  "document-card": {
+    "menu": {
+      "document-page": "Document Pagina",
+      "edit": "Bewerk document",
+      "delete": "Verwijder document"
+    },
+    "tips": {
+      "private": "Privé",
+      "extension": "Extensie"
+    }
+  },
+  "user-card": {
+    "role": "Rol:",
+    "active": "Actief:",
+    "last-login": "Laatste login:",
+    "yes": "Ja",
+    "no": "Nee"
+  },
+  "address-card": {
+    "address-line": "Adres",
+    "country": "Land",
+    "city": "Stad",
+    "created-by": "Aangemaakt door",
+    "created-at": "Aangemaakt op",
+    "updated-by": "Bijgewerkt door",
+    "updated-at": "Bijgewerkt op",
+    "notes": "Notities",
+    "action-buttons": {
+      "primary": "Primair",
+      "set-primary": "Stel in als primair",
+      "delete": "Verwijder",
+      "success": "Adres bijgewerkt",
+      "error": "Er is een fout opgetreden tijdens het bijwerken van het adres",
+      "delete-success": "Adres verwijderd",
+      "delete-error": "Er is een fout opgetreden tijdens het verwijderen van het adres",
+      "confirm-delete": "Weet u zeker dat u dit adres wilt verwijderen?"
+    }
+  },
+  "contact-card": {
+    "phone-number": "Telefoonnummer",
+    "email": "E-mail",
+    "created-by": "Aangemaakt door",
+    "created-at": "Aangemaakt op",
+    "updated-by": "Bijgewerkt door",
+    "updated-at": "Bijgewerkt op",
+    "notes": "Notities",
+    "action-buttons": {
+      "primary": "Primair",
+      "set-primary": "Stel in als primair",
+      "delete": "Verwijder",
+      "success": "Contact verwijderd",
+      "error": "Er is een fout opgetreden tijdens het verwijderen van het contact",
+      "delete-success": "Contact verwijderd",
+      "delete-error": "Er is een fout opgetreden tijdens het verwijderen van het contact",
+      "confirm-delete": "Weet u zeker dat u dit contact wilt verwijderen?"
+    }
+  },
+  "supplier-item-card": {
+    "make": "Maken",
+    "project": "Project",
+    "quantity": "Hoeveelheid {quantity}",
+    "ppu": "PPU ({currency}) {price}"
+  },
+  "card-tips": {
+    "creation-date": "Aanmaakdatum",
+    "id": "ID"
+  },
+  "filter": {
+    "tip": "Filter",
+    "filter-title": "Filter",
+    "filter-by": "Filter {type}",
+    "status": "Status",
+    "owner": "Eigenaar",
+    "createdBy": "Maker",
+    "type": "Type",
+    "select-placeholder": "Selecteer een waarde",
+    "from": "Van",
+    "to": "Tot"
+  },
+  "date-picker": {
+    "select-year": "Selecteer een jaar",
+    "select-date": "Selecteer een datum"
+  },
+  "home-page": {
+    "intro": {
+      "title": "Daftar Guide",
+      "description": "Daftar is een applicatie die je in één plek kunt beheren voor je contractontwerp.",
+      "subtitle": "De hoofddoel van Daftar is het beheren van alle projecten die je in één plek uitvoert."
+    },
+    "utils": {
+      "notes": "Notities"
+    },
+    "definitions": {
+      "title": "Definities",
+      "users": {
+        "title": "Gebruiker",
+        "description": "Een gebruiker is een persoon die Daftar gebruikmaakt, vaak een bedrijf die een contract met een persoon heeft. Gebruikers kunnen verschillende rollen hebben, zoals beheerder, supergebruiker, of gebruiker. Elke gebruiker kan de eigen profiel bewerken en alle informatie bekijken, inclusief de naam, e-mailadres, telefoonnummer en wachtwoord.",
+        "roles": {
+          "admin": {
+            "title": "Beheerder",
+            "description": "Beheerders hebben volledige toegang tot alle functies van Daftar, inclusief toegang tot het beheerpaneel waar ze kunnen een gebruiker toevoegen, bewerken en deactiveren."
+          },
+          "super-user": {
+            "title": "Supergebruiker",
+            "description": "Supergebruikers hebben volledige toegang tot alle functies van Daftar, inclusief toegang tot privé gegevens, behalve de gebruikers in het beheerpaneel."
+          },
+          "user": {
+            "title": "Gebruiker",
+            "description": "Supergebruikers hebben volledige toegang tot alle functies van Daftar, inclusief toegang tot privé gegevens, behalve de gebruikers in het beheerpaneel."
+          }
+        }
+      },
+      "document": {
+        "title": "Document",
+        "description": "Een document is een bestand dat je uploadet naar Daftar en dat je aan meerdere entiteiten koppelt. Bijvoorbeeld, kun je een contractafschrift PDF uploaden en het koppelen aan een project. Of je kunt een servicedocument PDF uploaden en het koppelen aan een item. Documenten kunnen gekoppeld zijn aan een of meer entiteiten of ze kunnen gebruikt worden als standaarddocumenten.",
+        "notes": {
+          "note-1": "Documenten kunnen een of meer types zijn, zoals PDF, Word, Excel, etc.",
+          "note-2": "Documenten kunnen privé zijn of publiek zijn. Privé documenten zijn alleen zichtbaar voor beheerders en supergebruikers."
+        }
+      },
+      "item": {
+        "title": "Item",
+        "description": "Een item is een fysieke of digitale asset dat je bedrijf levert aan een klant binnen het bereik van een project. Items zijn projecten, klanten, leveranciers, en de prijzen kunnen verschillen. Je kunt een item definiëren en dan kun je de context van het item bepalen binnen een specifieke project. Omdat er een item is, kun je documenten toevoegen aan het item."
+      },
+      "client": {
+        "title": "Klant",
+        "description": "Een klant is een bedrijf of persoon die je koopt. Klanten kunnen meerdere contacten en meerdere adressen hebben, maar ze hebben altijd minstens één contact en minstens één adres. Je kunt de primaire contact en primaire adres van een klant definiëren en deze worden toegevoegd aan het klant in alle referenties. Een klant kan gekoppeld zijn aan een of meer projecten. Je kunt documenten toevoegen aan een klant."
+      },
+      "supplier": {
+        "title": "Leverancier",
+        "description": "Een leverancier is een bedrijf of persoon die je levert producten of diensten binnen het bereik van een project. Leveranciers kunnen meerdere contacten en meerdere adressen hebben, maar ze hebben altijd minstens één contact en minstens één adres. Je kunt de primaire contact en primaire adres van een leverancier definiëren en deze worden toegevoegd aan het leverancier in alle referenties. Een leverancier kan gekoppeld zijn aan een of meer projecten. Je kunt documenten toevoegen aan een leverancier."
+      },
+      "project": {
+        "title": "Project",
+        "description": "Een project is een transactie van werk tussen je bedrijf en een klant. Het project is het einde van het werk dat je samen wilt uitvoeren. Dit is waar je samen met klanten samen kan werken.",
+        "project-properties": {
+          "project-owner": {
+            "title": "Projecteigenaar/manager",
+            "description": "De gebruiker die het project beheert. Je kunt een gebruiker van de lijst van gebruikers kiezen die in de applicatie is."
+          },
+          "client": {
+            "title": "Klant",
+            "description": "De klant die dit project is voor. Je kunt een klant van de lijst van klanten kiezen die in de applicatie is."
+          },
+          "purchase-items": {
+            "title": "Inkoop items",
+            "description": "Inkoop items zijn items die je koopt van een leverancier voor dit project. Inkoop items worden gebruikt om de kosten van het project te tellen. Je kunt meerdere inkoop items toevoegen aan een project. Inkoop items hebben een leverancier, een prijs, een valuta, en een hoeveelheid."
+          },
+          "sale-items": {
+            "title": "Verkoop items",
+            "description": "Verkoop items zijn items die je verkoopt aan de klant voor dit project. Verkoop items worden gebruikt om de inkoop van de project te tellen. Je kunt meerdere verkoop items toevoegen aan een project. Verkoop items hebben een prijs, een valuta, en een hoeveelheid. Verkoop items worden gebruikt om commerciële offertes te genereren."
+          },
+          "commercial-offer": {
+            "title": "Commerciële offerte",
+            "description": "Commerciële offertes zijn PDF offerte documenten die je aan het klant van dit project geeft. Commerciële offertes worden gegenereerd uit de klantgegevens en de verkoop items van het project. Commerciële offertes worden gedownload en opgeslagen als documenten aan het project voor later gebruik."
+          },
+          "comments": {
+            "title": "Commentaren",
+            "description": "Commentaren zijn journalnotities om de voortgang van het project te volgen, problemen en taken te traceren."
+          }
+        }
+      }
+    },
+    "demo-note": {
+      "title": "Opmerking",
+      "description": "Deze is een demoversie van Daftar. Het is niet bedoeld voor productie gebruik. De gegevens zijn automatisch gegenereerd en zijn niet die werkelijke gegevens in ieder geval. Gelieve geen gebruik te maken van deze voor elke belangrijke gegeven.",
+      "documents-description": "De functie documenten wordt nog niet volledig geïmplementeerd in de demoversie. Het uploaden van documenten zal geen documenten opslaan in de server opslag, het gekoppelde document wordt ernaar toegevoegd in plaats van."
+    },
+    "getting-started": {
+      "title": "Aan de slag",
+      "description": "Begin met het gebruiken van Daftar door een van de onderstaande pagina's te bezoeken en de gegevens toe te voegen.",
+      "links": {
+        "projects": "Projecten",
+        "clients": "Klanten",
+        "suppliers": "Leveranciers",
+        "items": "Items",
+        "documents": "Documenten"
+      },
+      "description-2": "Je kunt de gegevens van een gebruiker bekijken die is aangemaakt door het zoeken in de lijst van gegevens en klikken op de naam. Hier kun je alle details en acties bekijken."
+    }
+  }
+}

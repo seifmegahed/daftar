@@ -1320,6 +1320,23 @@
           }
         }
       }
+    },
+    "demo-note": {
+      "title": "Note",
+      "description": "This is a demo version of Daftar. It is not intended for production use. The data was automatically generated and does not represent real life in anyway. Please do not use this for any important data.",
+      "documents-description": "The documents feature is not fully functional in the demo version. Uploading documents will not save them to the server storage, mock document will be attached instead."
+    },
+    "getting-started": {
+      "title": "Getting Started",
+      "description": "Start using Daftar by visiting one of the following pages and adding data.",
+      "links": {
+        "projects": "Projects",
+        "clients": "Clients",
+        "suppliers": "Suppliers",
+        "items": "Items",
+        "documents": "Documents"
+      },
+      "description-2": "You can visit the page of the data you created by locating it's card in the list of data and clicking on it's name. There you can check out all the details and actions."
     }
   }
 }
