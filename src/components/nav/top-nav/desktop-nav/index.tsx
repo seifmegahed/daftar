@@ -7,7 +7,7 @@ function DesktopNav({ admin }: { admin: boolean }) {
   return (
     <nav className="hidden flex-col gap-4 text-lg font-medium md:flex md:flex-row md:items-center md:text-sm">
       <Link
-        href="#"
+        href="/"
         className="flex items-center gap-2 text-lg font-semibold md:text-base"
       >
         <BookmarkIcon />
