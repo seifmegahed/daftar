@@ -30,6 +30,10 @@ function LanguageButton() {
     locale === "es" ? switchLocale() : switchLocale("es");
   const switchToNl = () =>
     locale === "nl" ? switchLocale() : switchLocale("nl");
+  const switchToFr = () =>
+    locale === "fr" ? switchLocale() : switchLocale("fr");
+  const switchToDe = () =>
+    locale === "de" ? switchLocale() : switchLocale("de");
 
   const direction = getDirection(locale);
 
@@ -47,6 +51,12 @@ function LanguageButton() {
       <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuItem
           className="cursor-pointer text-left"
+          onClick={switchToDe}
+        >
+          <p className="w-full">Deutsch</p>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer text-left"
           onClick={switchToEn}
         >
           <p className="w-full">English</p>
@@ -56,6 +66,12 @@ function LanguageButton() {
           onClick={switchToEs}
         >
           <p className="w-full">Español</p>
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          className="cursor-pointer text-left"
+          onClick={switchToFr}
+        >
+          <p className="w-full">Français</p>
         </DropdownMenuItem>
         <DropdownMenuItem
           className="cursor-pointer text-left"

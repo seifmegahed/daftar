@@ -6,6 +6,8 @@ export const statusCodes = [
     ar: "مفعل",
     es: "Activo",
     nl: "Actief",
+    fr: "Actif",
+    de: "Aktiv",
   },
   {
     value: 1,
@@ -14,6 +16,8 @@ export const statusCodes = [
     ar: "غير مفعل",
     es: "Inactivo",
     nl: "Inactief",
+    fr: "Inactif",
+    de: "Inaktiv",
   },
   {
     value: 2,
@@ -22,6 +26,8 @@ export const statusCodes = [
     ar: "محفوظ",
     es: "Archivado",
     nl: "Gearchiveerd",
+    fr: "Archivé",
+    de: "Archiviert",
   },
   {
     value: 3,
@@ -30,6 +36,8 @@ export const statusCodes = [
     ar: "قيد الانتظار",
     es: "Pendiente",
     nl: "In afwachting",
+    fr: "En attente",
+    de: "In Warteschlange",
   },
   {
     value: 4,
@@ -38,6 +46,8 @@ export const statusCodes = [
     ar: "مرفوض",
     es: "Rechazado",
     nl: "Afgewezen",
+    fr: "Rejeté",
+    de: "Abgelehnt",
   },
   {
     value: 5,
@@ -46,6 +56,8 @@ export const statusCodes = [
     ar: "ملغى",
     es: "Cancelado",
     nl: "Geannuleerd",
+    fr: "Annulé",
+    de: "Abgebrochen",
   },
   {
     value: 6,
@@ -54,6 +66,8 @@ export const statusCodes = [
     ar: "منتهي",
     es: "Completado",
     nl: "Voltooid",
+    fr: "Terminé",
+    de: "Abgeschlossen",
   },
   {
     value: 7,
@@ -62,6 +76,8 @@ export const statusCodes = [
     ar: "محجوز",
     es: "En espera",
     nl: "In wacht",
+    fr: "En attente",
+    de: "In Warteschlange",
   },
   {
     value: 8,
@@ -70,6 +86,8 @@ export const statusCodes = [
     ar: "قيد الانتظار",
     es: "Pendiente",
     nl: "In afwachting",
+    fr: "En attente",
+    de: "In Warteschlange",
   },
   {
     value: 9,
@@ -78,6 +96,8 @@ export const statusCodes = [
     ar: "في انتظار الموافقة",
     es: "Pendiente de aprobación",
     nl: "Wacht op goedkeuring",
+    fr: "En attente d'approbation",
+    de: "Warten auf Genehmigung",
   },
   {
     value: 10,
@@ -86,6 +106,8 @@ export const statusCodes = [
     ar: "موافق",
     es: "Aprobado",
     nl: "Goedgekeurd",
+    fr: "Approuvé",
+    de: "Genehmigt",
   },
   {
     value: 11,
@@ -94,6 +116,8 @@ export const statusCodes = [
     ar: "مشكلة",
     es: "Problema",
     nl: "Probleem",
+    fr: "Problème",
+    de: "Problem",
   },
 ];
 
@@ -128,6 +152,8 @@ export const projectTypes = [
     ar: "توريد",
     es: "Suministro",
     nl: "Inkoop",
+    fr: "Fourniture",
+    de: "Lieferung",
   },
   {
     value: 1,
@@ -136,6 +162,8 @@ export const projectTypes = [
     ar: "صيانة",
     es: "Servicio",
     nl: "Service",
+    fr: "Service",
+    de: "Service",
   },
   {
     value: 2,
@@ -144,6 +172,8 @@ export const projectTypes = [
     ar: "دراسة مالية",
     es: "Presupuesto",
     nl: "Budget",
+    fr: "Budget",
+    de: "Budget",
   },
 ];
 
@@ -167,6 +197,8 @@ export const userRolesList = [
     ar: "مدير",
     es: "Administrador",
     nl: "Beheerder",
+    fr: "Administrateur",
+    de: "Administrator",
   },
   {
     value: "s-user",
@@ -175,6 +207,8 @@ export const userRolesList = [
     ar: "مستخدم مميز",
     es: "Superusuario",
     nl: "Supergebruiker",
+    fr: "Superutilisateur",
+    de: "Superbenutzer",
   },
   {
     value: "user",
@@ -183,6 +217,8 @@ export const userRolesList = [
     ar: "مستخدم",
     es: "Usuario",
     nl: "Gebruiker",
+    fr: "Utilisateur",
+    de: "Benutzer",
   },
 ];
 

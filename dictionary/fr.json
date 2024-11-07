@@ -1,0 +1,1342 @@
+{
+  "main-loading": {
+    "title": "Chargement de Daftar...",
+    "title-demo": "Chargement de Daftar Démo..."
+  },
+  "error": {
+    "title": "Oups, quelque chose s'est mal passé"
+  },
+  "invalid-type-id": {
+    "message": "ID de {type} invalide"
+  },
+  "topnav": {
+    "Projects": "Projets",
+    "Clients": "Clients",
+    "Suppliers": "Fournisseurs",
+    "Items": "Articles",
+    "Documents": "Documents",
+    "Admin": "Admin"
+  },
+  "user-button": {
+    "light-mode": "Mode clair",
+    "dark-mode": "Mode sombre",
+    "settings": "Paramètres",
+    "logout": "Déconnexion"
+  },
+  "login": {
+    "form": {
+      "title": "Connexion à {demo, select, true {Daftar Démo} other {Daftar}}",
+      "subtitle": "Entrez vos identifiants pour accéder à l'application",
+      "success": "Connexion réussie",
+      "error": "Une erreur s'est produite lors de la connexion",
+      "username-title": "Nom d'utilisateur",
+      "password-title": "Mot de passe",
+      "button-text": "Connexion"
+    },
+    "schema": {
+      "username-required": "Le nom d'utilisateur est requis",
+      "password-required": "Le mot de passe est requis",
+      "username-min-length": "Le nom d'utilisateur doit comporter au moins {minLength} caractères",
+      "username-max-length": "Le nom d'utilisateur ne doit pas dépasser {maxLength} caractères",
+      "password-min-length": "Le mot de passe doit comporter au moins {minLength} caractères",
+      "password-max-length": "Le mot de passe ne doit pas dépasser {maxLength} caractères"
+    },
+    "info": {
+      "title": "Bienvenue à Daftar {demo, select, true {Démo} other {}}",
+      "description": "Daftar est une application qui vous permet de gérer vos contrats de fourniture dans un seul endroit.",
+      "etymology": "Le mot Daftar <italic>/daf.tar/</italic> en arabe signifie <italic><break></break>Une carte de registre, une feuille de compte ou une feuille</italic>",
+      "sign-in-section-title-desktop": "Connectez-vous à votre compte pour continuer",
+      "sign-in-section-title-mobile": "Connectez-vous à votre compte ci-dessous pour continuer",
+      "sign-in-section-description": "Si vous n'avez pas de compte, vous devez demander à un administrateur de créer un compte pour vous. Si vous oubliez votre mot de passe, vous devez demander à un administrateur de réinitialiser votre mot de passe.",
+      "demo-sign-in-section-description": "Si vous n'avez pas de compte, vous pouvez demander à un administrateur de créer un compte en envoyant un courriel à seifmegahed at me dot com"
+    }
+  },
+  "projects": {
+    "layout": {
+      "title": "Projets",
+      "description": "Gérez vos projets",
+      "All Projects": "Tous les projets",
+      "New Project": "Nouveau projet"
+    },
+    "page": {
+      "title": "Page principale de tous les projets",
+      "filter-by-status": "Par statut",
+      "filter-by-type": "Par type",
+      "filter-by-owner": "Par propriétaire",
+      "filter-by-created-by": "Par créateur",
+      "filter-by-start-date": "Par date de début",
+      "filter-by-end-date": "Par date de fin",
+      "filter-by-creation-date": "Par date de création",
+      "filter-by-update-date": "Par date de mise à jour",
+      "no-projects-found-error-title": "Il semble que vous n'ayez pas de projets !",
+      "no-projects-found-error-message": "Commencez par ajouter des projets pour les voir ici"
+    },
+    "new-project-page": {
+      "title": "Ajouter un projet",
+      "description": "Entrez les détails du projet que vous souhaitez ajouter",
+      "button-text": "Ajouter un projet",
+      "name-field-label": "Nom *",
+      "name-field-description": "Entrez le nom du projet. Ce nom sera utilisé pour rechercher et référencer le projet. Il apparaîtra dans vos projets.",
+      "type-field-label": "Type *",
+      "type-field-description": "Sélectionnez le type du projet.",
+      "status-field-label": "Statut *",
+      "status-field-description": "Sélectionnez le statut du projet.",
+      "client-field-label": "Client *",
+      "client-select-message": "Sélectionnez un client",
+      "client-search-message": "Rechercher un client",
+      "client-not-found-message": "Client introuvable.",
+      "client-field-description": "Sélectionnez le client qui est responsable de ce projet.",
+      "owner-field-label": "Propriétaire *",
+      "owner-select-message": "Sélectionnez un utilisateur",
+      "owner-search-message": "Rechercher un utilisateur",
+      "owner-not-found-message": "Utilisateur introuvable.",
+      "owner-field-description": "Sélectionnez l'utilisateur qui sera responsable de ce projet. Vous pouvez sélectionner un utilisateur de la liste des utilisateurs existants dans l'application.",
+      "description-field-label": "Description",
+      "description-field-description": "Entrez une description du projet.",
+      "notes-field-label": "Notes",
+      "notes-field-description": "Entrez une note sur le projet.",
+      "schema": {
+        "name-required": "Le nom est requis",
+        "name-min-length": "Le nom doit comporter au moins {minLength} caractères",
+        "name-max-length": "Le nom ne doit pas dépasser {maxLength} caractères",
+        "type-required": "Le type est requis",
+        "status-required": "Le statut est requis",
+        "client-required": "Le client est requis",
+        "owner-required": "Le propriétaire est requis",
+        "description-max-length": "La description ne doit pas dépasser {maxLength} caractères",
+        "notes-max-length": "Les notes ne doivent pas dépasser {maxLength} caractères"
+      }
+    }
+  },
+  "project": {
+    "invalid-id": "ID de projet invalide",
+    "layout": {
+      "title": "Projet",
+      "description": "Gérez votre projet",
+      "project": "Projet",
+      "edit": "Modifier le projet",
+      "sale-items": "Articles de vente",
+      "purchase-items": "Articles d'achat",
+      "documents": "Documents",
+      "commercial-offer": "Offre commerciale",
+      "new-purchase-item": "Nouvel article d'achat",
+      "new-sale-item": "Nouvel article de vente",
+      "new-document": "Nouveau document",
+      "comments": "Commentaires"
+    },
+    "page": {
+      "invalid-id": "ID de projet invalide",
+      "subtitle": "Ceci est la page du projet {projectName}. Ici, vous pouvez voir toutes les informations sur le projet. Vous pouvez également voir les documents et les articles liés à ce projet.",
+      "description": "Description",
+      "status": "Statut",
+      "client": "Client",
+      "general-info": "Informations générales",
+      "type": "Type",
+      "owner": "Propriétaire",
+      "start-date": "Date de début",
+      "end-date": "Date de fin",
+      "other-info": "Autres informations",
+      "notes": "Notes",
+      "documents": "Documents",
+      "not-available": "N/A"
+    },
+    "project-documents-section": {
+      "project-documents": "Documents du projet",
+      "client-documents": "Documents du client",
+      "items-documents": "Documents des articles",
+      "suppliers-documents": "Documents des fournisseurs",
+      "download-all": "Télécharger tout"
+    },
+    "edit": {
+      "invalid-id": "ID de projet invalide",
+      "title": "Modifier le projet",
+      "subtitle": "Ceci est la page de modification du projet {projectName}. Ici, vous pouvez modifier les détails du projet.",
+      "status-form": {
+        "title": "Statut du projet",
+        "description": "Mettre à jour le statut du projet pour refléter l'état actuel du projet. Après avoir sélectionné le statut souhaité, appuyez sur le bouton de mise à jour pour enregistrer les modifications.",
+        "success": "Statut du projet mis à jour",
+        "error": "Une erreur s'est produite lors de la mise à jour du statut",
+        "update": "Mettre à jour"
+      },
+      "dates-form": {
+        "title": "Dates du projet",
+        "start-date": "Date de début",
+        "end-date": "Date de fin",
+        "success": "Dates du projet mises à jour",
+        "error": "Une erreur s'est produite lors de la mise à jour des dates",
+        "update": "Mettre à jour"
+      },
+      "owner-form": {
+        "unauthorized": "Vous n'avez pas la permission de modifier le propriétaire du projet",
+        "success": "Propriétaire du projet mis à jour",
+        "error": "Une erreur s'est produite lors de la mise à jour du propriétaire",
+        "title": "Propriétaire du projet",
+        "description": "Mettre à jour le propriétaire du projet. Après avoir sélectionné le propriétaire souhaité, appuyez sur le bouton de mise à jour pour enregistrer les modifications.",
+        "note": "Note: ",
+        "note-content": "Seul le propriétaire ou un administrateur peut modifier le propriétaire d'un projet.",
+        "update": "Mettre à jour"
+      }
+    },
+    "sale-items-page": {
+      "invalid-id": "ID de projet invalide",
+      "no-items-found-error-message": "Aucun article en vente n'a été trouvé pour ce projet",
+      "title": "Articles en vente du projet",
+      "subtitle": "Cette page affiche les articles en vente du projet.",
+      "card": {
+        "make": "Fabricant",
+        "ppu": "Prix par unité ({currency}) {price}",
+        "quantity": "Quantité {quantity}",
+        "menu": {
+          "confirm-delete": "Êtes-vous sûr de vouloir supprimer cet article du projet ?",
+          "success": "Article supprimé du projet",
+          "error": "Erreur lors de la suppression de l'article",
+          "item-page": "Page de l'article",
+          "delete": "Supprimer"
+        }
+      }
+    },
+    "purchase-items-page": {
+      "invalid-id": "ID de projet invalide",
+      "no-items-found-error-message": "Aucun article d'achat n'a été trouvé pour ce projet",
+      "title": "Articles d'achat du projet",
+      "subtitle": "Cette page affiche les articles d'achat du projet.",
+      "card": {
+        "make": "Fabricant",
+        "supplier": "Fournisseur",
+        "ppu": "Prix par unité ({currency}) {price}",
+        "quantity": "Quantité {quantity}",
+        "menu": {
+          "confirm-delete": "Êtes-vous sûr de vouloir supprimer cet article du projet ?",
+          "success": "Article supprimé du projet",
+          "error": "Erreur lors de la suppression de l'article",
+          "item-page": "Page de l'article",
+          "supplier-page": "Page du fournisseur",
+          "delete": "Supprimer"
+        }
+      }
+    },
+    "documents-page": {
+      "invalid-id": "ID de projet invalide",
+      "no-documents-found-error-message": "Aucun document n'a été trouvé pour ce projet",
+      "title": "Documents du projet",
+      "subtitle": "Cette liste affiche les documents du projet."
+    },
+    "commercial-offer": {
+      "invalid-id": "ID de projet invalide",
+      "unauthorized": "Vous n'avez pas la permission de voir cette page",
+      "form": {
+        "error": "Une erreur s'est produite lors de la génération du fichier",
+        "title": "Offre commerciale",
+        "description": "Générer une offre commerciale pour le projet",
+        "button-text": "Générer",
+        "company-name": "Nom de l'entreprise *",
+        "company-name-description": "Entrez le nom de votre entreprise. Ce nom sera affiché sur la offre commerciale.",
+        "address": "Adresse *",
+        "address-description": "Entrez l'adresse de votre entreprise. Cette adresse sera affichée sur la offre commerciale.",
+        "country": "Pays *",
+        "country-description": "Entrez le pays et le code pays de votre entreprise. Ce pays sera affiché sur la offre commerciale.",
+        "phone-nm-a": "Numéro de téléphone (principal) *",
+        "phone-nm-a-description": "Entrez le numéro de téléphone principal de votre entreprise. Ce numéro de téléphone sera affiché sur la offre commerciale.",
+        "phone-nm-b": "Numéro de téléphone (secondaire) *",
+        "phone-nm-b-description": "Entrez le numéro de téléphone secondaire de votre entreprise. Ce numéro de téléphone sera affiché sur la offre commerciale.",
+        "email": "E-mail *",
+        "email-description": "Entrez l'adresse e-mail de votre entreprise. Cet e-mail sera affiché sur la offre commerciale.",
+        "offer-validity-in-days": "Validité de l'offre (en jours) *",
+        "offer-validity-in-days-description": "Entrez le nombre de jours durant lesquels l'offre est valide. Cette offre sera affichée sur la page de l'offre commerciale.",
+        "offer-validity-example": "Exemple: 7",
+        "payment-advance": "Avance de paiement (%) *",
+        "payment-advance-description": "Entrez le pourcentage de l'avance de paiement. Cet avance de paiement sera affiché sur la page de l'offre commerciale.",
+        "payment-advance-example": "Exemple: 25",
+        "delivery-period": "Période de livraison",
+        "delivery-period-description": "Entrez la période de livraison du projet. Cette période de livraison sera affichée sur la page de l'offre commerciale.",
+        "delivery-period-example": "Exemple: 2 - 3 mois",
+        "schema": {
+          "offer-validity-number": "La validité de l'offre doit être un nombre",
+          "payment-advance-number": "Le pourcentage de l'avance de paiement doit être un nombre"
+        }
+      }
+    },
+    "new-purchase-item-page": {
+      "invalid-id": "ID de projet invalide",
+      "no-items-found-error-title": "Vous n'avez aucun article",
+      "no-items-found-error-message": "Ajoutez des articles pour pouvoir les ajouter.",
+      "no-suppliers-found-error-title": "Vous n'avez aucun fournisseur",
+      "no-suppliers-found-error-message": "Ajoutez des fournisseurs pour pouvoir les ajouter.",
+      "title": "Ajouter un article d'achat",
+      "subtitle": "Cette page ajoute un article d'achat au projet.",
+      "form": {
+        "item-required": "L'article est requis",
+        "supplier-required": "Le fournisseur est requis",
+        "price-required": "Le prix est requis",
+        "currency-required": "La devise est requise",
+        "quantity-required": "La quantité est requise",
+        "price-number": "Le prix doit être un nombre",
+        "quantity-number": "La quantité doit être un nombre",
+        "success": "Article ajouté",
+        "error": "Une erreur s'est produite lors de l'ajout de l'article",
+        "title": "Ajouter un article d'achat",
+        "description": "Entrez les détails de l'article que vous souhaitez ajouter.",
+        "button-text": "Ajouter l'article",
+        "item-field-label": "Article *",
+        "item-select-message": "Sélectionnez un article",
+        "item-search-message": "Rechercher un article",
+        "item-not-found-message": "Article introuvable.",
+        "item-field-description": "Sélectionnez un article à ajouter au projet. Si l'article n'existe pas, vous devez le créer dans la section Articles.",
+        "supplier-field-label": "Fournisseur *",
+        "supplier-select-message": "Sélectionnez un fournisseur",
+        "supplier-search-message": "Rechercher un fournisseur",
+        "supplier-not-found-message": "Fournisseur introuvable.",
+        "supplier-field-description": "Sélectionnez le fournisseur qui est responsable de l'article. Si le fournisseur n'existe pas, vous devez le créer dans la section Fournisseurs.",
+        "price-field-label": "Prix *",
+        "price-field-description": "Entrez le prix de l'article.",
+        "currency-field-label": "Devise *",
+        "currency-field-description": "Sélectionnez la devise du prix.",
+        "quantity-field-label": "Quantité *",
+        "quantity-field-description": "Entrez la quantité de l'article."
+      }
+    },
+    "new-sale-item-page": {
+      "invalid-id": "ID de projet invalide",
+      "no-items-found-error-title": "Vous n'avez aucun article",
+      "no-items-found-error-message": "Ajoutez des articles pour pouvoir les ajouter.",
+      "form": {
+        "item-required": "L'article est requis",
+        "price-required": "Le prix est requis",
+        "currency-required": "La devise est requise",
+        "quantity-required": "La quantité est requise",
+        "price-number": "Le prix doit être un nombre",
+        "quantity-number": "La quantité doit être un nombre",
+        "success": "Article ajouté",
+        "error": "Une erreur s'est produite lors de l'ajout de l'article",
+        "title": "Ajouter un article de vente",
+        "description": "Entrez les détails de l'article que vous souhaitez ajouter.",
+        "button-text": "Ajouter l'article",
+        "item-field-label": "Article *",
+        "item-select-message": "Sélectionnez un article",
+        "item-search-message": "Rechercher un article",
+        "item-not-found-message": "Article introuvable.",
+        "item-field-description": "Sélectionnez un article à ajouter au projet. Si l'article n'existe pas, vous devez le créer dans la section Articles.",
+        "price-field-label": "Prix *",
+        "price-field-description": "Entrez le prix de l'article.",
+        "currency-field-label": "Devise *",
+        "currency-field-description": "Sélectionnez la devise du prix.",
+        "quantity-field-label": "Quantité *",
+        "quantity-field-description": "Entrez la quantité de l'article."
+      }
+    },
+    "comments-page": {
+      "invalid-id": "ID de projet invalide",
+      "comment-max": "Le commentaire ne doit pas dépasser {max} caractères",
+      "error": "Une erreur s'est produite lors de l'ajout du commentaire",
+      "placeholder": "Ajouter un commentaire...",
+      "delete-error": "Une erreur s'est produite lors de la suppression du commentaire",
+      "comment-date": "{time} avant"
+    }
+  },
+  "clients": {
+    "layout": {
+      "title": "Clients",
+      "description": "Gérez vos clients",
+      "all-clients": "Tous les clients",
+      "new-client": "Nouveau client"
+    },
+    "page": {
+      "title": "Page principale de tous les clients",
+      "filter-by-created-by": "Par créateur",
+      "filter-by-creation-date": "Par date de création",
+      "filter-by-updated-date": "Par date de mise à jour",
+      "no-clients-found-error-title": "Il semble que vous n'ayez pas de clients !",
+      "no-clients-found-error-description": "Commencez par ajouter des clients pour les voir ici."
+    },
+    "new-client-page": {
+      "title": "Ajouter un client",
+      "description": "Entrez les détails du client que vous souhaitez ajouter.",
+      "button-text": "Ajouter un client",
+      "name-field-label": "Nom *",
+      "name-field-description": "Entrez le nom du client. Ce nom sera affiché sur les clients.",
+      "registration-number-field-label": "Numéro d'enregistrement",
+      "registration-number-field-description": "Entrez le numéro d'enregistrement du client. Le numéro d'enregistrement sera affiché sur la carte du client.",
+      "website-field-label": "Site web",
+      "website-field-description": "Entrez le site web du client.",
+      "notes-field-label": "Notes",
+      "notes-field-description": "Entrez une note sur le client.",
+      "success": "Client ajouté",
+      "error": "Une erreur s'est produite lors de l'ajout du client",
+      "schema": {
+        "name-required": "Le nom est requis",
+        "name-min-length": "Le nom doit comporter au moins {minLength} caractères",
+        "name-max-length": "Le nom ne doit pas dépasser {maxLength} caractères",
+        "registration-number-max-length": "Le numéro d'enregistrement ne doit pas dépasser {maxLength} caractères",
+        "website-max-length": "Le site web ne doit pas dépasser {maxLength} caractères",
+        "notes-max-length": "Les notes ne doivent pas dépasser {maxLength} caractères"
+      }
+    }
+  },
+  "client": {
+    "layout": {
+      "title": "Client",
+      "description": "Gérez votre client",
+      "client": "Client",
+      "edit": "Modifier le client",
+      "projects": "Projets",
+      "documents": "Documents",
+      "addresses": "Adresses",
+      "contacts": "Contacts",
+      "new-address": "Nouvelle adresse",
+      "new-contact": "Nouveau contact",
+      "new-document": "Nouveau document"
+    },
+    "page": {
+      "invalid-id": "ID de client invalide",
+      "subtitle": "Ceci est la page du client: {clientName}. Ici, vous pouvez voir toutes les informations sur le client.",
+      "general-info": "Informations générales",
+      "other-info": "Autres informations",
+      "notes": "Notes"
+    },
+    "edit": {
+      "delete-form-info": "Vous ne pouvez pas supprimer ce client car il est lié à {count, plural, one {un projet} other {{count} projets}}. Vous devez d'abord supprimer ces projets avant de pouvoir le supprimer.",
+      "invalid-id": "ID de client invalide",
+      "title": "Modifier le client",
+      "subtitle": "Ceci est la page de modification du client: {clientName}. Ici, vous pouvez modifier les détails du client."
+    },
+    "projects": {
+      "title": "Projets du client",
+      "subtitle": "Ceci est une liste des projets du client.",
+      "invalid-id": "ID de client invalide",
+      "no-projects-found-error-message": "Aucun projet n'a été trouvé lié à ce client"
+    },
+    "documents": {
+      "title": "Documents du client",
+      "subtitle": "Ceci est une liste des documents du client.",
+      "invalid-id": "ID de client invalide",
+      "no-documents-found-error-message": "Aucun document n'a été trouvé lié à ce client"
+    },
+    "addresses": {
+      "title": "Adresses du client",
+      "subtitle": "Ceci est une liste des adresses du client.",
+      "invalid-id": "ID de client invalide",
+      "no-addresses-found-error-message": "Aucune adresse n'a été trouvée liée à ce client"
+    },
+    "contacts": {
+      "title": "Contacts du client",
+      "subtitle": "Ceci est une liste des contacts du client.",
+      "invalid-id": "ID de client invalide",
+      "no-contacts-found-error-message": "Aucun contact n'a été trouvé lié à ce client"
+    }
+  },
+  "suppliers": {
+    "layout": {
+      "title": "Fournisseurs",
+      "description": "Gérez vos fournisseurs",
+      "all-suppliers": "Tous les fournisseurs",
+      "new-supplier": "Nouveau fournisseur"
+    },
+    "page": {
+      "title": "Page principale de tous les fournisseurs",
+      "filter-by-created-by": "Par créateur",
+      "filter-by-creation-date": "Par date de création",
+      "filter-by-updated-date": "Par date de mise à jour",
+      "no-suppliers-found-error-title": "Il semble que vous n'ayez pas de fournisseurs !",
+      "no-suppliers-found-error-message": "Commencez par ajouter des fournisseurs pour les voir ici."
+    },
+    "new-supplier-page": {
+      "title": "Ajouter un fournisseur",
+      "description": "Entrez les détails du fournisseur que vous souhaitez ajouter.",
+      "button-text": "Ajouter un fournisseur",
+      "name-field-label": "Nom *",
+      "name-field-description": "Entrez le nom du fournisseur. Ce nom sera affiché sur les fournisseurs.",
+      "field-field-label": "Champ de l'ongène *",
+      "field-field-description": "Entrez le champ de l'ongène du fournisseur. Ce champ sera utilisé pour classer les fournisseurs et le rendre plus facile à rechercher.",
+      "registration-number-field-label": "Numéro d'enregistrement",
+      "registration-number-field-description": "Entrez le numéro d'enregistrement du fournisseur. Le numéro d'enregistrement sera affiché sur la carte du fournisseur.",
+      "website-field-label": "Site web",
+      "website-field-description": "Entrez le site web du fournisseur.",
+      "notes-field-label": "Notes",
+      "notes-field-description": "Entrez une note sur le fournisseur.",
+      "success": "Fournisseur ajouté",
+      "error": "Une erreur s'est produite lors de l'ajout du fournisseur",
+      "schema": {
+        "name-required": "Le nom est requis",
+        "name-min-length": "Le nom doit comporter au moins {minLength} caractères",
+        "name-max-length": "Le nom ne doit pas dépasser {maxLength} caractères",
+        "field-required": "Le champ de l'ongène est requis",
+        "field-min-length": "Le champ de l'ongène doit comporter au moins {minLength} caractères",
+        "field-max-length": "Le champ de l'ongène ne doit pas dépasser {maxLength} caractères",
+        "registration-number-max-length": "Le numéro d'enregistrement ne doit pas dépasser {maxLength} caractères",
+        "website-max-length": "Le site web ne doit pas dépasser {maxLength} caractères",
+        "notes-max-length": "Les notes ne doivent pas dépasser {maxLength} caractères"
+      }
+    }
+  },
+  "supplier": {
+    "layout": {
+      "title": "Fournisseur",
+      "description": "Gérez votre fournisseur",
+      "supplier": "Fournisseur",
+      "edit": "Modifier le fournisseur",
+      "items": "Articles",
+      "projects": "Projets",
+      "documents": "Documents",
+      "addresses": "Adresses",
+      "contacts": "Contacts",
+      "new-address": "Nouvelle adresse",
+      "new-contact": "Nouveau contact",
+      "new-document": "Nouveau document"
+    },
+    "page": {
+      "invalid-id": "ID de fournisseur invalide",
+      "subtitle": "Ceci est la page du fournisseur: {supplierName}. Ici, vous pouvez voir toutes les informations sur le fournisseur.",
+      "general-info": "Informations générales",
+      "other-info": "Autres informations",
+      "notes": "Notes"
+    },
+    "edit": {
+      "delete-form-info": "Vous ne pouvez pas supprimer ce fournisseur car il est lié à {count, plural, one {un projet} other {{count} projets}}. Vous devez d'abord supprimer ces projets avant de pouvoir le supprimer.",
+      "invalid-id": "ID de fournisseur invalide",
+      "title": "Modifier le fournisseur",
+      "subtitle": "Ceci est la page de modification du fournisseur: {supplierName}. Ici, vous pouvez modifier les détails du fournisseur."
+    },
+    "items": {
+      "title": "Articles du fournisseur",
+      "subtitle": "Ceci est une liste des articles du fournisseur.",
+      "invalid-id": "ID de fournisseur invalide",
+      "no-items-found-error-message": "Aucun article n'a été trouvé lié à ce fournisseur"
+    },
+    "projects": {
+      "title": "Projets du fournisseur",
+      "subtitle": "Ceci est une liste des projets du fournisseur.",
+      "invalid-id": "ID de fournisseur invalide",
+      "no-projects-found-error-message": "Aucun projet n'a été trouvé lié à ce fournisseur"
+    },
+    "documents": {
+      "title": "Documents du fournisseur",
+      "subtitle": "Ceci est une liste des documents du fournisseur.",
+      "invalid-id": "ID de fournisseur invalide",
+      "no-documents-found-error-message": "Aucun document n'a été trouvé lié à ce fournisseur"
+    },
+    "addresses": {
+      "title": "Adresses du fournisseur",
+      "subtitle": "Ceci est une liste des adresses du fournisseur.",
+      "invalid-id": "ID de fournisseur invalide",
+      "no-addresses-found-error-message": "Aucune adresse n'a été trouvée liée à ce fournisseur"
+    },
+    "contacts": {
+      "title": "Contacts du fournisseur",
+      "subtitle": "Ceci est une liste des contacts du fournisseur.",
+      "invalid-id": "ID de fournisseur invalide",
+      "no-contacts-found-error-message": "Aucun contact n'a été trouvé lié à ce fournisseur"
+    }
+  },
+  "items": {
+    "layout": {
+      "title": "Articles",
+      "description": "Gérez vos articles",
+      "all-items": "Tous les articles",
+      "new-item": "Nouvel article"
+    },
+    "page": {
+      "title": "Page principale de tous les articles",
+      "filter-by-created-by": "Par créateur",
+      "filter-by-creation-date": "Par date de création",
+      "filter-by-updated-date": "Par date de mise à jour",
+      "no-items-found-error-title": "Il semble que vous n'ayez pas d'articles !",
+      "no-items-found-error-message": "Commencez par ajouter des articles pour les voir ici."
+    },
+    "new-item-page": {
+      "form": {
+        "success": "Article ajouté",
+        "error": "Une erreur s'est produite lors de l'ajout de l'article",
+        "title": "Ajouter un article",
+        "description": "Entrez les détails de l'article que vous souhaitez ajouter.",
+        "button-text": "Ajouter l'article",
+        "name-field-label": "Nom *",
+        "name-field-description": "Entrez le nom de l'article. Ce nom sera affiché sur les articles.",
+        "type-field-label": "Type *",
+        "type-field-description": "Sélectionnez le type de l'article.",
+        "description-field-label": "Description",
+        "description-field-description": "Entrez une description de l'article.",
+        "make-field-label": "Fabricant",
+        "make-field-description": "Entrez le fabricant de l'article.",
+        "mpn-field-label": "MPN",
+        "mpn-field-description": "Entrez le MPN de l'article.",
+        "notes-field-label": "Notes",
+        "notes-field-description": "Entrez une note sur l'article."
+      },
+      "schema": {
+        "name-required": "Le nom est requis",
+        "name-min-length": "Le nom doit comporter au moins {minLength} caractères",
+        "name-max-length": "Le nom ne doit pas dépasser {maxLength} caractères",
+        "type-required": "Le type est requis",
+        "type-max-length": "Le type ne doit pas dépasser {maxLength} caractères",
+        "description-max-length": "La description ne doit pas dépasser {maxLength} caractères",
+        "mpn-max-length": "Le MPN ne doit pas dépasser {maxLength} caractères",
+        "make-max-length": "Le fabricant ne doit pas dépasser {maxLength} caractères",
+        "notes-max-length": "Les notes ne doivent pas dépasser {maxLength} caractères"
+      }
+    }
+  },
+  "item": {
+    "layout": {
+      "title": "Article",
+      "description": "Gérez votre article",
+      "item": "Article",
+      "edit": "Modifier l'article",
+      "projects": "Projets",
+      "suppliers": "Fournisseurs",
+      "documents": "Documents",
+      "new-document": "Nouveau document"
+    },
+    "page": {
+      "invalid-id": "ID de l'article invalide",
+      "subtitle": "Ceci est la page de l'article: {itemName}. Ici, vous pouvez voir toutes les informations sur l'article.",
+      "general-info": "Informations générales",
+      "other-info": "Autres informations",
+      "notes": "Notes",
+      "general-info-section": {
+        "type": "Type",
+        "description": "Description",
+        "mpn": "MPN",
+        "make": "Fabricant"
+      }
+    },
+    "edit": {
+      "invalid-id": "ID de l'article invalide",
+      "title": "Modifier l'article",
+      "subtitle": "Ceci est la page de modification de l'article: {itemName}. Ici, vous pouvez modifier les détails de l'article.",
+      "delete-form-info": "Vous ne pouvez pas supprimer cet article car il est lié à {count, plural, one {un projet} other {{count} projets}}. Vous devez d'abord supprimer ces projets avant de pouvoir le supprimer."
+    },
+    "projects": {
+      "title": "Projets de l'article",
+      "subtitle": "Ceci est une liste des projets de l'article.",
+      "invalid-id": "ID de l'article invalide",
+      "no-projects-found-error-message": "Aucun projet n'a été trouvé lié à cet article"
+    },
+    "suppliers": {
+      "title": "Fournisseurs de l'article",
+      "subtitle": "Ceci est une liste des fournisseurs de l'article.",
+      "invalid-id": "ID de l'article invalide",
+      "no-suppliers-found-error-message": "Aucun fournisseur n'a été trouvé lié à cet article"
+    },
+    "documents": {
+      "title": "Documents de l'article",
+      "subtitle": "Ceci est une liste des documents de l'article.",
+      "invalid-id": "ID de l'article invalide",
+      "no-documents-found-error-message": "Aucun document n'a été trouvé lié à cet article"
+    }
+  },
+  "documents": {
+    "layout": {
+      "title": "Documents",
+      "description": "Gérez vos documents",
+      "all-documents": "Tous les documents",
+      "new-document": "Nouveau document"
+    },
+    "page": {
+      "title": "Page principale de tous les documents",
+      "filter-by-created-by": "Par créateur",
+      "filter-by-creation-date": "Par date de création",
+      "no-documents-found-error-title": "Il semble que vous n'ayez pas de documents !",
+      "no-documents-found-error-message": "Commencez par ajouter des documents pour les voir ici"
+    }
+  },
+  "document": {
+    "layout": {
+      "title": "Document",
+      "description": "Gérez votre document",
+      "document": "Document",
+      "edit": "Modifier le document",
+      "projects": "Projets",
+      "clients": "Clients",
+      "suppliers": "Fournisseurs",
+      "items": "Articles",
+      "new-document": "Nouveau document"
+    },
+    "page": {
+      "invalid-id": "ID de document invalide",
+      "subtitle": "Ceci est la page du document: {documentName}. Ici, vous pouvez voir toutes les informations sur le document.",
+      "general-info": "Informations générales",
+      "other-info": "Autres informations",
+      "notes": "Notes",
+      "download": "Télécharger",
+      "general-info-section": {
+        "extension": "Extension",
+        "private": "Privé",
+        "public": "Public",
+        "yes": "Oui",
+        "no": "Non"
+      }
+    },
+    "edit": {
+      "invalid-id": "ID de document invalide",
+      "title": "Modifier le document",
+      "subtitle": "Ceci est la page de modification du document: {documentName}. Ici, vous pouvez modifier les détails du document.",
+      "delete-form-info": "Vous ne pouvez pas supprimer ce document car il est lié à {count, plural, one {un projet} other {{count} projets}}. Vous devez d'abord supprimer ces projets avant de pouvoir le supprimer."
+    },
+    "projects": {
+      "title": "Projets du document",
+      "subtitle": "Ceci est une liste des projets du document.",
+      "invalid-id": "ID de document invalide",
+      "no-projects-found-error-message": "Aucun projet n'a été trouvé lié à ce document"
+    },
+    "clients": {
+      "title": "Clients du document",
+      "subtitle": "Ceci est une liste des clients du document.",
+      "invalid-id": "ID de document invalide",
+      "no-clients-found-error-message": "Aucun client n'a été trouvé lié à ce document"
+    },
+    "suppliers": {
+      "title": "Fournisseurs du document",
+      "subtitle": "Ceci est une liste des fournisseurs du document.",
+      "invalid-id": "ID de document invalide",
+      "no-suppliers-found-error-message": "Aucun fournisseur n'a été trouvé lié à ce document"
+    },
+    "items": {
+      "title": "Articles du document",
+      "subtitle": "Ceci est une liste des articles du document.",
+      "invalid-id": "ID de document invalide",
+      "no-items-found-error-message": "Aucun article n'a été trouvé lié à ce document"
+    }
+  },
+  "address": {
+    "success": "Adresse ajoutée",
+    "error": "Une erreur s'est produite lors de l'ajout de l'adresse",
+    "title": "Ajouter une adresse",
+    "description": "Entrez les détails de l'adresse que vous souhaitez ajouter.",
+    "button-text": "Ajouter l'adresse",
+    "form": {
+      "primary-address-title": "Adresse principale",
+      "address-name-label": "Nom de l'adresse *",
+      "address-name-description": "Entrez le nom ou le titre de l'adresse. Par exemple: Adresse principale",
+      "address-line-label": "Adresse *",
+      "address-line-description": "Entrez l'adresse de l'adresse.",
+      "country-label": "Pays *",
+      "country-select-message": "Sélectionnez un pays",
+      "country-search-message": "Rechercher un pays",
+      "country-not-found-message": "Pays introuvable",
+      "country-description": "Entrez le pays de l'adresse.",
+      "city-label": "Ville",
+      "city-description": "Entrez la ville de l'adresse.",
+      "address-notes-label": "Notes",
+      "address-notes-description": "Entrez une note sur l'adresse."
+    },
+    "schema": {
+      "name-required": "Le nom de l'adresse est requis",
+      "name-min-length": "Le nom de l'adresse doit comporter au moins {minLength} caractères",
+      "name-max-length": "Le nom de l'adresse ne doit pas dépasser {maxLength} caractères",
+      "address-line-required": "L'adresse est requise",
+      "address-line-min-length": "L'adresse doit comporter au moins {minLength} caractères",
+      "address-line-max-length": "L'adresse ne doit pas dépasser {maxLength} caractères",
+      "country-required": "Le pays est requis",
+      "country-min-length": "Le pays doit comporter au moins {minLength} caractères",
+      "country-max-length": "Le pays ne doit pas dépasser {maxLength} caractères",
+      "city-max-length": "La ville ne doit pas dépasser {maxLength} caractères",
+      "address-notes-max-length": "Les notes ne doivent pas dépasser {maxLength} caractères"
+    }
+  },
+  "contact": {
+    "success": "Contact ajouté",
+    "error": "Une erreur s'est produite lors de l'ajout du contact",
+    "title": "Ajouter un contact",
+    "description": "Entrez les détails du contact que vous souhaitez ajouter.",
+    "button-text": "Ajouter le contact",
+    "form": {
+      "primary-contact-label": "Contact principal",
+      "contact-name-label": "Nom du contact *",
+      "contact-name-description": "Entrez le nom du contact.",
+      "phone-number-label": "Numéro de téléphone",
+      "phone-number-description": "Entrez le numéro de téléphone du contact.",
+      "email-label": "E-mail",
+      "email-description": "Entrez l'adresse e-mail du contact.",
+      "notes-label": "Notes",
+      "notes-description": "Entrez une note sur le contact."
+    },
+    "schema": {
+      "name-required": "Le nom du contact est requis",
+      "name-min-length": "Le nom du contact doit comporter au moins {minLength} caractères",
+      "name-max-length": "Le nom du contact ne doit pas dépasser {maxLength} caractères",
+      "phone-number-min-length": "Le numéro de téléphone doit comporter au moins {minLength} caractères",
+      "phone-number-max-length": "Le numéro de téléphone ne doit pas dépasser {maxLength} caractères",
+      "email-not-valid": "L'adresse e-mail n'est pas valide",
+      "email-min-length": "L'adresse e-mail doit comporter au moins {minLength} caractères",
+      "email-max-length": "L'adresse e-mail ne doit pas dépasser {maxLength} caractères",
+      "notes-max-length": "Les notes ne doivent pas dépasser {maxLength} caractères",
+      "email-or-phone-required": "Un e-mail ou un numéro de téléphone est requis"
+    }
+  },
+  "admin": {
+    "layout": {
+      "title": "Admin",
+      "description": "Gérez les utilisateurs",
+      "users": "Utilisateurs",
+      "new-user": "Nouvel utilisateur"
+    },
+    "page": {
+      "title": "Page principale de tous les utilisateurs"
+    },
+    "new-user-page": {
+      "form": {
+        "success": "Utilisateur ajouté",
+        "error": "Une erreur s'est produite lors de l'ajout de l'utilisateur",
+        "title": "Ajouter un utilisateur",
+        "description": "Entrez les détails de l'utilisateur que vous souhaitez ajouter",
+        "button-text": "Ajouter l'utilisateur",
+        "username-field-label": "Nom d'utilisateur *",
+        "username-field-description": "Le nom d'utilisateur doit comporter au moins 4 caractères et doit être unique. Il ne peut pas contenir des espaces ou des caractères spéciaux. L'utilisateur sera utilisé pour se connecter.",
+        "name-field-label": "Nom *",
+        "name-field-description": "Entrez le nom de l'utilisateur. Ce nom sera affiché sur la page de l'utilisateur.",
+        "email-field-label": "E-mail *",
+        "email-field-description": "Entrez l'adresse e-mail de l'utilisateur. Cette adresse e-mail sera utilisée pour la facturation de l'offre commerciale si l'utilisateur est le propriétaire du projet ou de l'administrateur.",
+        "phone-number-field-label": "Numéro de téléphone *",
+        "phone-number-field-description": "Entrez le numéro de téléphone de l'utilisateur. Ce numéro de téléphone sera utilisé pour la facturation de l'offre commerciale si l'utilisateur est le propriétaire du projet ou de l'administrateur.",
+        "role-field-label": "Rôle *",
+        "role-field-description": "Le rôle de l'utilisateur détermine ce qu'il peut faire sur l'application. Les administrateurs peuvent effectuer toutes les actions, tandis que les utilisateurs peuvent seulement effectuer des actions limitées. Les administrateurs peuvent également ajouter et modifier des utilisateurs.",
+        "password-field-label": "Mot de passe *",
+        "password-field-description": "Le mot de passe de l'utilisateur doit comporter au moins 8 caractères et doit comporter au moins une lettre majuscule, une lettre minuscule et un chiffre.",
+        "verify-password-field-label": "Vérifier le mot de passe *"
+      },
+      "schema": {
+        "username-required": "Le nom d'utilisateur est requis",
+        "username-min-length": "Le nom d'utilisateur doit comporter au moins {minLength} caractères",
+        "username-max-length": "Le nom d'utilisateur ne doit pas dépasser {maxLength} caractères",
+        "name-required": "Le nom est requis",
+        "name-min-length": "Le nom doit comporter au moins {minLength} caractères",
+        "name-max-length": "Le nom ne doit pas dépasser {maxLength} caractères",
+        "email-not-valid": "L'adresse e-mail n'est pas valide",
+        "email-max-length": "L'adresse e-mail ne doit pas dépasser {maxLength} caractères",
+        "phone-number-max-length": "Le numéro de téléphone ne doit pas dépasser {maxLength} caractères",
+        "role-required": "Le rôle est requis",
+        "password-required": "Le mot de passe est requis",
+        "password-min-length": "Le mot de passe doit comporter au moins {minLength} caractères",
+        "password-max-length": "Le mot de passe ne doit pas dépasser {maxLength} caractères",
+        "verify-password-required": "La vérification du mot de passe est requise",
+        "verify-password-min-length": "La vérification du mot de passe doit comporter au moins {minLength} caractères",
+        "verify-password-max-length": "La vérification du mot de passe ne doit pas dépasser {maxLength} caractères",
+        "username-not-valid": "Le nom d'utilisateur ne doit pas contenir d'espaces ou de caractères spéciaux",
+        "password-complexity": "Le mot de passe doit comporter au moins une lettre majuscule, une lettre minuscule et un chiffre",
+        "password-not-match": "Les mots de passe ne correspondent pas"
+      }
+    }
+  },
+  "settings": {
+    "layout": {
+      "title": "Paramètres",
+      "description": "Gérez vos paramètres",
+      "profile": "Profil",
+      "edit": "Modifier",
+      "preferences": "Préférences"
+    },
+    "profile": {
+      "title": "Profil",
+      "subtitle": "",
+      "name": "Nom",
+      "username": "Nom d'utilisateur",
+      "role": "Rôle",
+      "created-at": "Créé le",
+      "updated-at": "Mis à jour le",
+      "last-login": "Dernière connexion",
+      "not-available": "N/A",
+      "description-a": "Vous ne pouvez pas modifier le nom d'utilisateur après la connexion, mais vous pouvez modifier votre nom. En modifiant votre nom, l'avatar sera mis à jour pour refléter votre nom. Vous pouvez également modifier votre mot de passe.",
+      "description-b": "Pour modifier votre nom ou votre mot de passe, allez sur la page 'Compte' dans le menu latéral à gauche.",
+      "description-c": "Le rôle ne peut être modifié que par un administrateur. Si vous pensez que le rôle est incorrect, veuillez contacter un administrateur."
+    },
+    "edit": {
+      "title": "Modifier l'utilisateur",
+      "subtitle": "Ceci est la page de modification de l'utilisateur: {userName}. Ici, vous pouvez modifier les détails de l'utilisateur."
+    },
+    "preferences": {
+      "title": "Préférences",
+      "description": "Gérez vos préférences",
+      "theme-title": "Thème",
+      "theme-description": "Changer le thème de l'application. Note: Le mode sombre est plus adapté à vos yeux.",
+      "light-mode-title": "Mode clair",
+      "dark-mode-title": "Mode sombre",
+      "update": "Mettre à jour"
+    }
+  },
+  "edit-user": {
+    "page": {
+      "invalid-id": "ID d'utilisateur invalide",
+      "title": "Modifier l'utilisateur",
+      "subtitle": "Ceci est la page de modification de l'utilisateur: {userName}. Ici, vous pouvez modifier les détails de l'utilisateur."
+    },
+    "change-name-section": {
+      "name-required-message": "Le nom est requis",
+      "name-min-length": "Le nom doit comporter au moins {minLength} caractères",
+      "name-max-length": "Le nom ne doit pas dépasser {maxLength} caractères",
+      "success": "Nom mis à jour",
+      "error": "Une erreur s'est produite lors de la mise à jour du nom",
+      "title": "Nom",
+      "placeholder": "Nom",
+      "description": "Mettre à jour le nom de l'utilisateur, l'avatar initial sera dépendant du nom. Après avoir mis à jour le nom, appuyez sur le bouton de mise à jour pour enregistrer les modifications. Le nom de l'utilisateur doit être unique.",
+      "update": "Mettre à jour"
+    },
+    "change-email-section": {
+      "email-required-message": "L'adresse e-mail est requise",
+      "email-invalid-message": "L'adresse e-mail n'est pas valide",
+      "email-max-length": "L'adresse e-mail ne doit pas dépasser {maxLength} caractères",
+      "success": "Adresse e-mail mise à jour",
+      "error": "Une erreur s'est produite lors de la mise à jour de l'adresse e-mail",
+      "title": "Adresse e-mail",
+      "placeholder": "Adresse e-mail",
+      "description": "Mettre à jour l'adresse e-mail de l'utilisateur. Cette adresse e-mail sera utilisée pour la facturation de l'offre commerciale si l'utilisateur est le propriétaire du projet ou de l'administrateur.",
+      "update": "Mettre à jour"
+    },
+    "change-phone-number-section": {
+      "phone-number-required-message": "Le numéro de téléphone est requis",
+      "phone-number-max-length": "Le numéro de téléphone ne doit pas dépasser {maxLength} caractères",
+      "success": "Numéro de téléphone mis à jour",
+      "error": "Une erreur s'est produite lors de la mise à jour du numéro de téléphone",
+      "title": "Numéro de téléphone",
+      "placeholder": "+20 123 456 7890",
+      "description": "Mettre à jour le numéro de téléphone de l'utilisateur. Ce numéro de téléphone sera utilisé pour la facturation de l'offre commerciale si l'utilisateur est le propriétaire du projet ou de l'administrateur.",
+      "update": "Mettre à jour"
+    },
+    "change-role-section": {
+      "role-required-message": "Le rôle est requis",
+      "success": "Rôle mis à jour",
+      "error": "Une erreur s'est produite lors de la mise à jour du rôle",
+      "title": "Rôle",
+      "description": "Mettre à jour le rôle de l'utilisateur, ce qui lui permettra de prendre en charge l'accès à l'interface de l'administrateur. Après avoir mis à jour le rôle, les modifications seront prises en compte dès que l'utilisateur se déconnecte.",
+      "update": "Mettre à jour"
+    },
+    "change-password-section": {
+      "old-password-required-message": "Le mot de passe actuel est requis",
+      "old-password-min-length": "Le mot de passe doit comporter au moins {minLength} caractères",
+      "old-password-max-length": "Le mot de passe ne doit pas dépasser {maxLength} caractères",
+      "password-required-message": "Le nouveau mot de passe est requis",
+      "password-min-length": "Le mot de passe doit comporter au moins {minLength} caractères",
+      "password-max-length": "Le mot de passe ne doit pas dépasser {maxLength} caractères",
+      "verify-password-required-message": "La vérification du mot de passe est requise",
+      "verify-password-min-length": "La vérification du mot de passe doit comporter au moins {minLength} caractères",
+      "verify-password-max-length": "La vérification du mot de passe ne doit pas dépasser {maxLength} caractères",
+      "password-not-complex": "Le mot de passe doit comporter au moins une lettre majuscule, une lettre minuscule et un chiffre",
+      "password-not-match": "Les mots de passe ne correspondent pas",
+      "password-match": "Vous ne pouvez pas utiliser le même mot de passe",
+      "success": "Mot de passe mis à jour",
+      "error": "Une erreur s'est produite lors de la mise à jour du mot de passe",
+      "title": "Mot de passe",
+      "old-password-title": "Mot de passe actuel",
+      "old-password-description": "Entrez votre mot de passe actuel pour confirmer votre identité.",
+      "password-title": "Nouveau mot de passe",
+      "new-password-description": "Entrez votre nouveau mot de passe. Le mot de passe doit comporter au moins 8 caractères et doit comporter au moins une lettre majuscule, une lettre minuscule et un chiffre.",
+      "verify-password-title": "Vérifier le mot de passe",
+      "verify-password-description": "Entrez le même mot de passe que vous avez entré ci-dessus pour vérifier qu'il a été saisi correctement.",
+      "description": "Mettre à jour le mot de passe de l'utilisateur, le mot de passe doit comporter au moins 8 caractères et doit comporter au moins une lettre majuscule, une lettre minuscule et un chiffre.",
+      "note": "Note: ",
+      "note-revoke": "Si vous souhaitez révoquer l'accès de l'utilisateur, vous pouvez désactiver le compte ci-dessous.",
+      "note-settings": "Utilisez cette fonction uniquement si vous oubliez votre mot de passe. Si vous souhaitez modifier votre mot de passe, vous devez vous reconnecter à votre compte.",
+      "update": "Mettre à jour"
+    },
+    "deactivate-user-section": {
+      "success": "Utilisateur désactivé",
+      "error": "Une erreur s'est produite lors de la désactivation de l'utilisateur",
+      "title": "Désactiver l'utilisateur",
+      "deactivate": "Désactiver",
+      "description-a": "Désactiver l'utilisateur, cela empêchera l'utilisateur de se connecter et d'accéder à l'application. Après avoir désactivé l'utilisateur",
+      "description-b": "les modifications seront prises en compte après la déconnexion de l'utilisateur.",
+      "description-c": "Si vous souhaitez réellement désactiver l'utilisateur, vous devez vous reconnecter à votre compte, mieux vaut appeler un administrateur IT.",
+      "description-d": "L'utilisateur restera dans la liste des utilisateurs, mais ne pourra pas se connecter ou accéder à l'application. Vous pouvez réactiver l'utilisateur à tout moment."
+    },
+    "activate-user-section": {
+      "success": "Utilisateur activé",
+      "error": "Une erreur s'est produite lors de l'activation de l'utilisateur",
+      "title": "Activer l'utilisateur",
+      "activate": "Activer",
+      "description": "Cet utilisateur est désactivé, cela signifie que vous ne pouvez pas accéder à l'application en utilisant ses identifiants. Activer l'utilisateur permettra de se connecter et d'accéder à l'application à nouveau."
+    }
+  },
+  "name-form": {
+    "success": "Nom mis à jour",
+    "error": "Une erreur s'est produite lors de la mise à jour du nom",
+    "unauthorized": "Vous n'avez pas la permission de modifier le nom de {type}",
+    "title": "Nom",
+    "description": "Mettre à jour le nom de {type}, cela modifiera le nom de {type} de toutes les références. Après avoir saisi le nom modifié, appuyez sur le bouton de mise à jour pour enregistrer les modifications. Le nom de {type} doit être unique.",
+    "note": "Note: ",
+    "note-with-owner": "Seul le propriétaire ou un administrateur peut modifier le nom de {type}.",
+    "note-without-owner": "Seul un administrateur peut modifier le nom de {type}.",
+    "update": "Mettre à jour"
+  },
+  "description-form": {
+    "success": "Description mise à jour",
+    "error": "Une erreur s'est produite lors de la mise à jour de la description",
+    "title": "Description",
+    "description": "Mettre à jour la description de {type}, cela modifiera la description de {type} de toutes les références. Après avoir saisi la description modifiée, appuyez sur le bouton de mise à jour pour enregistrer les modifications. La description est une des champs utilisés pour rechercher {type}s.",
+    "update": "Mettre à jour"
+  },
+  "notes-form": {
+    "success": "Notes mises à jour",
+    "error": "Une erreur s'est produite lors de la mise à jour des notes",
+    "title": "Notes",
+    "placeholder": "Ajouter une note...",
+    "description": "Mettre à jour les notes de {type}, cela modifiera les notes de {type} de toutes les références et les notes précédentes seront perdues. Après avoir saisi les notes modifiées, appuyez sur le bouton de mise à jour pour enregistrer les modifications.",
+    "update": "Mettre à jour"
+  },
+  "delete-form": {
+    "required": "Le nom est requis pour supprimer {type}",
+    "name-must-match": "Le nom doit correspondre",
+    "unauthorized": "Vous n'avez pas la permission de supprimer {type}",
+    "success": "{type} supprimé",
+    "error": "Une erreur s'est produite lors de la suppression de {type}",
+    "title": "Supprimer",
+    "description": "Êtes-vous sûr de vouloir supprimer {type} ? Cette action ne peut pas être annulée.",
+    "delete": "Supprimer",
+    "form-info": {
+      "description": "Veuillez saisir le nom de {type} pour confirmer. Après avoir saisi le nom, appuyez sur le bouton de suppression pour supprimer {type}.",
+      "warning": "Avertissement: ",
+      "warning-content": "La suppression d'un {type} est permanente, vous ne pourrez pas annuler cette action.",
+      "note": "Note: ",
+      "project-note-content": "Seul un administrateur ou un propriétaire peut supprimer un projet.",
+      "note-content": "Seul un administrateur peut supprimer un {type}."
+    }
+  },
+  "registration-number-form": {
+    "max-length-message": "Le numéro de registre ne doit pas dépasser {maxLength} caractères",
+    "success": "Numéro de registre mis à jour",
+    "error": "Une erreur s'est produite lors de la mise à jour du numéro de registre",
+    "title": "Numéro de registre",
+    "description": "Mettre à jour le numéro de registre de {type}, cela modifiera le numéro de registre de {type} dans toutes les références. Après avoir saisi le numéro de registre modifié, appuyez sur le bouton de mise à jour pour enregistrer les modifications.",
+    "update": "Mettre à jour"
+  },
+  "website-form": {
+    "max-length-message": "Le site web ne doit pas dépasser {maxLength} caractères",
+    "success": "Site web mis à jour",
+    "error": "Une erreur s'est produite lors de la mise à jour du site web",
+    "title": "Site web",
+    "description": "Mettre à jour le site web de {type}, cela modifiera le site web de {type} dans toutes les références. Après avoir saisi le site web modifié, appuyez sur le bouton de mise à jour pour enregistrer les modifications.",
+    "update": "Mettre à jour"
+  },
+  "field-update-form": {
+    "field-required-message": "Le champ de l'ongène est requis",
+    "field-min-length-message": "Le champ de l'ongène doit comporter au moins {minLength} caractères",
+    "field-max-length-message": "Le champ de l'ongène ne doit pas dépasser {maxLength} caractères",
+    "success": "Champ mis à jour",
+    "error": "Une erreur s'est produite lors de la mise à jour du champ",
+    "title": "Champ de l'ongène",
+    "description": "Mettre à jour le champ de l'ongène de {type}, cela modifiera le champ de l'ongène de {type} dans toutes les références. Après avoir saisi le champ de l'ongène modifié, appuyez sur le bouton de mise à jour pour enregistrer les modifications.",
+    "update": "Mettre à jour"
+  },
+  "type-update-form": {
+    "type-required-message": "Le type est requis",
+    "type-min-length-message": "Le type doit comporter au moins {minLength} caractères",
+    "type-max-length-message": "Le type ne doit pas dépasser {maxLength} caractères",
+    "success": "Type mis à jour",
+    "error": "Une erreur s'est produite lors de la mise à jour du type",
+    "title": "Type",
+    "description": "Mettre à jour le type de {type}, cela modifiera le type de {type} dans toutes les références. Après avoir saisi le type modifié, appuyez sur le bouton de mise à jour pour enregistrer les modifications.",
+    "update": "Mettre à jour"
+  },
+  "make-update-form": {
+    "make-max-length-message": "Le fabricant ne doit pas dépasser {maxLength} caractères",
+    "success": "Fabricant mis à jour",
+    "error": "Une erreur s'est produite lors de la mise à jour du fabricant",
+    "title": "Fabricant",
+    "description": "Mettre à jour le fabricant de {type}, cela modifiera le fabricant de {type} dans toutes les références. Après avoir saisi le fabricant modifié, appuyez sur le bouton de mise à jour pour enregistrer les modifications.",
+    "update": "Mettre à jour"
+  },
+  "mpn-update-form": {
+    "mpn-max-length-message": "Le MPN ne doit pas dépasser {maxLength} caractères",
+    "success": "MPN mis à jour",
+    "error": "Une erreur s'est produite lors de la mise à jour du MPN",
+    "title": "MPN",
+    "description": "Mettre à jour le MPN de {type}, cela modifiera le MPN de {type} dans toutes les références. Après avoir saisi le MPN modifié, appuyez sur le bouton de mise à jour pour enregistrer les modifications.",
+    "update": "Mettre à jour"
+  },
+  "user-info-section": {
+    "created-at": "Créé le",
+    "created-by": "Créé par",
+    "updated-at": "Mis à jour le",
+    "updated-by": "Mis à jour par",
+    "not-available": "N/A"
+  },
+  "company-section": {
+    "name": "Nom",
+    "field": "Champ de l'ongène",
+    "registration-number": "Numéro de registre",
+    "website": "Site web",
+    "address": "Adresse",
+    "contact": "Contact"
+  },
+  "search-bar": {
+    "placeholder": "Rechercher"
+  },
+  "drop-zone": {
+    "title": "Cliquez pour télécharger ",
+    "subtitle": "ou glissez-déposez",
+    "max": "Taille maximale du fichier est {max} Mo",
+    "error": "La taille du fichier doit être inférieure à {max} Mo"
+  },
+  "document-form": {
+    "existing-document": "Document existant",
+    "new-document": "Nouveau document",
+    "invalid-relation": "Relation invalide",
+    "new-document-form": {
+      "name-required": "Le nom est requis",
+      "name-min-length": "Le nom doit comporter au moins {minLength} caractères",
+      "name-max-length": "Le nom ne doit pas dépasser {maxLength} caractères",
+      "notes-max-length": "Les notes ne doivent pas dépasser {maxLength} caractères",
+      "success": "Document ajouté",
+      "error": "Une erreur s'est produite lors de l'ajout du document",
+      "title": "Ajouter un document",
+      "description": "Télécharger un nouveau document",
+      "button-text": "Ajouter un document",
+      "name-field-label": "Nom *",
+      "name-field-description": "Entrez le nom du document. Ce nom sera utilisé pour rechercher et référer le document.",
+      "private-field-label": "Privé",
+      "private-field-description": "Cochez cette case si vous souhaitez que le document soit privé. Seuls les utilisateurs avec les autorisations appropriées pourront le voir.",
+      "notes-field-label": "Notes",
+      "notes-field-description": "Entrez une note sur le document."
+    },
+    "existing-document-form": {
+      "success": "Document ajouté",
+      "error": "Une erreur s'est produite lors de l'ajout du document",
+      "title": "Ajouter un document existant",
+      "description": "Sélectionnez un document à lier",
+      "button-text": "Ajouter le document",
+      "id-field-label": "Document *",
+      "select-message": "Sélectionnez un document",
+      "search-message": "Rechercher un document",
+      "not-found-message": "Document introuvable",
+      "id-field-description": "Sélectionnez le document que vous souhaitez lier. Après avoir sélectionné le document, appuyez sur le bouton de lien pour lier le document."
+    }
+  },
+  "document-alt-card": {
+    "menu": {
+      "unlink-success": "Document délié",
+      "unlink-error": "Une erreur s'est produite lors de la déliaison du document",
+      "document-page": "Page du document",
+      "download-document": "Télécharger le document",
+      "unlink-document": "Délier le document"
+    }
+  },
+  "project-card": {
+    "menu": {
+      "project-page": "Page du projet",
+      "project-documents": "Documents du projet",
+      "project-comments": "Commentaires du projet",
+      "edit": "Modifier le projet",
+      "delete": "Supprimer le projet"
+    },
+    "tips": {
+      "status": "Statut",
+      "client": "Client"
+    }
+  },
+  "client-card": {
+    "menu": {
+      "client-page": "Page du client",
+      "client-documents": "Documents du client",
+      "client-comments": "Commentaires du client",
+      "edit": "Modifier le client",
+      "delete": "Supprimer le client"
+    },
+    "tips": {
+      "registration-number": "Numéro de registre"
+    }
+  },
+  "supplier-card": {
+    "menu": {
+      "supplier-page": "Page du fournisseur",
+      "supplier-documents": "Documents du fournisseur",
+      "supplier-comments": "Commentaires du fournisseur",
+      "edit": "Modifier le fournisseur",
+      "delete": "Supprimer le fournisseur"
+    },
+    "tips": {
+      "field": "Champ de l'ongène",
+      "registration-number": "Numéro de registre"
+    }
+  },
+  "item-card": {
+    "menu": {
+      "item-page": "Page de l'article",
+      "item-documents": "Documents de l'article",
+      "item-comments": "Commentaires de l'article",
+      "edit": "Modifier l'article",
+      "delete": "Supprimer l'article"
+    },
+    "tips": {
+      "make": "Fabricant"
+    }
+  },
+  "document-card": {
+    "menu": {
+      "document-page": "Page du document",
+      "edit": "Modifier le document",
+      "delete": "Supprimer le document"
+    },
+    "tips": {
+      "private": "Privé",
+      "extension": "Extension"
+    }
+  },
+  "user-card": {
+    "role": "Rôle:",
+    "active": "Actif:",
+    "last-login": "Dernière connexion:",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "address-card": {
+    "address-line": "Adresse",
+    "country": "Pays",
+    "city": "Ville",
+    "created-by": "Créé par",
+    "created-at": "Créé le",
+    "updated-by": "Mis à jour par",
+    "updated-at": "Mis à jour le",
+    "notes": "Notes",
+    "action-buttons": {
+      "primary": "Primaire",
+      "set-primary": "Définir comme primaire",
+      "delete": "Supprimer",
+      "success": "Adresse de la liste des adresses mise à jour",
+      "error": "Une erreur s'est produite lors de la mise à jour de l'adresse de la liste des adresses",
+      "delete-success": "Adresse supprimée",
+      "delete-error": "Une erreur s'est produite lors de la suppression de l'adresse",
+      "confirm-delete": "Êtes-vous sûr de vouloir supprimer cette adresse?"
+    }
+  },
+  "contact-card": {
+    "phone-number": "Numéro de téléphone",
+    "email": "E-mail",
+    "created-by": "Créé par",
+    "created-at": "Créé le",
+    "updated-by": "Mis à jour par",
+    "updated-at": "Mis à jour le",
+    "notes": "Notes",
+    "action-buttons": {
+      "primary": "Primaire",
+      "set-primary": "Définir comme primaire",
+      "delete": "Supprimer",
+      "success": "Contact supprimé",
+      "error": "Une erreur s'est produite lors de la suppression du contact",
+      "delete-success": "Contact supprimé",
+      "delete-error": "Une erreur s'est produite lors de la suppression du contact",
+      "confirm-delete": "Êtes-vous sûr de vouloir supprimer ce contact?"
+    }
+  },
+  "supplier-item-card": {
+    "make": "Fabricant",
+    "project": "Projet",
+    "quantity": "Quantité {quantity}",
+    "ppu": "Prix par unité ({currency}) {price}"
+  },
+  "card-tips": {
+    "creation-date": "Date de création",
+    "id": "ID"
+  },
+  "filter": {
+    "tip": "Filtrer",
+    "filter-title": "Filtrer",
+    "filter-by": "Filtrer par {type}",
+    "status": "Statut",
+    "owner": "Propriétaire",
+    "createdBy": "Créé par",
+    "type": "Type",
+    "select-placeholder": "Sélectionnez une valeur",
+    "from": "De",
+    "to": "À"
+  },
+  "date-picker": {
+    "select-year": "Sélectionnez une année",
+    "select-date": "Sélectionnez une date"
+  },
+  "home-page": {
+    "intro": {
+      "title": "Guide Daftar",
+      "description": "Guide Daftar est une application qui vous permet de gérer vos contrats de fourniture dans un seul endroit.",
+      "subtitle": "Le but principal de Guide Daftar est de garder une trace de tous les projets que vous travaillez sur."
+    },
+    "utils": {
+      "notes": "Notes"
+    },
+    "definitions": {
+      "title": "Définitions",
+      "users": {
+        "title": "Utilisateur",
+        "description": "Un utilisateur est une personne qui utilise Guide Daftar, souvent un entreprise qui a un contrat avec une personne. Les utilisateurs peuvent avoir différents rôles, tels que administrateur, superutilisateur, ou utilisateur. Chaque utilisateur peut modifier son propre profil et voir ses propres données, y compris le nom, l'adresse e-mail, le numéro de téléphone et le mot de passe.",
+        "roles": {
+          "admin": {
+            "title": "Administrateur",
+            "description": "Les administrateurs ont accès à toutes les fonctionnalités de Guide Daftar, y compris l'accès au panneau d'administration où ils peuvent créer, modifier et désactiver des utilisateurs."
+          },
+          "super-user": {
+            "title": "Superutilisateur",
+            "description": "Les superutilisateurs ont accès à toutes les fonctionnalités de Guide Daftar, y compris l'accès aux données privées, à l'exception des données que vous ne pouvez pas accéder à partir du panneau d'administration."
+          },
+          "user": {
+            "title": "Utilisateur",
+            "description": "Les superutilisateurs ont accès à toutes les fonctionnalités de Guide Daftar, y compris l'accès aux données privées, à l'exception des données que vous ne pouvez pas accéder à partir du panneau d'administration."
+          }
+        }
+      },
+      "document": {
+        "title": "Document",
+        "description": "Un document est simplement un fichier téléchargé sur Guide Daftar et attaché à plusieurs entités. Par exemple, vous pouvez télécharger un contrat de paiement PDF et le lier à un projet. Ou vous pouvez télécharger un document de service PDF et le lier à un article. Les documents peuvent être liés à un ou plusieurs entités ou ils peuvent être utilisés comme documents standards.",
+        "notes": {
+          "note-1": "Les documents peuvent être de n'importe quel type, PDF, Word, Excel, etc.",
+          "note-2": "Les documents peuvent être privés ou publics. Les documents privés ne sont visibles que par les administrateurs et les superutilisateurs."
+        }
+      },
+      "item": {
+        "title": "Article",
+        "description": "Un article est un article physique ou numérique qui est fourni par votre entreprise à un client à l'intérieur de la portée d'un projet. Les articles sont des projets, des clients, des fournisseurs et les prix varient. Vous pouvez définir un article et ensuite vous pouvez définir son contexte à l'intérieur d'un projet spécifique. Comme on l'a dit ci-dessus, vous pouvez lier plusieurs documents à un article."
+      },
+      "client": {
+        "title": "Client",
+        "description": "Un client est une entreprise ou une personne qui vous fait parvenir. Vous pouvez avoir plusieurs contacts et plusieurs adresses, mais ils sont toujours liés à un client. Vous pouvez définir le contact primaire et l'adresse primaire d'un client et ensuite ils seront liés au client dans toutes les références. Un client peut être lié à un ou plusieurs projets. Vous pouvez lier plusieurs documents à un client."
+      },
+      "supplier": {
+        "title": "Fournisseur",
+        "description": "Un fournisseur est une entreprise ou une personne qui vous fournit des produits ou des services à l'intérieur de la portée d'un projet. Les fournisseurs peuvent avoir plusieurs contacts et plusieurs adresses, mais ils sont toujours liés à un fournisseur. Vous pouvez définir le contact primaire et l'adresse primaire d'un fournisseur et ensuite ils seront liés au fournisseur dans toutes les références. Un fournisseur peut être lié à un ou plusieurs projets. Vous pouvez lier plusieurs documents à un fournisseur."
+      },
+      "project": {
+        "title": "Projet",
+        "description": "Un projet est une transaction de travail entre votre entreprise et un client. Le projet est le but final de la travail que vous effectuez. Il s'agit d'un endroit où vous pouvez travailler ensemble avec vos clients et vos fournisseurs.",
+        "project-properties": {
+          "project-owner": {
+            "title": "Propriétaire du projet",
+            "description": "L'utilisateur qui est responsable du projet. Vous pouvez sélectionner un utilisateur à partir de la liste des utilisateurs existants dans l'application."
+          },
+          "client": {
+            "title": "Client",
+            "description": "Le client auquel ce projet est destiné. Vous pouvez sélectionner un client à partir de la liste des clients que vous avez créés."
+          },
+          "purchase-items": {
+            "title": "Articles d'achat",
+            "description": "Articles d'achat sont les articles que vous achetez de ce fournisseur pour ce projet. Les articles d'achat sont utilisés pour suivre le coût du projet. Vous pouvez ajouter plusieurs articles d'achat à un projet. Les articles d'achat ont un fournisseur, un prix, une devise et une quantité."
+          },
+          "sale-items": {
+            "title": "Articles de vente",
+            "description": "Articles de vente sont les articles que vous vendez à ce client pour ce projet. Les articles de vente sont utilisés pour suivre le revenu du projet. Vous pouvez ajouter plusieurs articles de vente à un projet. Les articles de vente ont un prix, une devise et une quantité. Les articles de vente sont utilisés pour générer des offres commerciales."
+          },
+          "commercial-offer": {
+            "title": "Offre commerciale",
+            "description": "Les offres commerciales sont des documents PDF que vous fournissez aux clients de ce projet. Les offres commerciales sont générées à partir des données du client et des articles de vente du projet. Les offres commerciales sont téléchargées et stockées comme des documents liés au projet pour être utilisés ultérieurement."
+          },
+          "comments": {
+            "title": "Commentaires",
+            "description": "Les commentaires sont des notes journal des travaux du projet, des problèmes et des tâches."
+          }
+        }
+      }
+    },
+    "demo-note": {
+      "title": "Note",
+      "description": "Cette est une version de démonstration de Guide Daftar. Elle n'est pas destinée à l'utilisation en production. Les données générées aléatoirement et ne représentent pas les données réelles en aucun cas. Veuillez ne pas l'utiliser pour toutes les informations importantes.",
+      "documents-description": "La fonctionnalité des documents n'est pas entièrement fonctionnelle dans la version de démonstration de Guide Daftar. Télécharger des documents ne sauvegardera pas les documents dans le stockage du serveur, le document lié sera ajouté à la place."
+    },
+    "getting-started": {
+      "title": "Démarrage",
+      "description": "Commencez à utiliser Guide Daftar en visitant l'un des liens de la page et en ajoutant des données.",
+      "links": {
+        "projects": "Projets",
+        "clients": "Clients",
+        "suppliers": "Fournisseurs",
+        "items": "Articles",
+        "documents": "Documents"
+      },
+      "description-2": "Vous pouvez visiter la page de données que vous avez créée en localisant-la dans la liste des données et en cliquant sur son nom. Ici, vous pouvez voir toutes les détails et les actions."
+    }
+  }
+}

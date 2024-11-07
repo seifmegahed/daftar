@@ -1,4 +1,4 @@
-import { ar, enUS, es, nl } from "date-fns/locale";
+import { ar, de, enUS, es, fr, nl } from "date-fns/locale";
 import { between, gte, lte, sql } from "drizzle-orm";
 import type { PgColumn } from "drizzle-orm/pg-core";
 
@@ -106,20 +106,67 @@ export const getDateLocaleFormat = (locale: string) => {
       return enUS;
     case "nl":
       return nl;
+    case "fr":
+      return fr;
+    case "de":
+      return de;
     default:
       return enUS;
   }
 };
 
-export const getDirection = (locale: string) => locale === "ar" ? "rtl" : "ltr";
+export const getDirection = (locale: string) =>
+  locale === "ar" ? "rtl" : "ltr";
 
 const types = {
-  client: { en: "Client", ar: "عميل", es: "Cliente", nl: "Klant" },
-  supplier: { en: "Supplier", ar: "مورد", es: "Proveedor", nl: "Leverancier" },
-  project: { en: "Project", ar: "مشروع", es: "Proyecto", nl: "Project" },
-  item: { en: "Item", ar: "مادة", es: "Artículo", nl: "Item" },
-  document: { en: "Document", ar: "مستند", es: "Documento", nl: "Document" },
-  user: { en: "User", ar: "مستخدم", es: "Usuario", nl: "Gebruiker" },
+  client: {
+    en: "Client",
+    ar: "عميل",
+    es: "Cliente",
+    nl: "Klant",
+    fr: "Client",
+    de: "Kunde",
+  },
+  supplier: {
+    en: "Supplier",
+    ar: "مورد",
+    es: "Proveedor",
+    nl: "Leverancier",
+    fr: "Fournisseur",
+    de: "Lieferant",
+  },
+  project: {
+    en: "Project",
+    ar: "مشروع",
+    es: "Proyecto",
+    nl: "Project",
+    fr: "Projet",
+    de: "Projekt",
+  },
+  item: {
+    en: "Item",
+    ar: "مادة",
+    es: "Artículo",
+    nl: "Item",
+    fr: "Article",
+    de: "Artikel",
+  },
+  document: {
+    en: "Document",
+    ar: "مستند",
+    es: "Documento",
+    nl: "Document",
+    fr: "Document",
+    de: "Dokument",
+  },
+  user: {
+    en: "User",
+    ar: "مستخدم",
+    es: "Usuario",
+    nl: "Gebruiker",
+    fr: "Utilisateur",
+    de: "Benutzer",
+  },
 };
 
 export const getLocaleType = (type: keyof typeof types, locale: Locale) =>
