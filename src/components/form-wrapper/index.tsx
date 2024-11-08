@@ -44,6 +44,7 @@ export function FormWrapperWithSubmit({
       <div className="flex justify-end py-4">
         <SubmitButton
           type="submit"
+          data-testid="submit-button"
           disabled={submitting || !dirty}
           loading={submitting}
         >

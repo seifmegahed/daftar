@@ -11,6 +11,8 @@ import {
 } from "@testing-library/react";
 import AddressForm from ".";
 import { addNewAddressAction } from "@/server/actions/addresses";
+import { NextIntlClientProvider } from "next-intl";
+import messages from "../../../../dictionary/en.json";
 
 vi.mock("@/server/actions/addresses", () => ({
   addNewAddressAction: vi.fn(),
@@ -22,13 +24,21 @@ beforeEach(() => {
   cleanup();
 });
 
-describe("Address Form", () => {
+describe("Address Form", async () => {
   it("should render", () => {
-    render(<AddressForm id={1} type="client" />);
-    expect(screen.getByRole("heading", { level: 2 })).toBeDefined();
+    render(
+      <NextIntlClientProvider messages={messages} locale="en">
+        <AddressForm id={1} type="client" />
+      </NextIntlClientProvider>,
+    );
+    expect(screen.getByRole("heading", { level: 1 })).toBeDefined();
   });
   it("should error on empty submit", async () => {
-    render(<AddressForm id={1} type="client" />);
+    render(
+      <NextIntlClientProvider messages={messages} locale="en">
+        <AddressForm id={1} type="client" />
+      </NextIntlClientProvider>,
+    );
     const submitButton = screen.getByTestId("submit-button");
     if (!submitButton) throw new Error("submit button not found");
     const notesField = screen.getByTestId("notes-field");
@@ -44,13 +54,17 @@ describe("Address Form", () => {
     window.HTMLElement.prototype.scrollIntoView = function () {
       return;
     };
-    render(<AddressForm id={1} type="client" />);
+    render(
+      <NextIntlClientProvider messages={messages} locale="en">
+        <AddressForm id={1} type="client" />
+      </NextIntlClientProvider>,
+    );
     (addNewAddressAction as Mock).mockResolvedValue([1, null]);
 
     const submitButton = screen.getByTestId("submit-button");
     expect(submitButton).toBeDefined();
 
-    const titleField: HTMLInputElement = screen.getByTestId("title");
+    const titleField: HTMLInputElement = screen.getByTestId("address-name");
     expect(titleField).toBeDefined();
 
     const addressLineField: HTMLInputElement =
@@ -65,9 +79,9 @@ describe("Address Form", () => {
       expect(titleField.value).toBe("Test");
     });
 
-    fireEvent.change(addressLineField, { target: { value: "Test" } });
+    fireEvent.change(addressLineField, { target: { value: "Test Address" } });
     await waitFor(() => {
-      expect(addressLineField.value).toBe("Test");
+      expect(addressLineField.value).toBe("Test Address");
     });
 
     fireEvent.click(countryField);
@@ -85,11 +99,11 @@ describe("Address Form", () => {
       expect(addNewAddressAction).toHaveBeenCalledWith({
         clientId: 1,
         name: "Test",
-        addressLine: "Test",
+        addressLine: "Test Address",
         country: "Angola",
-        city: "",
-        notes: "",
-      });
+        city: undefined,
+        notes: undefined,
+      }, "client");
     });
   });
 });

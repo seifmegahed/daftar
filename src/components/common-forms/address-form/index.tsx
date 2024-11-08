@@ -138,7 +138,7 @@ function NewAddressForm({
               <FormItem>
                 <FormLabel>{t("form.address-name-label")}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} data-testid="address-name" />
                 </FormControl>
                 <FormDescription>
                   {t("form.address-name-description")}
@@ -154,7 +154,7 @@ function NewAddressForm({
               <FormItem>
                 <FormLabel>{t("form.address-line-label")}</FormLabel>
                 <FormControl>
-                  <Input {...field} />
+                  <Input {...field} data-testid="address-line" />
                 </FormControl>
                 <FormDescription>
                   {t("form.address-line-description")}
@@ -190,9 +190,7 @@ function NewAddressForm({
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
-                <FormDescription>
-                  {t("form.city-description")}
-                </FormDescription>
+                <FormDescription>{t("form.city-description")}</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -204,7 +202,12 @@ function NewAddressForm({
               <FormItem>
                 <FormLabel>{t("form.address-notes-label")}</FormLabel>
                 <FormControl>
-                  <Textarea {...field} className="resize-none" rows={4} />
+                  <Textarea
+                    {...field}
+                    className="resize-none"
+                    rows={4}
+                    data-testid="notes-field"
+                  />
                 </FormControl>
                 <FormDescription>
                   {t("form.address-notes-description")}
