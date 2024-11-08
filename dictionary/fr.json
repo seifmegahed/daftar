@@ -1266,7 +1266,7 @@
           },
           "user": {
             "title": "Utilisateur",
-            "description": "Les superutilisateurs ont accès à toutes les fonctionnalités de Guide Daftar, y compris l'accès aux données privées, à l'exception des données que vous ne pouvez pas accéder à partir du panneau d'administration."
+            "description": "Les utilisateurs n'ont pas accès aux données privées ni au panneau d'administration, et n'ont pas de privilèges de suppression."
           }
         }
       },

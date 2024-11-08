@@ -1262,11 +1262,11 @@
           },
           "super-user": {
             "title": "Super User",
-            "description": "Admin users have full access to all the features of daftar including access to the admin dashboard where they can create, edit, and deactivate users."
+            "description": "Super users have full access to all the features of Daftar including access to private data except they don't have access to the admin dashboard."
           },
           "user": {
             "title": "User",
-            "description": "Super users have full access to all the features of Daftar including access to private data except they don't have access to the admin dashboard."
+            "description": "Users don't have access to private data and to the admin panel, they also do not have delete privileges."
           }
         }
       },

@@ -1266,7 +1266,7 @@
           },
           "user": {
             "title": "Benutzer",
-            "description": "Superusers haben vollständige Zugriffsrechte auf alle Funktionen von Daftar, einschließlich des Zugriffs auf die Privatdaten, außerdem haben sie keine Berechtigungen für das Admin-Dashboard."
+            "description": "Benutzer haben keinen Zugang zu privaten Daten oder zum Admin-Panel und keine Löschrechte."
           }
         }
       },

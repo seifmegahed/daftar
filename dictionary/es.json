@@ -1266,7 +1266,7 @@
           },
           "user": {
             "title": "Usuario",
-            "description": "Los superusuarios tienen acceso completo a todas las características de Daftar, incluyendo el acceso a los datos privados, excepto los que se encuentren en la lista de bloqueo."
+            "description": "Los usuarios no tienen acceso a datos privados ni al panel de administración, y tampoco tienen privilegios de eliminación."
           }
         }
       },

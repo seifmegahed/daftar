@@ -761,7 +761,7 @@
       "email-max-length": "E-mail mag niet langer zijn dan {maxLength} tekens",
       "notes-max-length": "Notities mag niet langer zijn dan {maxLength} tekens",
       "email-or-phone-required": "E-mail of telefoonnummer is vereist"
-      }
+    }
   },
   "admin": {
     "layout": {
@@ -943,7 +943,7 @@
       "title": "Activeer gebruiker",
       "activate": "Activeer",
       "description": "Deze gebruiker is gedeactiveerd, dit betekent dat deze gebruiker niet kan inloggen en toegang heeft tot de applicatie. Activeer de gebruiker om deze gebruiker weer in te loggen en toegang te krijgen tot de applicatie."
-      }
+    }
   },
   "name-form": {
     "success": "Naam bijgewerkt",
@@ -1245,7 +1245,7 @@
     "intro": {
       "title": "Daftar Guide",
       "description": "Daftar is een applicatie die je in één plek kunt beheren voor je contractontwerp.",
-      "subtitle": "De hoofddoel van Daftar is het beheren van alle projecten die je in één plek uitvoert."
+      "subtitle": "Het hoofddoel van Daftar is het beheren van alle projecten op één centrale plek."
     },
     "utils": {
       "notes": "Notities"
@@ -1262,11 +1262,11 @@
           },
           "super-user": {
             "title": "Supergebruiker",
-            "description": "Supergebruikers hebben volledige toegang tot alle functies van Daftar, inclusief toegang tot privé gegevens, behalve de gebruikers in het beheerpaneel."
+            "description": "Supergebruikers hebben volledige toegang tot alle functies van Daftar, inclusief toegang tot privégegevens"
           },
           "user": {
             "title": "Gebruiker",
-            "description": "Supergebruikers hebben volledige toegang tot alle functies van Daftar, inclusief toegang tot privé gegevens, behalve de gebruikers in het beheerpaneel."
+            "description": "Gebruikers hebben geen toegang tot privégegevens of het beheerpaneel, en ze hebben ook geen verwijderrechten."
           }
         }
       },
@@ -1304,11 +1304,11 @@
           },
           "purchase-items": {
             "title": "Inkoop items",
-            "description": "Inkoop items zijn items die je koopt van een leverancier voor dit project. Inkoop items worden gebruikt om de kosten van het project te tellen. Je kunt meerdere inkoop items toevoegen aan een project. Inkoop items hebben een leverancier, een prijs, een valuta, en een hoeveelheid."
+            "description": "Inkoopitems zijn producten die je inkoopt bij een leverancier voor dit project. Inkoop items worden gebruikt om de kosten van het project te tellen. Je kunt meerdere inkoop items toevoegen aan een project. Inkoop items hebben een leverancier, een prijs, een valuta, en een hoeveelheid."
           },
           "sale-items": {
             "title": "Verkoop items",
-            "description": "Verkoop items zijn items die je verkoopt aan de klant voor dit project. Verkoop items worden gebruikt om de inkoop van de project te tellen. Je kunt meerdere verkoop items toevoegen aan een project. Verkoop items hebben een prijs, een valuta, en een hoeveelheid. Verkoop items worden gebruikt om commerciële offertes te genereren."
+            "description": "Verkoopitems zijn producten die je verkoopt aan de klant voor dit project. Verkoop items worden gebruikt om de inkoop van de project te tellen. Je kunt meerdere verkoop items toevoegen aan een project. Verkoop items hebben een prijs, een valuta, en een hoeveelheid. Verkoop items worden gebruikt om commerciële offertes te genereren."
           },
           "commercial-offer": {
             "title": "Commerciële offerte",
