@@ -1345,7 +1345,8 @@
       "an-error-occurred": "Ein Fehler ist aufgetreten",
       "too-many-attempts": "Zu viele Versuche. Konto ist vorübergehend gesperrt.",
       "account-locked": "Konto ist vorübergehend gesperrt.",
-      "user-deactivated": "Dieses Konto wurde deaktiviert. Wenden Sie sich an den Administrator, um es wieder nutzen zu können."
+      "user-deactivated": "Dieses Konto wurde deaktiviert. Wenden Sie sich an den Administrator, um es wieder nutzen zu können.",
+      "username-does-not-exist": "Benutzername existiert nicht"
     }
   }
 }

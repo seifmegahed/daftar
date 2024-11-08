@@ -1345,7 +1345,8 @@
       "an-error-occurred": "An error occurred",
       "too-many-attempts": "Too many attempts. Account is temporarily locked.",
       "account-locked": "Account is temporarily locked.",
-      "user-deactivated": "This account has been deactivated. Contact the administrator to be able to use it."
+      "user-deactivated": "This account has been deactivated. Contact the administrator to be able to use it.",
+      "username-does-not-exist": "Username does not exist"
     }
   }
 }

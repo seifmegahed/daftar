@@ -1345,7 +1345,8 @@
       "an-error-occurred": "Er is een fout opgetreden",
       "too-many-attempts": "Te veel pogingen. Account is tijdelijk vergrendeld.",
       "account-locked": "Account is tijdelijk vergrendeld.",
-      "user-deactivated": "Dit account is gedeactiveerd. Neem contact op met de beheerder om het weer te kunnen gebruiken."
+      "user-deactivated": "Dit account is gedeactiveerd. Neem contact op met de beheerder om het weer te kunnen gebruiken.",
+      "username-does-not-exist": "Gebruikersnaam bestaat niet"
     }
   }
 }

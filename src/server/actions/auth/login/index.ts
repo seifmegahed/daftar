@@ -86,7 +86,7 @@ export const loginAction = async (
 
   const [user, error] = await sensitiveGetUserByUsername(data.username);
   if (error !== null) {
-    if (error === "User not found") return [null, "Username does not exist"];
+    if (error === "User not found") return [null, errorMessages("username-does-not-exist")];
     return [null, error];
   }
 

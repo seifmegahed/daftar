@@ -1345,7 +1345,8 @@
       "an-error-occurred": "Une erreur est survenue",
       "too-many-attempts": "Trop de tentatives. Le compte est temporairement verrouillé.",
       "account-locked": "Le compte est temporairement verrouillé.",
-      "user-deactivated": "Ce compte a été désactivé. Contactez l'administrateur pour pouvoir l'utiliser."
+      "user-deactivated": "Ce compte a été désactivé. Contactez l'administrateur pour pouvoir l'utiliser.",
+      "username-does-not-exist": "Nom d'utilisateur n'existe pas"
     }
   }
 }
