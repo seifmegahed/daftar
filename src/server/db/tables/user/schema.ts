@@ -3,6 +3,7 @@ import {
   index,
   pgTable,
   serial,
+  smallint,
   timestamp,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -24,6 +25,9 @@ export const usersTable = pgTable(
 
     role: varchar("role", { length: 32 }).default("user").notNull(),
     active: boolean("active").notNull().default(true),
+
+    wrongAttempts: smallint("wrong_attempts").default(0).notNull(),
+    lockedUntil: timestamp("locked_until"),
     // Salted password
     password: varchar("password", { length: 128 }).notNull(),
     // timestamps
@@ -70,6 +74,8 @@ export const UserSchemaRaw = {
     .max(64, { message: "Phone Number must be at most 64 characters" })
     .default("+20 123 456 7890")
     .optional(),
+  lockedUntil: z.date().nullable(),
+  wrongAttempts: z.number(),
 };
 
 export const UserSchema = z.object(UserSchemaRaw);

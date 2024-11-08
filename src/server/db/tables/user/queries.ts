@@ -21,7 +21,7 @@ const logError = errorLogger(errorMessages.mainTitle);
 
 export type GetPartialUserType = Omit<
   UserDataType,
-  "verifyPassword" | "password"
+  "verifyPassword" | "password" | "wrongAttempts" | "lockedUntil"
 >;
 
 export const getAllUsers = async (
@@ -144,7 +144,14 @@ export const sensitiveGetUserPasswordById = async (
 
 type SensitiveGetUserType = Pick<
   UserDataType,
-  "id" | "name" | "username" | "role" | "active" | "password"
+  | "id"
+  | "name"
+  | "username"
+  | "role"
+  | "active"
+  | "password"
+  | "lockedUntil"
+  | "wrongAttempts"
 >;
 
 /**
@@ -179,6 +186,8 @@ export const sensitiveGetUserByUsername = async (
         role: usersTable.role,
         active: usersTable.active,
         password: usersTable.password,
+        wrongAttempts: usersTable.wrongAttempts,
+        lockedUntil: usersTable.lockedUntil,
       })
       .from(usersTable)
       .where(

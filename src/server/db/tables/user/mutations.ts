@@ -1,5 +1,5 @@
 import { db } from "@/server/db";
-import { eq } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 import { usersTable } from "@/server/db/schema";
 
 import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
@@ -13,6 +13,8 @@ const errorMessages = {
   nameExists: "User username already exists",
   update: "An error occurred while updating users",
   delete: "An error occurred while deleting users",
+  lock: "An error occurred while locking user",
+  incrementWrongAttempts: "An error occurred while incrementing wrong attempts",
 };
 
 const logError = errorLogger(errorMessages.mainTitle);
@@ -109,7 +111,7 @@ export const updateUserLastActive = async (
   try {
     const [user] = await db
       .update(usersTable)
-      .set({ lastActive: new Date() })
+      .set({ lastActive: new Date(), wrongAttempts: 0 })
       .where(eq(usersTable.id, id))
       .returning();
 
@@ -150,6 +152,50 @@ export const updateUser = async (
     const [user] = await db
       .update(usersTable)
       .set(data)
+      .where(eq(usersTable.id, id))
+      .returning();
+
+    if (!user) return [null, errorMessage];
+    return [user.id, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
+export const incrementWrongAttempts = async (
+  id: number,
+): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.incrementWrongAttempts;
+  try {
+    const [user] = await db
+      .update(usersTable)
+      .set({
+        wrongAttempts: sql`${usersTable.wrongAttempts} + 1`,
+      })
+      .where(eq(usersTable.id, id))
+      .returning();
+
+    if (!user) return [null, errorMessage];
+    return [user.wrongAttempts, null];
+  } catch (error) {
+    logError(error);
+    return [null, errorMessage];
+  }
+};
+
+export const lockUser = async (
+  id: number,
+  lockTimeHr = 1,
+): Promise<ReturnTuple<number>> => {
+  const errorMessage = errorMessages.lock;
+  try {
+    const [user] = await db
+      .update(usersTable)
+      .set({
+        wrongAttempts: 0,
+        lockedUntil: new Date(Date.now() + 1000 * 60 * 60 * lockTimeHr),
+      })
       .where(eq(usersTable.id, id))
       .returning();
 
