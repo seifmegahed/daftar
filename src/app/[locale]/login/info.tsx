@@ -53,7 +53,7 @@ function LoginInfo({ onScroll }: { onScroll?: () => void }) {
           )}
         </div>
         <div className="flex items-end pb-16 lg:hidden">
-          <div onClick={onScroll} className="animate-pulse cursor-pointer">
+          <div onClick={onScroll} className="animate-pulse cursor-pointer" id="scroll-to-bottom">
             <ChevronDown className="h-24 w-24" />
           </div>
         </div>

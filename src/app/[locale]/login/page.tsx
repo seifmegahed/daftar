@@ -15,7 +15,7 @@ export default function LoginPage() {
       <div className="snap-center snap-always">
         <LoginInfoSection onScroll={() => ref.current?.scrollIntoView()} />
       </div>
-      <div className="snap-center snap-always" ref={ref}>
+      <div className="snap-center snap-always" ref={ref} id="login-form">
         <LoginFormSection />
       </div>
     </div>

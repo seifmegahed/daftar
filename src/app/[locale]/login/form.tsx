@@ -99,8 +99,8 @@ function LoginForm() {
                 render={({ field }) => (
                   <FormItem>
                     <Label htmlFor="username">{t("form.username-title")}</Label>
-                    <Input id="username" type="username" {...field} />
-                    <FormMessage />
+                    <Input id="username" {...field} />
+                    <FormMessage id="username-message" />
                   </FormItem>
                 )}
               />
@@ -111,11 +111,12 @@ function LoginForm() {
                   <FormItem>
                     <Label htmlFor="password">{t("form.password-title")}</Label>
                     <PasswordInput id="password" {...field} />
-                    <FormMessage />
+                    <FormMessage id="password-message" />
                   </FormItem>
                 )}
               />
               <Button
+                id="submit-button"
                 className="mt-5 w-full"
                 type="submit"
                 disabled={form.formState.isSubmitting}

@@ -82,7 +82,7 @@ export const getUserById = async (
   const timer = new performanceTimer("getUserById");
   try {
     timer.start();
-    const [user] = await db
+    const user = await db
       .select({
         id: usersTable.id,
         name: usersTable.name,
@@ -99,8 +99,8 @@ export const getUserById = async (
       .where(eq(usersTable.id, id));
     timer.end();
 
-    if (!user) return [null, errorMessages.notFound];
-    return [user, null];
+    if (!user[0]) return [null, errorMessages.notFound];
+    return [user[0], null];
   } catch (error) {
     logError(error);
     return [null, errorMessage];

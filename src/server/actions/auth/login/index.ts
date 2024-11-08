@@ -85,7 +85,10 @@ export const loginAction = async (
   }
 
   const [user, error] = await sensitiveGetUserByUsername(data.username);
-  if (error !== null) return [null, error];
+  if (error !== null) {
+    if (error === "User not found") return [null, "Username does not exist"];
+    return [null, error];
+  }
 
   if (user.lockedUntil && user.lockedUntil > new Date())
     return [null, errorMessages("account-locked")];
