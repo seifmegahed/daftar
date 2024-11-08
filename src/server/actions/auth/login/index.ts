@@ -23,8 +23,10 @@ import { errorLogger } from "@/lib/exceptions";
 import type { z } from "zod";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { performanceTimer } from "@/utils/performance";
+import { getTranslations } from "next-intl/server";
 
 const NUMBER_OF_WRONG_ATTEMPTS = 3;
+const LOCK_TIME_HR = 1;
 
 const loginSchema = UserSchema.pick({
   username: true,
@@ -44,6 +46,7 @@ const checkAttempts = async ({
   attempts: number;
   userId: number;
 }): Promise<string> => {
+  const errorMessages = await getTranslations("errors.login");
   // Handle other errors
   if (errorMessage !== "Incorrect Password") {
     return errorMessage;
@@ -54,23 +57,25 @@ const checkAttempts = async ({
     const [, incrementError] = await incrementWrongAttempts(userId);
     if (incrementError !== null) {
       loginErrorLog(incrementError);
-      return "An error has occurred";
+      return errorMessages("an-error-occurred");
     }
-    return "Incorrect Password";
+    return errorMessages("incorrect-password");
   }
 
   // Lock user
-  const [, lockError] = await lockUser(userId);
+  const [, lockError] = await lockUser(userId, LOCK_TIME_HR);
   if (lockError !== null) {
     loginErrorLog(lockError);
-    return "An error has occurred";
+    return errorMessages("an-error-occurred");
   }
-  return "Too many wrong attempts. Account is temporarily locked";
+  return errorMessages("too-many-attempts");
 };
 
 export const loginAction = async (
   data: LoginFormType,
 ): Promise<ReturnTuple<number> | undefined> => {
+  const errorMessages = await getTranslations("errors.login");
+
   const timer = new performanceTimer("loginAction");
   timer.start();
   const isValid = loginSchema.safeParse(data);
@@ -83,7 +88,7 @@ export const loginAction = async (
   if (error !== null) return [null, error];
 
   if (user.lockedUntil && user.lockedUntil > new Date())
-    return [null, "Account is temporarily locked"];
+    return [null, errorMessages("account-locked")];
 
   const [, passwordCheckError] = await comparePassword(
     data.password,

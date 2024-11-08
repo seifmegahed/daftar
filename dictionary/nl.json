@@ -1338,5 +1338,14 @@
       },
       "description-2": "Je kunt de gegevens van een gebruiker bekijken die is aangemaakt door het zoeken in de lijst van gegevens en klikken op de naam. Hier kun je alle details en acties bekijken."
     }
+  },
+  "errors": {
+    "login": {
+      "incorrect-password": "Onjuist wachtwoord",
+      "an-error-occurred": "Er is een fout opgetreden",
+      "too-many-attempts": "Te veel pogingen. Account is tijdelijk vergrendeld.",
+      "account-locked": "Account is tijdelijk vergrendeld.",
+      "user-deactivated": "Dit account is gedeactiveerd. Neem contact op met de beheerder om het weer te kunnen gebruiken."
+    }
   }
 }

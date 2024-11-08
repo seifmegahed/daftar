@@ -163,6 +163,12 @@ export const updateUser = async (
   }
 };
 
+/**
+ * Increment wrong password attempts
+ * 
+ * @param id 
+ * @returns 
+ */
 export const incrementWrongAttempts = async (
   id: number,
 ): Promise<ReturnTuple<number>> => {
@@ -183,7 +189,16 @@ export const incrementWrongAttempts = async (
     return [null, errorMessage];
   }
 };
-
+/**
+ * Lock User
+ * 
+ * Locks a user account for a specified amount of time.
+ * Resets wrong attempts as well
+ * 
+ * @param id - ID of the user to lock
+ * @param lockTimeHr - Number of hours to lock the user for
+ * @returns - Tuple containing the updated user's ID or an error message if there is one
+ */
 export const lockUser = async (
   id: number,
   lockTimeHr = 1,

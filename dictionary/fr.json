@@ -1338,5 +1338,14 @@
       },
       "description-2": "Vous pouvez visiter la page de données que vous avez créée en localisant-la dans la liste des données et en cliquant sur son nom. Ici, vous pouvez voir toutes les détails et les actions."
     }
+  },
+  "errors": {
+    "login": {
+      "incorrect-password": "Mot de passe incorrect",
+      "an-error-occurred": "Une erreur est survenue",
+      "too-many-attempts": "Trop de tentatives. Le compte est temporairement verrouillé.",
+      "account-locked": "Le compte est temporairement verrouillé.",
+      "user-deactivated": "Ce compte a été désactivé. Contactez l'administrateur pour pouvoir l'utiliser."
+    }
   }
 }

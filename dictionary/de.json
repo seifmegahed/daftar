@@ -1338,5 +1338,14 @@
       },
       "description-2": "Du kannst die Daten, die du von der Anwendung erstellt hast, auf der Liste der Daten sehen, indem du sie durchgehst und klickst auf den Namen. Hier kannst du alle Details und Aktionen sehen."
     }
+  },
+  "errors": {
+    "login": {
+      "incorrect-password": "Falsches Passwort",
+      "an-error-occurred": "Ein Fehler ist aufgetreten",
+      "too-many-attempts": "Zu viele Versuche. Konto ist vorübergehend gesperrt.",
+      "account-locked": "Konto ist vorübergehend gesperrt.",
+      "user-deactivated": "Dieses Konto wurde deaktiviert. Wenden Sie sich an den Administrator, um es wieder nutzen zu können."
+    }
   }
 }

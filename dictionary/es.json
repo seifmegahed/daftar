@@ -1338,5 +1338,14 @@
       },
       "description-2": "Puede visitar la página de datos que ha creado ubicada en la lista de datos y hacer clic en ella. Aquí puede ver todos los detalles y acciones."
     }
+  },
+  "errors": {
+    "login": {
+      "incorrect-password": "Contraseña incorrecta",
+      "an-error-occurred": "Ocurrió un error",
+      "too-many-attempts": "Demasiados intentos. La cuenta está bloqueada temporalmente.",
+      "account-locked": "La cuenta está bloqueada temporalmente.",
+      "user-deactivated": "Esta cuenta ha sido desactivada. Contacta al administrador para poder usarla."
+    }
   }
 }

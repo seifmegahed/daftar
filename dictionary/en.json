@@ -1338,5 +1338,14 @@
       },
       "description-2": "You can visit the page of the data you created by locating it's card in the list of data and clicking on it's name. There you can check out all the details and actions."
     }
+  },
+  "errors": {
+    "login": {
+      "incorrect-password": "Incorrect password",
+      "an-error-occurred": "An error occurred",
+      "too-many-attempts": "Too many attempts. Account is temporarily locked.",
+      "account-locked": "Account is temporarily locked.",
+      "user-deactivated": "This account has been deactivated. Contact the administrator to be able to use it."
+    }
   }
 }
