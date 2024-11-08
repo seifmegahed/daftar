@@ -96,14 +96,17 @@ describe("Address Form", async () => {
 
     fireEvent.click(submitButton);
     await waitFor(() => {
-      expect(addNewAddressAction).toHaveBeenCalledWith({
-        clientId: 1,
-        name: "Test",
-        addressLine: "Test Address",
-        country: "Angola",
-        city: undefined,
-        notes: undefined,
-      }, "client");
+      expect(addNewAddressAction).toHaveBeenCalledWith(
+        {
+          clientId: 1,
+          name: "Test",
+          addressLine: "Test Address",
+          country: "Angola",
+          city: undefined,
+          notes: undefined,
+        },
+        "client",
+      );
     });
   });
 });
