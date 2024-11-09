@@ -26,8 +26,10 @@ function ListPageWrapper({
     <div className="space-y-6">
       <div className="space-y-6 px-3 sm:px-0">
         <div className="">
-          <h3 className="font-xl text-2xl font-bold">{title}</h3>
-          {subtitle && <p className="text-muted-foreground">{subtitle}</p>}
+          <h2 className="font-xl text-2xl font-bold" id="page-title">
+            {title}
+          </h2>
+          {subtitle && <h3 className="text-muted-foreground">{subtitle}</h3>}
         </div>
         {filter && (
           <FilterAndSearch

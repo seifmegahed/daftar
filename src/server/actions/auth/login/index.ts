@@ -1,7 +1,7 @@
 "use server";
 
 import { env } from "@/env";
-import { redirect } from "next/navigation";
+import { redirect } from "@/i18n/routing";
 import { cookies } from "next/headers";
 
 import { sensitiveGetUserByUsername } from "@/server/db/tables/user/queries";
@@ -23,7 +23,7 @@ import { errorLogger } from "@/lib/exceptions";
 import type { z } from "zod";
 import type { ReturnTuple } from "@/utils/type-utils";
 import { performanceTimer } from "@/utils/performance";
-import { getTranslations } from "next-intl/server";
+import { getLocale, getTranslations } from "next-intl/server";
 
 const NUMBER_OF_WRONG_ATTEMPTS = 3;
 const LOCK_TIME_HR = 1;
@@ -86,7 +86,8 @@ export const loginAction = async (
 
   const [user, error] = await sensitiveGetUserByUsername(data.username);
   if (error !== null) {
-    if (error === "User not found") return [null, errorMessages("username-does-not-exist")];
+    if (error === "User not found")
+      return [null, errorMessages("username-does-not-exist")];
     return [null, error];
   }
 
@@ -131,5 +132,6 @@ export const loginAction = async (
   });
   timer.end();
 
-  redirect("/");
+  const locale = await getLocale();
+  redirect({ locale, href: "/" });
 };

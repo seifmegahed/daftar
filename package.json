@@ -22,6 +22,7 @@
     "lint": "next lint",
     "start": "next start",
     "test": "vitest",
+    "test:e2e": "cypress run --headless",
     "pm2": "pm2"
   },
   "dependencies": {
