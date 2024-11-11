@@ -42,15 +42,23 @@ function NewUserForm() {
         emptyToUndefined,
         z
           .string({ required_error: t("schema.username-required") })
-          .min(4, { message: t("schema.username-min-length", { minLength: 4 }) })
-          .max(64, { message: t("schema.username-max-length", { maxLength: 64 }) }),
+          .min(4, {
+            message: t("schema.username-min-length", { minLength: 4 }),
+          })
+          .max(64, {
+            message: t("schema.username-max-length", { maxLength: 64 }),
+          }),
       ),
       password: z.preprocess(
         emptyToUndefined,
         z
           .string({ required_error: t("schema.password-required") })
-          .min(8, { message: t("schema.password-min-length", { minLength: 8 }) })
-          .max(64, { message: t("schema.password-max-length", { maxLength: 64 }) }),
+          .min(8, {
+            message: t("schema.password-min-length", { minLength: 8 }),
+          })
+          .max(64, {
+            message: t("schema.password-max-length", { maxLength: 64 }),
+          }),
       ),
       verifyPassword: z.preprocess(
         emptyToUndefined,
@@ -82,7 +90,9 @@ function NewUserForm() {
         emptyToUndefined,
         z
           .string()
-          .max(64, { message: t("schema.phone-number-max-length", { maxLength: 64 }) })
+          .max(64, {
+            message: t("schema.phone-number-max-length", { maxLength: 64 }),
+          })
           .optional(),
       ),
       role: z.preprocess(
@@ -171,7 +181,9 @@ function NewUserForm() {
             name="username"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="username">{t("form.username-field-label")}</Label>
+                <Label htmlFor="username">
+                  {t("form.username-field-label")}
+                </Label>
                 <Input
                   id="username"
                   type="username"
@@ -236,7 +248,9 @@ function NewUserForm() {
             name="phoneNumber"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="phoneNumber">{t("form.phone-number-field-label")}</Label>
+                <Label htmlFor="phoneNumber">
+                  {t("form.phone-number-field-label")}
+                </Label>
                 <Input
                   id="phoneNumber"
                   type="phoneNumber"
@@ -266,10 +280,7 @@ function NewUserForm() {
                   </SelectTrigger>
                   <SelectContent>
                     {userRolesList.map((role) => (
-                      <SelectItem
-                        key={role.value}
-                        value={role.value}
-                      >
+                      <SelectItem key={role.value} value={role.value}>
                         {role[locale]}
                       </SelectItem>
                     ))}
@@ -287,7 +298,9 @@ function NewUserForm() {
             name="password"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="password">{t("form.password-field-label")}</Label>
+                <Label htmlFor="password">
+                  {t("form.password-field-label")}
+                </Label>
                 <PasswordInput
                   id="password"
                   autoComplete="new-password"
@@ -305,7 +318,9 @@ function NewUserForm() {
             name="verifyPassword"
             render={({ field }) => (
               <FormItem>
-                <Label htmlFor="verify-password">{t("form.verify-password-field-label")}</Label>
+                <Label htmlFor="verify-password">
+                  {t("form.verify-password-field-label")}
+                </Label>
                 <PasswordInput
                   id="verify-password"
                   autoComplete="new-password-verify"
