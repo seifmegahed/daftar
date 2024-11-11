@@ -29,6 +29,7 @@ import { checkUsername } from "@/utils/user-name-check";
 import { useTranslations, useLocale } from "next-intl";
 import { getDirection } from "@/utils/common";
 import { userRolesList } from "@/data/lut";
+import { PasswordInput } from "@/components/inputs";
 
 function NewUserForm() {
   const locale = useLocale() as Locale;
@@ -287,9 +288,8 @@ function NewUserForm() {
             render={({ field }) => (
               <FormItem>
                 <Label htmlFor="password">{t("form.password-field-label")}</Label>
-                <Input
+                <PasswordInput
                   id="password"
-                  type="password"
                   autoComplete="new-password"
                   {...field}
                 />
@@ -306,9 +306,8 @@ function NewUserForm() {
             render={({ field }) => (
               <FormItem>
                 <Label htmlFor="verify-password">{t("form.verify-password-field-label")}</Label>
-                <Input
+                <PasswordInput
                   id="verify-password"
-                  type="password"
                   autoComplete="new-password-verify"
                   {...field}
                 />
