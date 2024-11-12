@@ -345,8 +345,8 @@
       "filter-by-created-by": "Op basis van maker",
       "filter-by-creation-date": "Op basis van creatiedatum",
       "filter-by-updated-date": "Op basis van updatedatum",
-      "no-clients-found-error-title": "Het lijkt erop dat er nog geen klanten zijn!",
-      "no-clients-found-error-description": "Start met het toevoegen van klanten om ze te zien hier."
+      "no-clients-error-title": "Het lijkt erop dat er nog geen klanten zijn!",
+      "no-clients-error-description": "Start met het toevoegen van klanten om ze te zien hier."
     },
     "new-client-page": {
       "title": "Voeg klant toe",

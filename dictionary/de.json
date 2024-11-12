@@ -345,8 +345,8 @@
       "filter-by-created-by": "Nach Ersteller",
       "filter-by-creation-date": "Nach Erstellungsdatum",
       "filter-by-updated-date": "Nach Aktualisierungsdatum",
-      "no-clients-found-error-title": "Es sieht so aus, als hätten wir keine Kunden gefunden!",
-      "no-clients-found-error-description": "Beginne mit dem Hinzufügen von Kunden, um sie hier anzuzeigen."
+      "no-clients-error-title": "Es sieht so aus, als hätten wir keine Kunden gefunden!",
+      "no-clients-error-description": "Beginne mit dem Hinzufügen von Kunden, um sie hier anzuzeigen."
     },
     "new-client-page": {
       "title": "Kunde hinzufügen",
@@ -491,7 +491,7 @@
       "notes": "Notizen"
     },
     "edit": {
-      "delete-form-info": "Du kannst diesen Lieferanten nicht löschen, da er mit {count, plural, one {einem Projekt} other {{count} Projekten}} verbunden ist. Du musst zuerst diese Projekte entfernen, bevor du ihn löschen kannst.",
+      "delete-form-info": "Sie können diesen Kunden nicht löschen, da er mit {count, plural, one {einem Projekt} other {{count} Projekten}} verknüpft ist. Sie müssen ihn zuerst von dem {count, plural, one {Projekt} other {Projekten}} trennen, in denen er referenziert ist, bevor Sie ihn löschen können.",
       "invalid-id": "Ungültige Lieferanten-ID",
       "title": "Lieferantenbearbeitung",
       "subtitle": "Dies ist die Lieferantenbearbeitungsseite für {supplierName}. Hier kannst du die Details des Lieferanten bearbeiten."

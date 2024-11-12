@@ -394,7 +394,7 @@
       "notes": "Notes"
     },
     "edit": {
-      "delete-form-info": "You cannot delete this client because it is linked to {count, plural, =1 {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it.",
+      "delete-form-info": "You cannot delete this client because it is linked to {count, plural, one {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it.",
       "invalid-id": "Invalid client ID",
       "title": "Edit Client",
       "subtitle": "This is the edit page for the client: {clientName}. Here you can edit the client details."
@@ -491,7 +491,7 @@
       "notes": "Notes"
     },
     "edit": {
-      "delete-form-info": "You cannot delete this supplier because it is referenced in {count, plural, =1 {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it.",
+      "delete-form-info": "You cannot delete this supplier because it is referenced in {count, plural, one {a project} other {{count} projects}}. You first need to unlink it from the {count, plural, one {project} other {projects} it is referenced in before you can delete it.",
       "invalid-id": "Invalid supplier ID",
       "title": "Edit Supplier",
       "subtitle": "This is the edit page for the supplier: {supplierName}. Here you can edit the supplier details."

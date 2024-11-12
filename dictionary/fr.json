@@ -345,8 +345,8 @@
       "filter-by-created-by": "Par créateur",
       "filter-by-creation-date": "Par date de création",
       "filter-by-updated-date": "Par date de mise à jour",
-      "no-clients-found-error-title": "Il semble que vous n'ayez pas de clients !",
-      "no-clients-found-error-description": "Commencez par ajouter des clients pour les voir ici."
+      "no-clients-error-title": "Il semble que vous n'ayez pas de clients !",
+      "no-clients-error-description": "Commencez par ajouter des clients pour les voir ici."
     },
     "new-client-page": {
       "title": "Ajouter un client",

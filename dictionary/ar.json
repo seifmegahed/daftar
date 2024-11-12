@@ -345,8 +345,8 @@
       "filter-by-created-by": "بالمنشئ",
       "filter-by-creation-date": "بتاريخ الإنشاء",
       "filter-by-updated-date": "بتاريخ التحديث",
-      "no-clients-found-error-title": "لا يوجد عملاء بعد",
-      "no-clients-found-error-description": "ابدأ بإضافة العملاء لرؤيتهم هنا"
+      "no-clients-error-title": "لا يوجد عملاء بعد",
+      "no-clients-error-description": "ابدأ بإضافة العملاء لرؤيتهم هنا"
     },
     "new-client-page": {
       "title": "إضافة عميل",
