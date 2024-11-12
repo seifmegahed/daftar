@@ -2,7 +2,9 @@ import { describe, it, expect } from "vitest";
 import * as fs from "fs";
 import * as path from "path";
 
-type TranslationFileType = Record<string, unknown>;
+interface TranslationFileType {
+  [key: string]: string | TranslationFileType;
+}
 
 const loadJson = (filePath: string) => {
   try {
@@ -15,6 +17,7 @@ const loadJson = (filePath: string) => {
     return null;
   }
 };
+
 const checkKeys = (
   baseline: TranslationFileType,
   testFile: TranslationFileType,
@@ -35,12 +38,7 @@ const checkKeys = (
         continue;
       }
       errors.push(
-        ...checkKeys(
-          baseline[key] as TranslationFileType,
-          testFile[key] as TranslationFileType,
-          fileName,
-          currentPath,
-        ),
+        ...checkKeys(baseline[key], testFile[key], fileName, currentPath),
       );
     } else if (
       typeof baseline[key] === "string" &&
@@ -59,17 +57,27 @@ const checkKeys = (
         // Check that the placeholder with the same variable and type exists in the test string
         const testRegex = new RegExp(`\\{${variable},\\s*${icuType},`);
         if (!testRegex.test(testFile[key])) {
-          errors.push(`Missing ICU placeholder in ${fileName} at ${formattedPath}: ${placeholder}`);
+          errors.push(
+            `Missing ICU placeholder in ${fileName} at ${formattedPath}: ${placeholder}`,
+          );
         } else {
           // Extract the option keys (e.g., "one", "other") from the options part
-          const optionKeys = options ? [...options.matchAll(/\b\w+\b(?=\s*\{)/g)].map(m => m[0]) : []; 
-          const testOptions = new RegExp(`\\{${variable},\\s*${icuType},\\s*(.*?)\\}`, 's').exec(testFile[key]);
-          const testOptionKeys = testOptions?.[1] ? [...testOptions[1].matchAll(/\b\w+\b(?=\s*\{)/g)].map(m => m[0]) : [];
+          const optionKeys = options
+            ? [...options.matchAll(/\b\w+\b(?=\s*\{)/g)].map((m) => m[0])
+            : [];
+          const testOptions = new RegExp(
+            `\\{${variable},\\s*${icuType},\\s*(.*?)\\}`,
+            "s",
+          ).exec(testFile[key]);
+          const testOptionKeys = testOptions?.[1]
+            ? [...testOptions[1].matchAll(/\b\w+\b(?=\s*\{)/g)].map((m) => m[0])
+            : [];
 
-          // Check if each expected option key exists in the test file
           optionKeys.forEach((opt) => {
             if (!testOptionKeys.includes(opt)) {
-              errors.push(`Missing ICU option '${opt}' in ${fileName} at ${formattedPath} for ${placeholder}`);
+              errors.push(
+                `Missing ICU option '${opt}' in ${fileName} at ${formattedPath} for ${placeholder}`,
+              );
             }
           });
         }
@@ -78,8 +86,6 @@ const checkKeys = (
   }
   return errors;
 };
-
-
 
 describe("Translation files validation", () => {
   const baselineFilePath = "en.json";
@@ -94,7 +100,7 @@ describe("Translation files validation", () => {
 
     it(`should validate keys and placeholders for ${fileName}`, () => {
       const testFile = loadJson(filePath);
-      expect(testFile).toBeTruthy(); // Check file loaded
+      expect(testFile).toBeTruthy();
 
       if (testFile) {
         const errors = checkKeys(baseline, testFile, fileName);
@@ -102,7 +108,7 @@ describe("Translation files validation", () => {
           console.error(`Errors in ${fileName}:`);
           errors.forEach((error) => console.error(`  - ${error}`));
         }
-        expect(errors).toEqual([]); // Expect no errors
+        expect(errors).toEqual([]);
       }
     });
   });
