@@ -6,7 +6,6 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { errorLogger } from "../exceptions";
 
 const jwtSecret = env.JWT_SECRET;
-const tokenTTL = "1d";
 
 type TokenPayloadType = Pick<UserDataType, "username" | "role" | "id">;
 
@@ -14,12 +13,13 @@ const jwtErrorLog = errorLogger("JWT Error:");
 
 export const createToken = async (
   payload: TokenPayloadType,
+  expiryDate: Date,
 ): Promise<ReturnTuple<string>> => {
   try {
     const token = await new SignJWT(payload)
       .setProtectedHeader({ alg: "HS256" })
       .setIssuedAt()
-      .setExpirationTime(tokenTTL)
+      .setExpirationTime(expiryDate)
       .sign(new TextEncoder().encode(jwtSecret));
     return [token, null];
   } catch (error) {

@@ -25,8 +25,10 @@ import type { ReturnTuple } from "@/utils/type-utils";
 import { performanceTimer } from "@/utils/performance";
 import { getLocale, getTranslations } from "next-intl/server";
 
-const NUMBER_OF_WRONG_ATTEMPTS = 3;
-const LOCK_TIME_HR = 1;
+const NUMBER_OF_WRONG_ATTEMPTS = env.LOGIN_ATTEMPTS;
+const LOCK_TIME_HR = env.LOCK_TIME_HR;
+const JWT_VALIDITY_IN_DAYS = env.JWT_VALIDITY_IN_DAYS;
+const SECURE = env.NEXT_PUBLIC_VERCEL || env.SSL;
 
 const loginSchema = UserSchema.pick({
   username: true,
@@ -36,6 +38,21 @@ const loginSchema = UserSchema.pick({
 type LoginFormType = z.infer<typeof loginSchema>;
 
 const loginErrorLog = errorLogger("Login Action Error:");
+
+/**
+ * Gets the a date in the future by the number of days
+ * At exactly 2:00 AM
+ * 
+ * @param days number of days in the future
+ * @param hour (optional) hour in the future
+ * @returns date instance in the future
+ */
+const getDaysInAdvance = (days: number, hour = 2) => {
+  const date = new Date();
+  date.setDate(date.getDate() + days);
+  date.setHours(hour, 0, 0, 0);
+  return date;
+};
 
 const checkAttempts = async ({
   errorMessage,
@@ -112,22 +129,22 @@ export const loginAction = async (
   const [, updateActiveError] = await updateUserLastActive(user.id);
   if (updateActiveError !== null) loginErrorLog(updateActiveError);
 
-  const [token, tokenError] = await createToken({
-    id: user.id,
-    username: user.username,
-    role: user.role,
-  });
+  const expiryDate = getDaysInAdvance(JWT_VALIDITY_IN_DAYS);
+
+  const [token, tokenError] = await createToken(
+    {
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    },
+    expiryDate,
+  );
   if (tokenError !== null) return [null, tokenError];
 
   cookies().set("token", token, {
     httpOnly: true,
-    /**
-     * Secure cookies are only sent to HTTPS endpoints, this should be true in production
-     * Perhaps instead of using the vercel env variable, we should use an SSL environment variable
-     */
-    secure: env.NEXT_PUBLIC_VERCEL || env.SSL ? true : false,
-    // Expires in 1 day
-    expires: new Date(Date.now() + 24 * 60 * 60 * 1000),
+    secure: SECURE,
+    expires: expiryDate,
     sameSite: "strict",
   });
   timer.end();

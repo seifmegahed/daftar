@@ -8,10 +8,13 @@ export const env = createEnv({
    */
   server: {
     POSTGRES_URL: z.string(),
-    JWT_SECRET: z.string().min(32).max(256),
     CACHE_REDIS: z.boolean(),
     SSL: z.boolean(),
     PERFORMANCE_DEBUG: z.boolean(),
+    LOGIN_ATTEMPTS: z.number(),
+    LOCK_TIME_HR: z.number(),
+    JWT_SECRET: z.string().min(32).max(256),
+    JWT_VALIDITY_IN_DAYS: z.number(),
     NODE_ENV: z
       .enum(["development", "test", "production"])
       .default("development"),
@@ -23,7 +26,7 @@ export const env = createEnv({
    * `NEXT_PUBLIC_`.
    */
   client: {
-    NEXT_PUBLIC_VERCEL: z.boolean().optional(),
+    NEXT_PUBLIC_VERCEL: z.boolean(),
   },
 
   /**
@@ -31,6 +34,21 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    JWT_VALIDITY_IN_DAYS: process.env.JWT_VALIDITY_IN_DAYS
+      ? isNaN(parseInt(process.env.JWT_VALIDITY_IN_DAYS))
+        ? 1
+        : parseInt(process.env.JWT_VALIDITY_IN_DAYS)
+      : 1,
+    LOGIN_ATTEMPTS: process.env.LOGIN_ATTEMPTS
+      ? isNaN(parseInt(process.env.LOGIN_ATTEMPTS))
+        ? 3
+        : parseInt(process.env.LOGIN_ATTEMPTS)
+      : 3,
+    LOCK_TIME_HR: process.env.LOCK_TIME_HR
+      ? isNaN(parseInt(process.env.LOCK_TIME_HR))
+        ? 1
+        : parseInt(process.env.LOCK_TIME_HR)
+      : 1,
     CACHE_REDIS: process.env.CACHE_REDIS === "true",
     SSL: process.env.SSL === "true",
     PERFORMANCE_DEBUG: process.env.PERFORMANCE_DEBUG === "true",
@@ -40,7 +58,7 @@ export const env = createEnv({
         : process.env.POSTGRES_URL,
     JWT_SECRET: process.env.JWT_SECRET,
     NODE_ENV: process.env.NODE_ENV,
-    NEXT_PUBLIC_VERCEL: process.env.NEXT_PUBLIC_VERCEL === "true",
+    NEXT_PUBLIC_VERCEL: process.env.NEXT_PUBLIC_VERCEL === "true" ? true : false,
   },
   /**
    * Run `build` or `dev` with `SKIP_ENV_VALIDATION` to skip env validation. This is especially
