@@ -1174,7 +1174,8 @@
     "active": "Aktiv:",
     "last-login": "Letzter Login:",
     "yes": "Ja",
-    "no": "Nein"
+    "no": "Nein",
+    "date": "vor {time}"
   },
   "address-card": {
     "address-line": "Adresse",

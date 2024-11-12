@@ -1174,7 +1174,8 @@
     "active": "الحالة",
     "last-login": "آخر تسجيل الدخول",
     "yes": "مفعل",
-    "no": "غير مفعل"
+    "no": "غير مفعل",
+    "date": "منذ {time}"
   },
   "address-card": {
     "address-line": "العنوان",

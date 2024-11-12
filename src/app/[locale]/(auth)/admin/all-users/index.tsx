@@ -1,11 +1,18 @@
 import CardWrapper from "@/components/card-wrapper";
 import { getLocalizedUserRoleLabel } from "@/data/lut";
 import type { GetPartialUserType } from "@/server/db/tables/user/queries";
-import { format } from "date-fns";
+import { format, formatDistanceToNow } from "date-fns";
 import { Edit } from "lucide-react";
 import { Link } from "@/i18n/routing";
 import { getTranslations, getLocale } from "next-intl/server";
 import { getDateLocaleFormat } from "@/utils/common";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+import { get } from "node_modules/cypress/types/lodash";
 
 function AllUsersList({ users }: { users: GetPartialUserType[] }) {
   return (
@@ -18,7 +25,7 @@ function AllUsersList({ users }: { users: GetPartialUserType[] }) {
 }
 
 async function UserCard({ user }: { user: GetPartialUserType }) {
-  const locale = await getLocale() as Locale;
+  const locale = (await getLocale()) as Locale;
   const dateLocaleFormat = getDateLocaleFormat(locale);
   const t = await getTranslations("user-card");
   return (
@@ -40,9 +47,24 @@ async function UserCard({ user }: { user: GetPartialUserType }) {
           <div className="flex justify-between gap-6 text-sm text-muted-foreground">
             <div>{t("last-login")}</div>
             <div>
-              {user.lastActive
-                ? format(user.lastActive, "PP", { locale: dateLocaleFormat })
-                : "-"}
+              {user.lastActive ? (
+                <Tooltip>
+                  <TooltipTrigger>
+                    {t("date", {
+                      time: formatDistanceToNow(user.lastActive, {
+                        locale: dateLocaleFormat,
+                      }),
+                    })}
+                  </TooltipTrigger>
+                  <TooltipContent>
+                    {format(user.lastActive, "PPP", {
+                      locale: dateLocaleFormat,
+                    })}
+                  </TooltipContent>
+                </Tooltip>
+              ) : (
+                "-"
+              )}
             </div>
           </div>
         </div>

@@ -1174,7 +1174,8 @@
     "active": "Activo:",
     "last-login": "Último inicio de sesión:",
     "yes": "Sí",
-    "no": "No"
+    "no": "No",
+    "date": "hace {time}"
   },
   "address-card": {
     "address-line": "Dirección",
