@@ -5,6 +5,7 @@ import {
   purchaseItemsTable,
   documentRelationsTable,
   saleItemsTable,
+  projectCommentsTable,
 } from "@/server/db/schema";
 
 import { errorLogger } from "@/lib/exceptions";
@@ -71,6 +72,10 @@ export const deleteProject = async (
       await tx
         .delete(documentRelationsTable)
         .where(eq(documentRelationsTable.projectId, id));
+
+      await tx
+        .delete(projectCommentsTable)
+        .where(eq(projectCommentsTable.projectId, id));
 
       const [project] = await tx
         .delete(projectsTable)

@@ -17,11 +17,15 @@ export const projectCommentsTable = pgTable(
   {
     id: serial("id").primaryKey(),
 
-    projectId: serial("project_id").notNull(),
+    projectId: serial("project_id")
+      .notNull()
+      .references(() => projectsTable.id),
     text: varchar("text", { length: 256 }).notNull(),
 
     createdAt: timestamp("created_at").defaultNow().notNull(),
-    createdBy: integer("created_by").notNull(),
+    createdBy: integer("created_by")
+      .notNull()
+      .references(() => usersTable.id),
   },
   (table) => ({
     projectIdIndex: index("project_id_index").on(table.projectId),

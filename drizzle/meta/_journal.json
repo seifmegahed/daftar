@@ -169,6 +169,13 @@
       "when": 1731060727887,
       "tag": "0023_chunky_stature",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1731600449399,
+      "tag": "0024_windy_thunderball",
+      "breakpoints": true
     }
   ]
 }
