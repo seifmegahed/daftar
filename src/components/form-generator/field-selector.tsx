@@ -1,6 +1,5 @@
 "use client";
 
-
 import {
   Select,
   SelectContent,
@@ -22,32 +21,35 @@ import { cn } from "@/lib/utils";
 import FieldWrapper from "./field-wrapper";
 import { FieldType, type FieldDataType } from "./types";
 
-type FieldSchema<T extends FieldDataType> = {
-  [K in T["name"]]: z.infer<Extract<T, { name: K }>["schema"]>;
-};
+type FieldSchema<T extends FieldDataType> = T["schema"] extends z.ZodType<unknown>
+  ? z.infer<T["schema"]>
+  : never;
 
-interface FieldSelectorProps {
-  fieldData: FieldDataType;
-  field: ControllerRenderProps<
-    FieldSchema<FieldDataType>,
-    Path<FieldSchema<FieldDataType>>
-  >;
+interface FieldSelectorProps<T extends FieldDataType> {
+  fieldData: T;
+  field: ControllerRenderProps<FieldSchema<T>, Path<FieldSchema<T>>>;
 }
 
-function FieldSelector({ fieldData, field }: FieldSelectorProps) {
+function FieldSelector<T extends FieldDataType>({
+  fieldData,
+  field,
+}: FieldSelectorProps<T>) {
   switch (fieldData.type) {
-        case FieldType.Select:
+    case FieldType.Select:
       return (
         <FieldWrapper
           className={fieldData.className}
           label={fieldData.label}
           description={fieldData.description}
+          htmlFor={fieldData.name}
         >
           <Select
             onValueChange={field.onChange}
             value={(field.value as string) ?? ""}
+            required={fieldData.required}
+            data-testid={fieldData.testId}
           >
-            <SelectTrigger>
+            <SelectTrigger id={fieldData.name}>
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -66,14 +68,15 @@ function FieldSelector({ fieldData, field }: FieldSelectorProps) {
           </Select>
         </FieldWrapper>
       );
-        case FieldType.Text:
+    case FieldType.Text:
       return (
         <FieldWrapper
           className={fieldData.className}
           label={fieldData.label}
           description={fieldData.description}
+          htmlFor={fieldData.name}
         >
-          <Input {...field} value={(field.value as string) ?? ""} />
+          <Input id={fieldData.name} {...field} data-testid={fieldData.testId} />
         </FieldWrapper>
       );
     case FieldType.Number:
@@ -82,91 +85,117 @@ function FieldSelector({ fieldData, field }: FieldSelectorProps) {
           className={fieldData.className}
           label={fieldData.label}
           description={fieldData.description}
+          htmlFor={fieldData.name}
         >
-          <Input {...field} type="number" />
+          <Input {...field} type="number" id={fieldData.name} data-testid={fieldData.testId} />
         </FieldWrapper>
       );
-        case FieldType.Textarea:
+    case FieldType.Textarea:
       return (
         <FieldWrapper
           className={fieldData.className}
           label={fieldData.label}
           description={fieldData.description}
+          htmlFor={fieldData.name}
         >
           <Textarea
             {...field}
             rows={6}
             className="resize-none"
             maxLength={512}
+            id={fieldData.name}
+            data-testid={fieldData.testId}
           />
         </FieldWrapper>
       );
-        case FieldType.Checkbox:
+    case FieldType.Checkbox:
       return (
         <FormItem
           className={cn(
             "flex h-full flex-col justify-center gap-2",
             fieldData.className,
           )}
+          aria-label={fieldData.label + " field"}
         >
           <div className="flex items-center justify-between">
-            <span className="text-lg text-muted-foreground">
+            <label
+              htmlFor={fieldData.name}
+              className="text-lg text-muted-foreground"
+            >
               {fieldData.label}
-            </span>
+            </label>
             <Checkbox
+              id={fieldData.name}
               checked={field.value as boolean}
               onCheckedChange={field.onChange}
+              required={fieldData.required}
               className="size-5 border-2"
+              data-testid={fieldData.testId}
             />
           </div>
           <FormMessage />
-          <FormDescription className="text-xs">
-            {fieldData.description}
-          </FormDescription>
+          {fieldData.description && (
+            <FormDescription className="text-xs">
+              {fieldData.description}
+            </FormDescription>
+          )}
         </FormItem>
       );
-        case FieldType.DatePicker:
+    case FieldType.DatePicker:
       return (
         <FormItem
           className={cn(
             "flex h-full flex-col justify-center gap-2",
             fieldData.className,
           )}
+          aria-label={fieldData.label + " field"}
         >
           <div className="flex items-center justify-between">
-            <span className="text-lg text-muted-foreground">
+            <label
+              htmlFor={fieldData.name}
+              className="text-lg text-muted-foreground"
+            >
               {fieldData.label}
-            </span>
+            </label>
             <DatePicker
+              required={fieldData.required}
+              id={fieldData.name}
               date={field.value as Date}
               onChange={field.onChange}
               allowFuture={fieldData.allowFuture}
+              data-testid={fieldData.testId}
             />
           </div>
           <FormMessage />
-          <FormDescription className="text-xs">
-            {fieldData.description}
-          </FormDescription>
+          {fieldData.description && (
+            <FormDescription className="text-xs">
+              {fieldData.description}
+            </FormDescription>
+          )}
         </FormItem>
       );
-        case FieldType.ComboSelect:
+    case FieldType.ComboSelect:
       return (
         <FieldWrapper
           className={fieldData.className}
           label={fieldData.label}
           description={fieldData.description}
+          htmlFor={fieldData.name}
         >
           <ComboSelect
+            required={fieldData.required}
+            id={fieldData.name}
             value={field.value as string}
             onChange={field.onChange}
             options={fieldData.options}
             selectMessage={fieldData.selectMessage}
             searchMessage={fieldData.searchMessage}
             notFoundMessage={fieldData.notFoundMessage}
+            data-testid={fieldData.testId}
           />
         </FieldWrapper>
       );
-        default:
+    default:
       return null;
   }
 }

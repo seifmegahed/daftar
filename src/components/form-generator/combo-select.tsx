@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/popover";
 
 function ComboSelect({
+  id,
   value,
   onChange = () => {
     return;
@@ -29,14 +30,17 @@ function ComboSelect({
   selectMessage = "Select",
   searchMessage = "Search",
   notFoundMessage = "Not Found",
+  required,
 }: {
+  id?: string;
   value?: string | number;
   onChange?: (value: string | number) => void;
   className?: string;
-  options: { label: string; value: string }[] | string[];
+  options: readonly { label: string; value: string }[] | readonly string[];
   selectMessage?: string;
   searchMessage?: string;
   notFoundMessage?: string;
+  required?: boolean;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -51,9 +55,11 @@ function ComboSelect({
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
+          id={id}
           variant="outline"
           role="combobox"
           aria-expanded={open}
+          aria-required={required}
           className={cn(
             "w-full justify-between",
             className,
@@ -61,7 +67,11 @@ function ComboSelect({
           )}
         >
           <p className="truncate">{valueLabel ? valueLabel : selectMessage}</p>
-          <ChevronsUpDown className="h-3 w-3 shrink-0 text-secondary-foreground opacity-50" />
+          <ChevronsUpDown
+            className="h-3 w-3 shrink-0 text-secondary-foreground opacity-50"
+            aria-hidden
+            aria-label="Open Combo Select"
+          />
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-full p-0" align="start">

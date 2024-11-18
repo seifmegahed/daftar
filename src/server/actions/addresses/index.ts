@@ -62,7 +62,7 @@ export const addNewAddressAction = async (
       ? `/client/${isValid.data.clientId}`
       : `/supplier/${isValid.data.supplierId}`;
   revalidatePath(basePath);
-  redirect(basePath + "/address/");
+  redirect(basePath + "/addresses/");
 };
 
 export const getClientAddressesCountAction = async (

@@ -102,8 +102,8 @@ describe("Address Form", async () => {
           name: "Test",
           addressLine: "Test Address",
           country: "Angola",
-          city: undefined,
-          notes: undefined,
+          city: null,
+          notes: null,
         },
         "client",
       );

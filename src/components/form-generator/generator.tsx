@@ -1,6 +1,6 @@
 "use client";
 
-import type { ControllerRenderProps, UseFormReturn } from "react-hook-form";
+import type { Path, UseFormReturn } from "react-hook-form";
 import type { z } from "zod";
 
 import { Form, FormField } from "@/components/ui/form";
@@ -49,18 +49,12 @@ class FormGenerator<T extends readonly FieldDataType[]> {
         {this.formData.map((fieldData) =>
           fieldData.hidden ? null : (
             <FormField
+              aria-label={fieldData.label}
               key={fieldData.name}
               control={form.control}
-              name={fieldData.name as FormSchema<T>[keyof FormSchema<T>]}
+              name={fieldData.name as Path<FormSchema<T>>}
               render={({ field }) => (
-                <FieldSelector
-                  fieldData={fieldData}
-                  field={
-                    field as ControllerRenderProps<
-                      FormSchema<T>[keyof FormSchema<T>]
-                    >
-                  }
-                />
+                <FieldSelector fieldData={fieldData} field={field} />
               )}
             />
           ),

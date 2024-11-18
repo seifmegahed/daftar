@@ -10,21 +10,37 @@ import { cn } from "@/lib/utils";
 
 function FieldWrapper({
   label,
+  htmlFor,
   children,
   className,
   description,
 }: {
   label: string;
   children: ReactNode;
+  htmlFor?: string;
   className?: string;
-  description?: string;
+  description?: string | ReactNode;
 }) {
   return (
-    <FormItem className={cn("py-2", className)}>
-      <FormLabel className="text-md">{label}</FormLabel>
+    <FormItem
+      className={cn("py-2", className)}
+      aria-label={label + " field"}
+      role="field"
+      aria-describedby={description ? `${htmlFor}-form-item-description` : ""}
+    >
+      <FormLabel htmlFor={htmlFor} className="text-md">
+        {label}
+      </FormLabel>
       {children}
       <FormMessage />
-      <FormDescription className="text-xs">{description}</FormDescription>
+      {description && (
+        <FormDescription
+          id={`${htmlFor}-form-item-description`}
+          className="text-xs"
+        >
+          {description}
+        </FormDescription>
+      )}
     </FormItem>
   );
 }
