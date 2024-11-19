@@ -1,6 +1,6 @@
 {
   "name": "daftar",
-  "description": "An ARP Web App to manage Engineering Business's contracting projects and resources",
+  "description": "An offline (Intranet) application for managing the data of an Engineering firm",
   "version": "0.1.0",
   "private": true,
   "type": "module",

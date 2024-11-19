@@ -9,10 +9,14 @@ import { addNewAddressAction } from "@/server/actions/addresses";
 
 import { countries } from "@/lib/countries";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
-import { emptyToNull, emptyToUndefined } from "@/utils/common";
 import { notesMaxLength } from "@/data/config";
 import { useTranslations } from "next-intl";
-import { FieldType, FormGenerator } from "@/components/form-generator";
+import {
+  FieldType,
+  FormGenerator,
+  emptyToNull,
+  emptyToUndefined,
+} from "@/components/form-generator";
 
 function NewAddressForm({
   id,
@@ -132,13 +136,9 @@ function NewAddressForm({
 
   const onSubmit = async (data: FormSchemaType) => {
     const ref = type === "supplier" ? { supplierId: id } : { clientId: id };
-
     try {
       const response = await addNewAddressAction(
-        {
-          ...data,
-          ...ref,
-        },
+        Object.assign(data, ref),
         type,
       );
       if (!response) return;
@@ -156,10 +156,7 @@ function NewAddressForm({
   };
 
   return (
-    <form
-      onSubmit={form.handleSubmit(onSubmit)}
-      className="flex flex-col gap-4"
-    >
+    <form onSubmit={form.handleSubmit(onSubmit)}>
       <FormWrapperWithSubmit
         title={t("title")}
         description={t("description")}
