@@ -145,7 +145,8 @@ export const loginAction = async (
     httpOnly: true,
     secure: SECURE,
     expires: expiryDate,
-    sameSite: "strict",
+    sameSite: "lax",
+    priority: "high",
   });
   timer.end();
 
