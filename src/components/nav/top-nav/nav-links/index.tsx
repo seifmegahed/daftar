@@ -15,7 +15,7 @@ const protectedRoutes = [
   { name: "Admin", href: "/admin", alt: "/admin" },
 ] as const;
 
-function NavLinks({ admin }: { admin: boolean }) {
+function NavLinks({ admin, onClick }: { admin?: boolean; onClick?: () => void }) {
   const pathname = "/" + usePathname().split("/")[1];
   const t = useTranslations("topnav");
   
@@ -30,6 +30,7 @@ function NavLinks({ admin }: { admin: boolean }) {
         <Link
           key={link.name}
           href={link.href}
+          onClick={onClick}
           className={`transition-colors hover:text-foreground ${selectedIndex === index ? "text-foreground" : "text-muted-foreground"}`}
         >
           {t(link.name)}
