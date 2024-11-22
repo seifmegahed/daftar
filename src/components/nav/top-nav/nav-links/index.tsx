@@ -15,10 +15,16 @@ const protectedRoutes = [
   { name: "Admin", href: "/admin", alt: "/admin" },
 ] as const;
 
-function NavLinks({ admin, onClick }: { admin?: boolean; onClick?: () => void }) {
+function NavLinks({
+  admin,
+  onClick,
+}: {
+  admin?: boolean;
+  onClick?: () => void;
+}) {
   const pathname = "/" + usePathname().split("/")[1];
   const t = useTranslations("topnav");
-  
+
   const data = admin ? [...routes, ...protectedRoutes] : routes;
 
   const selectedIndex = data.findIndex(
@@ -31,7 +37,7 @@ function NavLinks({ admin, onClick }: { admin?: boolean; onClick?: () => void })
           key={link.name}
           href={link.href}
           onClick={onClick}
-          className={`transition-colors hover:text-foreground ${selectedIndex === index ? "text-foreground" : "text-muted-foreground"}`}
+          className={`px-3 transition-colors hover:text-foreground ${selectedIndex === index ? "text-foreground" : "text-muted-foreground"}`}
         >
           {t(link.name)}
         </Link>

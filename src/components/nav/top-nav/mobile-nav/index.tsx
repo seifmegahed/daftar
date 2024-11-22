@@ -27,10 +27,10 @@ function MobileNav({ admin }: { admin: boolean }) {
         </div>
       </SheetTrigger>
       <SheetContent side={direction === "rtl" ? "right" : "left"}>
-        <nav className="grid gap-6 text-lg font-medium">
+        <nav className="grid gap-3 text-lg font-medium">
           <Link
             href="/"
-            className="flex items-center gap-2 text-lg font-semibold"
+            className="flex items-center px-3 text-lg font-semibold"
             onClick={handleClose}
           >
             <BookmarkIcon />
