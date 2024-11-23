@@ -19,7 +19,7 @@ if grep -q "^JWT_SECRET=" "$ENV_FILE"; then
     sed -i '' "s/^JWT_SECRET=.*/JWT_SECRET=$SECRET/" "$ENV_FILE"
 else
     # If JWT_SECRET does not exist, append it to the .env file
-    echo "JWT_SECRET=$SECRET" >> "$ENV_FILE"
+    echo -e "\nJWT_SECRET=$SECRET" >> "$ENV_FILE"
 fi
 
 echo "JWT_SECRET has been updated in $ENV_FILE"
