@@ -7,13 +7,14 @@ type SubmitButtonProps = ButtonProps & {
 };
 
 function SubmitButton(props: SubmitButtonProps) {
+  const { loading, ...rest } = props;
   return (
     <Button
-      {...props}
+      {...rest}
       className={cn(props.className, "w-40")}
       variant={props.variant ?? "outline"}
     >
-      {props.loading ? <Loading className="size-5" /> : props.children}
+      {loading ? <Loading className="size-5" /> : props.children}
     </Button>
   );
 }
