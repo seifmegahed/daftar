@@ -431,6 +431,9 @@ function LogoutButton({ id }: { id: number }) {
       toast.error("An error occurred while logging out");
     }
   }
+
+  return <button onClick={handleLogout}>Logout</button>;
+};
 ```
 
 In this example, the logout server action will return undefined if successful because of the redirect call.
