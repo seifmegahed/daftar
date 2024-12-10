@@ -4,9 +4,8 @@ import type { NextRequest } from "next/server";
 import { verifyToken } from "./lib/jwt";
 
 import createMiddleware from "next-intl/middleware";
-import { routing } from "./i18n/routing";
-
-const locales = ["en", "ar"];
+import { locales, routing } from "./i18n/routing";
+import { env } from "./env";
 
 function getLocaleFromPath(pathname: string): string {
   const parts = pathname.split("/");
@@ -19,12 +18,15 @@ const i18nMiddleware = createMiddleware(routing);
 async function authMiddleware(request: NextRequest) {
   const locale = getLocaleFromPath(request.nextUrl.pathname);
 
+  const loginRedirect = env.LOGIN_REWRITE
+    ? NextResponse.rewrite(new URL(`/${locale}/login`, request.url))
+    : NextResponse.redirect(new URL(`/${locale}/login`, request.url));
+
   const token = request.cookies.get("token");
-  if (!token) return NextResponse.redirect(new URL("/login", request.url));
+  if (!token) return loginRedirect;
 
   const [decoded, error] = await verifyToken(token.value);
-  if (error !== null)
-    return NextResponse.redirect(new URL("/login", request.url));
+  if (error !== null) return loginRedirect;
 
   // Check for admin-only access
   if (request.nextUrl.pathname.startsWith(`/${locale}/admin`)) {

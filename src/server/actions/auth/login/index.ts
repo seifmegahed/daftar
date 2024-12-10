@@ -42,7 +42,7 @@ const loginErrorLog = errorLogger("Login Action Error:");
 /**
  * Gets the a date in the future by the number of days
  * At exactly 2:00 AM
- * 
+ *
  * @param days number of days in the future
  * @param hour (optional) hour in the future
  * @returns date instance in the future
@@ -90,6 +90,7 @@ const checkAttempts = async ({
 
 export const loginAction = async (
   data: LoginFormType,
+  pathname: string,
 ): Promise<ReturnTuple<number> | undefined> => {
   const errorMessages = await getTranslations("errors.login");
 
@@ -151,5 +152,5 @@ export const loginAction = async (
   timer.end();
 
   const locale = await getLocale();
-  redirect({ locale, href: "/" });
+  redirect({ locale, href: pathname === "/login" ? "/" : pathname });
 };

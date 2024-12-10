@@ -10,6 +10,7 @@ export const env = createEnv({
     POSTGRES_URL: z.string(),
     CACHE_REDIS: z.boolean(),
     SSL: z.boolean(),
+    LOGIN_REWRITE: z.boolean(),
     PERFORMANCE_DEBUG: z.boolean(),
     LOGIN_ATTEMPTS: z.number(),
     LOCK_TIME_HR: z.number(),
@@ -34,6 +35,7 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    LOGIN_REWRITE: process.env.LOGIN_REWRITE === "true",
     JWT_VALIDITY_IN_DAYS: process.env.JWT_VALIDITY_IN_DAYS
       ? isNaN(parseInt(process.env.JWT_VALIDITY_IN_DAYS))
         ? 1

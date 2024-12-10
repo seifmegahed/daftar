@@ -23,6 +23,7 @@ import Loading from "@/components/loading";
 
 import { emptyToUndefined } from "@/utils/common";
 import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/routing";
 
 function LoginForm() {
   const t = useTranslations("login");
@@ -64,9 +65,11 @@ function LoginForm() {
     defaultValues: defaultValues,
   });
 
+  const pathname = usePathname();
+
   const onSubmit = async (data: LoginFormSchemaType) => {
     try {
-      const response = await loginAction(data);
+      const response = await loginAction(data, pathname);
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
