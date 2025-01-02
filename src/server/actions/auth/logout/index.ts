@@ -1,19 +1,22 @@
 "use server";
+
 import { cookies } from "next/headers";
+import { redirect } from "@/i18n/routing";
+import { getLocale } from "next-intl/server";
 
 import { errorLogger } from "@/lib/exceptions";
 
 import type { ReturnTuple } from "@/utils/type-utils";
-import { redirect } from "next/navigation";
 
 const logoutErrorLog = errorLogger("Logout Action Error:");
 
 export const logoutAction = async (): Promise<
   ReturnTuple<boolean> | undefined
 > => {
+  const locale = await getLocale();
   const [, error] = deleteCookie();
   if (error !== null) return [null, error];
-  redirect("/login");
+  redirect({ href: "/login", locale });
 };
 
 const deleteCookie = (): ReturnTuple<boolean> => {
