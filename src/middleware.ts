@@ -18,6 +18,9 @@ const i18nMiddleware = createMiddleware(routing);
 async function authMiddleware(request: NextRequest) {
   const locale = getLocaleFromPath(request.nextUrl.pathname);
 
+  if (request.nextUrl.pathname.startsWith(`/${locale}/login`)) 
+    return NextResponse.next();
+
   const loginRedirect = env.LOGIN_REWRITE
     ? NextResponse.rewrite(new URL(`/${locale}/login`, request.url))
     : NextResponse.redirect(new URL(`/${locale}/login`, request.url));
@@ -44,8 +47,6 @@ async function middleware(request: NextRequest) {
 
   // If the response is a redirect or an error, return it
   if (!response.ok) return response;
-
-  if (request.url.includes("login")) return response;
 
   // Continue with authentication checks for page routes
   return authMiddleware(request);
