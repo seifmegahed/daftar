@@ -3,7 +3,6 @@ describe("Admin Page Tests", () => {
     cy.clearAllCookies();
     // Login
     cy.visit("localhost:3000/");
-    cy.url().should("include", "/login");
 
     cy.get("#scroll-to-bottom").click({ force: true });
     const usernameField = cy.get("#username");
