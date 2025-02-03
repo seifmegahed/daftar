@@ -21,6 +21,9 @@ async function authMiddleware(request: NextRequest) {
   if (request.nextUrl.pathname.startsWith(`/${locale}/login`)) 
     return NextResponse.next();
 
+  if (request.nextUrl.pathname.startsWith(`/${locale}/verify`)) 
+    return NextResponse.next();
+
   const loginRedirect = env.LOGIN_REWRITE
     ? NextResponse.rewrite(new URL(`/${locale}/login`, request.url))
     : NextResponse.redirect(new URL(`/${locale}/login`, request.url));

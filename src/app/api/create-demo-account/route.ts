@@ -6,6 +6,7 @@ import { checkPasswordComplexity } from "@/utils/password-complexity";
 import { z } from "zod";
 import type { ReturnTuple } from "@/utils/type-utils";
 import nodemailer from "nodemailer";
+import { createUserRequestAction } from "@/server/actions/user-requests/create";
 
 const schema = z
   .object({
@@ -70,7 +71,13 @@ export async function POST(req: Request) {
     if (emailExists)
       return new Response("Email already exists", { status: 400 });
 
-    sendEmail(parseResult.data);
+    const [confirmationCode, confirmationCodeError] =
+      await createUserRequestAction(parseResult.data);
+
+    if (confirmationCodeError !== null)
+      return new Response(confirmationCodeError, { status: 400 });
+
+    sendEmail(parseResult.data, confirmationCode);
   } catch (error) {
     console.log(error);
     return new Response("Invalid data", { status: 400 });
@@ -112,8 +119,8 @@ async function checkEmailExists(email: string): Promise<ReturnTuple<boolean>> {
   }
 }
 
-function sendEmail(data: z.infer<typeof schema>) {
-  const { email, username, name } = data;
+function sendEmail(data: z.infer<typeof schema>, confirmationCode: string) {
+  const { name } = data;
   const transporter = nodemailer.createTransport({
     service: env.NODE_MAILER_SERVICE,
     auth: {
@@ -128,12 +135,39 @@ function sendEmail(data: z.infer<typeof schema>) {
     subject: "Welcome to Daftar Demo",
     html: `
     <h1>Hello ${name},</h1>
+    <h3>Welcome to Daftar Demo</h3>
     <br/>
-    <h1>Welcome to Daftar Demo</h1>
+    <p>Please click on the button below to verify you Email.</p>
     <br/>
-    <p>Your username is ${username}, and your email is ${email}</p>
+    <button><a class="button-href" target="_blank" href="${env.SSL ? "https" : "http"}://${env.NEXT_PUBLIC_VERCEL ? "daftar-demo.vercel.app" : "localhost:3000"}/verify/${confirmationCode}">Verify Email</a></button>
     <br/>
     <p>Thank you for signing up, Feel free to explore the app.</p>
+    <br/>
+    <p>Kind Regards,</p>
+    <p>Seif Megahed</p>
+    <a href="mailto:seifmegahed@me.com">seifmegahed@me.com</a>
+    <style>
+      .button-href {
+        text-decoration: none;
+        color: white;
+      }
+      button {
+        background-color: #007bff;
+        border: none;
+        color: white;
+        padding: 10px 20px;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 4px 2px;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+    </style>
     `,
   };
 

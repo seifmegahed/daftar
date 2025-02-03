@@ -13,7 +13,7 @@ function ErrorPage({
 }) {
   const t = useTranslations("error");
   return (
-    <div className="flex h-full w-full flex-col items-center gap-4 text-center text-muted-foreground">
+    <div className="flex h-full w-full flex-col justify-center items-center gap-4 text-center text-muted-foreground">
       <PokeBoi />
       <h1 className="text-2xl font-bold">
         <Balancer>{title ?? t("title")}</Balancer>
