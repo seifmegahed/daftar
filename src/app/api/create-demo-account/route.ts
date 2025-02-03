@@ -120,7 +120,7 @@ async function checkEmailExists(email: string): Promise<ReturnTuple<boolean>> {
 }
 
 function sendEmail(data: z.infer<typeof schema>, confirmationCode: string) {
-  const { name } = data;
+  const { name, email } = data;
   const transporter = nodemailer.createTransport({
     service: env.NODE_MAILER_SERVICE,
     auth: {
@@ -131,7 +131,7 @@ function sendEmail(data: z.infer<typeof schema>, confirmationCode: string) {
 
   const mailOptions = {
     from: "Daftar",
-    to: "seifmegahed@me.com",
+    to: email,
     subject: "Welcome to Daftar Demo",
     html: `
     <h1>Hello ${name},</h1>
