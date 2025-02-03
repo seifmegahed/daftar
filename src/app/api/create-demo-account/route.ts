@@ -35,9 +35,6 @@ const schema = z
   });
 
 export async function POST(req: Request) {
-  // if (!env.NEXT_PUBLIC_VERCEL)
-  //   return new Response("Not Available", { status: 404 });
-
   if (
     !env.NODE_MAILER_USERNAME ||
     !env.NODE_MAILER_PASSWORD ||
@@ -77,12 +74,14 @@ export async function POST(req: Request) {
     if (confirmationCodeError !== null)
       return new Response(confirmationCodeError, { status: 400 });
 
-    sendEmail(parseResult.data, confirmationCode);
+    const [result, error] = await sendEmail(parseResult.data, confirmationCode);
+    if (result === null) return new Response(error, { status: 400 });
+
+    return new Response("ok");
   } catch (error) {
     console.log(error);
     return new Response("Invalid data", { status: 400 });
   }
-  return new Response("ok");
 }
 
 async function checkUsernameExists(
@@ -119,7 +118,10 @@ async function checkEmailExists(email: string): Promise<ReturnTuple<boolean>> {
   }
 }
 
-function sendEmail(data: z.infer<typeof schema>, confirmationCode: string) {
+async function sendEmail(
+  data: z.infer<typeof schema>,
+  confirmationCode: string,
+): Promise<ReturnTuple<boolean>> {
   const { name, email } = data;
   const transporter = nodemailer.createTransport({
     service: env.NODE_MAILER_SERVICE,
@@ -171,11 +173,11 @@ function sendEmail(data: z.infer<typeof schema>, confirmationCode: string) {
     `,
   };
 
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log("Email sent: " + info.response);
-    }
-  });
+  const result = await transporter.sendMail(mailOptions);
+
+  if (result.accepted.length > 0) {
+    return [true, null];
+  } else {
+    return [null, "Email not sent"];
+  }
 }
