@@ -10,6 +10,9 @@ export const env = createEnv({
     POSTGRES_URL: z.string(),
     CACHE_REDIS: z.boolean(),
     SSL: z.boolean(),
+    NODE_MAILER_USERNAME: z.string().optional(),
+    NODE_MAILER_PASSWORD: z.string().optional(),
+    NODE_MAILER_SERVICE: z.string().optional(),
     LOGIN_REWRITE: z.boolean(),
     PERFORMANCE_DEBUG: z.boolean(),
     LOGIN_ATTEMPTS: z.number(),
@@ -35,6 +38,10 @@ export const env = createEnv({
    * middlewares) or client-side so we need to destruct manually.
    */
   runtimeEnv: {
+    NODE_MAILER_USERNAME: process.env.NODE_MAILER_USERNAME,
+    NODE_MAILER_PASSWORD: process.env.NODE_MAILER_PASSWORD,
+    NODE_MAILER_SERVICE: process.env.NODE_MAILER_SERVICE,
+
     LOGIN_REWRITE: process.env.LOGIN_REWRITE === "true",
     JWT_VALIDITY_IN_DAYS: process.env.JWT_VALIDITY_IN_DAYS
       ? isNaN(parseInt(process.env.JWT_VALIDITY_IN_DAYS))
