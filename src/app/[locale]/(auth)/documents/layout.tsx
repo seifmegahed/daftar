@@ -8,7 +8,7 @@ interface SettingsLayoutProps {
 }
 
 
-export default async function SettingsLayout({
+export default async function DocumentsLayout({
   children,
   params
 }: SettingsLayoutProps) {
