@@ -46,6 +46,7 @@ function ComboSelect({
         <Button
           variant="outline"
           role="combobox"
+          type="button"
           aria-expanded={open}
           className={cn(
             "w-full justify-between",
@@ -67,6 +68,7 @@ function ComboSelect({
                 <CommandItem
                   key={option}
                   value={option}
+                  className="cursor-pointer"
                   onSelect={() => {
                     if (option === value) onChange("");
                     else onChange(option);

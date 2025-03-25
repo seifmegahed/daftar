@@ -58,6 +58,7 @@ function ComboSelect({
           id={id}
           variant="outline"
           role="combobox"
+          type="button"
           aria-expanded={open}
           aria-required={required}
           className={cn(
@@ -89,6 +90,7 @@ function ComboSelect({
                   <CommandItem
                     key={optionValue}
                     value={optionValue}
+                    className="cursor-pointer"
                     onSelect={() => {
                       if (value === optionValue) onChange("");
                       else onChange(optionValue);
