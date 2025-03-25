@@ -21,9 +21,8 @@ import { cn } from "@/lib/utils";
 import FieldWrapper from "./field-wrapper";
 import { FieldType, type FieldDataType } from "./types";
 
-type FieldSchema<T extends FieldDataType> = T["schema"] extends z.ZodType<unknown>
-  ? z.infer<T["schema"]>
-  : never;
+type FieldSchema<T extends FieldDataType> =
+  T["schema"] extends z.ZodType<unknown> ? z.infer<T["schema"]> : never;
 
 interface FieldSelectorProps<T extends FieldDataType> {
   fieldData: T;
@@ -59,7 +58,11 @@ function FieldSelector<T extends FieldDataType>({
                 const value =
                   typeof option === "string" ? option : option.value;
                 return (
-                  <SelectItem key={value + label} value={value + ""}>
+                  <SelectItem
+                    className="cursor-pointer"
+                    key={value + label}
+                    value={value + ""}
+                  >
                     {label}
                   </SelectItem>
                 );
@@ -76,7 +79,11 @@ function FieldSelector<T extends FieldDataType>({
           description={fieldData.description}
           htmlFor={fieldData.name}
         >
-          <Input id={fieldData.name} {...field} data-testid={fieldData.testId} />
+          <Input
+            id={fieldData.name}
+            {...field}
+            data-testid={fieldData.testId}
+          />
         </FieldWrapper>
       );
     case FieldType.Number:
@@ -87,7 +94,12 @@ function FieldSelector<T extends FieldDataType>({
           description={fieldData.description}
           htmlFor={fieldData.name}
         >
-          <Input {...field} type="number" id={fieldData.name} data-testid={fieldData.testId} />
+          <Input
+            {...field}
+            type="number"
+            id={fieldData.name}
+            data-testid={fieldData.testId}
+          />
         </FieldWrapper>
       );
     case FieldType.Textarea:
