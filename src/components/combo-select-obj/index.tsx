@@ -44,7 +44,7 @@ function ComboSelect({
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
+      <PopoverTrigger>
         <Button
           variant="outline"
           role="combobox"
@@ -52,10 +52,10 @@ function ComboSelect({
           className={cn(
             "w-full justify-between",
             className,
-            value ? "" : "text-muted-foreground",
+            value ?? "text-muted-foreground",
           )}
         >
-          <p className="truncate">{valueLabel ? valueLabel : selectMessage}</p>
+          <p className="truncate">{valueLabel ?? selectMessage}</p>
           <ChevronsUpDown className="h-3 w-3 shrink-0 opacity-50 text-secondary-foreground" />
         </Button>
       </PopoverTrigger>

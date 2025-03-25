@@ -66,7 +66,7 @@ function ComboSelect({
             value ? "" : "text-muted-foreground",
           )}
         >
-          <p className="truncate">{valueLabel ? valueLabel : selectMessage}</p>
+          <p className="truncate">{valueLabel ?? selectMessage}</p>
           <ChevronsUpDown
             className="h-3 w-3 shrink-0 text-secondary-foreground opacity-50"
             aria-hidden

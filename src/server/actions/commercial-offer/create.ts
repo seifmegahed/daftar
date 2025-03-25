@@ -78,17 +78,40 @@ export const createCommercialOffer = async (
 const parseFormData = (
   formData: FormData,
 ): ReturnTuple<GenerateCommercialOfferArgs> => {
-  const projectId = parseInt(formData.get("id")?.toString() ?? "");
+  // I think utilizing zod here would be a good idea
+  if (!formData.has("id")) return [null, "Missing id"];
+  const projectIdRaw = formData.get("id");
+  if (projectIdRaw === null) return [null, "Missing id"];
+  if (typeof projectIdRaw !== "string") return [null, "Invalid id"];
+  const projectId = parseInt(projectIdRaw);
   if (isNaN(projectId)) return [null, "Invalid id"];
-  const companyName = formData.get("companyName")?.toString();
-  const companyAddress = formData.get("companyAddress")?.toString();
-  const companyCountry = formData.get("companyCountry")?.toString();
-  const companyPhoneNmA = formData.get("companyPhoneNmA")?.toString();
-  const companyPhoneNmB = formData.get("companyPhoneNmB")?.toString();
-  const companyEmail = formData.get("companyEmail")?.toString();
-  const offerValidityInDays = formData.get("offerValidityInDays")?.toString();
-  const advancePercentage = formData.get("advancePercentage")?.toString();
-  const deliveryPeriod = formData.get("deliveryPeriod")?.toString();
+  const companyName = (
+    formData.get("companyName") as string | null
+  )?.toString();
+  const companyAddress = (
+    formData.get("companyAddress") as string | null
+  )?.toString();
+  const companyCountry = (
+    formData.get("companyCountry") as string | null
+  )?.toString();
+  const companyPhoneNmA = (
+    formData.get("companyPhoneNmA") as string | null
+  )?.toString();
+  const companyPhoneNmB = (
+    formData.get("companyPhoneNmB") as string | null
+  )?.toString();
+  const companyEmail = (
+    formData.get("companyEmail") as string | null
+  )?.toString();
+  const offerValidityInDays = (
+    formData.get("offerValidityInDays") as string | null
+  )?.toString();
+  const advancePercentage = (
+    formData.get("advancePercentage") as string | null
+  )?.toString();
+  const deliveryPeriod = (
+    formData.get("deliveryPeriod") as string | null
+  )?.toString();
   if (advancePercentage && isNaN(parseInt(advancePercentage)))
     return [null, "Invalid advance percentage"];
   if (offerValidityInDays && isNaN(parseInt(offerValidityInDays)))

@@ -53,7 +53,7 @@ function ComboSelect({
             value ? "" : "text-muted-foreground",
           )}
         >
-          <p className="truncate">{value ? value : selectMessage}</p>
+          <p className="truncate">{value ?? selectMessage}</p>
           <ChevronsUpDown className="h-3 w-3 shrink-0 text-secondary-foreground opacity-50" />
         </Button>
       </PopoverTrigger>

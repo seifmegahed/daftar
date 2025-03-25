@@ -113,11 +113,7 @@ function DeleteForm({
                 </p>
                 <FormMessage />
                 <FormDescription>
-                  {FormInfo ? (
-                    FormInfo
-                  ) : (
-                    <DeleteFormInfo type={localizedType} />
-                  )}
+                  {FormInfo ?? <DeleteFormInfo type={localizedType} />}
                 </FormDescription>
               </FormItem>
             )}
