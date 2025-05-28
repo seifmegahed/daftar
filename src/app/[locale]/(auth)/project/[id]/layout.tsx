@@ -1,7 +1,7 @@
 import PageLayout from "@/components/page-layout";
 import { setLocale } from "@/i18n/set-locale";
 
-import { hasAccessToPrivateDataAction } from "@/server/actions/users";
+// import { hasAccessToPrivateDataAction } from "@/server/actions/users";
 import { getTranslations } from "next-intl/server";
 const basePath = (id: string) => "/project/" + id;
 
@@ -17,7 +17,7 @@ export default async function ProjectLayout({
   setLocale(params.locale);
 
   const t = await getTranslations("project.layout");
-  const [userAccess] = await hasAccessToPrivateDataAction();
+  // const [userAccess] = await hasAccessToPrivateDataAction();
 
   const sidebarNavItemsGenerator = (id: string) => [
     {
@@ -28,34 +28,34 @@ export default async function ProjectLayout({
       title: t("edit"),
       href: basePath(id) + "/edit",
     },
-    {
-      title: t("sale-items"),
-      href: basePath(id) + "/sale-items",
-      hidden: !userAccess,
-    },
-    {
-      title: t("purchase-items"),
-      href: basePath(id) + "/purchase-items",
-      hidden: !userAccess,
-    },
+    // {
+    //   title: t("sale-items"),
+    //   href: basePath(id) + "/sale-items",
+    //   hidden: !userAccess,
+    // },
+    // {
+    //   title: t("purchase-items"),
+    //   href: basePath(id) + "/purchase-items",
+    //   hidden: !userAccess,
+    // },
     {
       title: t("documents"),
       href: basePath(id) + "/documents",
     },
-    {
-      title: t("commercial-offer"),
-      href: basePath(id) + "/commercial-offer",
-      hidden: !userAccess,
-    },
-    {
-      title: t("new-purchase-item"),
-      href: basePath(id) + "/new-purchase-item",
-    },
-    {
-      title: t("new-sale-item"),
-      href: basePath(id) + "/new-sale-item",
-      hidden: !userAccess,
-    },
+    // {
+    //   title: t("commercial-offer"),
+    //   href: basePath(id) + "/commercial-offer",
+    //   hidden: !userAccess,
+    // },
+    // {
+    //   title: t("new-purchase-item"),
+    //   href: basePath(id) + "/new-purchase-item",
+    // },
+    // {
+    //   title: t("new-sale-item"),
+    //   href: basePath(id) + "/new-sale-item",
+    //   hidden: !userAccess,
+    // },
     {
       title: t("new-document"),
       href: basePath(id) + "/new-document",
