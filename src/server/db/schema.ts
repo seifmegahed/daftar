@@ -23,3 +23,11 @@ export {
   documentRelationsTable,
   documentRelationsRelations,
 } from "./tables/document-relation/schema";
+
+export { tagTable } from "./tables/tag/schema";
+
+export { itemTagTable, itemTagRelations } from "./tables/item-tag/schema";
+export {
+  supplierTagTable,
+  supplierTagRelations,
+} from "./tables/supplier-tag/schema";
