@@ -158,6 +158,12 @@ type UserDataType = {
 };
 
 export interface GetSupplierType extends SelectSupplierType {
+  tags: {
+    tag: {
+      id: number;
+      name: string;
+    };
+  }[];
   primaryAddress: AddressDataType | null;
   primaryContact: ContactDataType | null;
   creator: UserDataType;
@@ -174,6 +180,16 @@ export const getSupplierFullById = async (
     const supplier = await db.query.suppliersTable.findFirst({
       where: (supplier, { eq }) => eq(supplier.id, id),
       with: {
+        tags: {
+          with: {
+            tag: {
+              columns: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         primaryContact: {
           columns: {
             id: true,

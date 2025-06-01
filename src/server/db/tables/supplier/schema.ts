@@ -16,6 +16,7 @@ import {
   addressesTable,
   contactsTable,
   documentRelationsTable,
+  supplierTagTable,
 } from "@/server/db/schema";
 import { notesMaxLength } from "@/data/config";
 
@@ -55,6 +56,7 @@ export const suppliersTable = pgTable(
 );
 
 export const supplierRelations = relations(suppliersTable, ({ many, one }) => ({
+  tags: many(supplierTagTable),
   contacts: many(contactsTable),
   addresses: many(addressesTable),
   documents: many(documentRelationsTable),
