@@ -21,7 +21,7 @@ export const getTagsAction = async (): Promise<ReturnTuple<Tag[]>> => {
 
 export const getTagSuggestionsAction = async (
   searchTerm: string,
-): Promise<ReturnTuple<Tag[]>> => {
+): Promise<ReturnTuple<string[]>> => {
   const [result, error] = await getTagSuggestions(searchTerm);
 
   if (error !== null) {
@@ -29,5 +29,5 @@ export const getTagSuggestionsAction = async (
     return [null, error];
   }
 
-  return [result, null];
+  return [result.map((tag) => tag.name), null];
 };

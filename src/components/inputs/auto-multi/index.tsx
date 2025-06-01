@@ -2,16 +2,17 @@ import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import React from "react";
-import { getTagSuggestionsAction } from "@/server/actions/tags/read";
 import Loading from "@/components/loading";
+import type { ReturnTuple } from "@/utils/type-utils";
 
 export const AutoMultiInput = React.forwardRef<
   HTMLInputElement,
   {
     value: string[];
     onChange: (value: string[]) => void;
+    getSuggestions: (searchTerm: string) => Promise<ReturnTuple<string[]>>;
   }
->(({ value, onChange }, ref) => {
+>(({ value, onChange, getSuggestions }, ref) => {
   const [inputValue, setInputValue] = useState("");
   const [popoverTop, setPopoverTop] = useState(false);
   const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -43,14 +44,14 @@ export const AutoMultiInput = React.forwardRef<
         }
 
         setLoading(true);
-        const [data, error] = await getTagSuggestionsAction(trimmed);
+        const [data, error] = await getSuggestions(trimmed);
         setLoading(false);
 
         if (error !== null) {
           console.error("Error fetching suggestions:", error);
           return;
         }
-        setSuggestions(data.map((tag) => tag.name));
+        setSuggestions(data || []);
         setSelectedIndex(-1);
       })().catch((error) => {
         console.error("Error in tag suggestions effect:", error);
@@ -60,7 +61,7 @@ export const AutoMultiInput = React.forwardRef<
     return () => {
       if (debounceRef.current) clearTimeout(debounceRef.current);
     };
-  }, [inputValue]);
+  }, [inputValue, getSuggestions]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "," || e.key === " ") {

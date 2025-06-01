@@ -1,6 +1,7 @@
 import React from "react";
 import { X } from "lucide-react";
 import { AutoMultiInput } from "../auto-multi";
+import { getTagSuggestionsAction } from "@/server/actions/tags/read";
 
 export const TagsInput = React.forwardRef<
   HTMLInputElement,
@@ -24,7 +25,12 @@ export const TagsInput = React.forwardRef<
           />
         ))}
       </div>
-      <AutoMultiInput value={value} onChange={onChange} ref={ref} />
+      <AutoMultiInput
+        value={value}
+        onChange={onChange}
+        ref={ref}
+        getSuggestions={getTagSuggestionsAction}
+      />
     </div>
   );
 });
