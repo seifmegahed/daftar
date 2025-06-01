@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
-import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { getTagSuggestionsAction } from "@/server/actions/tags/read";
+import Loading from "@/components/loading";
 
 export const AutoMultiInput = React.forwardRef<
   HTMLInputElement,
@@ -13,7 +14,9 @@ export const AutoMultiInput = React.forwardRef<
 >(({ value, onChange }, ref) => {
   const [inputValue, setInputValue] = useState("");
   const [popoverTop, setPopoverTop] = useState(false);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
   const [selectedIndex, setSelectedIndex] = useState(-1);
+  const [loading, setLoading] = useState(false);
 
   const innerInputRef = useRef<HTMLInputElement>(null);
 
@@ -26,8 +29,38 @@ export const AutoMultiInput = React.forwardRef<
     }
   }, [ref]);
 
-  const handleRemoveTag = (tag: string) =>
-    onChange(value.filter((t) => t !== tag));
+  const debounceRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(() => {
+      (async () => {
+        const trimmed = inputValue.trim();
+        if (!trimmed) {
+          setSuggestions([]);
+          return;
+        }
+
+        setLoading(true);
+        const [data, error] = await getTagSuggestionsAction(trimmed);
+        setLoading(false);
+
+        if (error !== null) {
+          console.error("Error fetching suggestions:", error);
+          return;
+        }
+        setSuggestions(data.map((tag) => tag.name));
+        setSelectedIndex(-1);
+      })().catch((error) => {
+        console.error("Error in tag suggestions effect:", error);
+      });
+    }, 300);
+
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
+  }, [inputValue]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "," || e.key === " ") {
@@ -39,25 +72,34 @@ export const AutoMultiInput = React.forwardRef<
     if (e.key === "ArrowDown" || e.key === "ArrowUp") {
       e.preventDefault();
       setSelectedIndex((prev) => {
-        const newIndex =
-          e.key === "ArrowDown"
-            ? Math.min(prev + 1, value.length - 1)
-            : Math.max(prev - 1, -1);
-        return newIndex;
+        const lastIndex = suggestions.length - 1;
+
+        if (prev === -1) {
+          // First press → decide starting point
+          return popoverTop
+            ? lastIndex // Start from end if popover is on top
+            : 0; // Start from beginning if popover is on bottom
+        }
+
+        // Normal navigation
+        if (e.key === "ArrowDown") {
+          return Math.min(prev + 1, lastIndex);
+        } else {
+          return Math.max(prev - 1, 0);
+        }
       });
       return;
     }
 
     if (e.key === "Enter") {
       e.preventDefault();
-      if (selectedIndex === -1) {
+      if (selectedIndex === -1 || selectedIndex === suggestions.length) {
         addValue(inputValue);
         return;
       }
-      const selectedValue = value[selectedIndex];
+      const selectedValue = suggestions[selectedIndex];
       if (!selectedValue) return; // Prevent adding undefined values
       addValue(selectedValue);
-      setInputValue("");
       return;
     }
   };
@@ -66,11 +108,10 @@ export const AutoMultiInput = React.forwardRef<
     const trimmedValue = newValue.trim();
     if (trimmedValue && !value.includes(trimmedValue)) {
       onChange([...value, trimmedValue]);
-      setInputValue("");
-    } else {
-      // If the tag already exists, just clear the input
-      setInputValue("");
     }
+    setInputValue("");
+    setSuggestions([]);
+    setSelectedIndex(-1);
   };
 
   useEffect(() => {
@@ -95,18 +136,13 @@ export const AutoMultiInput = React.forwardRef<
 
   return (
     <div className="flex flex-wrap gap-2">
-      <div className="flex flex-wrap gap-2">
-        {value.map((tag) => (
-          <RemovableTag
-            key={tag}
-            tag={tag}
-            onRemove={() => handleRemoveTag(tag)}
-          />
-        ))}
-      </div>
       <Input
         onKeyDown={handleKeyDown}
-        value={selectedIndex === -1 ? inputValue : value[selectedIndex]}
+        value={
+          selectedIndex === -1 || selectedIndex === suggestions.length
+            ? inputValue
+            : suggestions[selectedIndex]
+        }
         onChange={(e) => {
           setInputValue(e.target.value);
           setSelectedIndex(-1);
@@ -115,19 +151,20 @@ export const AutoMultiInput = React.forwardRef<
       />
       <AutocompleteBox
         anchorTop={popoverTop}
-        open={!!inputValue && !!value.length}
+        open={!!inputValue && !!suggestions.length}
         onHover={() => setSelectedIndex(-1)}
+        loading={loading}
       >
-        {value.map((tag, index) => (
+        {suggestions.map((option, index) => (
           <div
             className={cn(
               "flex cursor-pointer items-center gap-2 border-b border-muted p-3 last:border-none hover:bg-muted-foreground/20",
               index === selectedIndex && "bg-muted-foreground/20",
             )}
-            key={tag}
-            onClick={() => addValue(tag)}
+            key={option}
+            onClick={() => addValue(option)}
           >
-            <span className="text-xs text-muted-foreground">{tag}</span>
+            <span className="text-xs text-muted-foreground">{option}</span>
           </div>
         ))}
       </AutocompleteBox>
@@ -137,37 +174,18 @@ export const AutoMultiInput = React.forwardRef<
 
 AutoMultiInput.displayName = "AutoMultiInput";
 
-const RemovableTag = ({
-  tag,
-  onRemove,
-}: {
-  tag: string;
-  onRemove: () => void;
-}) => {
-  return (
-    <div className="flex items-center gap-2 rounded-lg bg-muted px-3 py-1.5">
-      <span className="text-xs font-medium">{tag}</span>
-      <button
-        type="button"
-        className="text-muted-foreground hover:text-foreground"
-        onClick={onRemove}
-      >
-        <X className="h-3 w-3" />
-      </button>
-    </div>
-  );
-};
-
 const AutocompleteBox = ({
   children,
   anchorTop,
   open = false,
   onHover,
+  loading,
 }: {
   children: React.ReactNode;
   anchorTop?: boolean;
   open?: boolean;
   onHover?: () => void;
+  loading?: boolean;
 }) => {
   return (
     <div className="relative w-full" onMouseOver={onHover}>
@@ -178,7 +196,13 @@ const AutocompleteBox = ({
           open ? "block" : "hidden",
         )}
       >
-        <div className="flex flex-col">{children}</div>
+        {loading ? (
+          <div className="p-4">
+            <Loading className="h-5 w-5" />
+          </div>
+        ) : (
+          <div className="flex flex-col">{children}</div>
+        )}
       </div>
     </div>
   );

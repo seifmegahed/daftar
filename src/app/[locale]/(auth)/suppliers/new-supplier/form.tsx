@@ -15,8 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { AutoMultiInput } from "@/components/inputs/auto-multi";
 import ComboSelect from "@/components/combo-select";
+import { TagsInput } from "@/components/inputs/tags-input";
 
 import { toast } from "sonner";
 import { addSupplierAction } from "@/server/actions/suppliers/create";
@@ -246,6 +246,7 @@ function NewSupplierForm() {
           email: data.email,
           notes: data.contactNotes,
         },
+        data.tags
       );
       if (!response) return;
       const [, error] = response;
@@ -307,11 +308,11 @@ function NewSupplierForm() {
               <FormItem>
                 <FormLabel>{"Tags"}</FormLabel>
                 <FormControl>
-                  <AutoMultiInput {...field} />
+                  <TagsInput {...field} />
                 </FormControl>
                 <FormDescription>
                   {
-                    "Add tags to categorize the supplier. Press Enter, comma, or space to add a tag."
+                    "Add tags to categorize the supplier. type a comma, press space, or select from the suggestions to add a tag."
                   }
                 </FormDescription>
                 <FormMessage />

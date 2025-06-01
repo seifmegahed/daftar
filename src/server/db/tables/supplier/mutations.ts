@@ -1,10 +1,12 @@
 import { db } from "@/server/db";
-import { eq } from "drizzle-orm";
+import { eq, inArray } from "drizzle-orm";
 import {
   suppliersTable,
   documentRelationsTable,
   addressesTable,
   contactsTable,
+  tagTable,
+  supplierTagTable,
 } from "@/server/db/schema";
 
 import { checkUniqueConstraintError, errorLogger } from "@/lib/exceptions";
@@ -28,23 +30,24 @@ export const insertNewSupplier = async (
   supplierData: InsertSupplierType,
   addressData: InsertAddressType,
   contactData: InsertContactType,
+  tags: string[],
 ): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.insert;
   try {
     const supplier = await db.transaction(async (tx) => {
-      const [supplier] = await tx
+      const [insertedSupplier] = await tx
         .insert(suppliersTable)
         .values(supplierData)
         .returning();
 
-      if (!supplier) {
+      if (!insertedSupplier) {
         tx.rollback();
         return;
       }
 
       const [address] = await tx
         .insert(addressesTable)
-        .values({ ...addressData, supplierId: supplier.id })
+        .values({ ...addressData, supplierId: insertedSupplier.id })
         .returning();
 
       if (!address) {
@@ -54,7 +57,7 @@ export const insertNewSupplier = async (
 
       const [contact] = await tx
         .insert(contactsTable)
-        .values({ ...contactData, supplierId: supplier.id })
+        .values({ ...contactData, supplierId: insertedSupplier.id })
         .returning();
 
       if (!contact) {
@@ -68,10 +71,44 @@ export const insertNewSupplier = async (
           primaryAddressId: address.id,
           primaryContactId: contact.id,
         })
-        .where(eq(suppliersTable.id, supplier.id))
+        .where(eq(suppliersTable.id, insertedSupplier.id))
         .returning();
 
       if (!updatedSupplier) {
+        tx.rollback();
+        return;
+      }
+
+      const existingTags = await tx
+        .select()
+        .from(tagTable)
+        .where(inArray(tagTable.name, tags));
+
+      // Filter to get new tags
+      const newTags = tags.filter(
+        (tag) =>
+          !existingTags.some((existingTag) => existingTag.name === tag),
+      );
+
+      // Insert new tags
+      const newInsertedTags = await tx
+        .insert(tagTable)
+        .values(newTags.map((tag) => ({ name: tag })))
+        .returning();
+
+      // Combine existing and new tags and create supplier-tag objects
+      const supplierTags = [...existingTags, ...newInsertedTags].map((tag) => ({
+        supplierId: updatedSupplier.id,
+        tagId: tag.id,
+      }));
+
+      // Insert supplier-tag objects
+      const result = await tx
+        .insert(supplierTagTable)
+        .values(supplierTags)
+        .returning();
+
+      if (!result[0]) {
         tx.rollback();
         return;
       }

@@ -4,6 +4,8 @@ import { supplierTagTable } from "./schema";
 import { inArray } from "drizzle-orm";
 
 import type { ReturnTuple } from "@/utils/type-utils";
+import type { PgTransaction } from "drizzle-orm/pg-core";
+import type { PostgresJsQueryResultHKT } from "drizzle-orm/postgres-js";
 
 type SupplierTagType = {
   id: number;

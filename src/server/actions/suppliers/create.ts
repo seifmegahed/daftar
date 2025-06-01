@@ -12,7 +12,7 @@ import { insertAddressSchemaRaw } from "@/server/db/tables/address/schema";
 
 import { errorLogger } from "@/lib/exceptions";
 
-import type { z } from "zod";
+import { z } from "zod";
 import type { ReturnTuple } from "@/utils/type-utils";
 
 const suppliersErrorLog = errorLogger("Supplier Create Action Error:");
@@ -45,6 +45,7 @@ export const addSupplierAction = async (
   clientData: AddSupplierFormType,
   addressData: AddSupplierAddressType,
   contactData: AddSupplierContactType,
+  tags: string[],
 ): Promise<ReturnTuple<number> | undefined> => {
   const isSupplierValid = addSupplierSchema.safeParse(clientData);
   if (isSupplierValid.error) {
@@ -61,6 +62,12 @@ export const addSupplierAction = async (
   const isContactValid = addClientContactSchema.safeParse(contactData);
   if (isContactValid.error) {
     suppliersErrorLog(isContactValid.error);
+    return [null, "Invalid data"];
+  }
+
+  const isTagsValid = z.array(z.string().min(1)).min(1).safeParse(tags);
+  if (isTagsValid.error) {
+    suppliersErrorLog(isTagsValid.error);
     return [null, "Invalid data"];
   }
 
@@ -91,6 +98,7 @@ export const addSupplierAction = async (
       notes: contactData.notes,
       createdBy: userId,
     },
+    tags,
   );
   if (supplierInsertError !== null) return [null, supplierInsertError];
 
