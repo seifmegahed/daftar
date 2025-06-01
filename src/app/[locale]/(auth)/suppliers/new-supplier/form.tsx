@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { AutoMultiInput } from "@/components/inputs/auto-multi";
 import ComboSelect from "@/components/combo-select";
 
 import { toast } from "sonner";
@@ -49,6 +50,10 @@ function NewSupplierForm() {
             message: t("schema.field-max-length", { maxLength: 64 }),
           }),
       ),
+      tags: z
+        .array(z.string().min(1))
+        .nonempty()
+        .min(1, { message: "At least one tag is required" }),
       registrationNumber: z.preprocess(
         emptyToUndefined,
         z
@@ -196,6 +201,7 @@ function NewSupplierForm() {
   const defaultValues = {
     name: "",
     field: "",
+    tags: [],
     registrationNumber: "",
     website: "",
     notes: "",
@@ -289,6 +295,24 @@ function NewSupplierForm() {
                 </FormControl>
                 <FormDescription>
                   {t("field-field-description")}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{"Tags"}</FormLabel>
+                <FormControl>
+                  <AutoMultiInput {...field} />
+                </FormControl>
+                <FormDescription>
+                  {
+                    "Add tags to categorize the supplier. Press Enter, comma, or space to add a tag."
+                  }
                 </FormDescription>
                 <FormMessage />
               </FormItem>
