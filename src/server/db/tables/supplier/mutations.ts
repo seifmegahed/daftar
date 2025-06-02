@@ -90,6 +90,26 @@ export const insertNewSupplier = async (
           !existingTags.some((existingTag) => existingTag.name === tag),
       );
 
+      if (newTags.length === 0) {
+        // If no new tags, just create supplier-tag relations with existing tags
+        const supplierTags = existingTags.map((tag) => ({
+          supplierId: updatedSupplier.id,
+          tagId: tag.id,
+        }));
+
+        const result = await tx
+          .insert(supplierTagTable)
+          .values(supplierTags)
+          .returning();
+
+        if (!result[0]) {
+          tx.rollback();
+          return;
+        }
+
+        return updatedSupplier;
+      }
+      
       // Insert new tags
       const newInsertedTags = await tx
         .insert(tagTable)

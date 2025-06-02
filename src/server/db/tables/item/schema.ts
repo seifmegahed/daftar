@@ -10,7 +10,7 @@ import { relations, sql } from "drizzle-orm";
 import type { z } from "zod";
 import { createInsertSchema, createSelectSchema } from "drizzle-zod";
 
-import { usersTable, documentRelationsTable } from "@/server/db/schema";
+import { usersTable, documentRelationsTable, itemTagTable } from "@/server/db/schema";
 import { notesMaxLength } from "@/data/config";
 
 export const itemsTable = pgTable(
@@ -46,6 +46,7 @@ export const itemsTable = pgTable(
 
 export const itemRelations = relations(itemsTable, ({ one, many }) => ({
   documents: many(documentRelationsTable),
+  tags: many(itemTagTable),
   creator: one(usersTable, {
     fields: [itemsTable.createdBy],
     references: [usersTable.id],

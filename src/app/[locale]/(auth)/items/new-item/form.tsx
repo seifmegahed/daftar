@@ -23,6 +23,7 @@ import { notesMaxLength } from "@/data/config";
 import { FormWrapperWithSubmit } from "@/components/form-wrapper";
 import { emptyToUndefined } from "@/utils/common";
 import { useTranslations } from "next-intl";
+import { TagsInput } from "@/components/inputs/tags-input";
 
 function NewItemForm() {
   const t = useTranslations("items.new-item-page");
@@ -41,6 +42,10 @@ function NewItemForm() {
         .string({ required_error: t("schema.type-required") })
         .max(64, { message: t("schema.type-max-length", { maxLength: 64 }) }),
     ),
+    tags: z
+      .array(z.string().min(1))
+      .nonempty()
+      .min(1, { message: "At least one tag is required" }),
     description: z.preprocess(
       emptyToUndefined,
       z
@@ -79,9 +84,10 @@ function NewItemForm() {
 
   type ItemFormSchemaType = z.infer<typeof schema>;
 
-  const defaultValues: ItemFormSchemaType = {
+  const defaultValues = {
     name: "",
     type: "",
+    tags: [],
     description: "",
     mpn: "",
     make: "",
@@ -95,7 +101,17 @@ function NewItemForm() {
 
   const onSubmit = async (data: ItemFormSchemaType) => {
     try {
-      const response = await addItemAction(data);
+      const response = await addItemAction(
+        {
+          name: data.name,
+          type: data.type,
+          description: data.description,
+          mpn: data.mpn,
+          make: data.make,
+          notes: data.notes,
+        },
+        data.tags,
+      );
       if (!response) return;
       const [, error] = response;
       if (error !== null) {
@@ -147,6 +163,24 @@ function NewItemForm() {
                 </FormControl>
                 <FormDescription>
                   {t("form.type-field-description")}
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="tags"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>{"Tags *"}</FormLabel>
+                <FormControl>
+                  <TagsInput {...field} />
+                </FormControl>
+                <FormDescription>
+                  {
+                    "Add tags to categorize the item. type a comma, press space, or select from the suggestions to add a tag."
+                  }
                 </FormDescription>
                 <FormMessage />
               </FormItem>
