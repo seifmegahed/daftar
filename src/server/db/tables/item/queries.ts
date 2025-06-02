@@ -101,6 +101,7 @@ type BriefUserType = {
 };
 
 export type GetItemDetailType = SelectItemType & {
+  tags: { tag: { id: number; name: string } }[];
   creator: BriefUserType;
   updater: BriefUserType | null;
 };
@@ -115,6 +116,16 @@ export const getItemDetail = async (
     const item = await db.query.itemsTable.findFirst({
       where: (item, { eq }) => eq(item.id, id),
       with: {
+        tags: {
+          with: {
+            tag: {
+              columns: {
+                id: true,
+                name: true,
+              },
+            },
+          },
+        },
         creator: {
           columns: {
             id: true,

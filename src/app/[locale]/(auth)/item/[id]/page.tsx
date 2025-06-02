@@ -6,6 +6,7 @@ import Section from "@/components/info-section";
 import { getItemDetailsAction } from "@/server/actions/items/read";
 import { setLocale } from "@/i18n/set-locale";
 import { getTranslations } from "next-intl/server";
+import { TagsSection } from "@/components/tags-section";
 
 async function ItemPage({
   params,
@@ -28,12 +29,23 @@ async function ItemPage({
     { label: t("general-info-section.make"), value: item.make },
   ];
 
+  const tags = item.tags.map((itemTag) => ({
+    name: itemTag.tag.name,
+    id: itemTag.tag.id,
+  }));
+
   return (
-    <InfoPageWrapper title={item.name} subtitle={t("subtitle", { itemName: item.name })}>
+    <InfoPageWrapper
+      title={item.name}
+      subtitle={t("subtitle", { itemName: item.name })}
+    >
       <Section title={t("general-info")}>
         {infoData.map(({ label, value }) => (
           <DataDisplayUnit key={value} label={label} values={[value]} />
         ))}
+      </Section>
+      <Section title={"Tags"}>
+        <TagsSection tags={tags} />
       </Section>
       <Section title={t("other-info")}>
         <UserInfoSection data={item} />
