@@ -2,10 +2,12 @@ import InfoPageWrapper from "@/components/info-page-wrapper";
 import NotesForm from "@/components/common-forms/update-notes-form";
 import RegistrationNumberForm from "@/components/common-forms/update-registration-form";
 import WebsiteForm from "@/components/common-forms/update-website-form";
+import UpdateTagsForm from "@/components/common-forms/update-tag-form";
 import { getCurrentUserAction } from "@/server/actions/users";
 import {
   updateSupplierNotesAction,
   updateSupplierRegistrationNumberAction,
+  updateSupplierTagsAction,
   updateSupplierWebsiteAction,
 } from "@/server/actions/suppliers/update";
 import { getSupplierFullByIdAction } from "@/server/actions/suppliers/read";
@@ -50,12 +52,19 @@ async function EditSupplierPage({
       </>
     ) : undefined;
 
+  const tags = supplier.tags.map((supplierTag) => supplierTag.tag.name) ?? [];
+
   return (
     <InfoPageWrapper
       title={t("title")}
       subtitle={t("subtitle", { supplierName: supplier.name })}
     >
       <FieldUpdateForm id={supplierId} field={supplier.field ?? ""} />
+      <UpdateTagsForm
+        id={supplierId}
+        tags={tags}
+        onUpdateTags={updateSupplierTagsAction}
+      />
       <RegistrationNumberForm
         id={supplierId}
         updateRegistrationNumberCallbackAction={

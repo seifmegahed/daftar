@@ -10,6 +10,8 @@ import { errorLogger } from "@/lib/exceptions";
 
 import type { z } from "zod";
 import type { ReturnTuple } from "@/utils/type-utils";
+import { itemTagTable } from "@/server/db/schema";
+import { updateEntityTags } from "@/server/db/tables/tag/mutations";
 
 const itemErrorLog = errorLogger("Item Update Action Error:");
 
@@ -169,4 +171,36 @@ export const updateItemNotesAction = async (
   if (error !== null) return [null, error];
   revalidatePath("/item");
   return [returnValue, null];
+};
+
+export const updateItemTags = async (
+  itemId: number,
+  tags: string[],
+): Promise<
+  ReturnTuple<
+    {
+      id?: number;
+      itemId: number;
+      tagId: number;
+    }[]
+  >
+> => {
+  const [, currentUserIdError] = await getCurrentUserIdAction();
+  if (currentUserIdError !== null) return [null, currentUserIdError];
+  
+  const [updatedTags, error] = await updateEntityTags({
+    foreignId: itemId,
+    tags,
+    relationTable: itemTagTable,
+    relationForeignKey: itemTagTable.itemId,
+    relationTagKey: itemTagTable.tagId,
+    createInsertObject: (itemId: number, tagId: number) => ({
+      itemId,
+      tagId,
+    }),
+  });
+
+  if (error !== null) return [null, error];
+  revalidatePath("/item");
+  return [updatedTags, null];
 };

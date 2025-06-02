@@ -3,6 +3,7 @@ import {
   updateItemDescriptionAction,
   updateItemNameAction,
   updateItemNotesAction,
+  updateItemTags,
 } from "@/server/actions/items/update";
 import { deleteItemAction } from "@/server/actions/items/delete";
 import { getCurrentUserAction } from "@/server/actions/users";
@@ -21,6 +22,7 @@ import DeleteForm from "@/components/common-forms/delete-form";
 import ErrorPage from "@/components/error";
 import { setLocale } from "@/i18n/set-locale";
 import { getTranslations } from "next-intl/server";
+import UpdateTagsForm from "@/components/common-forms/update-tag-form";
 
 async function EditItemPage({
   params,
@@ -50,6 +52,8 @@ async function EditItemPage({
       <>{t("delete-form-info", { count: itemReferences })}</>
     ) : undefined;
 
+  const tags = item.tags.map((itemTag) => itemTag.tag.name) ?? [];
+
   return (
     <InfoPageWrapper
       title={t("title")}
@@ -63,6 +67,11 @@ async function EditItemPage({
         name={item.name}
       />
       <TypeForm id={itemId} defaultValue={item.type ?? ""} />
+      <UpdateTagsForm
+        id={itemId}
+        tags={tags ?? ([] as string[])}
+        onUpdateTags={updateItemTags}
+      />
       <DescriptionForm
         id={itemId}
         updateCallbackAction={updateItemDescriptionAction}

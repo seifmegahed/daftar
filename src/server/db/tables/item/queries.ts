@@ -315,8 +315,6 @@ export const getItemProjectsCount = async (
       return projectIds.size;
     });
     timer.end();
-
-    if (!count) return [null, errorMessage];
     return [count, null];
   } catch (error) {
     logError(error);

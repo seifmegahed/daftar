@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 
 import { updateSupplier } from "@/server/db/tables/supplier/mutations";
 import { getCurrentUserAction } from "@/server/actions/users";
+import { supplierTagTable } from "@/server/db/schema";
+import { updateEntityTags } from "@/server/db/tables/tag/mutations";
 
 import type { ReturnTuple } from "@/utils/type-utils";
 
@@ -97,4 +99,34 @@ export const updateSupplierNotesAction = async (
   if (supplierError !== null) return [null, supplierError];
   revalidatePath("/supplier");
   return [supplier, null];
+};
+
+export const updateSupplierTagsAction = async (
+  supplierId: number,
+  tags: string[],
+): Promise<
+  ReturnTuple<{
+    id?: number;
+    supplierId: number;
+    tagId: number;
+  }[]>
+> => {
+  const [, currentUserError] = await getCurrentUserAction();
+  if (currentUserError !== null) return [null, currentUserError];
+
+  const [updatedTags, error] = await updateEntityTags({
+    foreignId: supplierId,
+    tags,
+    relationTable: supplierTagTable,
+    relationForeignKey: supplierTagTable.supplierId,
+    relationTagKey: supplierTagTable.tagId,
+    createInsertObject: (supplierId: number, tagId: number) => ({
+      supplierId,
+      tagId,
+    }),
+  });
+
+  if (error !== null) return [null, error];
+  revalidatePath("/supplier");
+  return [updatedTags, null];
 };

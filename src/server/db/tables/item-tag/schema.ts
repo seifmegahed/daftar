@@ -2,6 +2,7 @@ import { integer, pgTable, serial } from "drizzle-orm/pg-core";
 import { tagTable } from "../tag/schema";
 import { itemsTable } from "../../schema";
 import { relations } from "drizzle-orm";
+import { db } from "../..";
 
 export const itemTagTable = pgTable("item_tag", {
   id: serial("id").primaryKey(),
@@ -23,3 +24,4 @@ export const itemTagRelations = relations(itemTagTable, ({ one }) => ({
     references: [tagTable.id],
   }),
 }));
+
