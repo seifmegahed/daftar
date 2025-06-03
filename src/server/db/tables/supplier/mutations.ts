@@ -86,8 +86,7 @@ export const insertNewSupplier = async (
 
       // Filter to get new tags
       const newTags = tags.filter(
-        (tag) =>
-          !existingTags.some((existingTag) => existingTag.name === tag),
+        (tag) => !existingTags.some((existingTag) => existingTag.name === tag),
       );
 
       if (newTags.length === 0) {
@@ -109,7 +108,7 @@ export const insertNewSupplier = async (
 
         return updatedSupplier;
       }
-      
+
       // Insert new tags
       const newInsertedTags = await tx
         .insert(tagTable)
@@ -181,18 +180,19 @@ export const deleteSupplier = async (
     const supplier = await db.transaction(async (tx) => {
       await tx
         .delete(addressesTable)
-        .where(eq(addressesTable.supplierId, supplierId))
-        .returning();
+        .where(eq(addressesTable.supplierId, supplierId));
 
       await tx
         .delete(contactsTable)
-        .where(eq(contactsTable.supplierId, supplierId))
-        .returning();
+        .where(eq(contactsTable.supplierId, supplierId));
 
       await tx
         .delete(documentRelationsTable)
-        .where(eq(documentRelationsTable.supplierId, supplierId))
-        .returning();
+        .where(eq(documentRelationsTable.supplierId, supplierId));
+
+      await tx
+        .delete(supplierTagTable)
+        .where(eq(supplierTagTable.supplierId, supplierId));
 
       const [supplier] = await tx
         .delete(suppliersTable)

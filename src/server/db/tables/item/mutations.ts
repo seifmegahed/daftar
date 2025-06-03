@@ -49,13 +49,16 @@ export const insertItem = async (
           tagId: tag.id,
         }));
 
-        const result = await tx.insert(itemTagTable).values(itemTags).returning();
+        const result = await tx
+          .insert(itemTagTable)
+          .values(itemTags)
+          .returning();
 
         if (!result[0]) {
           tx.rollback();
           return;
         }
-        
+
         return insertedItem;
       }
 
@@ -63,7 +66,7 @@ export const insertItem = async (
       const newInsertedTags = await tx
         .insert(tagTable)
         .values(newTags.map((tag) => ({ name: tag })))
-        .returning()
+        .returning();
 
       // Combine existing and new tags and create supplier-tag objects
       const itemTags = [...existingTags, ...newInsertedTags].map((tag) => ({
@@ -119,10 +122,18 @@ export const updateItem = async (
 export const deleteItem = async (id: number): Promise<ReturnTuple<number>> => {
   const errorMessage = errorMessages.delete;
   try {
-    const [item] = await db
-      .delete(itemsTable)
-      .where(eq(itemsTable.id, id))
-      .returning();
+    const item = await db.transaction(async (tx) => {
+      await tx.delete(itemTagTable).where(eq(itemTagTable.itemId, id));
+      
+      const [deletedItem] = await tx
+        .delete(itemsTable)
+        .where(eq(itemsTable.id, id))
+        .returning();
+
+      if (!deletedItem) return;
+
+      return deletedItem;
+    });
 
     if (!item) return [null, errorMessage];
 
