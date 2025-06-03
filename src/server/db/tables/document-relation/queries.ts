@@ -228,7 +228,7 @@ export const getClientDocumentsCount = async (
       .limit(1);
     timer.end();
 
-    if (!documents) return [null, errorMessage];
+    if (documents === undefined) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
     logError(error);
@@ -260,7 +260,7 @@ export const getSupplierDocumentsCount = async (
       .limit(1);
     timer.end();
 
-    if (!documents) return [null, errorMessage];
+    if (documents === undefined) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
     logError(error);
@@ -292,7 +292,7 @@ export const getItemDocumentsCount = async (
       .limit(1);
     timer.end();
 
-    if (!documents) return [null, errorMessage];
+    if (documents === undefined) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
     logError(error);
@@ -324,7 +324,7 @@ export const getProjectDocumentsCount = async (
       .limit(1);
     timer.end();
 
-    if (!documents) return [null, errorMessage];
+    if (documents === undefined) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
     logError(error);
@@ -346,7 +346,7 @@ export const getDocumentRelationsCount = async (
       .limit(1);
     timer.end();
 
-    if (!result) return [null, errorMessage];
+    if (result === undefined) return [null, errorMessage];
     return [result.count, null];
   } catch (error) {
     logError(error);
@@ -425,7 +425,7 @@ export const documentProjectsCount = async (
       .limit(1);
     timer.end();
 
-    if (!projects) return [null, errorMessage];
+    if (projects === undefined) return [null, errorMessage];
     return [projects.count, null];
   } catch (error) {
     logError(error);
@@ -499,7 +499,7 @@ export const documentClientsCount = async (
       .limit(1);
     timer.end();
 
-    if (!clients) return [null, errorMessage];
+    if (clients === undefined) return [null, errorMessage];
     return [clients.count, null];
   } catch (error) {
     logError(error);
@@ -577,7 +577,7 @@ export const documentSuppliersCount = async (
       .limit(1);
     timer.end();
 
-    if (!suppliers) return [null, errorMessage];
+    if (suppliers === undefined) return [null, errorMessage];
     return [suppliers.count, null];
   } catch (error) {
     logError(error);
@@ -652,7 +652,7 @@ export const documentItemsCount = async (
       .limit(1);
     timer.end();
 
-    if (!items) return [null, errorMessage];
+    if (items === undefined) return [null, errorMessage];
     return [items.count, null];
   } catch (error) {
     logError(error);

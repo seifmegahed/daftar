@@ -31,7 +31,7 @@ export const getClientContactsCount = async (
       .limit(1);
     timer.end();
 
-    if (!contacts) return [null, errorMessage];
+    if (contacts === undefined) return [null, errorMessage];
     return [contacts.count, null];
   } catch (error) {
     logError(error);
@@ -53,7 +53,7 @@ export const getSupplierContactsCount = async (
       .limit(1);
     timer.end();
 
-    if (!contacts) return [null, errorMessage];
+    if (contacts === undefined) return [null, errorMessage];
     return [contacts.count, null];
   } catch (error) {
     logError(error);

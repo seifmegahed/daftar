@@ -58,7 +58,7 @@ export const getClientProjectsCount = async (
       .where(eq(projectsTable.clientId, clientId))
       .limit(1);
     timer.end();
-    if (!projectCount) return [null, errorMessage];
+    if (projectCount === undefined) return [null, errorMessage];
 
     return [projectCount.count, null];
   } catch (error) {
@@ -135,7 +135,7 @@ export const getProjectsCount = async (
       .limit(1);
     timer.end();
 
-    if (!projectCount) return [null, errorMessage];
+    if (projectCount === undefined) return [null, errorMessage];
 
     return [projectCount.count, null];
   } catch (error) {

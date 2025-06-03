@@ -315,9 +315,8 @@ export const getSuppliersCount = async (
         )
         .limit(1);
 
-      if (suppliers === undefined) {
+      if (suppliers === undefined)
         return [null, errorMessage];
-      }
       timer.end();
       return [suppliers.count, null];
     }

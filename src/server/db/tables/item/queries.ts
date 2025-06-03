@@ -229,9 +229,7 @@ export const getItemsCount = async (
         )
         .limit(1);
 
-      if (items === undefined) {
-        return [null, errorMessage];
-      }
+      if (items === undefined) return [null, errorMessage];
       timer.end();
       return [items.count, null];
     }

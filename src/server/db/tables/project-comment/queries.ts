@@ -81,7 +81,7 @@ export const getProjectCommentsCount = async (
       .limit(1);
     timer.end();
 
-    if (!result) return [null, errorMessage];
+    if (result === undefined) return [null, errorMessage];
     return [result.count, null];
   } catch (error) {
     logError(error);

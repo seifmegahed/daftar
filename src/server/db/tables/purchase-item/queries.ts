@@ -89,7 +89,7 @@ export const getPurchaseItemsCount = async (
       .limit(1);
     timer.end();
 
-    if (!items) return [null, errorMessage];
+    if (items === undefined) return [null, errorMessage];
     return [items.count, null];
   } catch (error) {
     logError(error);
@@ -111,7 +111,7 @@ export const getSupplierItemsCount = async (
       .limit(1);
     timer.end();
 
-    if (!items) return [null, errorMessage];
+    if (items === undefined) return [null, errorMessage];
     return [items.count, null];
   } catch (error) {
     logError(error);

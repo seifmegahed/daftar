@@ -254,7 +254,7 @@ export const getClientsCount = async (
       .limit(1);
     timer.end();
 
-    if (!clients) return [null, errorMessage];
+    if (clients === undefined) return [null, errorMessage];
     return [clients.count, null];
   } catch (error) {
     logError(error);

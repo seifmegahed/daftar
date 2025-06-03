@@ -67,7 +67,7 @@ export const getUsersCount = async (): Promise<ReturnTuple<number>> => {
       .limit(1);
     timer.end();
 
-    if (!usersCount) return [null, errorMessage];
+    if (usersCount === undefined) return [null, errorMessage];
     return [usersCount.count, null];
   } catch (error) {
     logError(error);

@@ -31,7 +31,7 @@ export const getClientAddressesCount = async (
       .limit(1);
     timer.end();
 
-    if (!addresses) return [null, errorMessage];
+    if (addresses === undefined) return [null, errorMessage];
     return [addresses.count, null];
   } catch (error) {
     logError(error);
@@ -105,7 +105,7 @@ export const getSupplierAddressesCount = async (
       .limit(1);
     timer.end();
 
-    if (!addresses) return [null, errorMessage];
+    if (addresses === undefined) return [null, errorMessage];
     return [addresses.count, null];
   } catch (error) {
     logError(error);

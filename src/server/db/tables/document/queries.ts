@@ -188,7 +188,7 @@ export const getDocumentsCount = async (
       .limit(1);
     timer.end();
 
-    if (!documents) return [null, errorMessage];
+    if (documents === undefined) return [null, errorMessage];
     return [documents.count, null];
   } catch (error) {
     logError(error);
