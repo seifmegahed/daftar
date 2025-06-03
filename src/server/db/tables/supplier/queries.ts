@@ -1,6 +1,6 @@
 import { db } from "@/server/db";
-import { asc, count, sql, desc, eq } from "drizzle-orm";
-import { suppliersTable } from "@/server/db/schema";
+import { asc, count, sql, desc, eq, inArray } from "drizzle-orm";
+import { suppliersTable, supplierTagTable, tagTable } from "@/server/db/schema";
 
 import { defaultPageLimit } from "@/data/config";
 import { filterDefault } from "@/components/filter-and-search";
@@ -112,22 +112,54 @@ export const getSuppliersBrief = async (
   const timer = new performanceTimer("getSuppliersBrief");
   try {
     timer.start();
-    const allSuppliers = await db
-      .select({
-        id: suppliersTable.id,
-        name: suppliersTable.name,
-        registrationNumber: suppliersTable.registrationNumber,
-        createdAt: suppliersTable.createdAt,
-        field: suppliersTable.field,
-        rank: searchText
-          ? sql`ts_rank(${supplierSearchQuery(searchText ?? "")})`
-          : sql`1`,
-      })
-      .from(suppliersTable)
-      .where(supplierFilterQuery(filter))
-      .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
-      .limit(limit)
-      .offset((page - 1) * limit);
+    const tagsFilterValue =
+      filter.filterValue?.split(",").filter((x) => x.length > 0) ?? [];
+    const isTagFilter =
+      filter.filterType === "tags" && tagsFilterValue.length > 0;
+
+    const selectFields = {
+      id: suppliersTable.id,
+      name: suppliersTable.name,
+      registrationNumber: suppliersTable.registrationNumber,
+      createdAt: suppliersTable.createdAt,
+      field: suppliersTable.field,
+      rank: searchText
+        ? sql`ts_rank(${supplierSearchQuery(searchText)})`
+        : sql`1`,
+    };
+
+    let allSuppliers;
+
+    if (isTagFilter) {
+      allSuppliers = await db
+        .select(selectFields)
+        .from(suppliersTable)
+        .innerJoin(
+          supplierTagTable,
+          eq(suppliersTable.id, supplierTagTable.supplierId),
+        )
+        .innerJoin(tagTable, eq(tagTable.id, supplierTagTable.tagId))
+        .where(inArray(tagTable.name, tagsFilterValue))
+        .groupBy(
+          suppliersTable.id,
+          suppliersTable.name,
+          suppliersTable.registrationNumber,
+          suppliersTable.createdAt,
+          suppliersTable.field,
+        )
+        .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
+        .limit(limit)
+        .offset((page - 1) * limit);
+    } else {
+      // Query without tag filtering
+      allSuppliers = await db
+        .select(selectFields)
+        .from(suppliersTable)
+        .where(supplierFilterQuery(filter))
+        .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
+        .limit(limit)
+        .offset((page - 1) * limit);
+    }
     timer.end();
 
     return [allSuppliers, null];
@@ -266,6 +298,30 @@ export const getSuppliersCount = async (
   const timer = new performanceTimer("getSuppliersCount");
   try {
     timer.start();
+    if (filter.filterType === "tags") {
+      const [suppliers] = await db
+        .select({ count: count() })
+        .from(suppliersTable)
+        .innerJoin(
+          supplierTagTable,
+          eq(suppliersTable.id, supplierTagTable.supplierId),
+        )
+        .innerJoin(tagTable, eq(tagTable.id, supplierTagTable.tagId))
+        .where(
+          inArray(
+            tagTable.name,
+            filter.filterValue?.split(",").filter((x) => x.length > 0) ?? [],
+          ),
+        )
+        .limit(1);
+
+      if (suppliers === undefined) {
+        return [null, errorMessage];
+      }
+      timer.end();
+      return [suppliers.count, null];
+    }
+
     const [suppliers] = await db
       .select({ count: count() })
       .from(suppliersTable)

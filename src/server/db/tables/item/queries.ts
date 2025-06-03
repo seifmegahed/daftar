@@ -93,9 +93,7 @@ export const getAllItemsBrief = async (
         .from(itemsTable)
         .innerJoin(itemTagTable, eq(itemsTable.id, itemTagTable.itemId))
         .innerJoin(tagTable, eq(itemTagTable.tagId, tagTable.id))
-        .where(
-          and(itemFilterQuery(filter), inArray(tagTable.name, tagsFilterValue)),
-        )
+        .where(inArray(tagTable.name, tagsFilterValue))
         .groupBy(
           itemsTable.id,
           itemsTable.name,
