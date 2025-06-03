@@ -37,6 +37,7 @@ async function SuppliersPage({ params, searchParams }: Props) {
   }));
 
   const filterItems: FilterOptionType[] = [
+    { label: "By Tags", value: "tags" },
     { label: t("filter-by-created-by"), value: "createdBy", options: userOptions },
     { label: t("filter-by-creation-date"), value: "creationDate" },
     { label: t("filter-by-updated-date"), value: "updateDate" },

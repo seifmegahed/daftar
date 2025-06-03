@@ -19,6 +19,7 @@ export type FilterTypes =
   | "endDate"
   | "creationDate"
   | "updateDate"
+  | "tags"
   | null;
 
 export type FilterArgs = {

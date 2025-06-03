@@ -1,6 +1,7 @@
 import { projectTypes, statusCodes } from "@/data/lut";
 import DateFilter from "./date-filter";
 import SelectFilter from "./select-filter";
+import { TagFilter } from "./tag-filter";
 
 import type { FilterTypes } from ".";
 import { useLocale, useTranslations } from "next-intl";
@@ -35,6 +36,10 @@ function FilterBar({
           type={"status"}
           label={t("status")}
         />
+      );
+    case "tags":
+      return (
+        <TagFilter defaultValue={type === "tags" ? defaultValue : ""} />
       );
     case "type":
       return (

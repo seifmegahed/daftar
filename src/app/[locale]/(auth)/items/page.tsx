@@ -44,6 +44,7 @@ async function ItemsPage({ searchParams, params }: Props) {
       value: "createdBy",
       options: userOptions,
     },
+    {label: "By Tags", value: "tags"},
     { label: t("filter-by-creation-date"), value: "creationDate" },
     { label: t("filter-by-updated-date"), value: "updateDate" },
   ];

@@ -1,12 +1,14 @@
 import { z } from "zod";
 import { db } from "@/server/db";
-import { asc, count, desc, sql, eq, inArray } from "drizzle-orm";
+import { asc, count, desc, sql, eq, inArray, and } from "drizzle-orm";
 import {
   clientsTable,
   itemsTable,
+  itemTagTable,
   projectsTable,
   purchaseItemsTable,
   saleItemsTable,
+  tagTable,
 } from "@/server/db/schema";
 
 import { prepareSearchText, timestampQueryGenerator } from "@/utils/common";
@@ -68,26 +70,55 @@ export const getAllItemsBrief = async (
   const timer = new performanceTimer("getAllItemsBrief");
   try {
     timer.start();
-    const allItems = await db
-      .select({
-        id: itemsTable.id,
-        name: itemsTable.name,
-        type: itemsTable.type,
-        make: itemsTable.make,
-        createdAt: itemsTable.createdAt,
-        rank: searchText
-          ? sql`ts_rank(${itemSearchQuery(searchText)})`
-          : sql`1`,
-      })
-      .from(itemsTable)
-      .where(itemFilterQuery(filter))
-      .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
-      .limit(limit)
-      .offset((page - 1) * limit);
+    // Check if we need to filter by tags
+    const tagsFilterValue =
+      filter.filterValue?.split(",").filter((x) => x.length > 0) ?? [];
+    const isTagFilter =
+      filter.filterType === "tags" && tagsFilterValue.length > 0;
+
+    const selectFields = {
+      id: itemsTable.id,
+      name: itemsTable.name,
+      type: itemsTable.type,
+      make: itemsTable.make,
+      createdAt: itemsTable.createdAt,
+      rank: searchText ? sql`ts_rank(${itemSearchQuery(searchText)})` : sql`1`,
+    };
+
+    let allItems;
+
+    if (isTagFilter) {
+      allItems = await db
+        .select(selectFields)
+        .from(itemsTable)
+        .innerJoin(itemTagTable, eq(itemsTable.id, itemTagTable.itemId))
+        .innerJoin(tagTable, eq(itemTagTable.tagId, tagTable.id))
+        .where(
+          and(itemFilterQuery(filter), inArray(tagTable.name, tagsFilterValue)),
+        )
+        .groupBy(
+          itemsTable.id,
+          itemsTable.name,
+          itemsTable.type,
+          itemsTable.make,
+          itemsTable.createdAt,
+        )
+        .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
+        .limit(limit)
+        .offset((page - 1) * limit);
+    } else {
+      // Query without tag filtering
+      allItems = await db
+        .select(selectFields)
+        .from(itemsTable)
+        .where(itemFilterQuery(filter))
+        .orderBy((table) => (searchText ? desc(table.rank) : desc(table.id)))
+        .limit(limit)
+        .offset((page - 1) * limit);
+    }
+
     timer.end();
-
     if (!allItems) return [null, errorMessage];
-
     return [allItems, null];
   } catch (error) {
     logError(error);
@@ -183,6 +214,29 @@ export const getItemsCount = async (
   const errorMessage = errorMessages.count;
   const timer = new performanceTimer("getItemsCount");
   try {
+    if (filter.filterType === "tags") {
+      const [items] = await db
+        .select({ count: count() })
+        .from(itemsTable)
+        .innerJoin(itemTagTable, eq(itemsTable.id, itemTagTable.itemId))
+        .innerJoin(tagTable, eq(itemTagTable.tagId, tagTable.id))
+        .where(
+          and(
+            itemFilterQuery(filter),
+            inArray(
+              tagTable.name,
+              filter.filterValue?.split(",").filter((x) => x.length > 0) ?? [],
+            ),
+          ),
+        )
+        .limit(1);
+
+      if (items === undefined) {
+        return [null, errorMessage];
+      }
+      timer.end();
+      return [items.count, null];
+    }
     timer.start();
     const [items] = await db
       .select({ count: count() })
